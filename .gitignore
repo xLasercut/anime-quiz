@@ -12,5 +12,10 @@ dist
 # server user data
 server/data/user/*
 
+# server logs
+server/log/
+
+# shared module build info
+shared/tsconfig.tsbuildinfo
 
 !.gitkeep
