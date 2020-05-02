@@ -1,0 +1,142 @@
+[
+  {
+    "regex": "^deja vu$",
+    "flag": "i",
+    "response": {
+      "user": "Toyota Sprinter Trueno AE86",
+      "text": "I've just been in this place before\nHigher on the street\nAnd I know it's my time to go",
+      "avatar": "initial_d",
+      "id": "initial_d"
+    }
+  },
+  {
+    "regex": "^calling you$",
+    "flag": "i",
+    "response": {
+      "user": "Toyota Sprinter Trueno AE86",
+      "text": "...and the search is mystery\nStanding on my feet\nIt's so hard when I try to be me uoooh!",
+      "avatar": "initial_d",
+      "id": "initial_d"
+    }
+  },
+  {
+    "regex": "^gas gas gas$",
+    "flag": "i",
+    "response": {
+      "user": "Toyota Sprinter Trueno AE86",
+      "text": "I'm gonna step on the gas\nTonight I'll fly and be your lover",
+      "avatar": "initial_d",
+      "id": "initial_d"
+    }
+  },
+  {
+    "regex": "^yeah yeah yeah$",
+    "flag": "i",
+    "response": {
+      "user": "Toyota Sprinter Trueno AE86",
+      "text": "I'll be so quick as a flash\nAnd I'll be your hero",
+      "avatar": "initial_d",
+      "id": "initial_d"
+    }
+  },
+  {
+    "regex": "^i continue to (fly|fight)$",
+    "flag": "i",
+    "response": {
+      "user": "Lelouch Vi Britannia",
+      "text": "I CONTINUE TO FIGHT",
+      "avatar": "lelouch",
+      "id": "lelouch"
+    }
+  },
+  {
+    "regex": "^rawr$",
+    "flag": "i",
+    "response": {
+      "user": "Taiga",
+      "text": "RAWR",
+      "avatar": "rawr",
+      "id": "taiga"
+    }
+  },
+  {
+    "regex": "^iku z$",
+    "flag": "i",
+    "response": {
+      "user": "Pikachu",
+      "text": "...Hageshiku moeru batoru\nIku Z!! Pinchi wa chansu daze\nIkou Z!! Kishikaisei\nZettai ni akiramenai\nOretachi wa akiramenai",
+      "avatar": "pikachu",
+      "id": "pikachu"
+    }
+  },
+  {
+    "regex":"^looking the blitz loop$",
+    "flag": "i",
+    "response": {
+      "user": "Misaka Mikoto",
+      "text": "..this planet to search way.\nOnly my RAILGUN can shoot it.\nIMASUGU",
+      "avatar": "misaka",
+      "id": "misaka"
+    }
+  },
+  {
+    "regex": "^jaeger$",
+    "flag": "i",
+    "response": {
+      "user": "Eren Yeager",
+      "text": "Jäger!!!",
+      "avatar": "eren",
+      "id": "eren"
+    }
+  },
+  {
+    "regex": "^(sasageyo|sasage yo)$",
+    "flag": "i",
+    "response": {
+      "user": "Eren Yeager",
+      "text": "...Sasage yo!  Shinzou wo sasage yo!",
+      "avatar": "eren",
+      "id": "eren"
+    }
+  },
+  {
+    "regex": "^like a fallen angel$",
+    "flag": "i",
+    "response": {
+      "user": "Eren Yeager",
+      "text": "...toki no kaze ni",
+      "avatar": "eren",
+      "id": "eren"
+    }
+  },
+  {
+    "regex": "^flugel der freiheit$",
+    "flag": "i",
+    "response": {
+      "user": "Eren Yeager",
+      "text": "Wohlan Freund!\nJetzt hier ist ein Sieg.\nDies ist der erste Gloria.",
+      "avatar": "eren",
+      "id": "eren"
+    }
+  },
+  {
+    "regex": "^shinzou wo not sasageyo$",
+    "flag": "i",
+    "response": {
+      "user": "Eren Yeager",
+      "text": "Yumiya ga kakenuketa kiseki tsubasa o chirashite\nShinzō o tabanete mo\nRequiem ni wa haya sugiru\nTaiyō wa mada shizunde inai no da kara",
+      "avatar": "eren",
+      "id": "eren"
+    }
+  },
+  {
+    "regex": "^its a whole new world we live in$",
+    "flag": "i",
+    "response": {
+      "user": "Pikachu",
+      "text": "It's a whole new way to see\nIt's a whole new place\nWith a brand new attitude\nBut you still gotta catch'em all",
+      "avatar": "pikachu",
+      "id": "pikachu"
+    }
+  }
+]

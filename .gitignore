@@ -7,3 +7,10 @@ node_modules
 
 # build dir
 dist
+
+
+# server user data
+server/data/user/*
+
+
+!.gitkeep

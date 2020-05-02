@@ -1,0 +1,197 @@
+[
+  {
+    "command": "worry",
+    "src": "https://cdn.discordapp.com/emojis/384946988770131970.png",
+    "type": "img"
+  },
+  {
+    "command": "grinning",
+    "src": "😀",
+    "type": "dec"
+  },
+  {
+    "command": "worrylove",
+    "src": "https://cdn.discordapp.com/emojis/411919283484885024.png",
+    "type": "img"
+  },
+  {
+    "command": "worryneat",
+    "src": "https://cdn.discordapp.com/emojis/511581092139106316.png",
+    "type": "img"
+  },
+  {
+    "command": "worreee",
+    "src": "https://cdn.discordapp.com/emojis/436979346704695306.png",
+    "type": "img"
+  },
+  {
+    "command": "worrydodgesel",
+    "src": "https://cdn.discordapp.com/emojis/499886898567970845.gif",
+    "type": "img"
+  },
+  {
+    "command": "notes",
+    "src": "🎶",
+    "type": "dec"
+  },
+  {
+    "command": "worryeyes",
+    "src": "https://cdn.discordapp.com/emojis/441791691813289985.gif",
+    "type": "img"
+  },
+  {
+    "command": "worryweird",
+    "src": "https://cdn.discordapp.com/emojis/587729608028192790.png",
+    "type": "img"
+  },
+  {
+    "command": "worrypoggers",
+    "src": "https://cdn.discordapp.com/emojis/553703679392481311.png",
+    "type": "img"
+  },
+  {
+    "command": "worryglasses",
+    "src": "https://cdn.discordapp.com/emojis/437652757764112394.png",
+    "type": "img"
+  },
+  {
+    "command": "worrydodge",
+    "src": "https://cdn.discordapp.com/emojis/499282698238427166.png",
+    "type": "img"
+  },
+  {
+    "command": "hailthetail",
+    "src": "https://cdn.discordapp.com/emojis/282297723321843712.png",
+    "type": "img"
+  },
+  {
+    "command": "birbpeek",
+    "src": "https://cdn.discordapp.com/emojis/477804499290030091.png",
+    "type": "img"
+  },
+  {
+    "command": "birbhug",
+    "src": "https://cdn.discordapp.com/emojis/477835313863983104.png",
+    "type": "img"
+  },
+  {
+    "command": "kannawant",
+    "src": "https://cdn.discordapp.com/emojis/499439260706013194.png",
+    "type": "img"
+  },
+  {
+    "command": "birb",
+    "src": "https://cdn.discordapp.com/emojis/477804762029621250.png",
+    "type": "img"
+  },
+  {
+    "command": "birbsob",
+    "src": "https://cdn.discordapp.com/emojis/477804499474579457.png",
+    "type": "img"
+  },
+  {
+    "command": "birblove",
+    "src": "https://cdn.discordapp.com/emojis/477804497998184448.png",
+    "type": "img"
+  },
+  {
+    "command": "notlikebirb",
+    "src": "https://cdn.discordapp.com/emojis/477804500166508544.png",
+    "type": "img"
+  },
+  {
+    "command": "awoo",
+    "src": "https://cdn.discordapp.com/emojis/281645268376485888.png",
+    "type": "img"
+  },
+  {
+    "command": "feesh",
+    "src": "https://cdn.discordapp.com/emojis/477804835748446209.png",
+    "type": "img"
+  },
+  {
+    "command": "aworryhype",
+    "src": "https://cdn.discordapp.com/emojis/425124209891475456.gif",
+    "type": "img"
+  },
+  {
+    "command": "worryfoodtime",
+    "src": "https://cdn.discordapp.com/emojis/454350595692691468.png",
+    "type": "img"
+  },
+  {
+    "command": "birbwise",
+    "src": "https://cdn.discordapp.com/emojis/477804502544678912.png",
+    "type": "img"
+  },
+  {
+    "command": "worryhands",
+    "src": "https://cdn.discordapp.com/emojis/416637655846092803.png",
+    "type": "img"
+  },
+  {
+    "command": "aworryninja",
+    "src": "https://cdn.discordapp.com/emojis/419506568728543263.gif",
+    "type": "img"
+  },
+  {
+    "command": "worryKMSwTears",
+    "src": "https://cdn.discordapp.com/emojis/395547800336859146.png",
+    "type": "img"
+  },
+  {
+    "command": "aworrywave",
+    "src": "https://cdn.discordapp.com/emojis/438794906798915584.gif",
+    "type": "img"
+  },
+  {
+    "command": "birbnight",
+    "src": "https://cdn.discordapp.com/emojis/477804499151486977.png",
+    "type": "img"
+  },
+  {
+    "command": "worrypeekhammer",
+    "src": "https://cdn.discordapp.com/emojis/567799409035837440.png",
+    "type": "img"
+  },
+  {
+    "command": "worrysmile",
+    "src": "https://cdn.discordapp.com/emojis/454356289040941079.png",
+    "type": "img"
+  },
+  {
+    "command": "worrysad",
+    "src": "https://cdn.discordapp.com/emojis/391253501067526144.png",
+    "type": "img"
+  },
+  {
+    "command": "worrypoggerswoke",
+    "src": "https://cdn.discordapp.com/emojis/586902243899342870.png",
+    "type": "img"
+  },
+  {
+    "command": "birbsadhug",
+    "src": "https://cdn.discordapp.com/emojis/452163544599887913.png",
+    "type": "img"
+  },
+  {
+    "command": "karenaww",
+    "src": "https://cdn.discordapp.com/emojis/497495913003221015.gif",
+    "type": "img"
+  },
+  {
+    "command": "worrywaytooweird",
+    "src": "https://cdn.discordapp.com/emojis/672599488824606721.gif",
+    "type": "img"
+  },
+  {
+    "command": "panik",
+    "src": "https://cdn.discordapp.com/emojis/688825255245905930.png",
+    "type": "img"
+  },
+  {
+    "command": "kalm",
+    "src": "https://cdn.discordapp.com/emojis/688825679533309953.png",
+    "type": "img"
+  }
+]
