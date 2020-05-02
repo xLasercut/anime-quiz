@@ -1,12 +1,16 @@
 import * as socketio from 'socket.io'
 import * as express from 'express'
+import {LOG_BASE, Logger} from './logging'
+import {SERVER_PORT} from '../config'
 
-let app = express()
-let server = app.listen(3001, () => {
 
+const logger = new Logger()
+const app = express()
+const server = app.listen(SERVER_PORT, () => {
+  logger.writeLog(LOG_BASE.SERVER001, {port: SERVER_PORT})
 })
 
-let io = socketio(server)
+const io = socketio(server)
 
 
-export {io}
+export {io, logger}

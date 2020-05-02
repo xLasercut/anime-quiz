@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "module": "CommonJS",
+    "lib": [
+      "es2018"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "references": [
+    {"path":  "../shared/"}
+  ]
+}
