@@ -4,3 +4,6 @@ node_modules
 # editor configs
 .vscode
 .idea
+
+# build dir
+dist
