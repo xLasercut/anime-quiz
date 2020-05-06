@@ -1,61 +1,33 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
+    <system-notification></system-notification>
     <v-content>
-      <HelloWorld/>
+      <v-btn @click="test()">test</v-btn>
     </v-content>
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+  import {defineComponent, onMounted} from '@vue/composition-api'
+  import {socket} from '@/assets/socket'
+  import SystemNotification from '@/app/SystemNotification.vue'
 
-export default Vue.extend({
-  name: 'App',
+  export default defineComponent({
+    components: {
+      SystemNotification
+    },
+    setup(props, context) {
+      function test() {
+        socket.emit('test', 'cheese')
+      }
 
-  components: {
-    HelloWorld,
-  },
+      onMounted(() => {
+        socket.on('test', (google: any) => {
+          console.log(google)
+        })
+      })
 
-  data: () => ({
-    //
-  }),
-});
+      return {test}
+    }
+  })
 </script>

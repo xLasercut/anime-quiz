@@ -41,6 +41,31 @@ const LOG_BASE = {
     code: 'SERVER001',
     level: LOG_LEVEL.INFO,
     template: 'server running on port="{{port}}"'
+  },
+  SERVER002: {
+    code: 'SERVER002',
+    level: LOG_LEVEL.INFO,
+    template: 'new connection - id="{{id}}"'
+  },
+  SERVER003: {
+    code: 'SERVER003',
+    level: LOG_LEVEL.INFO,
+    template: 'client disconnected - id="{{id}}"'
+  },
+  SERVER004: {
+    code: 'SERVER004',
+    level: LOG_LEVEL.ERROR,
+    template: 'unhandled error - stack="{{stack}}"'
+  },
+  DATA001: {
+    code: 'DATA001',
+    level: LOG_LEVEL.WARN,
+    template: 'server data error - reason="{{reason}}"'
+  },
+  AUTH002: {
+    code: 'AUTH002',
+    level: LOG_LEVEL.WARN,
+    template: 'unauthorised connection - id="{{id}}"'
   }
 }
 

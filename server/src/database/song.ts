@@ -1,6 +1,7 @@
 import {ISong} from '../../../shared/interfaces/database'
 import {readFile} from './helper'
 import {SONG_LIST_PATH} from '../config'
+import {ServerDataError} from '../exceptions'
 
 class SongDatabase {
   protected _songList: Array<ISong>
@@ -26,6 +27,12 @@ class SongDatabase {
       this._songIds.add(song.songId)
       this._addTitleChoice(song, titleDupes)
       this._addAnimeChoice(song, animeDupes)
+    }
+  }
+
+  public validateSongIdExists(songId: string): void {
+    if (!this._songIds.has(songId)) {
+      throw new ServerDataError('Song ID not in database')
     }
   }
 

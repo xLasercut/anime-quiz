@@ -14,11 +14,13 @@
     "@types/express": "^4.17.6",
     "@types/mustache": "^4.0.1",
     "@types/socket.io": "^2.1.4",
+    "@types/uuid": "^7.0.3",
     "express": "^4.17.1",
     "fs-extra": "^9.0.0",
     "mustache": "^4.0.1",
     "socket.io": "^2.3.0",
     "typescript": "^3.8.3",
+    "uuid": "^8.0.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2"
   }

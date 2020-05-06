@@ -1,7 +1,83 @@
-import {io} from './app/init'
+import {LOG_BASE, Logger} from './app/logging'
+import * as socketio from 'socket.io'
+import * as express from 'express'
+import {ADMIN_PASSWORD, SERVER_PASSWORD, SERVER_PORT} from './config'
+import {ISocket} from './interfaces'
+import {ServerDataError} from './exceptions'
+import {Emitter} from './app/emitter'
+import {AmqRooms} from './game/rooms/amq'
+import {SongDatabase} from './database/song'
+import {UserSongDatabase} from './database/user-song'
 
-io.on('connect', (socket) => {
 
+const logger = new Logger()
+
+const app = express()
+const server = app.listen(SERVER_PORT, () => {
+  logger.writeLog(LOG_BASE.SERVER001, {port: SERVER_PORT})
 })
 
-console.log(io)
+const io = socketio(server)
+const emitter = new Emitter(io)
+
+const songDatabase = new SongDatabase()
+const userSongDatabase = new UserSongDatabase(songDatabase)
+
+const amqRooms = new AmqRooms(io)
+
+
+io.on('connect', (socket: ISocket) => {
+  logger.writeLog(LOG_BASE.SERVER002, {id: socket.id})
+  socket.admin = false
+  socket.auth = false
+  socket.timer = setTimeout((): void => {
+    checkClientAuth(socket)
+  }, 2000)
+
+  socket.on('AUTHENTICATE', exceptionHandler(socket, (password: string, callback: Function): void => {
+    checkPassword(socket, password)
+    startHandlers(socket)
+    callback(socket.auth)
+  }))
+
+  socket.on('disconnect', exceptionHandler(socket, (): void => {
+    logger.writeLog(LOG_BASE.SERVER003, {id: socket.id})
+    clearTimeout(socket.timer)
+  }))
+})
+
+function startHandlers(socket: ISocket): void {
+
+}
+
+function exceptionHandler(socket: ISocket, f: Function): any {
+  return function () {
+    try {
+      return f.apply(this, arguments)
+    } catch (e) {
+      if (e instanceof ServerDataError) {
+        logger.writeLog(LOG_BASE.DATA001, {reason: e.message})
+        emitter.systemNotification('error', e.message)
+      }
+      else {
+        logger.writeLog(LOG_BASE.SERVER004, {stack: e.stack})
+      }
+    }
+  }
+}
+
+function checkPassword(socket: ISocket, password: string): void {
+  if (password === SERVER_PASSWORD || password === ADMIN_PASSWORD) {
+    socket.auth = true
+  }
+  if (password === ADMIN_PASSWORD) {
+    socket.admin = true
+  }
+}
+
+function checkClientAuth(socket: ISocket): void {
+  if (!socket.auth) {
+    logger.writeLog(LOG_BASE.AUTH002, {id: socket.id})
+    socket.disconnect()
+  }
+}
