@@ -8,6 +8,7 @@ import {Emitter} from './app/emitter'
 import {AmqRooms} from './game/rooms/amq'
 import {SongDatabase} from './database/song'
 import {UserSongDatabase} from './database/user-song'
+import {ListPickerHandler} from './handlers/list-picker'
 
 
 const logger = new Logger()
@@ -23,6 +24,8 @@ const emitter = new Emitter(io)
 const songDatabase = new SongDatabase()
 const userSongDatabase = new UserSongDatabase(songDatabase)
 
+const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
+
 const amqRooms = new AmqRooms(io)
 
 
@@ -37,6 +40,9 @@ io.on('connect', (socket: ISocket) => {
   socket.on('AUTHENTICATE', exceptionHandler(socket, (password: string, callback: Function): void => {
     checkPassword(socket, password)
     startHandlers(socket)
+    if (!socket.auth) {
+      emitter.systemNotification('error', 'Incorrect server password')
+    }
     callback(socket.auth)
   }))
 
@@ -47,7 +53,9 @@ io.on('connect', (socket: ISocket) => {
 })
 
 function startHandlers(socket: ISocket): void {
-
+  if (socket.auth) {
+    listPickerHandler.start(socket, exceptionHandler)
+  }
 }
 
 function exceptionHandler(socket: ISocket, f: Function): any {

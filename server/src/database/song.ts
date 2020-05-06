@@ -1,4 +1,4 @@
-import {ISong} from '../../../shared/interfaces/database'
+import {IChoices, ISong} from '../../../shared/interfaces/database'
 import {readFile} from './helper'
 import {SONG_LIST_PATH} from '../config'
 import {ServerDataError} from '../exceptions'
@@ -10,7 +10,7 @@ class SongDatabase {
   protected _titleChoices: Array<string>
 
   constructor() {
-
+    this.loadData()
   }
 
   public loadData(): void {
@@ -27,6 +27,17 @@ class SongDatabase {
       this._songIds.add(song.songId)
       this._addTitleChoice(song, titleDupes)
       this._addAnimeChoice(song, animeDupes)
+    }
+  }
+
+  public getSongList(): Array<ISong> {
+    return this._songList
+  }
+
+  public getChoices(): IChoices {
+    return {
+      anime: this._animeChoices,
+      title: this._titleChoices
     }
   }
 

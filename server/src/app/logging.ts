@@ -57,6 +57,11 @@ const LOG_BASE = {
     level: LOG_LEVEL.ERROR,
     template: 'unhandled error - stack="{{stack}}"'
   },
+  SERVER005: {
+    code: 'SERVER005',
+    level: LOG_LEVEL.INFO,
+    template: 'joined room - id="{{id}} roomId="{{roomId}}"'
+  },
   DATA001: {
     code: 'DATA001',
     level: LOG_LEVEL.WARN,

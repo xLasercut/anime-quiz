@@ -1,33 +1,26 @@
 <template>
   <v-app>
     <system-notification></system-notification>
-    <v-content>
-      <v-btn @click="test()">test</v-btn>
-    </v-content>
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script lang="ts">
   import {defineComponent, onMounted} from '@vue/composition-api'
-  import {socket} from '@/assets/socket'
   import SystemNotification from '@/app/SystemNotification.vue'
 
   export default defineComponent({
     components: {
       SystemNotification
     },
-    setup(props, context) {
-      function test() {
-        socket.emit('test', 'cheese')
-      }
-
+    setup(_props, context) {
       onMounted(() => {
-        socket.on('test', (google: any) => {
-          console.log(google)
-        })
+        if (localStorage.dark) {
+          context.root.$vuetify.theme.dark = (localStorage.dark === 'true')
+        }
       })
 
-      return {test}
+      return {}
     }
   })
 </script>

@@ -7,4 +7,9 @@ interface ISong {
   type: string
 }
 
-export {ISong}
+interface IChoices {
+  anime: Array<string>
+  title: Array<string>
+}
+
+export {ISong, IChoices}
