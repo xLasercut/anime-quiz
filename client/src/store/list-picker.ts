@@ -2,24 +2,26 @@ import {Module} from 'vuex'
 import {IListStoreState, IRooteStoreState, ISongListFilter} from '@/assets/interfaces'
 import {IChoices, ISong} from '../../../shared/interfaces/database'
 
-const DEFAULT_STATE: IListStoreState = {
-  songList: [],
-  users: [],
-  userSongs: new Set(),
-  currentUser: '',
-  choices: {
-    anime: [],
-    title: []
-  },
-  songListFilter: {
-    title: '',
-    anime: '',
-    type: 'All'
+function getDefaultState(): IListStoreState {
+  return {
+    songList: [],
+    users: [],
+    userSongs: new Set(),
+    currentUser: '',
+    choices: {
+      anime: [],
+      title: []
+    },
+    songListFilter: {
+      title: '',
+      anime: '',
+      type: 'All'
+    }
   }
 }
 
 const listPicker: Module<IListStoreState, IRooteStoreState> = {
-  state: DEFAULT_STATE,
+  state: getDefaultState(),
   mutations: {
     SOCKET_UPDATE_SONG_LIST(state: IListStoreState, songList: Array<ISong>): void {
       state.songList = songList
@@ -41,6 +43,9 @@ const listPicker: Module<IListStoreState, IRooteStoreState> = {
       if (!user) {
         state.userSongs = new Set()
       }
+    },
+    RESET_STORE_STATE(state: IListStoreState): void {
+      Object.assign(state, getDefaultState())
     }
   },
   getters: {

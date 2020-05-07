@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <nav-panel>
+    <nav-panel show-home>
       <list-picker-controls></list-picker-controls>
     </nav-panel>
     <v-content>
