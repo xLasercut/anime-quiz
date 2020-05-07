@@ -12,13 +12,16 @@
             </v-col>
           </v-row>
           <song-list-table
+            @user:add="addUserSong($event)"
+            @user:delete="deleteUserSong($event)"
             @admin:edit="openDialog($event)"
+            @admin:delete="deleteGameSong($event)"
           ></song-list-table>
           <game-dialog
             v-model="show" label="Song Editor"
             @dialog:close="show = false"
           >
-            <v-form v-model="valid" @submit.prevent="console.log('test')">
+            <v-form v-model="valid" @submit.prevent="confirmSongEdit()">
               <v-row justify="center">
                 <dialog-multi-select
                   :items="$store.state.list.choices.anime"
@@ -117,13 +120,37 @@
         state.show = true
       }
 
+      function confirmSongEdit(): void {
+        if (state.valid && state.show) {
+          if (state.isEdit) {
+            socket.emit('EDIT_GAME_SONG', state.form)
+          }
+          else {
+            socket.emit('ADD_GAME_SONG', state.form)
+          }
+          state.show = false
+        }
+      }
+
+      function deleteGameSong(song: ISong): void {
+        socket.emit('DELETE_GAME_SONG', song)
+      }
+
+      function addUserSong(song: ISong): void {
+        socket.emit('ADD_USER_SONG', song, context.root.$store.state.list.currentUser)
+      }
+
+      function deleteUserSong(song: ISong): void {
+        socket.emit('DELETE_USER_SONG', song, context.root.$store.state.list.currentUser)
+      }
+
       onMounted(() => {
         if (socket.disconnected) {
           context.root.$router.push('/login')
         }
       })
 
-      return {...toRefs(state), openDialog}
+      return {...toRefs(state), openDialog, addUserSong, deleteUserSong, confirmSongEdit, deleteGameSong}
     }
   })
 </script>

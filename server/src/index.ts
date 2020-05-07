@@ -3,12 +3,13 @@ import * as socketio from 'socket.io'
 import * as express from 'express'
 import {ADMIN_PASSWORD, SERVER_PASSWORD, SERVER_PORT} from './config'
 import {ISocket} from './interfaces'
-import {ServerDataError} from './exceptions'
+import {AuthError, ServerDataError} from './exceptions'
 import {Emitter} from './app/emitter'
 import {AmqRooms} from './game/rooms/amq'
 import {SongDatabase} from './database/song'
 import {UserSongDatabase} from './database/user-song'
 import {ListPickerHandler} from './handlers/list-picker'
+import {AdminHandler} from './handlers/admin'
 
 
 const logger = new Logger()
@@ -25,6 +26,7 @@ const songDatabase = new SongDatabase()
 const userSongDatabase = new UserSongDatabase(songDatabase)
 
 const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
+const adminHandler = new AdminHandler(logger, emitter, songDatabase)
 
 const amqRooms = new AmqRooms(io)
 
@@ -58,6 +60,7 @@ function startHandlers(socket: ISocket): void {
 
     if (socket.admin) {
       emitter.updateAdmin(socket.admin, socket.id)
+      adminHandler.start(socket, exceptionHandler)
     }
   }
 }
@@ -69,7 +72,12 @@ function exceptionHandler(socket: ISocket, f: Function): any {
     } catch (e) {
       if (e instanceof ServerDataError) {
         logger.writeLog(LOG_BASE.DATA001, {reason: e.message})
-        emitter.systemNotification('error', e.message)
+        emitter.systemNotification('error', e.message, socket.id)
+      }
+      else if (e instanceof AuthError) {
+        logger.writeLog(LOG_BASE.AUTH003, {id: socket.id})
+        emitter.systemNotification('error', e.message, socket.id)
+        socket.disconnect()
       }
       else {
         logger.writeLog(LOG_BASE.SERVER004, {stack: e.stack})

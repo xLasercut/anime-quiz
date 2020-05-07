@@ -4,4 +4,10 @@ class ServerDataError extends Error {
   }
 }
 
-export {ServerDataError}
+class AuthError extends Error {
+  constructor(message: string) {
+    super(message)
+  }
+}
+
+export {ServerDataError, AuthError}

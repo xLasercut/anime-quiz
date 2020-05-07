@@ -71,6 +71,26 @@ const LOG_BASE = {
     code: 'AUTH002',
     level: LOG_LEVEL.WARN,
     template: 'unauthorised connection - id="{{id}}"'
+  },
+  AUTH003: {
+    code: 'AUTH003',
+    level: LOG_LEVEL.WARN,
+    template: 'admin command attempted by non admin connection - id="{{id}}"'
+  },
+  LIST001: {
+    code: 'LIST001',
+    level: LOG_LEVEL.INFO,
+    template: 'list data request - id="{{id}}" data="{{data}}"'
+  },
+  LIST002: {
+    code: 'LIST002',
+    level: LOG_LEVEL.INFO,
+    template: 'user song data operation - id="{{id}}" user="{{user}}" operation="{{operation}}" songId="{{songId}}"'
+  },
+  LIST003: {
+    code: 'LIST003',
+    level: LOG_LEVEL.INFO,
+    template: 'list data operation - id="{{id}}" operation="{{operation}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
   }
 }
 

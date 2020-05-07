@@ -5,7 +5,7 @@
       v-if="$store.state.list.currentUser"
       :download="filename" :href="downloadHref"
     ></nav-btn>
-    <nav-btn color="warning" icon="mdi-sync"></nav-btn>
+    <nav-btn color="warning" icon="mdi-sync" @click="reloadSongList()"></nav-btn>
   </v-toolbar-items>
 </template>
 
@@ -13,6 +13,7 @@
   import {computed, defineComponent} from '@vue/composition-api'
   import NavBtn from '@/components/buttons/NavBtn.vue'
   import {ISong} from '../../../shared/interfaces/database'
+  import {socket} from '@/assets/socket'
 
   export default defineComponent({
     components: {
@@ -33,7 +34,12 @@
         return window.URL.createObjectURL(blob)
       })
 
-      return {filename, downloadHref}
+      function reloadSongList(): void {
+        context.root.$store.commit('SOCKET_UPDATE_SONG_LIST', [])
+        socket.emit('GET_SONG_LIST')
+      }
+
+      return {filename, downloadHref, reloadSongList}
     }
   })
 </script>
