@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app flat>
+  <v-app-bar app flat height="60px" min-height="60px">
     <v-toolbar-items>
       <nav-btn icon="mdi-theme-light-dark" @click="toggleTheme()"></nav-btn>
       <nav-btn icon="mdi-home" color="primary" @click="$router.push('/login')" v-if="showHome"></nav-btn>

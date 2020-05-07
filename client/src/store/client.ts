@@ -5,7 +5,9 @@ import {ILoginMode} from '@/assets/types'
 function getDefaultState(): IClientStoreState {
   return {
     admin: false,
-    loginMode: 'game'
+    loginMode: 'game',
+    username: '',
+    avatar: 'zero_2'
   }
 }
 
@@ -14,6 +16,17 @@ const client: Module<IClientStoreState, IRooteStoreState> = {
   mutations: {
     CHANGE_LOGIN_MODE(state: IClientStoreState, mode: ILoginMode): void {
       state.loginMode = mode
+    },
+    UPDATE_USERNAME(state: IClientStoreState, username: string): void {
+      if (username) {
+        state.username = username.trim()
+      }
+      else {
+        state.username = ''
+      }
+    },
+    UPDATE_AVATAR(state: IClientStoreState, avatar: string): void {
+      state.avatar = avatar
     },
     SOCKET_UPDATE_ADMIN(state: IClientStoreState, admin: boolean): void {
       state.admin = admin

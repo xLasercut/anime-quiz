@@ -5,6 +5,7 @@
     @click:append="togglePass()"
     :type="inputType"
     :value="value" @input="$emit('input', $event)"
+    v-bind="$attrs"
   ></form-input>
 </template>
 

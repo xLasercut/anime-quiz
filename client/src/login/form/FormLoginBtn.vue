@@ -5,7 +5,7 @@
         color="success"
         icon="mdi-login"
         v-bind="$attrs"
-        @click="$emit('click')"
+        type="submit"
       >Login</icon-btn>
     </v-col>
   </v-row>

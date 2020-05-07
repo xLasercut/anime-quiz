@@ -32,10 +32,12 @@
               <table-btn
                 color="warning" icon="mdi-pencil-plus"
                 @click="$emit('admin:edit', item)"
+                v-if="$store.state.client.admin"
               ></table-btn>
               <table-btn
                 color="error" icon="mdi-delete"
                 @click="$emit('admin:delete', item)"
+                v-if="$store.state.client.admin"
               ></table-btn>
             </template>
           </v-data-table>

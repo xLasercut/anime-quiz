@@ -1,8 +1,8 @@
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="valid" @submit.prevent="login()">
     <form-heading>User List</form-heading>
-    <form-input-password v-model="password"></form-input-password>
-    <form-login-btn @click="login()" :disabled="disabled || !valid"></form-login-btn>
+    <form-input-password v-model="password" :disabled="disabled"></form-input-password>
+    <form-login-btn :disabled="disabled || !valid"></form-login-btn>
   </v-form>
 </template>
 

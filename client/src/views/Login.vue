@@ -15,9 +15,11 @@
   import ListPickerLogin from '@/login/ListPickerLogin.vue'
   import LoginControls from '@/login/LoginControls.vue'
   import {socket} from '@/assets/socket'
+  import GameLogin from '@/login/GameLogin.vue'
 
   const componentMap: {[key: string]: any} = {
-    'list': ListPickerLogin
+    'list': ListPickerLogin,
+    'game': GameLogin
   }
 
   export default defineComponent({
@@ -35,6 +37,14 @@
         }
 
         context.root.$store.commit('RESET_STORE_STATE')
+
+        if (localStorage.username) {
+          context.root.$store.commit('UPDATE_USERNAME', localStorage.username)
+        }
+
+        if (localStorage.avatar) {
+          context.root.$store.commit('UPDATE_AVATAR', localStorage.avatar)
+        }
       })
 
       return {component}

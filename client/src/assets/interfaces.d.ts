@@ -17,6 +17,8 @@ interface IListStoreState {
 interface IClientStoreState {
   admin: boolean
   loginMode: ILoginMode
+  username: string
+  avatar: string
 }
 
 interface ISongListFilter {
