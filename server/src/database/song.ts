@@ -22,8 +22,7 @@ class SongDatabase {
     let animeDupes: Set<string> = new Set()
     let titleDupes: Set<string> = new Set()
 
-    for (let i = 0, l = this._songList.length; i < l; i++) {
-      let song = this._songList[i]
+    for (let song of this._songList) {
       this._songIds.add(song.songId)
       this._addTitleChoice(song, titleDupes)
       this._addAnimeChoice(song, animeDupes)

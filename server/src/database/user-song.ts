@@ -31,6 +31,11 @@ class UserSongDatabase {
     return Object.keys(this._userSongList)
   }
 
+  public getUserSongs(user: string): Array<string> {
+    this._validateUserExists(user)
+    return Array.from(this._userSongList[user].getUserSongs())
+  }
+
   public addSongId(songId: string, user: string): void {
     this._validateUserExists(user)
     this._songDatabase.validateSongIdExists(songId)
@@ -57,6 +62,10 @@ class UserSong {
   constructor(filepath: string) {
     this._filepath = filepath
     this.loadData()
+  }
+
+  public getUserSongs(): Set<string> {
+    return this._songIds
   }
 
   public addSongId(songId: string): void {

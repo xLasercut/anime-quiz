@@ -55,6 +55,10 @@ io.on('connect', (socket: ISocket) => {
 function startHandlers(socket: ISocket): void {
   if (socket.auth) {
     listPickerHandler.start(socket, exceptionHandler)
+
+    if (socket.admin) {
+      emitter.updateAdmin(socket.admin, socket.id)
+    }
   }
 }
 

@@ -24,6 +24,10 @@ class ListPickerHandler extends AbstractHandler {
       this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
       this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
     }))
+
+    socket.on('GET_USER_SONGS', exceptionHandler(socket, (user: string): void => {
+      this._emitter.updateUserSongs(this._userSongDatabase.getUserSongs(user), socket.id)
+    }))
   }
 }
 

@@ -17,8 +17,16 @@ class Emitter {
     this._client(sid).emit('UPDATE_USERS', users)
   }
 
+  public updateUserSongs(userSongs: Array<string>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_USER_SONGS', userSongs)
+  }
+
   public updateChoices(choices: IChoices, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AMQ_CHOICES', choices)
+    this._client(sid).emit('UPDATE_CHOICES', choices)
+  }
+
+  public updateAdmin(admin: boolean, sid: string): void {
+    this._client(sid).emit('UPDATE_ADMIN', admin)
   }
 
   public systemNotification(color: IBannerColor, message: string, sid: string = null): void {

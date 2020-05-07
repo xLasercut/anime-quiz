@@ -12,6 +12,9 @@ const client: Module<IClientStoreState, IRooteStoreState> = {
   mutations: {
     CHANGE_LOGIN_MODE(state: IClientStoreState, mode: ILoginMode): void {
       state.loginMode = mode
+    },
+    SOCKET_UPDATE_ADMIN(state: IClientStoreState, admin: boolean): void {
+      state.admin = admin
     }
   }
 }

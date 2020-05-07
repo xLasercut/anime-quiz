@@ -11,6 +11,7 @@ interface IListStoreState {
   userSongs: Set<string>
   currentUser: string
   choices: IChoices
+  songListFilter: ISongListFilter
 }
 
 interface IClientStoreState {
@@ -18,4 +19,10 @@ interface IClientStoreState {
   loginMode: ILoginMode
 }
 
-export {IListStoreState, IRooteStoreState, IClientStoreState}
+interface ISongListFilter {
+  anime: string
+  title: string
+  type: string
+}
+
+export {IListStoreState, IRooteStoreState, IClientStoreState, ISongListFilter}
