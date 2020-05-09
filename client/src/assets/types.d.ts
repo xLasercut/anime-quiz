@@ -1,3 +1,4 @@
 type ILoginMode = 'game' | 'list' | 'misc'
+type IRoomMode = 'list' | 'amq'
 
-export {ILoginMode}
+export {ILoginMode, IRoomMode}

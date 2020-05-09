@@ -1,5 +1,5 @@
 import {IChoices, ISong} from '../../../shared/interfaces/database'
-import {ILoginMode} from '@/assets/types'
+import {ILoginMode, IRoomMode} from '@/assets/types'
 
 interface IRooteStoreState {
 
@@ -19,6 +19,7 @@ interface IClientStoreState {
   loginMode: ILoginMode
   username: string
   avatar: string
+  roomMode: IRoomMode
 }
 
 interface ISongListFilter {

@@ -1,6 +1,7 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
 import {IChoices, ISong} from '../../../shared/interfaces/database'
+import {IRoom} from '../../../shared/interfaces/game'
 
 class Emitter {
   protected _io: socketio.Server
@@ -27,6 +28,10 @@ class Emitter {
 
   public updateAdmin(admin: boolean, sid: string): void {
     this._client(sid).emit('UPDATE_ADMIN', admin)
+  }
+
+  public updateRoomList(roomList: Array<IRoom>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_ROOM_LIST', roomList)
   }
 
   public systemNotification(color: IBannerColor, message: string, sid: string = null): void {

@@ -1,5 +1,4 @@
-import {Room, Socket} from 'socket.io'
-import {IRoomType} from '../../shared/types/game'
+import {Socket} from 'socket.io'
 
 interface ILog {
   code: string
@@ -15,9 +14,4 @@ interface ISocket extends Socket {
   timer: NodeJS.Timeout
 }
 
-interface IRoom extends Room {
-  name: string
-  type: IRoomType
-}
-
-export {ILog, ISocket, IRoom}
+export {ILog, ISocket}

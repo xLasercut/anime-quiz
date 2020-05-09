@@ -30,8 +30,7 @@
   import {DEFAULT_PASSWORD} from '@/assets/config/defaults'
   import FormAvatar from '@/login/form/FormAvatar.vue'
   import {socket} from '@/assets/socket'
-
-  const USERNAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
+  import {NAME_FORMAT} from '@/assets/config/formats'
 
   export default defineComponent({
     components: {
@@ -46,7 +45,7 @@
         valid: false,
         nameRules: [
           (v: string): boolean | string => (!!v) || 'Display name required',
-          (v: string): boolean | string => USERNAME_FORMAT.test(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
+          (v: string): boolean | string => NAME_FORMAT.test(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
           (v: string): boolean | string => (v && v.length <= 20) || 'Display name must be under 20 characters'
         ]
       })

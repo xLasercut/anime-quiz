@@ -5,11 +5,13 @@ import {ADMIN_PASSWORD, SERVER_PASSWORD, SERVER_PORT} from './config'
 import {ISocket} from './interfaces'
 import {AuthError, ServerDataError} from './exceptions'
 import {Emitter} from './app/emitter'
-import {AmqRooms} from './game/rooms/amq'
 import {SongDatabase} from './database/song'
 import {UserSongDatabase} from './database/user-song'
 import {ListPickerHandler} from './handlers/list-picker'
 import {AdminHandler} from './handlers/admin'
+import {AmqHandler} from './handlers/amq'
+import {RoomHandler} from './handlers/room'
+import {GameRooms} from './game/room'
 
 
 const logger = new Logger()
@@ -24,11 +26,14 @@ const emitter = new Emitter(io)
 
 const songDatabase = new SongDatabase()
 const userSongDatabase = new UserSongDatabase(songDatabase)
+const gameRooms = new GameRooms()
 
 const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
 const adminHandler = new AdminHandler(logger, emitter, songDatabase)
 
-const amqRooms = new AmqRooms(io)
+const amqHandler = new AmqHandler(logger, emitter, gameRooms)
+
+const roomHandler = new RoomHandler(logger, emitter, gameRooms)
 
 
 io.on('connect', (socket: ISocket) => {
@@ -57,6 +62,8 @@ io.on('connect', (socket: ISocket) => {
 function startHandlers(socket: ISocket): void {
   if (socket.auth) {
     listPickerHandler.start(socket, exceptionHandler)
+    roomHandler.start(socket, exceptionHandler)
+    amqHandler.start(socket, exceptionHandler)
 
     if (socket.admin) {
       emitter.updateAdmin(socket.admin, socket.id)

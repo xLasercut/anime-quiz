@@ -10,4 +10,11 @@ class AuthError extends Error {
   }
 }
 
-export {ServerDataError, AuthError}
+class GameDataError extends Error {
+  constructor(message: string) {
+    super(message)
+  }
+
+}
+
+export {ServerDataError, AuthError, GameDataError}

@@ -1,13 +1,14 @@
 import {Module} from 'vuex'
 import {IClientStoreState, IRooteStoreState} from '@/assets/interfaces'
-import {ILoginMode} from '@/assets/types'
+import {ILoginMode, IRoomMode} from '@/assets/types'
 
 function getDefaultState(): IClientStoreState {
   return {
     admin: false,
     loginMode: 'game',
     username: '',
-    avatar: 'zero_2'
+    avatar: 'zero_2',
+    roomMode: 'list'
   }
 }
 
@@ -27,6 +28,9 @@ const client: Module<IClientStoreState, IRooteStoreState> = {
     },
     UPDATE_AVATAR(state: IClientStoreState, avatar: string): void {
       state.avatar = avatar
+    },
+    UPDATE_ROOM_MODE(state: IClientStoreState, roomMode: IRoomMode): void {
+      state.roomMode = roomMode
     },
     SOCKET_UPDATE_ADMIN(state: IClientStoreState, admin: boolean): void {
       state.admin = admin
