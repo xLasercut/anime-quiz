@@ -1,5 +1,6 @@
 import {IChoices, ISong} from '../../../shared/interfaces/database'
 import {ILoginMode, IRoomMode} from '@/assets/types'
+import {IAmqPlayer} from '../../../shared/interfaces/amq'
 
 interface IRooteStoreState {
 
@@ -28,4 +29,8 @@ interface ISongListFilter {
   type: string
 }
 
-export {IListStoreState, IRooteStoreState, IClientStoreState, ISongListFilter}
+interface IAmqStoreState {
+  playerList: Array<IAmqPlayer>
+}
+
+export {IListStoreState, IRooteStoreState, IClientStoreState, ISongListFilter, IAmqStoreState}

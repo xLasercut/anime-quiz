@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    amq
+    {{$store.state.amq.playerList}}
   </v-row>
 </template>
 

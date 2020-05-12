@@ -1,4 +1,5 @@
 import {Socket} from 'socket.io'
+import {AmqPlayer} from './game/players/amq'
 
 interface ILog {
   code: string
@@ -10,7 +11,7 @@ interface ISocket extends Socket {
   auth: boolean
   admin: boolean
   roomId: string
-  player: object
+  player: AmqPlayer
   timer: NodeJS.Timeout
 }
 

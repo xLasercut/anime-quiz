@@ -19,6 +19,7 @@ class RoomHandler extends AbstractHandler {
 
     socket.on('LEAVE_ROOM', exceptionHandler(socket, (): void => {
       socket.leaveAll()
+      socket.roomId = ''
     }))
   }
 }

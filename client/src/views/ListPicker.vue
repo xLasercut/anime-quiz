@@ -148,6 +148,10 @@
         if (socket.disconnected) {
           context.root.$router.push('/login')
         }
+
+        socket.on('disconnect', (): void => {
+          context.root.$router.push('/login')
+        })
       })
 
       return {...toRefs(state), openDialog, addUserSong, deleteUserSong, confirmSongEdit, deleteGameSong}

@@ -2,6 +2,7 @@ import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
 import {IChoices, ISong} from '../../../shared/interfaces/database'
 import {IRoom} from '../../../shared/interfaces/game'
+import {IAmqPlayer} from '../../../shared/interfaces/amq'
 
 class Emitter {
   protected _io: socketio.Server
@@ -32,6 +33,10 @@ class Emitter {
 
   public updateRoomList(roomList: Array<IRoom>, sid: string = null): void {
     this._client(sid).emit('UPDATE_ROOM_LIST', roomList)
+  }
+
+  public updateAmqPlayerList(amqPlayerList: Array<IAmqPlayer>, sid: string): void {
+    this._client(sid).emit('UPDATE_AMQ_PLAYER_LIST', amqPlayerList)
   }
 
   public systemNotification(color: IBannerColor, message: string, sid: string = null): void {

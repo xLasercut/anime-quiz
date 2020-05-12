@@ -27,6 +27,10 @@
           state.roomList = roomList
         })
 
+        socket.on('disconnect', (): void => {
+          context.root.$router.push('/login')
+        })
+
         socket.emit('GET_ROOM_LIST')
       })
 

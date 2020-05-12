@@ -31,7 +31,7 @@ const gameRooms = new GameRooms()
 const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
 const adminHandler = new AdminHandler(logger, emitter, songDatabase)
 
-const amqHandler = new AmqHandler(logger, emitter, gameRooms)
+const amqHandler = new AmqHandler(io, logger, emitter, gameRooms)
 
 const roomHandler = new RoomHandler(logger, emitter, gameRooms)
 

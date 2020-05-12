@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 import store from '@/store'
 import {IChoices, ISong} from '../../../shared/interfaces/database'
+import {IAmqPlayer} from '../../../shared/interfaces/amq'
 
 //@ts-ignore
 const socket = io(GAME_SERVER, {autoConnect: false})
@@ -23,6 +24,10 @@ socket.on('UPDATE_ADMIN', (admin: boolean): void => {
 
 socket.on('UPDATE_USER_SONGS', (userSongs: Array<string>): void => {
   store.commit('SOCKET_UPDATE_USER_SONGS', userSongs)
+})
+
+socket.on('UPDATE_AMQ_PLAYER_LIST', (playerList: Array<IAmqPlayer>): void => {
+  store.commit('SOCKET_UPDATE_AMQ_PLAYER_LIST', playerList)
 })
 
 export {socket}
