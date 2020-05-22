@@ -91,6 +91,16 @@ const LOG_BASE = {
     code: 'LIST003',
     level: LOG_LEVEL.INFO,
     template: 'list data operation - id="{{id}}" operation="{{operation}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
+  },
+  EMOJI001: {
+    code: 'EMOJI001',
+    level: LOG_LEVEL.INFO,
+    template: 'emoji data request - id="{{id}}"'
+  },
+  EMOJI002: {
+    code: 'EMOJI002',
+    level: LOG_LEVEL.INFO,
+    template: 'emoji data operation - id="{{id}}" operation="{{operation}}" command="{{command}}" src="{{src}}" type="{{type}}"'
   }
 }
 

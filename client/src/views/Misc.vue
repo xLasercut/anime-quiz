@@ -11,10 +11,11 @@
 
 
 <script lang="ts">
-  import {computed, defineComponent} from '@vue/composition-api'
+  import {computed, defineComponent, onMounted} from '@vue/composition-api'
   import NavPanel from '@/components/NavPanel.vue'
   import MiscControls from '@/misc/MiscControls.vue'
   import Emoji from '@/misc/Emoji.vue'
+  import {socket} from '@/assets/socket'
 
   const componentMap = {
     'emoji': Emoji
@@ -24,9 +25,15 @@
     components: {
       NavPanel, MiscControls
     },
-    setup(_props, _context) {
+    setup(_props, context) {
       const component = computed(() => {
         return componentMap['emoji']
+      })
+
+      onMounted(() => {
+        if (socket.disconnected) {
+          context.root.$router.push('/login')
+        }
       })
 
       return {component}

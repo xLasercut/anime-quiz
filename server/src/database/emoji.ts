@@ -31,13 +31,23 @@ class EmojiDatabase {
     writeFile(EMOJI_LIST_PATH, this._emojiList)
   }
 
-  public deleteEmoji(emoji: IEmoji): void {
-    this._validateEmojiExists(emoji)
+  public editEmoji(emojiToEdit: IEmoji): void {
+    this._validateEmojiExists(emojiToEdit)
+    this._validateEmojiFields(emojiToEdit)
     let index = this._emojiList.findIndex((emoji: IEmoji) => {
-      return emoji.command.toLowerCase() == emoji.command.toLowerCase()
+      return emoji.command.toLowerCase() == emojiToEdit.command.toLowerCase()
+    })
+    this._emojiList[index] = emojiToEdit
+    writeFile(EMOJI_LIST_PATH, this._emojiList)
+  }
+
+  public deleteEmoji(emojiToDelete: IEmoji): void {
+    this._validateEmojiExists(emojiToDelete)
+    let index = this._emojiList.findIndex((emoji: IEmoji) => {
+      return emoji.command.toLowerCase() == emojiToDelete.command.toLowerCase()
     })
     this._emojiList.splice(index, 1)
-    this._commands.delete(emoji.command.toLowerCase())
+    this._commands.delete(emojiToDelete.command.toLowerCase())
     writeFile(EMOJI_LIST_PATH, this._emojiList)
   }
 
