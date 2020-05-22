@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="value" @input="$emit('input', $event)" width="600px">
+  <v-dialog v-model="show" width="600px">
     <v-card>
       <v-container fluid>
         <v-row justify="space-between" no-gutters>
@@ -7,7 +7,7 @@
             {{label}}
           </v-col>
           <v-col cols="auto">
-            <v-btn icon text small @click="$emit('dialog:close')">
+            <v-btn icon text small @click="show = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-col>
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+  import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
 
   export default defineComponent({
     props: {
@@ -29,6 +29,21 @@
       value: {
         required: true
       }
+    },
+    setup(props, context) {
+      const state = reactive({
+        show: props.value
+      })
+
+      watch(() => props.value, (val): void => {
+        state.show = val
+      })
+
+      watch(() => state.show, (val): void => {
+        context.emit('input', val)
+      })
+
+      return {...toRefs(state)}
     }
   })
 </script>

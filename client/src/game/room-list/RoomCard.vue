@@ -9,7 +9,7 @@
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
-        <icon-btn color="success" icon="mdi-login">Join</icon-btn>
+        <icon-btn color="success" icon="mdi-login" @click="joinRoom()">Join</icon-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -17,11 +17,12 @@
 
 <script lang="ts">
   import {defineComponent} from '@vue/composition-api'
-  import {IRoom} from '../../../../shared/interfaces/game'
+  import {IRoomSerial} from '../../../../shared/interfaces/game'
   import IconBtn from '@/components/buttons/IconBtn.vue'
+  import {socket} from '@/assets/socket'
 
   interface IProp {
-    room: IRoom
+    room: IRoomSerial
   }
 
   export default defineComponent<IProp>({
@@ -32,6 +33,20 @@
       room: {
         required: true
       }
+    },
+    setup(props, context) {
+      function joinRoom(): void {
+        let event = `LOGIN_${props.room.type.toUpperCase()}_EXIST`
+        socket.emit(
+          event,
+          props.room.roomId,
+          context.root.$store.state.client.username,
+          context.root.$store.state.client.avatar
+        )
+        context.root.$store.commit('UPDATE_ROOM_MODE', props.room.type)
+      }
+
+      return {joinRoom}
     }
   })
 </script>

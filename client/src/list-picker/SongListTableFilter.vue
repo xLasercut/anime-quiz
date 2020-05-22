@@ -3,29 +3,33 @@
     <table-filter-text
       label="Anime" :value="$store.state.list.songListFilter.anime"
       @input="updateSongFilter($event, 'anime')"
+      cols="3"
     ></table-filter-text>
     <table-filter-text
       label="Title" :value="$store.state.list.songListFilter.title"
       @input="updateSongFilter($event, 'title')"
+      cols="3"
     ></table-filter-text>
     <table-filter-select
       label="Type" :value="$store.state.list.songListFilter.type"
       :items="typeItems"
       @input="updateSongFilter($event, 'type')"
+      cols="3"
     ></table-filter-select>
     <table-filter-select
       label="User" :value="$store.state.list.currentUser"
       clearable
       :items="$store.state.list.users"
       @change="changeUser($event)"
+      cols="3"
     ></table-filter-select>
   </v-row>
 </template>
 
 <script lang="ts">
   import {defineComponent, reactive, toRefs} from '@vue/composition-api'
-  import TableFilterText from '@/list-picker/song-list-table/TableFilterText.vue'
-  import TableFilterSelect from '@/list-picker/song-list-table/TableFilterSelect.vue'
+  import TableFilterText from '@/components/table/TableFilterText.vue'
+  import TableFilterSelect from '@/components/table/TableFilterSelect.vue'
   import {debounce} from '@/assets/debounce'
   import {socket} from '@/assets/socket'
 

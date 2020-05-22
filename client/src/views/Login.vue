@@ -16,10 +16,12 @@
   import LoginControls from '@/login/LoginControls.vue'
   import {socket} from '@/assets/socket'
   import GameLogin from '@/login/GameLogin.vue'
+  import MiscLogin from '@/login/MiscLogin.vue'
 
   const componentMap: {[key: string]: any} = {
     'list': ListPickerLogin,
-    'game': GameLogin
+    'game': GameLogin,
+    'misc': MiscLogin
   }
 
   export default defineComponent({

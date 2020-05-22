@@ -1,7 +1,8 @@
 import io from 'socket.io-client'
 import store from '@/store'
-import {IChoices, ISong} from '../../../shared/interfaces/database'
+import {IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {IAmqPlayer} from '../../../shared/interfaces/amq'
+import {IRoomSerial} from '../../../shared/interfaces/game'
 
 //@ts-ignore
 const socket = io(GAME_SERVER, {autoConnect: false})
@@ -28,6 +29,14 @@ socket.on('UPDATE_USER_SONGS', (userSongs: Array<string>): void => {
 
 socket.on('UPDATE_AMQ_PLAYER_LIST', (playerList: Array<IAmqPlayer>): void => {
   store.commit('SOCKET_UPDATE_AMQ_PLAYER_LIST', playerList)
+})
+
+socket.on('UPDATE_ROOM_LIST', (roomList: Array<IRoomSerial>): void => {
+  store.commit('SOCKET_UPDATE_ROOM_LIST', roomList)
+})
+
+socket.on('UPDATE_EMOJI_LIST', (emojiList: Array<IEmoji>): void => {
+  store.commit('SOCKET_UPDATE_EMOJI_LIST', emojiList)
 })
 
 export {socket}

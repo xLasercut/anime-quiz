@@ -1,9 +1,11 @@
 import {IBannerColor} from '../types/game'
+import {IAmqGameMode} from '../types/amq'
+
 
 interface IAmqPlayer {
   username: string
-  score: number
   avatar: string
+  score: number
   admin: boolean
   host: boolean
   color: IBannerColor
@@ -13,5 +15,15 @@ interface IAmqPlayer {
   }
 }
 
+interface IAmqSettings {
+  songCount: number
+  guessTime: number
+  gameMode: IAmqGameMode
+  duplicate: boolean
+  selectTime: number
+  users: Array<string>
+  leastPlayed: boolean
+}
 
-export {IAmqPlayer}
+
+export {IAmqPlayer, IAmqSettings}

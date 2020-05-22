@@ -50,33 +50,41 @@ const listPicker: Module<IListStoreState, IRooteStoreState> = {
   },
   getters: {
     filteredSongList: (state: IListStoreState): Array<ISong> => {
-      let animeFilter = ''
-      let titleFilter = ''
       let typeFilter = ''
-
-      if (state.songListFilter.anime) {
-        animeFilter = state.songListFilter.anime.trim().toLowerCase()
-      }
-
-      if (state.songListFilter.title) {
-        titleFilter = state.songListFilter.title.trim().toLowerCase()
-      }
-
-      if (state.songListFilter.type && state.songListFilter.type !== 'All') {
+      let animeFilter = state.songListFilter.anime.trim().toLowerCase()
+      let titleFilter = state.songListFilter.title.trim().toLowerCase()
+      if (state.songListFilter.type !== 'All') {
         typeFilter = state.songListFilter.type.trim().toLowerCase()
       }
 
-      return state.songList.filter((song: ISong) => {
-        let anime = song.anime.join(',').toLowerCase()
-        let title = song.title.toLowerCase()
-        let type = song.type.toLowerCase()
+      return state.songList
+        .filter((song: ISong) => {
+          if (song.anime.join(',').toLowerCase().includes(animeFilter) &&
+            song.title.toLowerCase().includes(titleFilter) &&
+            song.type.toLowerCase().includes(typeFilter)) {
+            return song
+          }
+        })
+        .sort((a: ISong, b: ISong) => {
+          let animeA = a.anime[0]
+          let animeB = b.anime[0]
+          let titleA = a.title
+          let titleB = b.title
 
-        if (anime.includes(animeFilter) &&
-          title.includes(titleFilter) &&
-          type.includes(typeFilter)) {
-          return song
-        }
-      })
+          if (animeA === animeB) {
+            if (titleA > titleB) {
+              return 1
+            }
+            else if (titleA < titleB) {
+              return -1
+            }
+            return 0
+          }
+          else if (animeA > animeB) {
+            return 1
+          }
+          return -1
+        })
     }
   }
 }

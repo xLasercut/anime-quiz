@@ -1,24 +1,5 @@
-import {Server} from 'socket.io'
 import {IAmqPlayer} from '../../../../shared/interfaces/amq'
-import {ISocket} from '../../interfaces'
 import {IBannerColor} from '../../../../shared/types/game'
-
-class AmqPlayerManager {
-  protected _io: Server
-
-  constructor(io: Server) {
-    this._io = io
-  }
-
-  public getPlayerList(roomId: string): Array<IAmqPlayer> {
-    return Object.values(this._io.sockets.sockets).map((socket: ISocket) => {
-      if (socket.roomId === roomId) {
-        return socket.player.serialize()
-      }
-    })
-  }
-}
-
 
 class AmqPlayer {
   protected _username: string
@@ -51,4 +32,4 @@ class AmqPlayer {
 }
 
 
-export {AmqPlayer, AmqPlayerManager}
+export {AmqPlayer}

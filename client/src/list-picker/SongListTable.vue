@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12">
-      <table-filter></table-filter>
+      <song-list-table-filter></song-list-table-filter>
       <v-row justify="center" no-gutters>
         <v-col cols="12">
           <v-data-table
@@ -55,12 +55,12 @@
   import {defineComponent, reactive, toRefs} from '@vue/composition-api'
   import TableBtn from '@/components/buttons/TableBtn.vue'
   import {ISong} from '../../../shared/interfaces/database'
-  import TableFilter from '@/list-picker/song-list-table/TableFilter.vue'
+  import SongListTableFilter from '@/list-picker/SongListTableFilter.vue'
   import Pagination from '@/components/Pagination.vue'
 
   export default defineComponent({
     components: {
-      TableBtn, TableFilter, Pagination
+      TableBtn, SongListTableFilter, Pagination
     },
     setup(_props, context) {
       const state = reactive({

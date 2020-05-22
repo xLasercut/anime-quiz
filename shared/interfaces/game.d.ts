@@ -1,9 +1,9 @@
 import {IRoomType} from '../types/game'
 
-interface IRoom {
+interface IRoomSerial {
   name: string
   type: IRoomType
   roomId: string
 }
 
-export {IRoom}
+export {IRoomSerial}

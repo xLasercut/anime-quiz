@@ -1,6 +1,7 @@
 import {Module} from 'vuex'
 import {IClientStoreState, IRooteStoreState} from '@/assets/interfaces'
 import {ILoginMode, IRoomMode} from '@/assets/types'
+import {IRoomSerial} from '../../../shared/interfaces/game'
 
 function getDefaultState(): IClientStoreState {
   return {
@@ -8,7 +9,8 @@ function getDefaultState(): IClientStoreState {
     loginMode: 'game',
     username: '',
     avatar: 'zero_2',
-    roomMode: 'list'
+    roomMode: 'list',
+    roomList: []
   }
 }
 
@@ -34,6 +36,9 @@ const client: Module<IClientStoreState, IRooteStoreState> = {
     },
     SOCKET_UPDATE_ADMIN(state: IClientStoreState, admin: boolean): void {
       state.admin = admin
+    },
+    SOCKET_UPDATE_ROOM_LIST(state: IClientStoreState, roomList: Array<IRoomSerial>): void {
+      state.roomList = roomList
     },
     RESET_STORE_STATE(state: IClientStoreState): void {
       Object.assign(state, getDefaultState())

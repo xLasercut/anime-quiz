@@ -1,6 +1,7 @@
-import {IChoices, ISong} from '../../../shared/interfaces/database'
+import {IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {ILoginMode, IRoomMode} from '@/assets/types'
 import {IAmqPlayer} from '../../../shared/interfaces/amq'
+import {IRoomSerial} from '../../../shared/interfaces/game'
 
 interface IRooteStoreState {
 
@@ -21,6 +22,7 @@ interface IClientStoreState {
   username: string
   avatar: string
   roomMode: IRoomMode
+  roomList: Array<IRoomSerial>
 }
 
 interface ISongListFilter {
@@ -33,4 +35,21 @@ interface IAmqStoreState {
   playerList: Array<IAmqPlayer>
 }
 
-export {IListStoreState, IRooteStoreState, IClientStoreState, ISongListFilter, IAmqStoreState}
+interface IMiscStoreState {
+  emojiList: Array<IEmoji>
+  emojiListFilter: IEmojiListFilter
+}
+
+interface IEmojiListFilter {
+  command: string
+}
+
+export {
+  IListStoreState,
+  IRooteStoreState,
+  IClientStoreState,
+  ISongListFilter,
+  IAmqStoreState,
+  IMiscStoreState,
+  IEmojiListFilter
+}

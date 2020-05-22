@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+  import {defineComponent, onMounted} from '@vue/composition-api'
   import NavBtn from '@/components/buttons/NavBtn.vue'
   import {socket} from '@/assets/socket'
 
@@ -17,6 +17,10 @@
       function reloadRoomList(): void {
         socket.emit('GET_ROOM_LIST')
       }
+
+      onMounted((): void => {
+        reloadRoomList()
+      })
 
       return {reloadRoomList}
     }

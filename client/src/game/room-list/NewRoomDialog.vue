@@ -3,7 +3,7 @@
     <v-row justify="center">
       <icon-btn color="success" icon="mdi-plus" @click="show = true">New Room</icon-btn>
     </v-row>
-    <game-dialog label="New Room" v-model="show" @dialog:close="show = false">
+    <game-dialog label="New Room" v-model="show">
       <v-form v-model="valid" @submit.prevent="newRoom()">
         <v-row justify="center">
           <dialog-text
@@ -69,7 +69,12 @@
 
       function newRoom(): void {
         let event = `LOGIN_${state.roomType.toUpperCase()}_NEW`
-        socket.emit(event, state.roomName)
+        socket.emit(
+          event,
+          state.roomName,
+          context.root.$store.state.client.username,
+          context.root.$store.state.client.avatar
+        )
         context.root.$store.commit('UPDATE_ROOM_MODE', state.roomType)
       }
 

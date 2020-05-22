@@ -1,10 +1,10 @@
 <template>
-  <v-col cols="3">
-    <v-text-field
-      clearable hide-details v-bind="$attrs"
-      outlined dense
+  <v-col :cols="cols">
+    <v-select
+      outlined dense hide-details v-bind="$attrs"
       @input="$emit('input', $event)" :value="value"
-    ></v-text-field>
+      @change="$emit('change', $event)"
+    ></v-select>
   </v-col>
 </template>
 
@@ -14,6 +14,9 @@
   export default defineComponent({
     props: {
       value: {
+        required: true
+      },
+      cols: {
         required: true
       }
     }

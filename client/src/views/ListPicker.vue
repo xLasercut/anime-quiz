@@ -17,10 +17,7 @@
             @admin:edit="openDialog($event)"
             @admin:delete="deleteGameSong($event)"
           ></song-list-table>
-          <game-dialog
-            v-model="show" label="Song Editor"
-            @dialog:close="show = false"
-          >
+          <game-dialog v-model="show" label="Song Editor">
             <v-form v-model="valid" @submit.prevent="confirmSongEdit()">
               <v-row justify="center">
                 <dialog-multi-select
@@ -148,10 +145,6 @@
         if (socket.disconnected) {
           context.root.$router.push('/login')
         }
-
-        socket.on('disconnect', (): void => {
-          context.root.$router.push('/login')
-        })
       })
 
       return {...toRefs(state), openDialog, addUserSong, deleteUserSong, confirmSongEdit, deleteGameSong}

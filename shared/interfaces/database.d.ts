@@ -1,3 +1,5 @@
+import {IEmojiType} from '../types/game'
+
 interface ISong {
   songId: string
   anime: Array<string>
@@ -12,4 +14,10 @@ interface IChoices {
   title: Array<string>
 }
 
-export {ISong, IChoices}
+interface IEmoji {
+  src: string
+  command: string
+  type: IEmojiType
+}
+
+export {ISong, IChoices, IEmoji}

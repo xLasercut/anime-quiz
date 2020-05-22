@@ -15,7 +15,7 @@ class SongDatabase {
   }
 
   public loadData(): void {
-    this._songList = readFile(SONG_LIST_PATH).sort(this._sortByAnimeAndTitle)
+    this._songList = readFile(SONG_LIST_PATH)
     this._songIds = new Set()
     this._animeChoices = []
     this._titleChoices = []
@@ -101,28 +101,6 @@ class SongDatabase {
       titleDupes.add(lowerCaseTitle)
     }
   }
-
-  protected _sortByAnimeAndTitle(a: ISong, b: ISong): number {
-    let animeA = a.anime[0]
-    let animeB = b.anime[0]
-    let titleA = a.title
-    let titleB = b.title
-
-    if (animeA === animeB) {
-      if (titleA > titleB) {
-        return 1
-      }
-      else if (titleA < titleB) {
-        return -1
-      }
-      return 0
-    }
-    else if (animeA > animeB) {
-      return 1
-    }
-    return -1
-  }
-
 }
 
 export {SongDatabase}

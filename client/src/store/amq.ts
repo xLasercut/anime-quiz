@@ -8,7 +8,7 @@ function getDefaultState(): IAmqStoreState {
   }
 }
 
-export const amq: Module<IAmqStoreState, IRooteStoreState> = {
+const amq: Module<IAmqStoreState, IRooteStoreState> = {
   state: getDefaultState(),
   mutations: {
     SOCKET_UPDATE_AMQ_PLAYER_LIST(state: IAmqStoreState, playerList: Array<IAmqPlayer>): void {
@@ -20,3 +20,5 @@ export const amq: Module<IAmqStoreState, IRooteStoreState> = {
     }
   }
 }
+
+export default amq

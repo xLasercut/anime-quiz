@@ -9,9 +9,12 @@ import {SongDatabase} from './database/song'
 import {UserSongDatabase} from './database/user-song'
 import {ListPickerHandler} from './handlers/list-picker'
 import {AdminHandler} from './handlers/admin'
+import {MasterRoomManager} from './game/rooms/master'
 import {AmqHandler} from './handlers/amq'
 import {RoomHandler} from './handlers/room'
-import {GameRooms} from './game/room'
+import {AmqRoomManager} from './game/rooms/amq'
+import {EmojiDatabase} from './database/emoji'
+import {MiscHandler} from './handlers/misc'
 
 
 const logger = new Logger()
@@ -26,14 +29,17 @@ const emitter = new Emitter(io)
 
 const songDatabase = new SongDatabase()
 const userSongDatabase = new UserSongDatabase(songDatabase)
-const gameRooms = new GameRooms()
+const emojiDatabase = new EmojiDatabase()
+
+const masterRoomManager = new MasterRoomManager(io)
+const amqRoomManager = new AmqRoomManager(io)
 
 const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
+const miscHandler = new MiscHandler(logger, emitter, emojiDatabase)
 const adminHandler = new AdminHandler(logger, emitter, songDatabase)
 
-const amqHandler = new AmqHandler(io, logger, emitter, gameRooms)
-
-const roomHandler = new RoomHandler(logger, emitter, gameRooms)
+const roomHandler = new RoomHandler(logger, emitter, masterRoomManager)
+const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager)
 
 
 io.on('connect', (socket: ISocket) => {
@@ -62,6 +68,7 @@ io.on('connect', (socket: ISocket) => {
 function startHandlers(socket: ISocket): void {
   if (socket.auth) {
     listPickerHandler.start(socket, exceptionHandler)
+    miscHandler.start(socket, exceptionHandler)
     roomHandler.start(socket, exceptionHandler)
     amqHandler.start(socket, exceptionHandler)
 

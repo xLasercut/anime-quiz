@@ -1,8 +1,8 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
-import {IChoices, ISong} from '../../../shared/interfaces/database'
-import {IRoom} from '../../../shared/interfaces/game'
+import {IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {IAmqPlayer} from '../../../shared/interfaces/amq'
+import {IRoomSerial} from '../../../shared/interfaces/game'
 
 class Emitter {
   protected _io: socketio.Server
@@ -13,6 +13,10 @@ class Emitter {
 
   public updateSongList(songList: Array<ISong>, sid: string = null): void {
     this._client(sid).emit('UPDATE_SONG_LIST', songList)
+  }
+
+  public updateEmojiList(emojiList: Array<IEmoji>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_EMOJI_LIST', emojiList)
   }
 
   public updateUsers(users: Array<string>, sid: string = null): void {
@@ -31,7 +35,7 @@ class Emitter {
     this._client(sid).emit('UPDATE_ADMIN', admin)
   }
 
-  public updateRoomList(roomList: Array<IRoom>, sid: string = null): void {
+  public updateRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
     this._client(sid).emit('UPDATE_ROOM_LIST', roomList)
   }
 
