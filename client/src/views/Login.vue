@@ -19,9 +19,9 @@
   import MiscLogin from '@/login/MiscLogin.vue'
 
   const componentMap: {[key: string]: any} = {
-    'list': ListPickerLogin,
-    'game': GameLogin,
-    'misc': MiscLogin
+    list: ListPickerLogin,
+    game: GameLogin,
+    misc: MiscLogin
   }
 
   export default defineComponent({

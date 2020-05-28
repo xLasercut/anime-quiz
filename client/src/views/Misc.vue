@@ -18,7 +18,7 @@
   import {socket} from '@/assets/socket'
 
   const componentMap = {
-    'emoji': Emoji
+    emoji: Emoji
   }
 
   export default defineComponent({

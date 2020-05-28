@@ -13,7 +13,6 @@ const amq: Module<IAmqStoreState, IRooteStoreState> = {
   mutations: {
     SOCKET_UPDATE_AMQ_PLAYER_LIST(state: IAmqStoreState, playerList: Array<IAmqPlayer>): void {
       state.playerList = playerList
-      console.log(playerList)
     },
     RESET_STORE_STATE(state: IAmqStoreState): void {
       Object.assign(state, getDefaultState())

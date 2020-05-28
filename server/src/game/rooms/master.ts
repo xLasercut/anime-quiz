@@ -28,7 +28,7 @@ class MasterRoomManager {
   }
 
   public getRoom(roomId: string): any {
-    return this._io.sockets.adapter.rooms[roomId]
+    return this._io.sockets.adapter.rooms[roomId] || {}
   }
 
   public getPlayerList(roomId: string): Array<any> {

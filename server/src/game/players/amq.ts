@@ -4,8 +4,8 @@ import {IBannerColor} from '../../../../shared/types/game'
 class AmqPlayer {
   protected _username: string
   protected _avatar: string
+  protected _admin: boolean
   public score = 0
-  public admin = false
   public color: IBannerColor = 'error'
   public host = false
   public guess = {
@@ -13,9 +13,10 @@ class AmqPlayer {
     anime: ''
   }
 
-  constructor(username: string, avatar: string) {
+  constructor(username: string, avatar: string, admin: boolean) {
     this._username = username
     this._avatar = avatar
+    this._admin = admin
   }
 
   public serialize(): IAmqPlayer {
@@ -23,7 +24,7 @@ class AmqPlayer {
       username: this._username,
       avatar: this._avatar,
       score: this.score,
-      admin: this.admin,
+      admin: this._admin,
       host: this.host,
       color: this.color,
       guess: this.guess

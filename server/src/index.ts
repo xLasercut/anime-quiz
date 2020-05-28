@@ -39,7 +39,7 @@ const miscHandler = new MiscHandler(logger, emitter, emojiDatabase)
 const adminHandler = new AdminHandler(logger, emitter, songDatabase, emojiDatabase)
 
 const roomHandler = new RoomHandler(logger, emitter, masterRoomManager)
-const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager)
+const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager, songDatabase, userSongDatabase)
 
 
 io.on('connect', (socket: ISocket) => {

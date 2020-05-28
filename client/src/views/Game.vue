@@ -19,14 +19,16 @@
   import Amq from '@/game/Amq.vue'
   import {socket} from '@/assets/socket'
   import RoomListControls from '@/game/room-list/RoomListControls.vue'
+  import AmqControls from '@/game/amq/AmqControls.vue'
 
   const componentMap: { [key: string]: any } = {
-    'list': RoomList,
-    'amq': Amq
+    list: RoomList,
+    amq: Amq
   }
 
   const controlComponentMap: {[key: string]: any} = {
-    'list': RoomListControls
+    list: RoomListControls,
+    amq: AmqControls
   }
 
   export default defineComponent({
