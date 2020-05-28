@@ -28,7 +28,7 @@ class EmojiDatabase {
     this._validateEmojiFields(emoji)
     this._emojiList.push(emoji)
     this._commands.add(emoji.command.toLowerCase())
-    writeFile(EMOJI_LIST_PATH, this._emojiList)
+    this._saveList()
   }
 
   public editEmoji(emojiToEdit: IEmoji): void {
@@ -38,7 +38,7 @@ class EmojiDatabase {
       return emoji.command.toLowerCase() == emojiToEdit.command.toLowerCase()
     })
     this._emojiList[index] = emojiToEdit
-    writeFile(EMOJI_LIST_PATH, this._emojiList)
+    this._saveList()
   }
 
   public deleteEmoji(emojiToDelete: IEmoji): void {
@@ -48,7 +48,7 @@ class EmojiDatabase {
     })
     this._emojiList.splice(index, 1)
     this._commands.delete(emojiToDelete.command.toLowerCase())
-    writeFile(EMOJI_LIST_PATH, this._emojiList)
+    this._saveList()
   }
 
   protected _validateEmojiNotExists(emoji: IEmoji): void {
@@ -67,6 +67,10 @@ class EmojiDatabase {
     if (!emoji.src || !emoji.command.match(this._commandFormat) || !emoji.type) {
       throw  new ServerDataError('Invalid emoji field')
     }
+  }
+
+  protected _saveList(): void {
+    writeFile(EMOJI_LIST_PATH, this._emojiList)
   }
 }
 

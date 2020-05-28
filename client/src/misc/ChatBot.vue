@@ -11,13 +11,15 @@
       </v-row>
       <chat-bot-list-table
         @chat:edit="openDialog($event)"
+        @chat:delete="deleteChatBot($event)"
       ></chat-bot-list-table>
       <game-dialog v-model="show" label="Chat Bot Editor">
-        <v-form v-model="valid" @submit.prevent="confirmEmojiEdit()">
+        <v-form v-model="valid" @submit.prevent="confirmEdit()">
           <v-row justify="center">
             <dialog-text
               label="Regex"
               v-model="form.regex"
+              :rules="rules('Regex')"
             ></dialog-text>
             <dialog-text
               label="Flag"
@@ -27,7 +29,8 @@
               label="Avatar"
               :items="$store.getters.avatarList"
               item-value="avatar"
-              v-model="form.response.avatar"
+              v-model="form.avatar"
+              :rules="rules('Avatar')"
             >
               <template #item="{item}">
                 <v-list-item-avatar>
@@ -49,15 +52,18 @@
             </dialog-select>
             <dialog-text
               label="User"
-              v-model.trim="form.response.user"
+              v-model.trim="form.user"
+              :rules="rules('User')"
             ></dialog-text>
             <dialog-textarea
               label="Text"
-              v-model.trim="form.response.text"
+              v-model.trim="form.text"
+              :rules="rules('Text')"
             ></dialog-textarea>
             <dialog-text
               label="ID"
-              v-model.trim="form.response.id"
+              v-model.trim="form.userId"
+              :rules="rules('ID')"
             ></dialog-text>
             <dialog-confirm-btn :disabled="!valid"></dialog-confirm-btn>
           </v-row>
@@ -89,19 +95,17 @@
         form: Object.assign({}, getDefaultForm()),
         show: false,
         valid: false,
-        isEdit: false
+        isEdit: false,
       })
 
       function getDefaultForm(): IChatBot {
         return {
           regex: '',
           flag: '',
-          response: {
-            user: '',
-            text: '',
-            avatar: '',
-            id: ''
-          }
+          user: '',
+          text: '',
+          avatar: '',
+          userId: ''
         }
       }
 
@@ -117,12 +121,34 @@
         state.show = true
       }
 
+      function confirmEdit(): void {
+        if (state.valid && state.show) {
+          if (state.isEdit) {
+            socket.emit('EDIT_GAME_CHAT_BOT', state.form)
+          }
+          else {
+            socket.emit('ADD_GAME_CHAT_BOT', state.form)
+          }
+          state.show = false
+        }
+      }
+
+      function deleteChatBot(chatBot: IChatBot): void {
+        socket.emit('DELETE_GAME_CHAT_BOT', chatBot)
+      }
+
+      function rules(label: string): Array<any> {
+        return [
+          (v: string): boolean | string => !!v || `${label} cannot be empty`
+        ]
+      }
+
       function reload(): void {
         context.root.$store.commit('SOCKET_UPDATE_CHAT_BOT_LIST', [])
         socket.emit('GET_CHAT_BOT_LIST')
       }
 
-      return {...toRefs(state), reload, openDialog}
+      return {...toRefs(state), reload, openDialog, confirmEdit, rules, deleteChatBot}
     }
   })
 </script>

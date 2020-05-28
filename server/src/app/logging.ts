@@ -106,6 +106,11 @@ const LOG_BASE = {
     code: 'CHAT001',
     level: LOG_LEVEL.INFO,
     template: 'chat bot data request - id="{{id}}"'
+  },
+  CHAT002: {
+    code: 'CHAT002',
+    level: LOG_LEVEL.INFO,
+    template: 'chat bot data operation - id="{{id}}" operation="{{operation}}" regex="{{regex}}" flag="{{flag}}" user="{{user}}" text="{{text}}" avatar="{{avatar}}" userId="{{userId}}"'
   }
 }
 

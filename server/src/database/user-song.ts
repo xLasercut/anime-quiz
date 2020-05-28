@@ -71,13 +71,13 @@ class UserSong {
   public addSongId(songId: string): void {
     this._validateSongIdNotExists(songId)
     this._songIds.add(songId)
-    this._writeSongList()
+    this._saveList()
   }
 
   public deleteSongId(songId: string): void {
     this._validateSongIdExists(songId)
     this._songIds.delete(songId)
-    this._writeSongList()
+    this._saveList()
   }
 
   public loadData(): void {
@@ -96,7 +96,7 @@ class UserSong {
     }
   }
 
-  protected _writeSongList(): void {
+  protected _saveList(): void {
     writeFile(this._filepath, Array.from(this._songIds))
   }
 }

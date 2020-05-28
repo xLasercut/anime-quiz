@@ -1,40 +1,38 @@
 <template>
   <v-row justify="center">
     <v-col cols="12">
-      <v-row justify="center" no-gutters>
-        <v-data-table
-          disable-pagination disable-filtering disable-sort dense
-          hide-default-footer
-          :headers="headers"
-          :items="displayData()"
-        >
-          <template #top>
-            <chat-bot-list-table-filter></chat-bot-list-table-filter>
-          </template>
+      <v-data-table
+        disable-pagination disable-filtering disable-sort dense
+        hide-default-footer
+        :headers="headers"
+        :items="displayData()"
+      >
+        <template #top>
+          <chat-bot-list-table-filter></chat-bot-list-table-filter>
+        </template>
 
-          <template #item.response.avatar="{item}">
-            <game-avatar :avatar="item.response.avatar"></game-avatar>
-          </template>
+        <template #item.avatar="{item}">
+          <game-avatar :avatar="item.avatar"></game-avatar>
+        </template>
 
-          <template #item.action="{item}">
-            <table-btn
-              icon="mdi-pencil" color="warning"
-              @click="$emit('chat:edit', item)"
-            ></table-btn>
-            <table-btn
-              icon="mdi-delete" color="error"
-              @click="$emit('chat:delete', item)"
-            ></table-btn>
-          </template>
+        <template #item.action="{item}">
+          <table-btn
+            icon="mdi-pencil" color="warning"
+            @click="$emit('chat:edit', item)"
+          ></table-btn>
+          <table-btn
+            icon="mdi-delete" color="error"
+            @click="$emit('chat:delete', item)"
+          ></table-btn>
+        </template>
 
-          <template #footer>
-            <pagination
-              v-model="currentPage"
-              :max-page="maxPage" :items="items" :items-per-page.sync="itemsPerPage"
-            ></pagination>
-          </template>
-        </v-data-table>
-      </v-row>
+        <template #footer>
+          <pagination
+            v-model="currentPage"
+            :max-page="maxPage" :items="items" :items-per-page.sync="itemsPerPage"
+          ></pagination>
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>
@@ -60,10 +58,10 @@
         headers: [
           {text: 'Regex', value: 'regex'},
           {text: 'Flag', value: 'flag', width: 50},
-          {text: 'ID', value: 'response.id'},
-          {text: 'Avatar', value: 'response.avatar', width: 50},
-          {text: 'User', value: 'response.user'},
-          {text: 'Text', value: 'response.text'},
+          {text: 'ID', value: 'userId'},
+          {text: 'Avatar', value: 'avatar', width: 50},
+          {text: 'User', value: 'user'},
+          {text: 'Text', value: 'text'},
           {text: 'Action', value: 'action', width: 120}
         ]
       })

@@ -38,7 +38,7 @@ const amqRoomManager = new AmqRoomManager(io)
 
 const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
 const miscHandler = new MiscHandler(logger, emitter, emojiDatabase, chatBotDatabase)
-const adminHandler = new AdminHandler(logger, emitter, songDatabase, emojiDatabase)
+const adminHandler = new AdminHandler(logger, emitter, songDatabase, emojiDatabase, chatBotDatabase)
 
 const roomHandler = new RoomHandler(logger, emitter, masterRoomManager)
 const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager, songDatabase, userSongDatabase)

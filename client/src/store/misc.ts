@@ -66,7 +66,7 @@ const misc: Module<IMiscStoreState, IRooteStoreState> = {
           }
         })
         .sort((a: IChatBot, b: IChatBot) => {
-          if (a.response.id > b.response.id) {
+          if (a.userId > b.userId) {
             return 1
           }
           return -1

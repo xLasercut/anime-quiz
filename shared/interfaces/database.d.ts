@@ -23,14 +23,10 @@ interface IEmoji {
 interface IChatBot {
   regex: string
   flag: string
-  response: IChatBotResponse
-}
-
-interface IChatBotResponse {
   user: string
   text: string
   avatar: string
-  id: string
+  userId: string
 }
 
-export {ISong, IChoices, IEmoji, IChatBotResponse, IChatBot}
+export {ISong, IChoices, IEmoji, IChatBot}

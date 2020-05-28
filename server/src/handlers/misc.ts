@@ -19,7 +19,7 @@ class MiscHandler extends AbstractHandler {
 
   public start(socket: ISocket, exceptionHandler: Function): void {
     socket.on('LOGIN_MISC', exceptionHandler(socket, (): void => {
-      this._logger.writeLog(LOG_BASE.SERVER005, {id: socket.id, service: this._roomId})
+      this._logger.writeLog(LOG_BASE.SERVER005, {id: socket.id, roomId: this._roomId})
       socket.join(this._roomId)
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
       this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList(), socket.id)

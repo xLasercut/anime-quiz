@@ -1,7 +1,7 @@
 <template>
   <v-col cols="10">
     <v-text-field
-      :value="value" @input="$emit('input', $event)"
+      :value="value" @input="emitChange($event)"
       v-bind="$attrs" clearable outlined
       dense
       class="dialog-item"
@@ -17,6 +17,18 @@
       value: {
         required: true
       }
+    },
+    setup(_props, context) {
+      function emitChange(val: string): void {
+        if (val) {
+          context.emit('input', val)
+        }
+        else {
+          context.emit('input', '')
+        }
+      }
+
+      return {emitChange}
     }
   })
 </script>
