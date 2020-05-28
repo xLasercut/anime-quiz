@@ -1,52 +1,54 @@
 <template>
-  <v-row justify="center" align="center">
+  <v-row justify="center" no-gutters>
     <v-col cols="12">
-      <song-list-table-filter></song-list-table-filter>
-      <v-row justify="center" no-gutters>
-        <v-col cols="12">
-          <v-data-table
-            disable-sort disable-filtering disable-pagination dense
-            hide-default-footer
-            :headers="headers"
-            :items="displayData()"
-          >
-            <template #item.anime="{item}">
-              {{item.anime[0]}}
-            </template>
+      <v-data-table
+        disable-sort disable-filtering disable-pagination dense
+        hide-default-footer
+        :headers="headers"
+        :items="displayData()"
+      >
+        <template #top>
+          <song-list-table-filter></song-list-table-filter>
+        </template>
 
-            <template #item.src="{item}">
-              <a :href="item.src" target="_blank">View</a>
-            </template>
+        <template #item.anime="{item}">
+          {{item.anime[0]}}
+        </template>
 
-            <template #item.action="{item}">
-              <table-btn
-                color="success" icon="mdi-plus"
-                @click="$emit('user:add', item)"
-                :disabled="disableAddBtn(item)"
-              ></table-btn>
-              <table-btn
-                color="error" icon="mdi-minus"
-                @click="$emit('user:delete', item)"
-                :disabled="disableDeleteBtn(item)"
-              ></table-btn>
-              <table-btn
-                color="warning" icon="mdi-pencil-plus"
-                @click="$emit('admin:edit', item)"
-                v-if="$store.state.client.admin"
-              ></table-btn>
-              <table-btn
-                color="error" icon="mdi-delete"
-                @click="$emit('admin:delete', item)"
-                v-if="$store.state.client.admin"
-              ></table-btn>
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row>
-      <pagination
-        v-model="currentPage"
-        :max-page="maxPage" :items="items" :items-per-page.sync="itemsPerPage"
-      ></pagination>
+        <template #item.src="{item}">
+          <a :href="item.src" target="_blank">View</a>
+        </template>
+
+        <template #item.action="{item}">
+          <table-btn
+            color="success" icon="mdi-plus"
+            @click="$emit('user:add', item)"
+            :disabled="disableAddBtn(item)"
+          ></table-btn>
+          <table-btn
+            color="error" icon="mdi-minus"
+            @click="$emit('user:delete', item)"
+            :disabled="disableDeleteBtn(item)"
+          ></table-btn>
+          <table-btn
+            color="warning" icon="mdi-pencil-plus"
+            @click="$emit('admin:edit', item)"
+            v-if="$store.state.client.admin"
+          ></table-btn>
+          <table-btn
+            color="error" icon="mdi-delete"
+            @click="$emit('admin:delete', item)"
+            v-if="$store.state.client.admin"
+          ></table-btn>
+        </template>
+
+        <template #footer>
+          <pagination
+            v-model="currentPage"
+            :max-page="maxPage" :items="items" :items-per-page.sync="itemsPerPage"
+          ></pagination>
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>

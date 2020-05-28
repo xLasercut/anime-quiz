@@ -1,5 +1,5 @@
-import {IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
-import {ILoginMode, IRoomMode} from '@/assets/types'
+import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
+import {ILoginMode, IMiscMode, IRoomMode} from '@/assets/types'
 import {IAmqPlayer} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
 
@@ -23,6 +23,7 @@ interface IClientStoreState {
   avatar: string
   roomMode: IRoomMode
   roomList: Array<IRoomSerial>
+  avatarMap: {[key: string]: string}
 }
 
 interface ISongListFilter {
@@ -36,12 +37,24 @@ interface IAmqStoreState {
 }
 
 interface IMiscStoreState {
+  miscMode: IMiscMode
   emojiList: Array<IEmoji>
   emojiListFilter: IEmojiListFilter
+  chatBotList: Array<IChatBot>
+  chatBotListFilter: IChatBotListFilter
 }
 
 interface IEmojiListFilter {
   command: string
+}
+
+interface IChatBotListFilter {
+  regex: string
+}
+
+interface IAvatar {
+  avatar: string
+  src: string
 }
 
 export {
@@ -51,5 +64,7 @@ export {
   ISongListFilter,
   IAmqStoreState,
   IMiscStoreState,
-  IEmojiListFilter
+  IEmojiListFilter,
+  IChatBotListFilter,
+  IAvatar
 }

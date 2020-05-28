@@ -3,9 +3,7 @@
     <v-col cols="auto">
       <v-badge overlap left :color="badgeColor">
         <v-icon v-if="admin || host" color="white" slot="badge">mdi-crown</v-icon>
-        <v-avatar tile size="100px">
-          <v-img :src="avatarImage(avatar)" aspect-ratio="1"></v-img>
-        </v-avatar>
+        <game-avatar tile size="100px" :avatar="avatar"></game-avatar>
       </v-badge>
     </v-col>
   </v-row>
@@ -13,9 +11,12 @@
 
 <script lang="ts">
   import {computed, defineComponent} from '@vue/composition-api'
-  import {avatarImage} from '@/assets/avatar'
+  import GameAvatar from '@/components/GameAvatar.vue'
 
   export default defineComponent({
+    components: {
+      GameAvatar
+    },
     props: {
       avatar: {
         required: true
@@ -41,7 +42,7 @@
         return 'primary'
       })
 
-      return {avatarImage, badgeColor}
+      return {badgeColor}
     }
   })
 </script>

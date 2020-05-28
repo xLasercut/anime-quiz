@@ -20,4 +20,17 @@ interface IEmoji {
   type: IEmojiType
 }
 
-export {ISong, IChoices, IEmoji}
+interface IChatBot {
+  regex: string
+  flag: string
+  response: IChatBotResponse
+}
+
+interface IChatBotResponse {
+  user: string
+  text: string
+  avatar: string
+  id: string
+}
+
+export {ISong, IChoices, IEmoji, IChatBotResponse, IChatBot}

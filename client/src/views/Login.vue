@@ -18,14 +18,14 @@
   import GameLogin from '@/login/GameLogin.vue'
   import MiscLogin from '@/login/MiscLogin.vue'
 
-  const componentMap: {[key: string]: any} = {
+  const componentMap: { [key: string]: any } = {
     list: ListPickerLogin,
     game: GameLogin,
     misc: MiscLogin
   }
 
   export default defineComponent({
-    components:{
+    components: {
       NavPanel, LoginControls
     },
     setup(_props, context) {

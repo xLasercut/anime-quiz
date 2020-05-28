@@ -1,25 +1,25 @@
 <template>
   <v-toolbar-items>
-    <nav-btn color="warning" icon="mdi-sync" @click="reloadEmojiList()"></nav-btn>
+    <nav-btn color="warning" icon="mdi-sticker-emoji" @click="changeMiscMode('emoji')"></nav-btn>
+    <nav-btn color="primary" icon="mdi-robot" @click="changeMiscMode('chat')"></nav-btn>
   </v-toolbar-items>
 </template>
 
 <script lang="ts">
   import {defineComponent} from '@vue/composition-api'
   import NavBtn from '@/components/buttons/NavBtn.vue'
-  import {socket} from '@/assets/socket'
+  import {IMiscMode} from '@/assets/types'
 
   export default defineComponent({
     components: {
       NavBtn
     },
     setup(_props, context) {
-      function reloadEmojiList(): void {
-        context.root.$store.commit('SOCKET_UPDATE_EMOJI_LIST', [])
-        socket.emit('GET_EMOJI_LIST')
+      function changeMiscMode(mode: IMiscMode): void {
+        context.root.$store.commit('UPDATE_MISC_MODE', mode)
       }
 
-      return {reloadEmojiList}
+      return {changeMiscMode}
     }
   })
 </script>

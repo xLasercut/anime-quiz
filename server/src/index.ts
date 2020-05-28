@@ -15,6 +15,7 @@ import {RoomHandler} from './handlers/room'
 import {AmqRoomManager} from './game/rooms/amq'
 import {EmojiDatabase} from './database/emoji'
 import {MiscHandler} from './handlers/misc'
+import {ChatBotDatabase} from './database/chat-bot'
 
 
 const logger = new Logger()
@@ -30,12 +31,13 @@ const emitter = new Emitter(io)
 const songDatabase = new SongDatabase()
 const userSongDatabase = new UserSongDatabase(songDatabase)
 const emojiDatabase = new EmojiDatabase()
+const chatBotDatabase = new ChatBotDatabase()
 
 const masterRoomManager = new MasterRoomManager(io)
 const amqRoomManager = new AmqRoomManager(io)
 
 const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
-const miscHandler = new MiscHandler(logger, emitter, emojiDatabase)
+const miscHandler = new MiscHandler(logger, emitter, emojiDatabase, chatBotDatabase)
 const adminHandler = new AdminHandler(logger, emitter, songDatabase, emojiDatabase)
 
 const roomHandler = new RoomHandler(logger, emitter, masterRoomManager)

@@ -5,6 +5,9 @@
         <v-col cols="auto">
           <icon-btn icon="mdi-plus" color="success" @click="openDialog(null)">New Emoji</icon-btn>
         </v-col>
+        <v-col cols="auto">
+          <icon-btn icon="mdi-sync" color="warning" @click="reloadEmojiList()">Reload</icon-btn>
+        </v-col>
       </v-row>
       <emoji-list-table
         @emoji:edit="openDialog($event)"
@@ -120,7 +123,12 @@
         }
       }
 
-      return {...toRefs(state), confirmEmojiEdit, emoji, openDialog, deleteEmoji}
+      function reloadEmojiList(): void {
+        context.root.$store.commit('SOCKET_UPDATE_EMOJI_LIST', [])
+        socket.emit('GET_EMOJI_LIST')
+      }
+
+      return {...toRefs(state), confirmEmojiEdit, emoji, openDialog, deleteEmoji, reloadEmojiList}
     }
   })
 </script>

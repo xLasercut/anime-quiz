@@ -4,9 +4,22 @@
       v-bind="$attrs"
       :value="value"
       @input="$emit('input', $event)"
+      class="dialog-item"
       outlined
       dense
-    ></v-select>
+    >
+      <template #item="{item}">
+        <slot name="item" :item="item">
+          {{item}}
+        </slot>
+      </template>
+
+      <template #selection="{item}">
+        <slot name="selection" :item="item">
+          {{item}}
+        </slot>
+      </template>
+    </v-select>
   </v-col>
 </template>
 

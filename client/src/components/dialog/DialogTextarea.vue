@@ -1,15 +1,11 @@
 <template>
   <v-col cols="10">
-    <v-combobox
-      outlined
-      multiple
-      v-bind="$attrs"
-      :value="value"
-      @input="$emit('input', $event)"
-      chips
-      dense
+    <v-textarea
+      :value="value" @input="$emit('input', $event)"
+      v-bind="$attrs" clearable outlined
+      dense no-resize
       class="dialog-item"
-    ></v-combobox>
+    ></v-textarea>
   </v-col>
 </template>
 

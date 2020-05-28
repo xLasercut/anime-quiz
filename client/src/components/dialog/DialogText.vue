@@ -4,6 +4,7 @@
       :value="value" @input="$emit('input', $event)"
       v-bind="$attrs" clearable outlined
       dense
+      class="dialog-item"
     ></v-text-field>
   </v-col>
 </template>

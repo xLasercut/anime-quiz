@@ -101,6 +101,11 @@ const LOG_BASE = {
     code: 'EMOJI002',
     level: LOG_LEVEL.INFO,
     template: 'emoji data operation - id="{{id}}" operation="{{operation}}" command="{{command}}" src="{{src}}" type="{{type}}"'
+  },
+  CHAT001: {
+    code: 'CHAT001',
+    level: LOG_LEVEL.INFO,
+    template: 'chat bot data request - id="{{id}}"'
   }
 }
 

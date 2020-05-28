@@ -38,6 +38,12 @@
     overflow: auto;
   }
 
+  .chat-window {
+    height: calc(100vh - 85px);
+    border-radius: 5px;
+    background-color: var(--v-background-darken1) !important;
+  }
+
   .v-application {
     background-color: var(--v-background-base) !important;
   }
@@ -46,7 +52,7 @@
     background-color: var(--v-background-darken1) !important;
   }
 
-  .v-textarea .v-input__slot {
+  .dialog-item .v-input__slot {
     background-color: var(--v-background-base) !important;
   }
 

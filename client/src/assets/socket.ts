@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 import store from '@/store'
-import {IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
+import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {IAmqPlayer} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
 
@@ -37,6 +37,10 @@ socket.on('UPDATE_ROOM_LIST', (roomList: Array<IRoomSerial>): void => {
 
 socket.on('UPDATE_EMOJI_LIST', (emojiList: Array<IEmoji>): void => {
   store.commit('SOCKET_UPDATE_EMOJI_LIST', emojiList)
+})
+
+socket.on('UPDATE_CHAT_BOT_LIST', (chatBotList: Array<IChatBot>): void => {
+  store.commit('SOCKET_UPDATE_CHAT_BOT_LIST', chatBotList)
 })
 
 export {socket}

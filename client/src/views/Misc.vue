@@ -16,9 +16,11 @@
   import MiscControls from '@/misc/MiscControls.vue'
   import Emoji from '@/misc/Emoji.vue'
   import {socket} from '@/assets/socket'
+  import ChatBot from '@/misc/ChatBot.vue'
 
-  const componentMap = {
-    emoji: Emoji
+  const componentMap: { [key: string]: any } = {
+    emoji: Emoji,
+    chat: ChatBot
   }
 
   export default defineComponent({
@@ -27,7 +29,7 @@
     },
     setup(_props, context) {
       const component = computed(() => {
-        return componentMap['emoji']
+        return componentMap[context.root.$store.state.misc.miscMode]
       })
 
       onMounted(() => {

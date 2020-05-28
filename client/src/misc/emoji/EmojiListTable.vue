@@ -1,45 +1,47 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" no-gutters>
     <v-col cols="12">
-      <emoji-list-table-filter></emoji-list-table-filter>
-      <v-row justify="center" no-gutters>
-        <v-col cols="12">
-          <v-data-table
-            disable-pagination disable-filtering disable-sort dense
-            hide-default-footer
-            :headers="headers()"
-            :items="displayData()"
-          >
-            <template #item.command="{item}">
-              :{{item.command}}:
-            </template>
+      <v-data-table
+        disable-pagination disable-filtering disable-sort dense
+        hide-default-footer
+        :headers="headers()"
+        :items="displayData()"
+      >
+        <template #top>
+          <emoji-list-table-filter></emoji-list-table-filter>
+        </template>
 
-            <template #item.emoji="{item}">
-              <emoji-preview :emoji="item"></emoji-preview>
-            </template>
+        <template #item.command="{item}">
+          :{{item.command}}:
+        </template>
 
-            <template #item.src="{item}">
-              <a :href="item.src" target="_blank" v-if="item.type === 'img'">View</a>
-              <span v-else>{{item.src}}</span>
-            </template>
+        <template #item.emoji="{item}">
+          <emoji-preview :emoji="item"></emoji-preview>
+        </template>
 
-            <template #item.action="{item}">
-              <table-btn
-                icon="mdi-pencil" color="warning"
-                @click="$emit('emoji:edit', item)"
-              ></table-btn>
-              <table-btn
-                icon="mdi-delete" color="error"
-                @click="$emit('emoji:delete', item)"
-              ></table-btn>
-            </template>
-          </v-data-table>
+        <template #item.src="{item}">
+          <a :href="item.src" target="_blank" v-if="item.type === 'img'">View</a>
+          <span v-else>{{item.src}}</span>
+        </template>
+
+        <template #item.action="{item}">
+          <table-btn
+            icon="mdi-pencil" color="warning"
+            @click="$emit('emoji:edit', item)"
+          ></table-btn>
+          <table-btn
+            icon="mdi-delete" color="error"
+            @click="$emit('emoji:delete', item)"
+          ></table-btn>
+        </template>
+
+        <template #footer>
           <pagination
             v-model="currentPage"
             :max-page="maxPage" :items="items" :items-per-page.sync="itemsPerPage"
           ></pagination>
-        </v-col>
-      </v-row>
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>

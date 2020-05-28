@@ -3,9 +3,7 @@
     <v-col cols="auto" v-for="avatar in avatars" :key="avatar">
       <input :id="avatar" type="radio" :value="avatar" :disabled="disabled" v-model="model"/>
       <label :for="avatar">
-        <v-avatar tile size="100px">
-          <v-img :src="avatarImage(avatar)"></v-img>
-        </v-avatar>
+        <game-avatar :avatar="avatar" tile size="100px"></game-avatar>
       </label>
     </v-col>
   </v-row>
@@ -13,9 +11,12 @@
 
 <script lang="ts">
   import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
-  import {avatarImage} from '@/assets/avatar'
+  import GameAvatar from '@/components/GameAvatar.vue'
 
   export default defineComponent({
+    components: {
+      GameAvatar
+    },
     props: {
       avatars: {
         required: true
@@ -40,7 +41,7 @@
         state.model = val
       })
 
-      return {...toRefs(state), avatarImage}
+      return {...toRefs(state)}
     }
   })
 </script>
@@ -55,7 +56,6 @@
     outline: 1px solid black;
     cursor: pointer;
     transition: all 0.1s;
-    background-color: white;
   }
 
   input:checked + label .v-avatar {

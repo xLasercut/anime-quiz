@@ -1,6 +1,6 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
-import {IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
+import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {IAmqPlayer} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
 
@@ -17,6 +17,10 @@ class Emitter {
 
   public updateEmojiList(emojiList: Array<IEmoji>, sid: string = null): void {
     this._client(sid).emit('UPDATE_EMOJI_LIST', emojiList)
+  }
+
+  public updateChatBotList(chatBotList: Array<IChatBot>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_CHAT_BOT_LIST', chatBotList)
   }
 
   public updateUsers(users: Array<string>, sid: string = null): void {
