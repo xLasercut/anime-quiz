@@ -48,6 +48,14 @@ class ChatBotDatabase {
     this._saveList()
   }
 
+  public getChatBot(msg: string): IChatBot {
+    for (let chatBot of this._chatBotList) {
+      if (msg.match(new RegExp(chatBot.regex, chatBot.flag))) {
+        return chatBot
+      }
+    }
+  }
+
   protected _validChatBotExists(chatBot: IChatBot): void {
     if (!this._regexes.has(chatBot.regex)) {
       throw new GameDataError('Chat bot regex not in database')

@@ -1,7 +1,13 @@
 <template>
   <v-toolbar-items>
-    <nav-btn color="warning" icon="mdi-sticker-emoji" @click="changeMiscMode('emoji')"></nav-btn>
-    <nav-btn color="primary" icon="mdi-robot" @click="changeMiscMode('chat')"></nav-btn>
+    <nav-btn
+      color="warning" icon="mdi-sticker-emoji" @click="changeMiscMode('emoji')"
+      v-if="$store.state.client.admin"
+    ></nav-btn>
+    <nav-btn
+      color="primary" icon="mdi-robot" @click="changeMiscMode('chat')"
+      v-if="$store.state.client.admin"
+    ></nav-btn>
   </v-toolbar-items>
 </template>
 

@@ -8,11 +8,13 @@ import {Server} from 'socket.io'
 import {AmqRoomManager} from '../game/rooms/amq'
 import {SongDatabase} from '../database/song'
 import {UserSongDatabase} from '../database/user-song'
+import {ChatManager} from '../game/chat'
 
 class AmqHandler extends AbstractHandler {
   protected _roomManager: AmqRoomManager
   protected _songDatabase: SongDatabase
   protected _userSongDatabase: UserSongDatabase
+  protected _chatManager: ChatManager
   protected _roomType: IRoomType = 'amq'
 
   constructor(
@@ -20,6 +22,7 @@ class AmqHandler extends AbstractHandler {
     logger: Logger,
     emitter: Emitter,
     roomManager: AmqRoomManager,
+    chatManager: ChatManager,
     songDatabase: SongDatabase,
     userSongDatabase: UserSongDatabase
   ) {
@@ -27,6 +30,7 @@ class AmqHandler extends AbstractHandler {
     this._roomManager = roomManager
     this._songDatabase = songDatabase
     this._userSongDatabase = userSongDatabase
+    this._chatManager = chatManager
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
@@ -40,6 +44,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateSongList(this._songDatabase.getSongList(), socket.id)
       this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
       this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
+      this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
     socket.on('LOGIN_AMQ_EXIST', exceptionHandler(socket, (roomId: string, username: string, avatar: string): void => {
@@ -50,22 +55,24 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateSongList(this._songDatabase.getSongList(), socket.id)
       this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
       this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
+      this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
     socket.on('LEAVE_ROOM', exceptionHandler(socket, (): void => {
       let roomId = socket.roomId
       if (this._roomManager.isAmqRoom(roomId)) {
+        let player = socket.player.serialize()
         this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
+        this._emitter.sendChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
       }
-      //let roomId = socket.roomId
-      //this._emitter.updateRoomList(this._roomManager.getRoomList())
-      //this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
     }))
 
     socket.on('disconnect', exceptionHandler(socket, (): void => {
       let roomId = socket.roomId
       if (this._roomManager.isAmqRoom(roomId)) {
+        let player = socket.player.serialize()
         this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
+        this._emitter.sendChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
       }
     }))
   }

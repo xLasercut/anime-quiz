@@ -2,7 +2,7 @@ import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
 import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {IAmqPlayer} from '../../../shared/interfaces/amq'
-import {IRoomSerial} from '../../../shared/interfaces/game'
+import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
 
 class Emitter {
   protected _io: socketio.Server
@@ -49,6 +49,10 @@ class Emitter {
 
   public systemNotification(color: IBannerColor, message: string, sid: string = null): void {
     this._client(sid).emit('SYSTEM_NOTIFICATION', color, message)
+  }
+
+  public sendChat(chat: IChat, sid: string = null): void {
+    this._client(sid).emit('UPDATE_CHAT_MESSAGE', chat)
   }
 
   protected _client(sid: string = null): socketio.Namespace | socketio.Server {

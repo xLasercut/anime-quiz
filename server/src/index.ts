@@ -16,6 +16,7 @@ import {AmqRoomManager} from './game/rooms/amq'
 import {EmojiDatabase} from './database/emoji'
 import {MiscHandler} from './handlers/misc'
 import {ChatBotDatabase} from './database/chat-bot'
+import {ChatManager} from './game/chat'
 
 
 const logger = new Logger()
@@ -33,6 +34,7 @@ const userSongDatabase = new UserSongDatabase(songDatabase)
 const emojiDatabase = new EmojiDatabase()
 const chatBotDatabase = new ChatBotDatabase()
 
+const chatManager = new ChatManager(logger, chatBotDatabase, emojiDatabase)
 const masterRoomManager = new MasterRoomManager(io)
 const amqRoomManager = new AmqRoomManager(io)
 
@@ -40,8 +42,8 @@ const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, u
 const miscHandler = new MiscHandler(logger, emitter, emojiDatabase, chatBotDatabase)
 const adminHandler = new AdminHandler(logger, emitter, songDatabase, emojiDatabase, chatBotDatabase)
 
-const roomHandler = new RoomHandler(logger, emitter, masterRoomManager)
-const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager, songDatabase, userSongDatabase)
+const roomHandler = new RoomHandler(logger, emitter, masterRoomManager, chatManager)
+const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager, chatManager, songDatabase, userSongDatabase)
 
 
 io.on('connect', (socket: ISocket) => {
