@@ -9,12 +9,14 @@ import {AmqRoomManager} from '../game/rooms/amq'
 import {SongDatabase} from '../database/song'
 import {UserSongDatabase} from '../database/user-song'
 import {ChatManager} from '../game/chat'
+import {EmojiDatabase} from '../database/emoji'
 
 class AmqHandler extends AbstractHandler {
   protected _roomManager: AmqRoomManager
   protected _songDatabase: SongDatabase
   protected _userSongDatabase: UserSongDatabase
   protected _chatManager: ChatManager
+  protected _emojiDatabase: EmojiDatabase
   protected _roomType: IRoomType = 'amq'
 
   constructor(
@@ -24,13 +26,15 @@ class AmqHandler extends AbstractHandler {
     roomManager: AmqRoomManager,
     chatManager: ChatManager,
     songDatabase: SongDatabase,
-    userSongDatabase: UserSongDatabase
+    userSongDatabase: UserSongDatabase,
+    emojiDatabase: EmojiDatabase
   ) {
     super(logger, emitter)
     this._roomManager = roomManager
     this._songDatabase = songDatabase
     this._userSongDatabase = userSongDatabase
     this._chatManager = chatManager
+    this._emojiDatabase = emojiDatabase
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
@@ -44,6 +48,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateSongList(this._songDatabase.getSongList(), socket.id)
       this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
       this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
+      this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
       this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
@@ -55,6 +60,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateSongList(this._songDatabase.getSongList(), socket.id)
       this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
       this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
+      this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
       this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
