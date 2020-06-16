@@ -55,26 +55,28 @@
       }
 
       watch(() =>  state.message, (val) => {
-        let match = val.match(EMOJI_CHAT_FORMAT)
-        if (match) {
-          let command = match[0]
-          state.choices = context.root.$store.state.misc.emojiList.filter((emoji: IEmoji) => {
-            if (`:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase())) {
-              return emoji
+        if (val) {
+          let match = val.match(EMOJI_CHAT_FORMAT)
+          if (match) {
+            let command = match[0]
+            state.choices = context.root.$store.state.misc.emojiList.filter((emoji: IEmoji) => {
+              if (`:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase())) {
+                return emoji
+              }
+            })
+            let currentLength = state.choices.length
+            if (currentLength > 0) {
+              if (currentLength != state.choicesOldLength) {
+                state.choicesOldLength = currentLength
+                state.show = false
+              }
+              setTimeout(() => {
+                state.show = true
+              }, 1)
             }
-          })
-          let currentLength = state.choices.length
-          if (currentLength > 0) {
-            if (currentLength != state.choicesOldLength) {
-              state.choicesOldLength = currentLength
+            else {
               state.show = false
             }
-            setTimeout(() => {
-              state.show = true
-            }, 1)
-          }
-          else {
-            state.show = false
           }
         }
       })

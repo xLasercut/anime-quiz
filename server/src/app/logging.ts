@@ -116,6 +116,16 @@ const LOG_BASE = {
     code: 'CHAT003',
     level: LOG_LEVEL.INFO,
     template: 'player message - id="{{id}}" username="{{username}}" message="{{message}}"'
+  },
+  SETTING001: {
+    code: 'SETTING001',
+    level: LOG_LEVEL.INFO,
+    template: 'amq setting request - id="{{id}}" username="{{username}}"'
+  },
+  SETTING002: {
+    code: 'SETTING002',
+    level: LOG_LEVEL.INFO,
+    template: 'amq setting update - id="{{id}}" username="{{username}}" songCount="{{songCount}}" guessTime="{{guessTime}}" gameMode="{{gameMode}}" users="{{users}}" duplicate="{{duplicate}}" selectTime="{{selectTime}}" leastPlayed="{{leastPlayed}}"'
   }
 }
 

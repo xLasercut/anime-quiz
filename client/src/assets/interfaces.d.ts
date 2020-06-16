@@ -1,6 +1,6 @@
 import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {ILoginMode, IMiscMode, IRoomMode} from '@/assets/types'
-import {IAmqPlayer} from '../../../shared/interfaces/amq'
+import {IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
 
 interface IRooteStoreState {
@@ -34,6 +34,7 @@ interface ISongListFilter {
 
 interface IAmqStoreState {
   playerList: Array<IAmqPlayer>
+  settings: IAmqSettings
 }
 
 interface IMiscStoreState {

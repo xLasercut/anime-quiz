@@ -1,5 +1,5 @@
 import {AbstractHandler} from './abstract'
-import {Logger} from '../app/logging'
+import {LOG_BASE, Logger} from '../app/logging'
 import {Emitter} from '../app/emitter'
 import {ISocket} from '../interfaces'
 import {IRoomType} from '../../../shared/types/game'
@@ -10,6 +10,7 @@ import {SongDatabase} from '../database/song'
 import {UserSongDatabase} from '../database/user-song'
 import {ChatManager} from '../game/chat'
 import {EmojiDatabase} from '../database/emoji'
+import {IAmqSettings} from '../../../shared/interfaces/amq'
 
 class AmqHandler extends AbstractHandler {
   protected _roomManager: AmqRoomManager
@@ -80,6 +81,22 @@ class AmqHandler extends AbstractHandler {
         this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
         this._emitter.sendChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
       }
+    }))
+
+    socket.on('GET_AMQ_SETTINGS', exceptionHandler(socket, (): void => {
+      this._logger.writeLog(LOG_BASE.SETTING001, {id: socket.id, username: socket.player.serialize().username})
+      this._emitter.updateAmqSettings(this._roomManager.getRoom(socket.roomId).settings.serialize(), socket.id)
+    }))
+
+    socket.on('UPDATE_AMQ_SETTINGS', exceptionHandler(socket, (amqSettings: IAmqSettings): void => {
+      let roomId = socket.roomId
+      this._logger.writeLog(LOG_BASE.SETTING002, Object.assign(
+        {id: socket.id, username: socket.player.serialize().username},
+        amqSettings
+      ))
+      this._roomManager.getRoom(roomId).settings.update(amqSettings)
+      this._emitter.updateAmqSettings(this._roomManager.getRoom(roomId).settings.serialize(), roomId)
+      this._emitter.sendChat(this._chatManager.generateSysMsg('Game settings updated'), roomId)
     }))
   }
 }

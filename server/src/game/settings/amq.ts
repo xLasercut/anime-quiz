@@ -10,6 +10,16 @@ class AmqSettings {
   public users: Array<string> = []
   public leastPlayed = false
 
+  public update(amqSettings: IAmqSettings): void {
+    this.songCount = amqSettings.songCount
+    this.guessTime = amqSettings.guessTime
+    this.gameMode = amqSettings.gameMode
+    this.duplicate = amqSettings.duplicate
+    this.selectTime = amqSettings.selectTime
+    this.users = amqSettings.users
+    this.leastPlayed = amqSettings.leastPlayed
+  }
+
   public serialize(): IAmqSettings {
     return {
       songCount: this.songCount,

@@ -1,7 +1,7 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
 import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
-import {IAmqPlayer} from '../../../shared/interfaces/amq'
+import {IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
 
 class Emitter {
@@ -53,6 +53,10 @@ class Emitter {
 
   public sendChat(chat: IChat, sid: string = null): void {
     this._client(sid).emit('UPDATE_CHAT_MESSAGE', chat)
+  }
+
+  public updateAmqSettings(amqSettings: IAmqSettings, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AMQ_SETTINGS', amqSettings)
   }
 
   protected _client(sid: string = null): socketio.Namespace | socketio.Server {
