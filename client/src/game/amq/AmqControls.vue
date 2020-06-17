@@ -1,7 +1,7 @@
 <template>
   <v-toolbar-items>
-    <nav-btn icon="mdi-play"></nav-btn>
-    <nav-btn icon="mdi-stop"></nav-btn>
+    <nav-btn icon="mdi-play" color="success"></nav-btn>
+    <nav-btn icon="mdi-stop" color="error"></nav-btn>
     <nav-btn icon="mdi-cog" color="info" @click="showSettings()"></nav-btn>
     <game-dialog
       v-model="show"
