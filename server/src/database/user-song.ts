@@ -1,9 +1,10 @@
 import * as fs from 'fs'
 import {USER_DATA_DIR} from '../config'
 import * as path from 'path'
-import {readFile, writeFile} from './helper'
+import {readFile, setDifference, setIntersect, setUnion, writeFile} from './helper'
 import {ServerDataError} from '../exceptions'
 import {SongDatabase} from './song'
+import {IBalancedAmqSongLists, INormalAmqSongLists} from '../interfaces'
 
 class UserSongDatabase {
   protected _userSongList: { [key: string]: UserSong }
@@ -45,6 +46,36 @@ class UserSongDatabase {
   public deleteSongId(songId: string, user: string): void {
     this._validateUserExists(user)
     this._userSongList[user].deleteSongId(songId)
+  }
+
+  public generateBalancedSongLists(users: Array<string>, playedSongIds: Set<string>): IBalancedAmqSongLists {
+    let balancedSongLists: IBalancedAmqSongLists = {}
+    for (let user of users) {
+      this._validateUserExists(user)
+      let userList = this._userSongList[user].getUserSongs()
+      let priorityUserList = setIntersect(userList, playedSongIds)
+      balancedSongLists[user] = {
+        normal: this._songDatabase.getFilteredSongList(setDifference(userList, priorityUserList)),
+        priority: this._songDatabase.getFilteredSongList(priorityUserList)
+      }
+    }
+
+    return balancedSongLists
+  }
+
+  public generateCombinedSongLists(users: Array<string>, playedSongIds: Set<string>): INormalAmqSongLists {
+    let combinedList: Set<string> = new Set()
+    for (let user of users) {
+      this._validateUserExists(user)
+      combinedList = setUnion(combinedList, this._userSongList[user].getUserSongs())
+    }
+
+    let priorityList = setIntersect(combinedList, playedSongIds)
+
+    return {
+      normal: this._songDatabase.getFilteredSongList(setDifference(combinedList, priorityList)),
+      priority: this._songDatabase.getFilteredSongList(priorityList)
+    }
   }
 
   protected _validateUserExists(user: string): void {

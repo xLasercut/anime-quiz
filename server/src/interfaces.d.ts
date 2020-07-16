@@ -2,6 +2,8 @@ import {Room, Socket} from 'socket.io'
 import {AmqPlayer} from './game/players/amq'
 import {IRoomType} from '../../shared/types/game'
 import {AmqSettings} from './game/settings/amq'
+import {AmqGameState} from './game/state/amq'
+import {ISong} from '../../shared/interfaces/database'
 
 interface ILog {
   code: string
@@ -25,6 +27,16 @@ interface IRoom extends Room {
 
 interface IAmqRoom extends IRoom {
   settings: AmqSettings
+  state: AmqGameState
 }
 
-export {ILog, ISocket, IRoom, IAmqRoom}
+interface IBalancedAmqSongLists {
+  [key: string]: INormalAmqSongLists
+}
+
+interface INormalAmqSongLists {
+  normal: Array<ISong>
+  priority: Array<ISong>
+}
+
+export {ILog, ISocket, IRoom, IAmqRoom, IBalancedAmqSongLists, INormalAmqSongLists}

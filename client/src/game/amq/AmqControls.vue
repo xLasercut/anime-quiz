@@ -1,6 +1,6 @@
 <template>
   <v-toolbar-items>
-    <nav-btn icon="mdi-play" color="success"></nav-btn>
+    <nav-btn icon="mdi-play" color="success" @click="startGame()"></nav-btn>
     <nav-btn icon="mdi-stop" color="error"></nav-btn>
     <nav-btn icon="mdi-cog" color="info" @click="showSettings()"></nav-btn>
     <game-dialog
@@ -41,11 +41,15 @@
         state.show = true
       }
 
+      function startGame(): void {
+        socket.emit('START_AMQ_GAME')
+      }
+
       const component = computed(() => {
         return componentMap[state.dialog]
       })
 
-      return {...toRefs(state), showSettings, component}
+      return {...toRefs(state), showSettings, component, startGame}
     }
   })
 </script>

@@ -1,5 +1,6 @@
 import {IBannerColor} from '../types/game'
 import {IAmqGameMode} from '../types/amq'
+import {ISong} from './database'
 
 
 interface IAmqPlayer {
@@ -9,10 +10,7 @@ interface IAmqPlayer {
   admin: boolean
   host: boolean
   color: IBannerColor
-  guess: {
-    title: string
-    anime: string
-  }
+  guess: IAmqGuess
 }
 
 interface IAmqSettings {
@@ -25,5 +23,18 @@ interface IAmqSettings {
   leastPlayed: boolean
 }
 
+interface IAmqGameState {
+  currentSong: ISong
+  currentSongCount: number
+  maxSongCount: number
+  playing: boolean
+  startPosition: number
+}
 
-export {IAmqPlayer, IAmqSettings}
+interface IAmqGuess {
+  title: string
+  anime: string
+}
+
+
+export {IAmqPlayer, IAmqSettings, IAmqGameState, IAmqGuess}

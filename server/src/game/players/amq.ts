@@ -8,15 +8,42 @@ class AmqPlayer {
   public score = 0
   public color: IBannerColor = 'error'
   public host = false
+  public selector = false
   public guess = {
     title: '',
     anime: ''
+  }
+  public ready = {
+    load: false,
+    guess: false,
+    select: false
   }
 
   constructor(username: string, avatar: string, admin: boolean) {
     this._username = username
     this._avatar = avatar
     this._admin = admin
+  }
+
+  public resetScore(): void {
+    this.score = 0
+  }
+
+  public reset(): void {
+    this.guess = {
+      title: '',
+      anime: ''
+    }
+
+    this.ready = {
+      load: false,
+      guess: false,
+      select: false
+    }
+
+    this.color = 'error'
+
+    this.selector = false
   }
 
   public serialize(): IAmqPlayer {

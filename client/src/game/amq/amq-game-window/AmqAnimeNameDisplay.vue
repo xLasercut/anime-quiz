@@ -4,14 +4,14 @@
       <v-row no-gutters justify="center">
         <v-col cols="5" sm="3" md="2">
           <v-sheet class="song-count-container">
-            {{}}
+            {{$store.state.amq.gameState.currentSongCount}} / {{$store.state.amq.gameState.maxSongCount}}
           </v-sheet>
         </v-col>
       </v-row>
       <v-row no-gutters justify="center">
         <v-col cols="12" sm="8" md="6" lg="5">
           <v-sheet class="answer-container">
-            test
+            {{answer}}
           </v-sheet>
         </v-col>
       </v-row>
@@ -20,9 +20,35 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+  import {computed, defineComponent, onMounted, reactive} from '@vue/composition-api'
+  import {socket} from '@/assets/socket'
 
-  export default defineComponent({})
+  export default defineComponent({
+    setup(_props, context) {
+      const state = reactive({
+        show: false
+      })
+
+      const answer = computed(() => {
+        if (state.show) {
+          return context.root.$store.state.amq.gameState.currentSong.anime[0]
+        }
+        return '?'
+      })
+
+      onMounted(() => {
+        socket.on('AMQ_NEW_SONG', (): void => {
+          state.show = false
+        })
+
+        socket.on('AMQ_TIME_UP', (): void => {
+          state.show = true
+        })
+      })
+
+      return {answer}
+    }
+  })
 </script>
 
 

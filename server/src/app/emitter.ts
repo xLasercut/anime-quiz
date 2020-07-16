@@ -1,7 +1,7 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
 import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
-import {IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
+import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
 
 class Emitter {
@@ -45,6 +45,30 @@ class Emitter {
 
   public updateAmqPlayerList(amqPlayerList: Array<IAmqPlayer>, sid: string): void {
     this._client(sid).emit('UPDATE_AMQ_PLAYER_LIST', amqPlayerList)
+  }
+
+  public updateAmqGameState(amqGameState: IAmqGameState, sid: string): void {
+    this._client(sid).emit('UPDATE_AMQ_GAME_STATE', amqGameState)
+  }
+
+  public amqNewSong(sid: string): void {
+    this._client(sid).emit('AMQ_NEW_SONG')
+  }
+
+  public amqStartLoad(sid: string): void {
+    this._client(sid).emit('AMQ_START_LOAD')
+  }
+
+  public amqStartCountdown(sid: string): void {
+    this._client(sid).emit('AMQ_START_COUNTDOWN')
+  }
+
+  public amqTimeUp(sid: string): void {
+    this._client(sid).emit('AMQ_TIME_UP')
+  }
+
+  public amqShowGuess(sid: string): void {
+    this._client(sid).emit('AMQ_SHOW_GUESS')
   }
 
   public systemNotification(color: IBannerColor, message: string, sid: string = null): void {

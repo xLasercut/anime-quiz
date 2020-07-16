@@ -34,6 +34,12 @@ class SongDatabase {
     return this._songList
   }
 
+  public getFilteredSongList(songIds: Set<string>): Array<ISong> {
+    return this._songList.filter((song: ISong) => {
+      return songIds.has(song.songId)
+    })
+  }
+
   public getChoices(): IChoices {
     return {
       anime: this._animeChoices,

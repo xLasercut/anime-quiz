@@ -10,7 +10,8 @@ import {SongDatabase} from '../database/song'
 import {UserSongDatabase} from '../database/user-song'
 import {ChatManager} from '../game/chat'
 import {EmojiDatabase} from '../database/emoji'
-import {IAmqSettings} from '../../../shared/interfaces/amq'
+import {IAmqGuess, IAmqSettings} from '../../../shared/interfaces/amq'
+import {AmqTimer} from '../game/timers/amq'
 
 class AmqHandler extends AbstractHandler {
   protected _roomManager: AmqRoomManager
@@ -18,6 +19,7 @@ class AmqHandler extends AbstractHandler {
   protected _userSongDatabase: UserSongDatabase
   protected _chatManager: ChatManager
   protected _emojiDatabase: EmojiDatabase
+  protected _timer: AmqTimer
   protected _roomType: IRoomType = 'amq'
 
   constructor(
@@ -36,6 +38,7 @@ class AmqHandler extends AbstractHandler {
     this._userSongDatabase = userSongDatabase
     this._chatManager = chatManager
     this._emojiDatabase = emojiDatabase
+    this._timer = new AmqTimer(roomManager)
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
@@ -50,6 +53,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
       this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
+      this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), socket.id)
       this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
@@ -62,25 +66,20 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
       this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
+      this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), socket.id)
       this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
+    socket.on('AMQ_GUESS', exceptionHandler(socket, (amqGuess: IAmqGuess): void => {
+      socket.player.guess = amqGuess
+    }))
+
     socket.on('LEAVE_ROOM', exceptionHandler(socket, (): void => {
-      let roomId = socket.roomId
-      if (this._roomManager.isAmqRoom(roomId)) {
-        let player = socket.player.serialize()
-        this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
-        this._emitter.sendChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
-      }
+      this._leaveRoom(socket)
     }))
 
     socket.on('disconnect', exceptionHandler(socket, (): void => {
-      let roomId = socket.roomId
-      if (this._roomManager.isAmqRoom(roomId)) {
-        let player = socket.player.serialize()
-        this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
-        this._emitter.sendChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
-      }
+      this._leaveRoom(socket)
     }))
 
     socket.on('GET_AMQ_SETTINGS', exceptionHandler(socket, (): void => {
@@ -98,6 +97,88 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateAmqSettings(this._roomManager.getRoom(roomId).settings.serialize(), roomId)
       this._emitter.sendChat(this._chatManager.generateSysMsg('Game settings updated'), roomId)
     }))
+
+    socket.on('START_AMQ_GAME', exceptionHandler(socket, (): void => {
+      let roomId = socket.roomId
+      this._roomManager.resetPlayerScore(roomId)
+      this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
+      if (this._roomManager.getRoom(roomId).settings.gameMode === 'balanced') {
+        this._generateBalancedGameList(roomId)
+      }
+      else {
+        this._generateGameList(roomId)
+      }
+    }))
+  }
+
+  protected _generateBalancedGameList(roomId: string): void {
+    let gameSettings = this._roomManager.getRoom(roomId).settings.serialize()
+    let playedSongIds = this._roomManager.getRoom(roomId).state.playedSongIds
+    let gameSongLists = this._userSongDatabase.generateBalancedSongLists(gameSettings.users, playedSongIds)
+    this._roomManager.getRoom(roomId).state.prepareBalancedGameList(gameSongLists, gameSettings)
+    this._checkGameList(roomId)
+  }
+
+  protected _generateGameList(roomId: string): void {
+    let gameSettings = this._roomManager.getRoom(roomId).settings.serialize()
+    let playedSongIds = this._roomManager.getRoom(roomId).state.playedSongIds
+    let gameSongLists = this._userSongDatabase.generateCombinedSongLists(gameSettings.users, playedSongIds)
+    this._roomManager.getRoom(roomId).state.prepareGameList(gameSongLists, gameSettings)
+    this._checkGameList(roomId)
+  }
+
+  protected _checkGameList(roomId: string): void {
+    if (this._roomManager.getRoom(roomId).state.gameList.length > 0) {
+      this._roomManager.getRoom(roomId).state.startGame()
+      this._logger.writeLog(LOG_BASE.GAME001, {
+        roomId: roomId,
+        gameMode: this._roomManager.getRoom(roomId).settings.gameMode,
+        songCount: this._roomManager.getRoom(roomId).state.maxSongCount
+      })
+      this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), roomId)
+      this._newRound(roomId)
+    }
+    else {
+      this._emitter.sendChat(this._chatManager.generateSysMsg('Empty song list'), roomId)
+    }
+  }
+
+  protected async _newRound(roomId: string): Promise<any> {
+    this._roomManager.newRound(roomId)
+    this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
+    if (this._roomManager.getRoom(roomId).settings.gameMode === 'selector') {
+
+    }
+    else {
+      await this._amqFlowMain(roomId)
+    }
+  }
+
+  protected async _amqFlowMain(roomId: string): Promise<any> {
+    let settings = this._roomManager.getRoom(roomId).settings
+    this._roomManager.getRoom(roomId).state.newSong(settings.leastPlayed)
+    this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), roomId)
+    this._logger.writeLog(
+      LOG_BASE.GAME002,
+      Object.assign({roomId: roomId}, this._roomManager.getRoom(roomId).state.currentSong)
+    )
+    this._emitter.amqNewSong(roomId)
+    this._emitter.amqStartLoad(roomId)
+    await this._timer.startCountdown(roomId, 5000, 'load')
+    this._emitter.amqStartCountdown(roomId)
+    await this._timer.startTimeout(roomId, settings.guessTime * 1000)
+    this._emitter.amqTimeUp(roomId)
+    await this._timer.startCountdown(roomId, 5000, 'guess')
+
+  }
+
+  protected _leaveRoom(socket: ISocket): void {
+    let roomId = socket.roomId
+    if (this._roomManager.isAmqRoom(roomId)) {
+      let player = socket.player.serialize()
+      this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
+      this._emitter.sendChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
+    }
   }
 }
 

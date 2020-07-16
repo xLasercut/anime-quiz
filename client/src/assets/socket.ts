@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import store from '@/store'
 import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
-import {IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
+import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
 
 //@ts-ignore
@@ -45,6 +45,10 @@ socket.on('UPDATE_CHAT_BOT_LIST', (chatBotList: Array<IChatBot>): void => {
 
 socket.on('UPDATE_AMQ_SETTINGS', (amqSettings: IAmqSettings): void => {
   store.commit('SOCKET_UPDATE_AMQ_SETTINGS', amqSettings)
+})
+
+socket.on('UPDATE_AMQ_GAME_STATE', (amqGameState: IAmqGameState): void => {
+  store.commit('SOCKET_UPDATE_AMQ_GAME_STATE', amqGameState)
 })
 
 export {socket}

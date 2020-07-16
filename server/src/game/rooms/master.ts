@@ -28,22 +28,51 @@ class MasterRoomManager {
   }
 
   public getRoom(roomId: string): any {
-    return this._io.sockets.adapter.rooms[roomId] || {}
+    return this._io.sockets.adapter.rooms[roomId]
   }
 
   public getPlayerList(roomId: string): Array<any> {
-    this._validateRoomIdExists(roomId)
-    let players = this.getRoom(roomId).sockets
+    if (this._isRoomExists(roomId)) {
+      let players = this.getRoom(roomId).sockets
 
-    return Object.values(this._io.sockets.connected)
-      .filter((socket: ISocket): ISocket => {
-        if (socket.id in players) {
-          return socket
+      return Object.values(this._io.sockets.connected)
+        .filter((socket: ISocket): ISocket => {
+          if (socket.id in players) {
+            return socket
+          }
+        })
+        .map((socket: ISocket): IAmqPlayer => {
+          return socket.player.serialize()
+        })
+    }
+    return []
+  }
+
+  public resetPlayerScore(roomId: string): void {
+    if (this._isRoomExists(roomId)) {
+      let players = this.getRoom(roomId).sockets
+      for (let socketId in this._io.sockets.connected) {
+        if (socketId in players) {
+          this._getSocket(socketId).player.resetScore()
         }
-      })
-      .map((socket: ISocket): IAmqPlayer => {
-        return socket.player.serialize()
-      })
+      }
+    }
+  }
+
+  public newRound(roomId: string): void {
+    if (this._isRoomExists(roomId)) {
+      let players = this.getRoom(roomId).sockets
+      for (let socketId in this._io.sockets.connected) {
+        if (socketId in players) {
+          this._getSocket(socketId).player.reset()
+        }
+      }
+    }
+  }
+
+  protected _getSocket(socketId: string): ISocket {
+    //@ts-ignore
+    return this._io.sockets.connected[socketId]
   }
 
   protected _validateRoomIdNotExists(roomId: string): void {
@@ -52,10 +81,8 @@ class MasterRoomManager {
     }
   }
 
-  protected _validateRoomIdExists(roomId: string): void {
-    if (!(roomId in this._io.sockets.adapter.rooms)) {
-      throw new GameDataError('Room ID does not exist')
-    }
+  protected _isRoomExists(roomId: string): boolean {
+    return (roomId in this._io.sockets.adapter.rooms)
   }
 }
 

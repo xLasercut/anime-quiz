@@ -79,7 +79,6 @@
       function updateAmqSettings(key: string, value: Array<string> | number | boolean): void {
         const amqSettings = context.root.$store.state.amq.settings
         amqSettings[key] = value
-        console.log(value)
         context.root.$store.commit('SOCKET_UPDATE_AMQ_SETTINGS', amqSettings)
       }
 

@@ -126,6 +126,16 @@ const LOG_BASE = {
     code: 'SETTING002',
     level: LOG_LEVEL.INFO,
     template: 'amq setting update - id="{{id}}" username="{{username}}" songCount="{{songCount}}" guessTime="{{guessTime}}" gameMode="{{gameMode}}" users="{{users}}" duplicate="{{duplicate}}" selectTime="{{selectTime}}" leastPlayed="{{leastPlayed}}"'
+  },
+  GAME001: {
+    code: 'GAME001',
+    level: LOG_LEVEL.INFO,
+    template: 'amq new game - roomId="{{roomId}}" gameMode="{{gameMode}}" songCount="{{songCount}}"'
+  },
+  GAME002: {
+    code: 'GAME002',
+    level: LOG_LEVEL.INFO,
+    template: 'amq new song - roomId="{{roomId}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
   }
 }
 

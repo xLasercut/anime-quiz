@@ -12,8 +12,9 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, reactive, toRefs} from '@vue/composition-api'
+  import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
   import GuessInputField from '@/components/game/GuessInputField.vue'
+  import {socket} from '@/assets/socket'
 
   export default defineComponent({
     components: {
@@ -25,6 +26,17 @@
           title: '',
           anime: ''
         }
+      })
+
+      onMounted(() => {
+        socket.on('AMQ_NEW_SONG', (): void => {
+          state.guess.title = ''
+          state.guess.anime = ''
+        })
+
+        socket.on('AMQ_TIME_UP', (): void => {
+          socket.emit('AMQ_GUESS', state.guess)
+        })
       })
 
       return {...toRefs(state)}

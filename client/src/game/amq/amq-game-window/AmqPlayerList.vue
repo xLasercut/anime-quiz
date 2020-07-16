@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, reactive, toRefs} from '@vue/composition-api'
-  import PlayerAvatar from '@/components/game/PlayerAvatar.vue'
+  import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
   import PlayerCard from '@/components/game/PlayerCard.vue'
+  import {socket} from '@/assets/socket'
 
   export default defineComponent({
     components: {
@@ -22,6 +22,12 @@
     setup(_props, _context) {
       const state = reactive({
         show: false
+      })
+
+      onMounted(() => {
+        socket.on('AMQ_SHOW_GUESS', (): void => {
+          state.show = true
+        })
       })
 
       return {...toRefs(state)}
