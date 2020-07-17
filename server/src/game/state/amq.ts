@@ -1,6 +1,7 @@
 import {ISong} from '../../../../shared/interfaces/database'
-import {IAmqGameState, IAmqSettings} from '../../../../shared/interfaces/amq'
+import {IAmqGameState, IAmqGuess, IAmqSettings} from '../../../../shared/interfaces/amq'
 import {IBalancedAmqSongLists, INormalAmqSongLists} from '../../interfaces'
+import {IBannerColor} from '../../../../shared/types/game'
 
 class AmqGameState {
   public playing = false
@@ -92,6 +93,31 @@ class AmqGameState {
     if (leastPlayed) {
       this.playedSongIds.add(this.currentSong.songId)
     }
+  }
+
+  public calculateScore(amqGuess: IAmqGuess) {
+    let point = 0
+    let color: IBannerColor = 'error'
+    let animes = this.currentSong.anime.map((anime: string) => {
+      return anime.toLowerCase()
+    })
+
+    if (amqGuess.anime && animes.includes(amqGuess.anime.toLowerCase())) {
+      point += 1
+    }
+
+    if (amqGuess.title && amqGuess.title.toLowerCase() === this.currentSong.title.toLowerCase()) {
+      point += 1
+    }
+
+    if (point === 2) {
+      color = 'success'
+    }
+    else if (point === 1) {
+      color = 'warning'
+    }
+
+    return {point, color}
   }
 
   public serialize(): IAmqGameState {
