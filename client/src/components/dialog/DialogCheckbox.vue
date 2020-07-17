@@ -2,7 +2,7 @@
   <v-col cols="10">
     <v-row justify="center" no-gutters>
       <v-col cols="auto" v-for="item in items">
-        <v-checkbox v-bind="item" v-model="model"></v-checkbox>
+        <v-checkbox v-bind="item" v-model="model" :disabled="disabled"></v-checkbox>
       </v-col>
     </v-row>
   </v-col>
@@ -18,6 +18,9 @@
       },
       value: {
         required: true
+      },
+      disabled: {
+        default: false
       }
     },
     setup(props, context) {

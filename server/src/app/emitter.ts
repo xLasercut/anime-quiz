@@ -71,6 +71,10 @@ class Emitter {
     this._client(sid).emit('AMQ_SHOW_GUESS')
   }
 
+  public amqReset(sid: string): void {
+    this._client(sid).emit('AMQ_RESET')
+  }
+
   public systemNotification(color: IBannerColor, message: string, sid: string = null): void {
     this._client(sid).emit('SYSTEM_NOTIFICATION', color, message)
   }

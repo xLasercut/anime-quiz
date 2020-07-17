@@ -3,9 +3,9 @@
     <nav-panel show-home>
       <misc-controls></misc-controls>
     </nav-panel>
-    <v-content>
+    <v-main>
       <component :is="component"></component>
-    </v-content>
+    </v-main>
   </v-container>
 </template>
 

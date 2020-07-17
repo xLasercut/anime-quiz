@@ -3,7 +3,7 @@
     <nav-panel show-home>
       <list-picker-controls></list-picker-controls>
     </nav-panel>
-    <v-content>
+    <v-main>
       <v-card flat>
         <v-container fluid>
           <v-row justify="center" v-if="$store.state.client.admin">
@@ -52,7 +52,7 @@
           </game-dialog>
         </v-container>
       </v-card>
-    </v-content>
+    </v-main>
   </v-container>
 </template>
 

@@ -33,6 +33,7 @@ interface ISongListFilter {
 }
 
 interface IAmqStoreState {
+  host: boolean
   playerList: Array<IAmqPlayer>
   settings: IAmqSettings
   gameState: IAmqGameState

@@ -74,6 +74,10 @@ class AmqHandler extends AbstractHandler {
       socket.player.guess = amqGuess
     }))
 
+    socket.on('AMQ_SONG_LOADED', exceptionHandler(socket, (): void => {
+      socket.player.ready.load = true
+    }))
+
     socket.on('LEAVE_ROOM', exceptionHandler(socket, (): void => {
       this._leaveRoom(socket)
     }))
@@ -109,6 +113,15 @@ class AmqHandler extends AbstractHandler {
         this._generateGameList(roomId)
       }
     }))
+
+    socket.on('STOP_AMQ_GAME', exceptionHandler(socket, (): void => {
+      let roomId = socket.roomId
+      this._timer.resetTimeout(roomId)
+      this._timer.resetCountdown(roomId)
+      this._roomManager.getRoom(roomId).state.reset()
+      this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), roomId)
+      this._emitter.amqReset(roomId)
+    }))
   }
 
   protected _generateBalancedGameList(roomId: string): void {
@@ -137,6 +150,9 @@ class AmqHandler extends AbstractHandler {
       })
       this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), roomId)
       this._newRound(roomId)
+        .catch((e) => {
+          console.log(e)
+        })
     }
     else {
       this._emitter.sendChat(this._chatManager.generateSysMsg('Empty song list'), roomId)
@@ -169,7 +185,6 @@ class AmqHandler extends AbstractHandler {
     await this._timer.startTimeout(roomId, settings.guessTime * 1000)
     this._emitter.amqTimeUp(roomId)
     await this._timer.startCountdown(roomId, 5000, 'guess')
-
   }
 
   protected _leaveRoom(socket: ISocket): void {

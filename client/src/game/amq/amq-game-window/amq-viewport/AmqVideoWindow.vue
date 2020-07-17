@@ -2,7 +2,10 @@
   <v-col cols="12" sm="6">
     <v-row justify="center" no-gutters>
       <v-col class="video-container">
+        <amq-countdown-timer></amq-countdown-timer>
         <amq-normal-video></amq-normal-video>
+        <amq-youtube-video></amq-youtube-video>
+        <amq-loading-circle></amq-loading-circle>
       </v-col>
     </v-row>
   </v-col>
@@ -11,10 +14,13 @@
 <script lang="ts">
   import {defineComponent} from '@vue/composition-api'
   import AmqNormalVideo from '@/game/amq/amq-game-window/amq-viewport/amq-video-window/AmqNormalVideo.vue'
+  import AmqYoutubeVideo from '@/game/amq/amq-game-window/amq-viewport/amq-video-window/AmqYoutubeVideo.vue'
+  import AmqCountdownTimer from '@/game/amq/amq-game-window/amq-viewport/amq-video-window/AmqCountdownTimer.vue'
+  import AmqLoadingCircle from '@/game/amq/amq-game-window/amq-viewport/amq-video-window/AmqLoadingCircle.vue'
 
   export default defineComponent({
     components: {
-      AmqNormalVideo
+      AmqNormalVideo, AmqYoutubeVideo, AmqCountdownTimer, AmqLoadingCircle
     }
   })
 </script>

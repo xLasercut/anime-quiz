@@ -6,9 +6,9 @@
     >
       <component :is="controlsComponent"></component>
     </nav-panel>
-    <v-content>
+    <v-main>
       <component :is="component"></component>
-    </v-content>
+    </v-main>
   </v-container>
 </template>
 

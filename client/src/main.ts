@@ -4,10 +4,12 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import VueCompositionApi from '@vue/composition-api'
+import VueYoutubeEmbed from 'vue-youtube-embed'
 
 Vue.config.productionTip = false
 
 Vue.use(VueCompositionApi)
+Vue.use(VueYoutubeEmbed)
 
 new Vue({
   router,

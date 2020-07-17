@@ -104,6 +104,14 @@ class AmqGameState {
     }
   }
 
+  public reset(): void {
+    this.currentSongCount = 0
+    this.maxSongCount = 0
+    this.playing = false
+    this.startPosition = 0
+    this.songOverride = null
+  }
+
   protected _addToBalancedGameList(sourceList: Array<ISong>, songCount: number, dupes: Set<string>, dupeSongIds: Set<string>, duplicate: boolean): void {
     while (sourceList.length > 0 && this.gameList.length < songCount) {
       let i = this._getRandomIndex(sourceList)

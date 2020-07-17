@@ -3,9 +3,9 @@
     <nav-panel>
       <login-controls></login-controls>
     </nav-panel>
-    <v-content>
+    <v-main>
       <component :is="component"></component>
-    </v-content>
+    </v-main>
   </v-container>
 </template>
 

@@ -4,6 +4,7 @@ import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interface
 
 function getDefaultState(): IAmqStoreState {
   return {
+    host: false,
     playerList: [],
     settings: {
       songCount: 20,
@@ -45,6 +46,24 @@ const amq: Module<IAmqStoreState, IRooteStoreState> = {
     },
     RESET_STORE_STATE(state: IAmqStoreState): void {
       Object.assign(state, getDefaultState())
+    }
+  },
+  getters: {
+    isAmqVideoType: (state: IAmqStoreState) => (videoType: string): boolean => {
+      let actualType = 'normal'
+
+      if (state.gameState.currentSong.src.includes('youtube')) {
+        actualType = 'youtube'
+      }
+
+      return actualType === videoType
+    },
+    amqStartPosition: (state: IAmqStoreState) => (videoDuration: number): number => {
+      let maxStart = Math.floor(videoDuration - state.settings.guessTime)
+      if (maxStart > 0) {
+        return Math.floor(state.gameState.startPosition * maxStart)
+      }
+      return 0
     }
   }
 }

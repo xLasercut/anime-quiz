@@ -1,7 +1,7 @@
 <template>
   <v-toolbar-items>
-    <nav-btn icon="mdi-play" color="success" @click="startGame()"></nav-btn>
-    <nav-btn icon="mdi-stop" color="error"></nav-btn>
+    <nav-btn icon="mdi-play" color="success" @click="startGame()" v-if="showPlayBtn()"></nav-btn>
+    <nav-btn icon="mdi-stop" color="error" @click="stopGame()" v-if="showStopBtn()"></nav-btn>
     <nav-btn icon="mdi-cog" color="info" @click="showSettings()"></nav-btn>
     <game-dialog
       v-model="show"
@@ -34,6 +34,8 @@
         dialog: ''
       })
 
+      const store = context.root.$store
+
       function showSettings(): void {
         socket.emit('GET_AMQ_SETTINGS')
         state.dialogTitle = 'AMQ Settings'
@@ -45,11 +47,23 @@
         socket.emit('START_AMQ_GAME')
       }
 
+      function stopGame(): void {
+        socket.emit('STOP_AMQ_GAME')
+      }
+
+      function showPlayBtn(): boolean {
+        return (!store.state.amq.gameState.playing && (store.state.client.admin || store.state.amq.host))
+      }
+
+      function showStopBtn(): boolean {
+        return (store.state.amq.gameState.playing && (store.state.client.admin || store.state.amq.host))
+      }
+
       const component = computed(() => {
         return componentMap[state.dialog]
       })
 
-      return {...toRefs(state), showSettings, component, startGame}
+      return {...toRefs(state), showSettings, component, startGame, stopGame, showPlayBtn, showStopBtn}
     }
   })
 </script>
