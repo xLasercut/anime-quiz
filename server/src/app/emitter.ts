@@ -51,6 +51,10 @@ class Emitter {
     this._client(sid).emit('UPDATE_AMQ_GAME_STATE', amqGameState)
   }
 
+  public updateAmqHost(host: boolean, sid: string): void {
+    this._client(sid).emit('UPDATE_AMQ_HOST', host)
+  }
+
   public amqNewSong(sid: string): void {
     this._client(sid).emit('AMQ_NEW_SONG')
   }

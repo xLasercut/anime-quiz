@@ -70,7 +70,6 @@
     max-width: 100%;
     margin: 0;
     padding: 0;
-    background: red;
   }
 
   .video-hidden {

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" width="600px">
+  <v-dialog v-model="show" :width="width">
     <v-card>
       <v-container fluid>
         <v-row justify="space-between" no-gutters>
@@ -23,8 +23,11 @@
 
   export default defineComponent({
     props: {
-      label :{
+      label: {
         default: ''
+      },
+      width: {
+        default: '600px'
       },
       value: {
         required: true

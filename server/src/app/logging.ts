@@ -136,6 +136,11 @@ const LOG_BASE = {
     code: 'GAME002',
     level: LOG_LEVEL.INFO,
     template: 'amq new song - roomId="{{roomId}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
+  },
+  GAME003: {
+    code: 'GAME003',
+    level: LOG_LEVEL.INFO,
+    template: 'amq song override - roomId="{{roomId}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
   }
 }
 

@@ -2,10 +2,12 @@
   <v-toolbar-items>
     <nav-btn icon="mdi-play" color="success" @click="startGame()" v-if="showPlayBtn()"></nav-btn>
     <nav-btn icon="mdi-stop" color="error" @click="stopGame()" v-if="showStopBtn()"></nav-btn>
+    <nav-btn icon="mdi-playlist-music" color="primary" @click="showSelector()"></nav-btn>
     <nav-btn icon="mdi-cog" color="info" @click="showSettings()"></nav-btn>
     <game-dialog
       v-model="show"
       :label="dialogTitle"
+      :width="width"
     >
       <component :is="component" @dialog:close="show = false"></component>
     </game-dialog>
@@ -18,9 +20,11 @@
   import GameDialog from '@/components/GameDialog.vue'
   import AmqSettings from '@/game/amq/amq-controls/AmqSettings.vue'
   import {socket} from '@/assets/socket'
+  import AmqSelector from '@/game/amq/amq-controls/AmqSelector.vue'
 
   const componentMap: any = {
-    settings: AmqSettings
+    settings: AmqSettings,
+    selector: AmqSelector
   }
 
   export default defineComponent({
@@ -31,7 +35,8 @@
       const state = reactive({
         show: false,
         dialogTitle: '',
-        dialog: ''
+        dialog: '',
+        width: '600px'
       })
 
       const store = context.root.$store
@@ -40,6 +45,14 @@
         socket.emit('GET_AMQ_SETTINGS')
         state.dialogTitle = 'AMQ Settings'
         state.dialog = 'settings'
+        state.width = '600px'
+        state.show = true
+      }
+
+      function showSelector(): void {
+        state.dialogTitle = 'AMQ Song Select'
+        state.dialog = 'selector'
+        state.width = '800px'
         state.show = true
       }
 
@@ -63,7 +76,7 @@
         return componentMap[state.dialog]
       })
 
-      return {...toRefs(state), showSettings, component, startGame, stopGame, showPlayBtn, showStopBtn}
+      return {...toRefs(state), showSettings, component, startGame, stopGame, showPlayBtn, showStopBtn, showSelector}
     }
   })
 </script>

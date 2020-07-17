@@ -5,7 +5,7 @@
       v-for="player in $store.state.amq.playerList"
       v-model="show"
     >
-      {{guess(player)}}
+      {{guess(player.guess)}}
     </player-card>
   </v-row>
 </template>
@@ -14,7 +14,7 @@
   import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
   import PlayerCard from '@/components/game/PlayerCard.vue'
   import {socket} from '@/assets/socket'
-  import {IAmqPlayer} from '../../../../../shared/interfaces/amq'
+  import {IAmqGuess} from '../../../../../shared/interfaces/amq'
 
   export default defineComponent({
     components: {
@@ -35,16 +35,16 @@
         })
       })
 
-      function guess(player: IAmqPlayer): string {
+      function guess(guess: IAmqGuess): string {
         let anime = '...'
         let title = '...'
 
-        if (player.guess.anime) {
-          anime = player.guess.anime
+        if (guess.anime) {
+          anime = guess.anime
         }
 
-        if (player.guess.title) {
-          title = player.guess.title
+        if (guess.title) {
+          title = guess.title
         }
 
         return `${anime} - ${title}`

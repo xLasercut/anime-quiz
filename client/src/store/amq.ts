@@ -44,6 +44,9 @@ const amq: Module<IAmqStoreState, IRooteStoreState> = {
     SOCKET_UPDATE_AMQ_GAME_STATE(state: IAmqStoreState, amqGameState: IAmqGameState): void {
       state.gameState = amqGameState
     },
+    SOCKET_UPDATE_AMQ_HOST(state: IAmqStoreState, host: boolean): void {
+      state.host = host
+    },
     RESET_STORE_STATE(state: IAmqStoreState): void {
       Object.assign(state, getDefaultState())
     }

@@ -20,26 +20,28 @@
         </template>
 
         <template #item.action="{item}">
-          <table-btn
-            color="success" icon="mdi-plus"
-            @click="$emit('user:add', item)"
-            :disabled="disableAddBtn(item)"
-          ></table-btn>
-          <table-btn
-            color="error" icon="mdi-minus"
-            @click="$emit('user:delete', item)"
-            :disabled="disableDeleteBtn(item)"
-          ></table-btn>
-          <table-btn
-            color="warning" icon="mdi-pencil-plus"
-            @click="$emit('admin:edit', item)"
-            v-if="$store.state.client.admin"
-          ></table-btn>
-          <table-btn
-            color="error" icon="mdi-delete"
-            @click="$emit('admin:delete', item)"
-            v-if="$store.state.client.admin"
-          ></table-btn>
+          <slot name="action" :item="item">
+            <table-btn
+              color="success" icon="mdi-plus"
+              @click="$emit('user:add', item)"
+              :disabled="disableAddBtn(item)"
+            ></table-btn>
+            <table-btn
+              color="error" icon="mdi-minus"
+              @click="$emit('user:delete', item)"
+              :disabled="disableDeleteBtn(item)"
+            ></table-btn>
+            <table-btn
+              color="warning" icon="mdi-pencil-plus"
+              @click="$emit('admin:edit', item)"
+              v-if="$store.state.client.admin"
+            ></table-btn>
+            <table-btn
+              color="error" icon="mdi-delete"
+              @click="$emit('admin:delete', item)"
+              v-if="$store.state.client.admin"
+            ></table-btn>
+          </slot>
         </template>
 
         <template #footer>

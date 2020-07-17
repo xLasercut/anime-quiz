@@ -41,7 +41,7 @@ class AmqRoomManager extends MasterRoomManager {
       let players = this.getRoom(roomId).sockets
       for (let socketId in this._io.sockets.connected) {
         if (socketId in players) {
-          if (!this._getPlayer(socketId).ready[readyType]) {
+          if (!this.getPlayer(socketId).ready[readyType]) {
             return false
           }
         }
@@ -51,20 +51,25 @@ class AmqRoomManager extends MasterRoomManager {
   }
 
   public singlePlayerReady(socketId: string, readyType: IAmqReadyType): boolean {
-    return this._getPlayer(socketId).ready[readyType]
-  }
-
-  public roundOver(roomId: string): void {
-    if (this._isRoomExists(roomId)) {
-
-    }
+    return this.getPlayer(socketId).ready[readyType]
   }
 
   public isAmqRoom(roomId: string): boolean {
     return (this._isRoomExists(roomId) && (this.getRoom(roomId).type === this._type))
   }
 
-  protected _getPlayer(socketId: string): AmqPlayer {
+  public getNextHostId(roomId: string): string {
+    if (this._isRoomExists(roomId)) {
+      let players = this.getRoom(roomId).sockets
+      for (let socketId in this._io.sockets.connected) {
+        if (socketId in players) {
+          return socketId
+        }
+      }
+    }
+  }
+
+  public getPlayer(socketId: string): AmqPlayer {
     return this._getSocket(socketId).player
   }
 }

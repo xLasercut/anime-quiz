@@ -51,4 +51,8 @@ socket.on('UPDATE_AMQ_GAME_STATE', (amqGameState: IAmqGameState): void => {
   store.commit('SOCKET_UPDATE_AMQ_GAME_STATE', amqGameState)
 })
 
+socket.on('UPDATE_AMQ_HOST', (host: boolean): void => {
+  store.commit('SOCKET_UPDATE_AMQ_HOST', host)
+})
+
 export {socket}
