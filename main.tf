@@ -16,3 +16,8 @@ provider "aws" {
 module "state-management" {
   source = "./terraform/state-management"
 }
+
+module "vpc" {
+  source = "./terraform/vpc"
+  aws-region = var.aws-region
+}
