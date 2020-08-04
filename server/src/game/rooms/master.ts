@@ -53,7 +53,7 @@ class MasterRoomManager {
       let players = this.getRoom(roomId).sockets
       for (let socketId in this._io.sockets.connected) {
         if (socketId in players) {
-          this._getSocket(socketId).player.resetScore()
+          this.getSocket(socketId).player.resetScore()
         }
       }
     }
@@ -64,13 +64,13 @@ class MasterRoomManager {
       let players = this.getRoom(roomId).sockets
       for (let socketId in this._io.sockets.connected) {
         if (socketId in players) {
-          this._getSocket(socketId).player.reset()
+          this.getSocket(socketId).player.reset()
         }
       }
     }
   }
 
-  protected _getSocket(socketId: string): ISocket {
+  public getSocket(socketId: string): ISocket {
     //@ts-ignore
     return this._io.sockets.connected[socketId]
   }

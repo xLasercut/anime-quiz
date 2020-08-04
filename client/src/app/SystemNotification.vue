@@ -35,7 +35,7 @@
             state.show = false
             setTimeout((): void => {
               showNotification(color, message)
-            }, 1)
+            }, 100)
           }
           else {
             showNotification(color, message)

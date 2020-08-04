@@ -45,7 +45,7 @@ class AmqHandler extends AbstractHandler {
   public start(socket: ISocket, exceptionHandler: Function) {
     socket.on('LOGIN_AMQ_NEW', exceptionHandler(socket, (roomName: string, username: string, avatar: string): void => {
       this._roomManager.newRoom(socket, roomName)
-      socket.player = new AmqPlayer(username, avatar, socket.admin)
+      socket.player = new AmqPlayer(username, avatar, socket.admin, socket.id)
       socket.player.host = true
       let roomId = socket.roomId
       this._emitter.updateAmqHost(true, socket.id)
@@ -61,7 +61,7 @@ class AmqHandler extends AbstractHandler {
 
     socket.on('LOGIN_AMQ_EXIST', exceptionHandler(socket, (roomId: string, username: string, avatar: string): void => {
       if (this._roomManager.isAmqRoom(roomId)) {
-        socket.player = new AmqPlayer(username, avatar, socket.admin)
+        socket.player = new AmqPlayer(username, avatar, socket.admin, socket.id)
         socket.roomId = roomId
         socket.join(roomId)
         this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
@@ -237,6 +237,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
       this._emitter.sendChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
       socket.roomId = ''
+      socket.player = null
     }
   }
 

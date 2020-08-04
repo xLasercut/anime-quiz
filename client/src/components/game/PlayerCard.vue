@@ -19,6 +19,11 @@
               {{player.score}}
             </v-sheet>
           </v-row>
+          <v-row justify="center" no-gutters v-if="$store.state.client.admin && !player.admin">
+            <v-col cols="auto">
+              <avatar-btn icon="mdi-delete" color="error" @click="kickPlayer(player.socketId)"></avatar-btn>
+            </v-col>
+          </v-row>
         </div>
       </template>
       <slot></slot>
@@ -29,6 +34,8 @@
 <script lang="ts">
   import {defineComponent} from '@vue/composition-api'
   import PlayerAvatar from '@/components/game/PlayerAvatar.vue'
+  import AvatarBtn from '@/components/buttons/AvatarBtn.vue'
+  import {socket} from '@/assets/socket'
 
   export default defineComponent({
     props: {
@@ -40,7 +47,14 @@
       }
     },
     components: {
-      PlayerAvatar
+      PlayerAvatar, AvatarBtn
+    },
+    setup(_props, _context) {
+      function kickPlayer(socketId: string) {
+        socket.emit('ADMIN_KICK_PLAYER', socketId)
+      }
+
+      return {kickPlayer}
     }
   })
 </script>

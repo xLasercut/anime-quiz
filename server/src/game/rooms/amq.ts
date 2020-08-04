@@ -84,7 +84,7 @@ class AmqRoomManager extends MasterRoomManager {
   }
 
   public getPlayer(socketId: string): AmqPlayer {
-    return this._getSocket(socketId).player
+    return this.getSocket(socketId).player
   }
 }
 

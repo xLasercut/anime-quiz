@@ -5,6 +5,7 @@ class AmqPlayer {
   protected _username: string
   protected _avatar: string
   protected _admin: boolean
+  protected _socketId: string
   public score = 0
   public color: IBannerColor = 'error'
   public host = false
@@ -18,10 +19,11 @@ class AmqPlayer {
     guess: false
   }
 
-  constructor(username: string, avatar: string, admin: boolean) {
+  constructor(username: string, avatar: string, admin: boolean, socketId: string) {
     this._username = username
     this._avatar = avatar
     this._admin = admin
+    this._socketId = socketId
   }
 
   public resetScore(): void {
@@ -52,7 +54,8 @@ class AmqPlayer {
       admin: this._admin,
       host: this.host,
       color: this.color,
-      guess: this.guess
+      guess: this.guess,
+      socketId: this._socketId
     }
   }
 }

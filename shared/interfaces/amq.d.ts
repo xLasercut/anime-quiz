@@ -9,6 +9,7 @@ interface IAmqPlayer {
   score: number
   admin: boolean
   host: boolean
+  socketId: string
   color: IBannerColor
   guess: IAmqGuess
 }

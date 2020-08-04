@@ -7,23 +7,32 @@ import {IChatBot, IEmoji, ISong} from '../../../shared/interfaces/database'
 import {AuthError} from '../exceptions'
 import {EmojiDatabase} from '../database/emoji'
 import {ChatBotDatabase} from '../database/chat-bot'
+import {UserSongDatabase} from '../database/user-song'
+import {MasterRoomManager} from '../game/rooms/master'
+import {IBannerColor} from '../../../shared/types/game'
 
 class AdminHandler extends AbstractHandler {
   protected _songDatabase: SongDatabase
+  protected _userSongDatabase: UserSongDatabase
   protected _emojiDatabase: EmojiDatabase
   protected _chatBotDatabase: ChatBotDatabase
+  protected _roomManager: MasterRoomManager
 
   constructor(
     logger: Logger,
     emitter: Emitter,
     songDatabase: SongDatabase,
+    userSongDatabase: UserSongDatabase,
     emojiDatabase: EmojiDatabase,
-    chatBotDatabase: ChatBotDatabase
+    chatBotDatabase: ChatBotDatabase,
+    roomManager: MasterRoomManager
   ) {
     super(logger, emitter)
+    this._userSongDatabase = userSongDatabase
     this._songDatabase = songDatabase
     this._emojiDatabase = emojiDatabase
     this._chatBotDatabase = chatBotDatabase
+    this._roomManager = roomManager
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
@@ -112,6 +121,30 @@ class AdminHandler extends AbstractHandler {
       this._chatBotDatabase.deleteChatBot(chatBot)
       this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
       this._emitter.systemNotification('success', `${chatBot.regex} deleted`, socket.id)
+    }))
+
+    socket.on('ADMIN_RELOAD_DATABASE', exceptionHandler(socket, (): void => {
+      this._checkAdminAuth(socket)
+      this._songDatabase.loadData()
+      this._userSongDatabase.loadData()
+      this._chatBotDatabase.loadData()
+      this._emojiDatabase.loadData()
+      this._emitter.updateSongList(this._songDatabase.getSongList())
+      this._emitter.updateUsers(this._userSongDatabase.getUsers())
+      this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList())
+      this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
+      this._emitter.systemNotification('success', 'Database reloaded', socket.id)
+    }))
+
+    socket.on('ADMIN_KICK_PLAYER', exceptionHandler(socket, (socketId: string): void => {
+      this._checkAdminAuth(socket)
+      this._emitter.systemNotification('error', 'You have been kicked', socketId)
+      this._roomManager.getSocket(socketId).disconnect()
+    }))
+
+    socket.on('ADMIN_SYSTEM_MESSAGE', exceptionHandler(socket, (message: string, color: IBannerColor): void => {
+      this._checkAdminAuth(socket)
+      this._emitter.systemNotification(color, message)
     }))
   }
 
