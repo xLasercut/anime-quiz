@@ -1,0 +1,17 @@
+version: '3'
+services:
+  server:
+    restart: unless-stopped
+    build:
+      context: '.'
+    ports:
+      - 3001:3001
+    volumes:
+      - ./server/data/:/home/aq_server/server/data
+      - ./server/log/:/home/aq_server/server/log
+    environment:
+      - SERVER_PASSWORD
+      - ADMIN_PASSWORD
+    logging:
+      options:
+        max-size: 50m
