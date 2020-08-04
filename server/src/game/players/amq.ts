@@ -15,8 +15,7 @@ class AmqPlayer {
   }
   public ready = {
     load: false,
-    guess: false,
-    select: false
+    guess: false
   }
 
   constructor(username: string, avatar: string, admin: boolean) {
@@ -37,8 +36,7 @@ class AmqPlayer {
 
     this.ready = {
       load: false,
-      guess: false,
-      select: false
+      guess: false
     }
 
     this.color = 'error'
