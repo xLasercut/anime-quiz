@@ -193,5 +193,10 @@
     "command": "kalm",
     "src": "https://cdn.discordapp.com/emojis/688825679533309953.png",
     "type": "img"
+  },
+  {
+    "command": "ripworry",
+    "src": "https://cdn.discordapp.com/emojis/595784477624631307.png",
+    "type": "img"
   }
 ]

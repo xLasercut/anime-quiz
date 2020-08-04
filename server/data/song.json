@@ -2623,7 +2623,7 @@
     "anime": [
       "Aldnoah.Zero"
     ],
-    "src": "https://www.youtube.com/watch?v=yE-kfC1wEwc",
+    "src": "https://files.catbox.moe/fqvveq.mp4",
     "title": "MKAlieZ",
     "artist": "",
     "type": "Insert"
@@ -8717,6 +8717,17 @@
     "type": "OP"
   },
   {
+    "songId": "8a05c0a4-1e29-409c-ba7c-23c5a9e9fc1a",
+    "anime": [
+      "Brand New Animal",
+      "BNA"
+    ],
+    "src": "https://animethemes.moe/video/BrandNewAnimal-OP1.webm",
+    "title": "Ready To",
+    "artist": "",
+    "type": "OP"
+  },
+  {
     "songId": "4c56fa55-05ee-43fe-97ac-eafac7a433f2",
     "anime": [
       "Brave 10"
@@ -14134,7 +14145,7 @@
     "anime": [
       "Death Note"
     ],
-    "src": "https://www.youtube.com/watch?v=MTGlrcReWrk",
+    "src": "https://www.youtube.com/watch?v=qR6dzwQahOM",
     "title": "L's Theme",
     "artist": "",
     "type": "Insert"
@@ -15415,7 +15426,7 @@
       "Digimon Adventure",
       "Digimon Adventure 02"
     ],
-    "src": "https://www.youtube.com/watch?v=HVVcrV8zXgU",
+    "src": "https://www.youtube.com/watch?v=b1uH4BnswKQ",
     "title": "Brave Heart",
     "artist": "Ayumi Miyazaki",
     "type": "Insert"
@@ -38256,6 +38267,17 @@
     "type": "OP V1"
   },
   {
+    "songId": "6c0d0b1d-7ce8-4e1e-a275-c2cc0150477b",
+    "anime": [
+      "Koukaku Kidoutai: SAC_2045",
+      "Ghost in the Shell: Stand Alone Complex 2045"
+    ],
+    "src": "https://www.youtube.com/watch?v=JHY0PYZXvfU",
+    "title": "sustain++;",
+    "artist": "Mili",
+    "type": "ED"
+  },
+  {
     "songId": "f6dfb701-4796-4c33-b1f0-0e664e7820a7",
     "anime": [
       "Koukaku no Pandora"
@@ -38947,6 +38969,17 @@
     "title": "Otto Dokkoi Nihon Bare",
     "artist": "",
     "type": "OP"
+  },
+  {
+    "songId": "d0f08d4b-8dec-4194-a493-a6d8c11cd74b",
+    "anime": [
+      "Kyokou Suiri",
+      "In/Spectre"
+    ],
+    "src": "https://animethemes.moe/video/KyokouSuiri-ED1.webm",
+    "title": "LAST DANCE",
+    "artist": "",
+    "type": "ED"
   },
   {
     "songId": "d664ae07-3f66-4c56-84ae-b218f8083a7d",
@@ -55060,7 +55093,7 @@
     "anime": [
       "Pokemon Diamond & Pearl"
     ],
-    "src": "https://www.youtube.com/watch?v=j4HlLnQF6Xs",
+    "src": "https://files.catbox.moe/ijmoa7.mp4",
     "title": "We Will be Heroes",
     "artist": "",
     "type": "OP"
@@ -64450,7 +64483,7 @@
       "Shokugeki no Souma: San no Sara - Toutsuki Ressha-hen",
       "Food Wars! The Third Plate Part 2"
     ],
-    "src": "https://www.youtube.com/watch?v=EkZkjVFFAoU",
+    "src": "https://files.catbox.moe/uikcvj.mp4",
     "title": "The Secret Ingredient Called Victory",
     "artist": "",
     "type": "Insert"
@@ -80252,6 +80285,16 @@
     ],
     "src": "https://animethemes.moe/video/Eldlive-OP1.webm",
     "title": "Our sympathy",
+    "artist": "",
+    "type": "OP"
+  },
+  {
+    "songId": "e040fe24-b84f-4eb0-8a63-368cb3637156",
+    "anime": [
+      "Toaru Kagaku no Railgun T"
+    ],
+    "src": "https://animethemes.moe/video/ToaruKagakuNoRailgunT-OP2.webm",
+    "title": "dual existence",
     "artist": "",
     "type": "OP"
   }
