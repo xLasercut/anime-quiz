@@ -31,6 +31,26 @@
         <v-col cols="auto">
           <icon-btn icon="mdi-send" color="success" @click="systemMessage()">Send Message</icon-btn>
         </v-col>
+        <v-col cols="12">
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title>Anime</v-list-item-title>
+              <v-list-item-subtitle>{{$store.state.amq.gameState.currentSong.anime[0]}}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title>Title</v-list-item-title>
+              <v-list-item-subtitle>{{$store.state.amq.gameState.currentSong.title}}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title>Type</v-list-item-title>
+              <v-list-item-subtitle>{{$store.state.amq.gameState.currentSong.type}}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-col>
       </v-row>
     </game-dialog>
   </div>
