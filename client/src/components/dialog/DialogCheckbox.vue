@@ -1,6 +1,6 @@
 <template>
   <v-col cols="10">
-    <v-row justify="center" no-gutters>
+    <v-row justify="center">
       <v-col cols="auto" v-for="item in items">
         <v-checkbox v-bind="item" v-model="model" :disabled="disabled"></v-checkbox>
       </v-col>

@@ -15,13 +15,6 @@
         hide-details
         :disabled="disabled()"
       ></dialog-slider>
-      <dialog-slider
-        label="Song Select Time" min="10" max="30"
-        :value="$store.state.amq.settings.selectTime"
-        @input="updateAmqSettings('selectTime', $event)"
-        hide-details
-        :disabled="disabled()"
-      ></dialog-slider>
       <dialog-radio
         label="Duplicate"
         :items="duplicateItems"
@@ -78,7 +71,6 @@
         ],
         gameModes: [
           {label: 'Normal', value: 'normal'},
-          {label: 'Selector', value: 'selector'},
           {label: 'Balanced', value: 'balanced'}
         ]
       })

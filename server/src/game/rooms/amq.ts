@@ -69,6 +69,20 @@ class AmqRoomManager extends MasterRoomManager {
     }
   }
 
+  public getSelectorId(roomId: string): string {
+    if (this._isRoomExists(roomId)) {
+      let players = this.getRoom(roomId).sockets
+      let validPlayers = Object.values(this._io.sockets.connected)
+        .filter((socket: ISocket): ISocket => {
+          if (socket.id in players) {
+            return socket
+          }
+        })
+      let index = Math.floor(Math.random() * validPlayers.length)
+      return validPlayers[index].id
+    }
+  }
+
   public getPlayer(socketId: string): AmqPlayer {
     return this._getSocket(socketId).player
   }

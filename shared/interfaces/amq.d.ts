@@ -18,7 +18,6 @@ interface IAmqSettings {
   guessTime: number
   gameMode: IAmqGameMode
   duplicate: boolean
-  selectTime: number
   users: Array<string>
   leastPlayed: boolean
 }

@@ -62,7 +62,9 @@ const listPicker: Module<IListStoreState, IRooteStoreState> = {
           if (song.anime.join(',').toLowerCase().includes(animeFilter) &&
             song.title.toLowerCase().includes(titleFilter) &&
             song.type.toLowerCase().includes(typeFilter)) {
-            return song
+            if (!state.currentUser || state.userSongs.has(song.songId)) {
+              return song
+            }
           }
         })
         .sort((a: ISong, b: ISong) => {

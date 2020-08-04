@@ -1,4 +1,4 @@
-type IAmqGameMode = 'normal' | 'selector' | 'balanced'
-type IAmqReadyType = 'load' | 'guess' | 'select'
+type IAmqGameMode = 'normal' | 'balanced'
+type IAmqReadyType = 'load' | 'guess'
 
 export {IAmqGameMode, IAmqReadyType}

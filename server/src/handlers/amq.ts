@@ -195,17 +195,6 @@ class AmqHandler extends AbstractHandler {
     if (this._roomManager.isAmqRoom(roomId)) {
       this._roomManager.newRound(roomId)
       this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
-      if (this._roomManager.getRoom(roomId).settings.gameMode === 'selector') {
-        await this._amqFlowSelector(roomId)
-      }
-      else {
-        await this._amqFlowMain(roomId)
-      }
-    }
-  }
-
-  protected async _amqFlowSelector(roomId: string): Promise<any> {
-    if (this._roomManager.isAmqRoom(roomId)) {
       await this._amqFlowMain(roomId)
     }
   }

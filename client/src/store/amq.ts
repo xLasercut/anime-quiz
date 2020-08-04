@@ -12,7 +12,6 @@ function getDefaultState(): IAmqStoreState {
       users: [],
       gameMode: 'normal',
       duplicate: false,
-      selectTime: 20,
       leastPlayed: false
     },
     gameState: {

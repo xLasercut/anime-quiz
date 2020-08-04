@@ -2,7 +2,7 @@
   <v-col cols="10">
     <v-radio-group
       v-bind="$attrs"
-      :value="value" @input="$emit('input', $event)"
+      v-model="model"
     >
       <v-radio v-for="item in items" v-bind="item"></v-radio>
     </v-radio-group>
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
 
   export default defineComponent({
     props: {
@@ -20,6 +20,21 @@
       value: {
         required: true
       }
+    },
+    setup(props, context) {
+      const state = reactive({
+        model: props.value
+      })
+
+      watch(() =>  state.model, (val) => {
+        context.emit('input', val)
+      })
+
+      watch(() => props.value, (val) => {
+        state.model = val
+      })
+
+      return {...toRefs(state)}
     }
   })
 </script>

@@ -7,23 +7,23 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
-  import SongListTable from '@/list-picker/SongListTable.vue'
-  import TableBtn from '@/components/buttons/TableBtn.vue'
-  import {ISong} from '../../../../../shared/interfaces/database'
-  import {socket} from '@/assets/socket'
+import {defineComponent} from '@vue/composition-api'
+import SongListTable from '@/list-picker/SongListTable.vue'
+import TableBtn from '@/components/buttons/TableBtn.vue'
+import {ISong} from '../../../../../shared/interfaces/database'
+import {socket} from '@/assets/socket'
 
-  export default defineComponent({
-    components: {
-      SongListTable, TableBtn
-    },
-    setup(_props, context) {
-      function selectSong(song: ISong): void {
-        socket.emit('AMQ_SONG_OVERRIDE', song)
-        context.emit('dialog:close')
-      }
-
-      return {selectSong}
+export default defineComponent({
+  components: {
+    SongListTable, TableBtn
+  },
+  setup(_props, context) {
+    function selectSong(song: ISong): void {
+      socket.emit('AMQ_SONG_OVERRIDE', song)
+      context.emit('dialog:close')
     }
-  })
+
+    return {selectSong}
+  }
+})
 </script>
