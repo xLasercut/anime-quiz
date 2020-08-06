@@ -4,7 +4,7 @@ import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/data
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
 
-//@ts-ignore
+const GAME_SERVER = localStorage.GAME_SERVER || 'http://localhost:3001'
 const socket = io(GAME_SERVER, {autoConnect: false})
 
 socket.on('UPDATE_SONG_LIST', (songList: Array<ISong>): void => {

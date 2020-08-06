@@ -13,6 +13,7 @@
   import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
   import {IBannerColor} from '../../../shared/types/game'
   import {socket} from '@/assets/socket'
+  import {EventBus} from '@/assets/events'
 
   export default defineComponent({
     setup(_props, _context) {
@@ -31,6 +32,18 @@
 
       onMounted(() => {
         socket.on('SYSTEM_NOTIFICATION', (color: IBannerColor, message: string): void => {
+          if (state.show) {
+            state.show = false
+            setTimeout((): void => {
+              showNotification(color, message)
+            }, 100)
+          }
+          else {
+            showNotification(color, message)
+          }
+        })
+
+        EventBus.$on('SYSTEM_NOTIFICATION', (color: IBannerColor, message: string): void => {
           if (state.show) {
             state.show = false
             setTimeout((): void => {
