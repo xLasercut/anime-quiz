@@ -7,10 +7,10 @@ ARG SERVER_DIR=${WRK_DIR}/server
 ARG SHARED_DIR=${WRK_DIR}/shared
 
 RUN apk update && apk upgrade \
- && apk -q add curl \
- && apk -q add bash \
- && apk -q add bash-completion \
- && mkdir ${WRK_DIR}
+  && apk -q add curl \
+  && apk -q add bash \
+  && apk -q add bash-completion \
+  && mkdir ${WRK_DIR}
 
 WORKDIR ${SERVER_DIR}
 

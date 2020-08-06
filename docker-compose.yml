@@ -4,6 +4,7 @@ services:
     restart: unless-stopped
     build:
       context: '.'
+      dockerfile: './server/Dockerfile'
     ports:
       - 3001:3001
     volumes:
@@ -12,6 +13,17 @@ services:
     environment:
       - SERVER_PASSWORD
       - ADMIN_PASSWORD
+    logging:
+      options:
+        max-size: 50m
+
+  ngrok:
+    restart: unless-stopped
+    build:
+      context: '.'
+      dockerfile: './ngrok/Dockerfile'
+    ports:
+      - 4040:4040
     logging:
       options:
         max-size: 50m
