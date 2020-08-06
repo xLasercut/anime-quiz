@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "build:gh": "cross-env NODE_ENV=ghpages npm run build"
   },
   "dependencies": {
     "@types/socket.io-client": "^1.4.33",
@@ -23,6 +24,7 @@
     "@vue/cli-plugin-typescript": "^4.4.6",
     "@vue/cli-plugin-vuex": "^4.4.6",
     "@vue/cli-service": "^4.4.6",
+    "cross-env": "^7.0.2",
     "sass": "^1.26.10",
     "sass-loader": "^8.0.0",
     "typescript": "~3.9.3",

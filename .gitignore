@@ -34,9 +34,3 @@ server/log/
 shared/tsconfig.tsbuildinfo
 
 !.gitkeep
-
-#terraform
-.terraform
-*.tfstate
-*.tfstate.backup
-terraform.tfvars
