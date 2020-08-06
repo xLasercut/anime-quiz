@@ -2,6 +2,7 @@
   <v-app>
     <system-notification></system-notification>
     <router-view></router-view>
+    <global-dialog></global-dialog>
   </v-app>
 </template>
 
@@ -9,10 +10,11 @@
 import {defineComponent, onMounted} from '@vue/composition-api'
 import SystemNotification from '@/app/SystemNotification.vue'
 import {socket} from '@/assets/socket'
+import GlobalDialog from '@/app/GlobalDialog.vue'
 
 export default defineComponent({
   components: {
-    SystemNotification
+    SystemNotification, GlobalDialog
   },
   setup(_props, context) {
     onMounted(() => {

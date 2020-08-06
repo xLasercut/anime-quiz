@@ -1,69 +1,25 @@
 <template>
-  <div>
-    <v-app-bar app flat height="60px" min-height="60px">
-      <v-toolbar-items>
-        <nav-btn icon="mdi-theme-light-dark" @click="toggleTheme()"></nav-btn>
-        <nav-btn icon="mdi-home" color="primary" @click="$router.push('/login')" v-if="showHome"></nav-btn>
-        <nav-btn icon="mdi-arrow-left-bold" color="info" @click="$emit('screen:back')" v-if="showBack"></nav-btn>
-        <nav-btn icon="mdi-shield-account" color="warning" @click="show = true" v-if="$store.state.client.admin"></nav-btn>
-      </v-toolbar-items>
-      <v-spacer></v-spacer>
-      <slot></slot>
-    </v-app-bar>
-    <game-dialog
-      label="Admin"
-      v-model="show"
-    >
-      <v-row justify="center">
-        <v-col cols="auto">
-          <icon-btn icon="mdi-sync" color="warning" @click="reloadDatabase()">Reload Database</icon-btn>
-        </v-col>
-        <dialog-text
-          label="Message"
-          v-model.trim="message"
-        ></dialog-text>
-        <dialog-select
-          label="Message Colour"
-          v-model="messageColor"
-          :items="messageColors"
-        >
-        </dialog-select>
-        <v-col cols="auto">
-          <icon-btn icon="mdi-send" color="success" @click="systemMessage()">Send Message</icon-btn>
-        </v-col>
-        <v-col cols="12">
-          <v-list-item two-line>
-            <v-list-item-content>
-              <v-list-item-title>Anime</v-list-item-title>
-              <v-list-item-subtitle>{{$store.state.amq.gameState.currentSong.anime[0]}}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item two-line>
-            <v-list-item-content>
-              <v-list-item-title>Title</v-list-item-title>
-              <v-list-item-subtitle>{{$store.state.amq.gameState.currentSong.title}}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item two-line>
-            <v-list-item-content>
-              <v-list-item-title>Type</v-list-item-title>
-              <v-list-item-subtitle>{{$store.state.amq.gameState.currentSong.type}}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-col>
-      </v-row>
-    </game-dialog>
-  </div>
+  <v-app-bar app flat height="60px" min-height="60px">
+    <v-toolbar-items>
+      <nav-btn icon="mdi-theme-light-dark" @click="toggleTheme()"></nav-btn>
+      <nav-btn icon="mdi-home" color="primary" @click="$router.push('/login')" v-if="showHome"></nav-btn>
+      <nav-btn icon="mdi-arrow-left-bold" color="info" @click="$emit('screen:back')" v-if="showBack"></nav-btn>
+      <nav-btn icon="mdi-shield-account" color="warning" @click="showAdminControls()"
+               v-if="$store.state.client.admin"></nav-btn>
+    </v-toolbar-items>
+    <v-spacer></v-spacer>
+    <slot></slot>
+  </v-app-bar>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs} from '@vue/composition-api'
+import {defineComponent} from '@vue/composition-api'
 import NavBtn from '@/components/buttons/NavBtn.vue'
 import GameDialog from '@/components/GameDialog.vue'
 import IconBtn from '@/components/buttons/IconBtn.vue'
-import {socket} from '@/assets/socket'
 import DialogText from '@/components/dialog/DialogText.vue'
 import DialogSelect from '@/components/dialog/DialogSelect.vue'
+import {EventBus} from '@/assets/events'
 
 export default defineComponent({
   props: {
@@ -80,30 +36,17 @@ export default defineComponent({
     NavBtn, GameDialog, IconBtn, DialogText, DialogSelect
   },
   setup(_props, context) {
-    const state = reactive({
-      show: false,
-      message: '',
-      messageColor: 'success',
-      messageColors: ['success', 'error', 'warning']
-    })
 
     function toggleTheme(): void {
       context.root.$vuetify.theme.dark = !context.root.$vuetify.theme.dark
       localStorage.dark = context.root.$vuetify.theme.dark
     }
 
-    function reloadDatabase(): void {
-      socket.emit('ADMIN_RELOAD_DATABASE')
+    function showAdminControls(): void {
+      EventBus.$emit('GLOBAL_DIALOG', 'admin', 'Admin')
     }
 
-    function systemMessage(): void {
-      if (state.message) {
-        socket.emit('ADMIN_SYSTEM_MESSAGE', state.message, state.messageColor)
-      }
-      state.message = ''
-    }
-
-    return {toggleTheme, ...toRefs(state), reloadDatabase, systemMessage}
+    return {toggleTheme, showAdminControls}
   }
 })
 </script>
