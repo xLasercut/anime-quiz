@@ -29,6 +29,14 @@ class RoomHandler extends AbstractHandler {
       this._emitter.updateRoomList(this._roomManager.getRoomList())
     }))
 
+    socket.on('LEAVE_ALL_ROOM', exceptionHandler(socket, (): void => {
+      for (let roomId in socket.rooms) {
+        if (roomId !== socket.id) {
+          socket.leave(roomId)
+        }
+      }
+    }))
+
     socket.on('PLAYER_CHAT', exceptionHandler(socket, (msg: string): void => {
       let player = socket.player.serialize()
       let roomId = socket.roomId

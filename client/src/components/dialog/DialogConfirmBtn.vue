@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
-  import IconBtn from '../buttons/IconBtn.vue'
+import {defineComponent} from '@vue/composition-api'
+import IconBtn from '@/components/buttons/IconBtn.vue'
 
-  export default defineComponent({
-    components: {
-      IconBtn
-    }
-  })
+export default defineComponent({
+  components: {
+    IconBtn
+  }
+})
 </script>

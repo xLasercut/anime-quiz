@@ -1,16 +1,12 @@
+import {IAvatar, IClientStoreState, IRootStoreState} from '@/assets/interfaces'
 import {Module} from 'vuex'
-import {IAvatar, IClientStoreState, IRooteStoreState} from '@/assets/interfaces'
-import {ILoginMode, IRoomMode} from '@/assets/types'
-import {IRoomSerial} from '../../../shared/interfaces/game'
 
-function getDefaultState(): IClientStoreState {
+function _getDefaultState(): IClientStoreState {
   return {
     admin: false,
-    loginMode: 'game',
-    username: '',
-    avatar: 'zero_2',
-    roomMode: 'list',
-    roomList: [],
+    view: 'login',
+    username: localStorage.username || '',
+    avatar: localStorage.avatar || 'zero_2',
     avatarMap: {
       'zero_2': 'https://i.imgur.com/qQ0Fkkx.png',
       'initial_d': 'https://i.imgur.com/fk44rTD.png',
@@ -31,34 +27,23 @@ function getDefaultState(): IClientStoreState {
   }
 }
 
-const client: Module<IClientStoreState, IRooteStoreState> = {
-  state: getDefaultState(),
+const client: Module<IClientStoreState, IRootStoreState> = {
+  state: _getDefaultState(),
   mutations: {
-    CHANGE_LOGIN_MODE(state: IClientStoreState, mode: ILoginMode): void {
-      state.loginMode = mode
-    },
     UPDATE_USERNAME(state: IClientStoreState, username: string): void {
-      if (username) {
-        state.username = username.trim()
-      }
-      else {
-        state.username = ''
-      }
+      state.username = username
     },
     UPDATE_AVATAR(state: IClientStoreState, avatar: string): void {
       state.avatar = avatar
     },
-    UPDATE_ROOM_MODE(state: IClientStoreState, roomMode: IRoomMode): void {
-      state.roomMode = roomMode
+    UPDATE_VIEW(state: IClientStoreState, view: string): void {
+      state.view = view
+    },
+    RESET_CLIENT_STORE_STATE(state: IClientStoreState): void {
+      Object.assign(state, _getDefaultState())
     },
     SOCKET_UPDATE_ADMIN(state: IClientStoreState, admin: boolean): void {
       state.admin = admin
-    },
-    SOCKET_UPDATE_ROOM_LIST(state: IClientStoreState, roomList: Array<IRoomSerial>): void {
-      state.roomList = roomList
-    },
-    RESET_STORE_STATE(state: IClientStoreState): void {
-      Object.assign(state, getDefaultState())
     }
   },
   getters: {

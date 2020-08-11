@@ -1,35 +1,16 @@
-import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
-import {ILoginMode, IMiscMode, IRoomMode} from '@/assets/types'
-import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
+import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
+import {IAmqChoices, IAmqSong, IChatBot, IEmoji} from '../../../shared/interfaces/database'
 
-interface IRooteStoreState {
-
-}
-
-interface IListStoreState {
-  songList: Array<ISong>
-  users: Array<string>
-  userSongs: Set<string>
-  currentUser: string
-  choices: IChoices
-  songListFilter: ISongListFilter
+interface IRootStoreState {
 }
 
 interface IClientStoreState {
   admin: boolean
-  loginMode: ILoginMode
+  view: string
   username: string
   avatar: string
-  roomMode: IRoomMode
-  roomList: Array<IRoomSerial>
-  avatarMap: {[key: string]: string}
-}
-
-interface ISongListFilter {
-  anime: string
-  title: string
-  type: string
+  avatarMap: { [key: string]: string }
 }
 
 interface IAmqStoreState {
@@ -37,18 +18,33 @@ interface IAmqStoreState {
   playerList: Array<IAmqPlayer>
   settings: IAmqSettings
   gameState: IAmqGameState
+  songList: Array<IAmqSong>
+  users: Array<string>
+  userSongs: Set<string>
+  currentUser: string
+  choices: IAmqChoices
+  songListFilter: IAmqSongListFilter
+  roomList: Array<IRoomSerial>
 }
 
-interface IMiscStoreState {
-  miscMode: IMiscMode
+interface IAmqSongListFilter {
+  anime: string
+  title: string
+  type: string
+}
+
+interface IEmojiStoreState {
   emojiList: Array<IEmoji>
   emojiListFilter: IEmojiListFilter
-  chatBotList: Array<IChatBot>
-  chatBotListFilter: IChatBotListFilter
 }
 
 interface IEmojiListFilter {
   command: string
+}
+
+interface IChatBotStoreState {
+  chatBotList: Array<IChatBot>
+  chatBotListFilter: IChatBotListFilter
 }
 
 interface IChatBotListFilter {
@@ -61,13 +57,13 @@ interface IAvatar {
 }
 
 export {
-  IListStoreState,
-  IRooteStoreState,
   IClientStoreState,
-  ISongListFilter,
+  IRootStoreState,
+  IAmqSongListFilter,
   IAmqStoreState,
-  IMiscStoreState,
+  IEmojiStoreState,
   IEmojiListFilter,
+  IChatBotStoreState,
   IChatBotListFilter,
   IAvatar
 }

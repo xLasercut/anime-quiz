@@ -10,33 +10,33 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
+import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      value: {
-        required: true
-      },
-      maxPage: {
-        required: true
-      },
-      items: {
-        required: true
-      },
-      itemsPerPage: {
-        required: true
-      }
+export default defineComponent({
+  props: {
+    value: {
+      required: true
     },
-    setup(props, context) {
-      const state = reactive({
-        rowsPerPage: props.itemsPerPage
-      })
-
-      watch(() => state.rowsPerPage, (val) => {
-        context.emit('update:itemsPerPage', val)
-      })
-
-      return {...toRefs(state)}
+    maxPage: {
+      required: true
+    },
+    items: {
+      required: true
+    },
+    itemsPerPage: {
+      required: true
     }
-  })
+  },
+  setup(props, context) {
+    const state = reactive({
+      rowsPerPage: props.itemsPerPage
+    })
+
+    watch(() => state.rowsPerPage, (val) => {
+      context.emit('update:itemsPerPage', val)
+    })
+
+    return {...toRefs(state)}
+  }
+})
 </script>

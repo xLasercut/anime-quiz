@@ -5,18 +5,19 @@ import {ADMIN_PASSWORD, SERVER_PASSWORD, SERVER_PORT} from './config'
 import {ISocket} from './interfaces'
 import {AuthError, ServerDataError} from './exceptions'
 import {Emitter} from './app/emitter'
-import {SongDatabase} from './database/song'
-import {UserSongDatabase} from './database/user-song'
-import {ListPickerHandler} from './handlers/list-picker'
+import {AmqSongDatabase} from './database/amq-song'
+import {AmqUserSongDatabase} from './database/amq-user-song'
+import {AmqSongListHandler} from './handlers/amq-song-list'
 import {AdminHandler} from './handlers/admin'
 import {MasterRoomManager} from './game/rooms/master'
 import {AmqHandler} from './handlers/amq'
 import {RoomHandler} from './handlers/room'
 import {AmqRoomManager} from './game/rooms/amq'
 import {EmojiDatabase} from './database/emoji'
-import {MiscHandler} from './handlers/misc'
+import {ChatBotHandler} from './handlers/chat-bot'
 import {ChatBotDatabase} from './database/chat-bot'
 import {ChatManager} from './game/chat'
+import {EmojiHandler} from './handlers/emoji'
 
 
 const logger = new Logger()
@@ -29,8 +30,8 @@ const server = app.listen(SERVER_PORT, () => {
 const io = socketio(server)
 const emitter = new Emitter(io)
 
-const songDatabase = new SongDatabase()
-const userSongDatabase = new UserSongDatabase(songDatabase)
+const amqSongDatabase = new AmqSongDatabase()
+const amqUserSongDatabase = new AmqUserSongDatabase(amqSongDatabase)
 const emojiDatabase = new EmojiDatabase()
 const chatBotDatabase = new ChatBotDatabase()
 
@@ -38,12 +39,13 @@ const chatManager = new ChatManager(logger, chatBotDatabase, emojiDatabase)
 const masterRoomManager = new MasterRoomManager(io)
 const amqRoomManager = new AmqRoomManager(io)
 
-const listPickerHandler = new ListPickerHandler(logger, emitter, songDatabase, userSongDatabase)
-const miscHandler = new MiscHandler(logger, emitter, emojiDatabase, chatBotDatabase)
-const adminHandler = new AdminHandler(logger, emitter, songDatabase, userSongDatabase, emojiDatabase, chatBotDatabase, masterRoomManager)
+const amqSongListHandler = new AmqSongListHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase)
+const emojiHandler = new EmojiHandler(logger, emitter, emojiDatabase)
+const chatBotHandler = new ChatBotHandler(logger, emitter, chatBotDatabase)
+const adminHandler = new AdminHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase, masterRoomManager)
 
 const roomHandler = new RoomHandler(logger, emitter, masterRoomManager, chatManager)
-const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager, chatManager, songDatabase, userSongDatabase, emojiDatabase)
+const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)
 
 
 io.on('connect', (socket: ISocket) => {
@@ -71,8 +73,9 @@ io.on('connect', (socket: ISocket) => {
 
 function startHandlers(socket: ISocket): void {
   if (socket.auth) {
-    listPickerHandler.start(socket, exceptionHandler)
-    miscHandler.start(socket, exceptionHandler)
+    amqSongListHandler.start(socket, exceptionHandler)
+    emojiHandler.start(socket, exceptionHandler)
+    chatBotHandler.start(socket, exceptionHandler)
     roomHandler.start(socket, exceptionHandler)
     amqHandler.start(socket, exceptionHandler)
 

@@ -9,28 +9,28 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+import {defineComponent} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      value: {
-        required: true
-      },
-      cols: {
-        required: true
-      }
+export default defineComponent({
+  props: {
+    value: {
+      required: true
     },
-    setup(_prop, context) {
-      function emitChange(value: string): void {
-        if (!value) {
-          context.emit('input', '')
-        }
-        else {
-          context.emit('input', value)
-        }
-      }
-
-      return {emitChange}
+    cols: {
+      required: true
     }
-  })
+  },
+  setup(_prop, context) {
+    function emitChange(value: string): void {
+      if (!value) {
+        context.emit('input', '')
+      }
+      else {
+        context.emit('input', value)
+      }
+    }
+
+    return {emitChange}
+  }
+})
 </script>

@@ -3,7 +3,7 @@ import {AmqPlayer} from './game/players/amq'
 import {IRoomType} from '../../shared/types/game'
 import {AmqSettings} from './game/settings/amq'
 import {AmqGameState} from './game/state/amq'
-import {ISong} from '../../shared/interfaces/database'
+import {IAmqSong} from '../../shared/interfaces/database'
 
 interface ILog {
   code: string
@@ -35,8 +35,8 @@ interface IBalancedAmqSongLists {
 }
 
 interface INormalAmqSongLists {
-  normal: Array<ISong>
-  priority: Array<ISong>
+  normal: Array<IAmqSong>
+  priority: Array<IAmqSong>
 }
 
 export {ILog, ISocket, IRoom, IAmqRoom, IBalancedAmqSongLists, INormalAmqSongLists}

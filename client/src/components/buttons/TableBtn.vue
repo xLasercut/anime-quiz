@@ -5,19 +5,19 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+import {defineComponent} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      icon: {
-        required: true
-      }
+export default defineComponent({
+  props: {
+    icon: {
+      required: true
     }
-  })
+  }
+})
 </script>
 
 <style scoped>
-  button {
-    margin-right: 2px;
-  }
+button {
+  margin-right: 2px;
+}
 </style>

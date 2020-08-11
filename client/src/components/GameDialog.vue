@@ -19,34 +19,34 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
+import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      label: {
-        default: ''
-      },
-      width: {
-        default: '600px'
-      },
-      value: {
-        required: true
-      }
+export default defineComponent({
+  props: {
+    label: {
+      default: ''
     },
-    setup(props, context) {
-      const state = reactive({
-        show: props.value
-      })
-
-      watch(() => props.value, (val): void => {
-        state.show = val
-      })
-
-      watch(() => state.show, (val): void => {
-        context.emit('input', val)
-      })
-
-      return {...toRefs(state)}
+    width: {
+      default: '600px'
+    },
+    value: {
+      required: true
     }
-  })
+  },
+  setup(props, context) {
+    const state = reactive({
+      show: props.value
+    })
+
+    watch(() => props.value, (val): void => {
+      state.show = val
+    })
+
+    watch(() => state.show, (val): void => {
+      context.emit('input', val)
+    })
+
+    return {...toRefs(state)}
+  }
+})
 </script>

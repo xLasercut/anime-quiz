@@ -1,7 +1,7 @@
 <template>
   <v-col cols="10">
     <v-row justify="center">
-      <v-col cols="auto" v-for="item in items">
+      <v-col cols="auto" v-for="(item, index) in items" :key="`${index}_checkbox`">
         <v-checkbox v-bind="item" v-model="model" :disabled="disabled"></v-checkbox>
       </v-col>
     </v-row>
@@ -9,34 +9,34 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
+import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      items: {
-        required: true
-      },
-      value: {
-        required: true
-      },
-      disabled: {
-        default: false
-      }
+export default defineComponent({
+  props: {
+    items: {
+      required: true
     },
-    setup(props, context) {
-      const state = reactive({
-        model: props.value
-      })
-
-      watch(() => props.value, (val) => {
-        state.model = val
-      })
-
-      watch(() => state.model, (val) => {
-        context.emit('input', val)
-      })
-
-      return {...toRefs(state)}
+    value: {
+      required: true
+    },
+    disabled: {
+      default: false
     }
-  })
+  },
+  setup(props, context) {
+    const state = reactive({
+      model: props.value
+    })
+
+    watch(() => props.value, (val) => {
+      state.model = val
+    })
+
+    watch(() => state.model, (val) => {
+      context.emit('input', val)
+    })
+
+    return {...toRefs(state)}
+  }
+})
 </script>

@@ -1,4 +1,4 @@
-import {ISong} from '../../../../shared/interfaces/database'
+import {IAmqSong} from '../../../../shared/interfaces/database'
 import {IAmqGameState, IAmqGuess, IAmqSettings} from '../../../../shared/interfaces/amq'
 import {IBalancedAmqSongLists, INormalAmqSongLists} from '../../interfaces'
 import {IBannerColor} from '../../../../shared/types/game'
@@ -8,9 +8,9 @@ class AmqGameState {
   public maxSongCount = 0
   public currentSongCount = 0
   public startPosition = 0
-  public gameList: Array<ISong> = []
-  public songOverride: ISong
-  public currentSong: ISong = {
+  public gameList: Array<IAmqSong> = []
+  public songOverride: IAmqSong
+  public currentSong: IAmqSong = {
     anime: [''],
     title: '',
     artist: '',
@@ -138,7 +138,7 @@ class AmqGameState {
     this.songOverride = null
   }
 
-  protected _addToBalancedGameList(sourceList: Array<ISong>, songCount: number, dupes: Set<string>, dupeSongIds: Set<string>, duplicate: boolean): void {
+  protected _addToBalancedGameList(sourceList: Array<IAmqSong>, songCount: number, dupes: Set<string>, dupeSongIds: Set<string>, duplicate: boolean): void {
     while (sourceList.length > 0 && this.gameList.length < songCount) {
       let i = this._getRandomIndex(sourceList)
       let anime = sourceList[i].anime[0]
@@ -152,7 +152,7 @@ class AmqGameState {
     }
   }
 
-  protected _addToGameList(sourceList: Array<ISong>, songCount: number, dupes: Set<string>, duplicate: boolean): void {
+  protected _addToGameList(sourceList: Array<IAmqSong>, songCount: number, dupes: Set<string>, duplicate: boolean): void {
     while (sourceList.length > 0 && this.gameList.length < songCount) {
       let i = this._getRandomIndex(sourceList)
       let anime = sourceList[i].anime[0]

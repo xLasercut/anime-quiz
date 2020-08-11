@@ -14,13 +14,13 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+import {defineComponent} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      value: {
-        required: true
-      }
+export default defineComponent({
+  props: {
+    value: {
+      required: true
     }
-  })
+  }
+})
 </script>

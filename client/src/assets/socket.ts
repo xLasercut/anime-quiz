@@ -1,22 +1,36 @@
 import io from 'socket.io-client'
 import store from '@/store'
-import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
+import {IChatBot, IAmqChoices, IEmoji, IAmqSong} from '../../../shared/interfaces/database'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IRoomSerial} from '../../../shared/interfaces/game'
 
 const GAME_SERVER = localStorage.GAME_SERVER || 'http://localhost:3001'
 const socket = io(GAME_SERVER, {autoConnect: false})
 
-socket.on('UPDATE_SONG_LIST', (songList: Array<ISong>): void => {
-  store.commit('SOCKET_UPDATE_SONG_LIST', songList)
+socket.on('disconnect', (): void => {
+  store.commit('UPDATE_VIEW', 'login')
 })
 
-socket.on('UPDATE_USERS', (users: Array<string>): void => {
-  store.commit('SOCKET_UPDATE_USERS', users)
+//@ts-ignore
+for (let mutation in store._mutations) {
+  if (mutation.startsWith('SOCKET_')) {
+    socket.on(mutation.replace('SOCKET_', ''), (data: any): void => {
+      store.commit(mutation, data)
+    })
+  }
+}
+
+
+/*socket.on('UPDATE_AMQ_SONG_LIST', (songList: Array<IAmqSong>): void => {
+  store.commit('SOCKET_UPDATE_AMQ_SONG_LIST', songList)
 })
 
-socket.on('UPDATE_CHOICES', (choices: IChoices): void => {
-  store.commit('SOCKET_UPDATE_CHOICES', choices)
+socket.on('UPDATE_AMQ_USERS', (users: Array<string>): void => {
+  store.commit('SOCKET_UPDATE_AMQ_USERS', users)
+})
+
+socket.on('UPDATE_AMQ_CHOICES', (choices: IAmqChoices): void => {
+  store.commit('SOCKET_UPDATE_AMQ_CHOICES', choices)
 })
 
 socket.on('UPDATE_ADMIN', (admin: boolean): void => {
@@ -53,6 +67,6 @@ socket.on('UPDATE_AMQ_GAME_STATE', (amqGameState: IAmqGameState): void => {
 
 socket.on('UPDATE_AMQ_HOST', (host: boolean): void => {
   store.commit('SOCKET_UPDATE_AMQ_HOST', host)
-})
+})*/
 
 export {socket}

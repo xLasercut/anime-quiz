@@ -6,18 +6,18 @@ import {IRoomType} from '../../../shared/types/game'
 import {AmqPlayer} from '../game/players/amq'
 import {Server} from 'socket.io'
 import {AmqRoomManager} from '../game/rooms/amq'
-import {SongDatabase} from '../database/song'
-import {UserSongDatabase} from '../database/user-song'
+import {AmqSongDatabase} from '../database/amq-song'
+import {AmqUserSongDatabase} from '../database/amq-user-song'
 import {ChatManager} from '../game/chat'
 import {EmojiDatabase} from '../database/emoji'
 import {IAmqGuess, IAmqSettings} from '../../../shared/interfaces/amq'
 import {AmqTimer} from '../game/timers/amq'
-import {ISong} from '../../../shared/interfaces/database'
+import {IAmqSong} from '../../../shared/interfaces/database'
 
 class AmqHandler extends AbstractHandler {
   protected _roomManager: AmqRoomManager
-  protected _songDatabase: SongDatabase
-  protected _userSongDatabase: UserSongDatabase
+  protected _songDatabase: AmqSongDatabase
+  protected _userSongDatabase: AmqUserSongDatabase
   protected _chatManager: ChatManager
   protected _emojiDatabase: EmojiDatabase
   protected _timer: AmqTimer
@@ -29,8 +29,8 @@ class AmqHandler extends AbstractHandler {
     emitter: Emitter,
     roomManager: AmqRoomManager,
     chatManager: ChatManager,
-    songDatabase: SongDatabase,
-    userSongDatabase: UserSongDatabase,
+    songDatabase: AmqSongDatabase,
+    userSongDatabase: AmqUserSongDatabase,
     emojiDatabase: EmojiDatabase
   ) {
     super(logger, emitter)
@@ -51,9 +51,9 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateAmqHost(true, socket.id)
       this._emitter.updateRoomList(this._roomManager.getRoomList())
       this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
-      this._emitter.updateSongList(this._songDatabase.getSongList(), socket.id)
-      this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
-      this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
+      this._emitter.updateAmqSongList(this._songDatabase.getSongList(), socket.id)
+      this._emitter.updateAmqChoices(this._songDatabase.getChoices(), socket.id)
+      this._emitter.updateAmqUsers(this._userSongDatabase.getUsers(), socket.id)
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
       this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), socket.id)
       this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
@@ -65,9 +65,9 @@ class AmqHandler extends AbstractHandler {
         socket.roomId = roomId
         socket.join(roomId)
         this._emitter.updateAmqPlayerList(this._roomManager.getPlayerList(roomId), roomId)
-        this._emitter.updateSongList(this._songDatabase.getSongList(), socket.id)
-        this._emitter.updateChoices(this._songDatabase.getChoices(), socket.id)
-        this._emitter.updateUsers(this._userSongDatabase.getUsers(), socket.id)
+        this._emitter.updateAmqSongList(this._songDatabase.getSongList(), socket.id)
+        this._emitter.updateAmqChoices(this._songDatabase.getChoices(), socket.id)
+        this._emitter.updateAmqUsers(this._userSongDatabase.getUsers(), socket.id)
         this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
         this._emitter.updateAmqGameState(this._roomManager.getRoom(roomId).state.serialize(), socket.id)
         this._emitter.sendChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
@@ -137,7 +137,7 @@ class AmqHandler extends AbstractHandler {
       this._resetAmq(roomId)
     }))
 
-    socket.on('AMQ_SONG_OVERRIDE', exceptionHandler(socket, (song: ISong): void => {
+    socket.on('AMQ_SONG_OVERRIDE', exceptionHandler(socket, (song: IAmqSong): void => {
       let roomId = socket.roomId
       if (this._roomManager.isAmqRoom(roomId)) {
         this._roomManager.getRoom(roomId).state.songOverride = song

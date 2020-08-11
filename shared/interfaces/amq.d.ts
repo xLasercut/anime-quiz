@@ -1,6 +1,6 @@
 import {IBannerColor} from '../types/game'
 import {IAmqGameMode} from '../types/amq'
-import {ISong} from './database'
+import {IAmqSong} from './database'
 
 
 interface IAmqPlayer {
@@ -24,7 +24,7 @@ interface IAmqSettings {
 }
 
 interface IAmqGameState {
-  currentSong: ISong
+  currentSong: IAmqSong
   currentSongCount: number
   maxSongCount: number
   playing: boolean

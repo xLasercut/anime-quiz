@@ -1,6 +1,6 @@
 import {IEmojiType} from '../types/game'
 
-interface ISong {
+interface IAmqSong {
   songId: string
   anime: Array<string>
   src: string
@@ -9,7 +9,7 @@ interface ISong {
   type: string
 }
 
-interface IChoices {
+interface IAmqChoices {
   anime: Array<string>
   title: Array<string>
 }
@@ -29,4 +29,4 @@ interface IChatBot {
   userId: string
 }
 
-export {ISong, IChoices, IEmoji, IChatBot}
+export {IAmqSong, IAmqChoices, IEmoji, IChatBot}

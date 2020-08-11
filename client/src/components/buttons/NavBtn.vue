@@ -5,14 +5,14 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from '@vue/composition-api'
+import {defineComponent} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      icon: {
-        required: true
-      },
-      activator: {}
-    }
-  })
+export default defineComponent({
+  props: {
+    icon: {
+      required: true
+    },
+    activator: {}
+  }
+})
 </script>

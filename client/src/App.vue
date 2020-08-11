@@ -1,51 +1,46 @@
 <template>
   <v-app>
     <system-notification></system-notification>
-    <router-view></router-view>
-    <global-dialog></global-dialog>
+    <v-container fluid>
+      <nav-panel>
+        <component :is="panelComponent"></component>
+      </nav-panel>
+      <component :is="viewComponent"></component>
+    </v-container>
   </v-app>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted} from '@vue/composition-api'
+import {computed, defineComponent, onMounted} from '@vue/composition-api'
 import SystemNotification from '@/app/SystemNotification.vue'
-import {socket} from '@/assets/socket'
-import GlobalDialog from '@/app/GlobalDialog.vue'
+import NavPanel from '@/app/NavPanel.vue'
+import {PANEL_COMPONENTS, VIEW_COMPONENTS} from '@/assets/component'
 
 export default defineComponent({
   components: {
-    SystemNotification, GlobalDialog
+    SystemNotification, NavPanel
   },
   setup(_props, context) {
-    onMounted(() => {
+    const viewComponent = computed(() => {
+      return VIEW_COMPONENTS[context.root.$store.state.client.view]
+    })
+
+    const panelComponent = computed(() => {
+      return PANEL_COMPONENTS[context.root.$store.state.client.view]
+    })
+
+    onMounted((): void => {
       if (localStorage.dark) {
         context.root.$vuetify.theme.dark = (localStorage.dark === 'true')
       }
-
-      socket.on('disconnect', (): void => {
-        if (context.root.$route.path !== '/login') {
-          context.root.$router.push('/login')
-        }
-      })
     })
 
-    return {}
+    return {viewComponent, panelComponent}
   }
 })
 </script>
 
 <style>
-.game-window {
-  height: calc(100vh - 85px);
-  overflow: auto;
-}
-
-.chat-window {
-  height: calc(100vh - 85px);
-  border-radius: 5px;
-  background-color: var(--v-background-darken1) !important;
-}
-
 .v-application {
   background-color: var(--v-background-base) !important;
 }

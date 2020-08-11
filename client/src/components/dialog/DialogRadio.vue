@@ -12,29 +12,29 @@
 <script lang="ts">
 import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      items: {
-        required: true
-      },
-      value: {
-        required: true
-      }
+export default defineComponent({
+  props: {
+    items: {
+      required: true
     },
-    setup(props, context) {
-      const state = reactive({
-        model: props.value
-      })
-
-      watch(() =>  state.model, (val) => {
-        context.emit('input', val)
-      })
-
-      watch(() => props.value, (val) => {
-        state.model = val
-      })
-
-      return {...toRefs(state)}
+    value: {
+      required: true
     }
-  })
+  },
+  setup(props, context) {
+    const state = reactive({
+      model: props.value
+    })
+
+    watch(() =>  state.model, (val) => {
+      context.emit('input', val)
+    })
+
+    watch(() => props.value, (val) => {
+      state.model = val
+    })
+
+    return {...toRefs(state)}
+  }
+})
 </script>

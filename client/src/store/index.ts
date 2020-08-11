@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import listPicker from '@/store/list-picker'
 import client from '@/store/client'
 import amq from '@/store/amq'
-import misc from '@/store/misc'
+import emoji from '@/store/emoji'
+import chatBot from '@/store/chat-bot'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    list: listPicker,
     client: client,
     amq: amq,
-    misc: misc
+    emoji: emoji,
+    chatBot: chatBot
   }
 })

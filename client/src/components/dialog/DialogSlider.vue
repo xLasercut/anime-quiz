@@ -21,43 +21,43 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
+import {defineComponent, reactive, toRefs, watch} from '@vue/composition-api'
 
-  export default defineComponent({
-    props: {
-      min: {
-        required: true
-      },
-      max: {
-        required: true
-      },
-      disabled: {
-        default: false
-      },
-      value: {
-        required: true
-      }
+export default defineComponent({
+  props: {
+    min: {
+      required: true
     },
-    setup(props, context) {
-      const state = reactive({
-        model: props.value
-      })
-
-      watch(() => props.value, (val) => {
-        state.model = val
-      })
-
-      watch(() => state.model, (val) => {
-        context.emit('input', val)
-      })
-
-      return {...toRefs(state)}
+    max: {
+      required: true
+    },
+    disabled: {
+      default: false
+    },
+    value: {
+      required: true
     }
-  })
+  },
+  setup(props, context) {
+    const state = reactive({
+      model: props.value
+    })
+
+    watch(() => props.value, (val) => {
+      state.model = val
+    })
+
+    watch(() => state.model, (val) => {
+      context.emit('input', val)
+    })
+
+    return {...toRefs(state)}
+  }
+})
 </script>
 
 <style scoped>
-  .v-input__slider {
-    margin-right: 20px;
-  }
+.v-input__slider {
+  margin-right: 20px;
+}
 </style>

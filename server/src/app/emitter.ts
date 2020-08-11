@@ -1,6 +1,6 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
-import {IChatBot, IChoices, IEmoji, ISong} from '../../../shared/interfaces/database'
+import {IChatBot, IAmqChoices, IEmoji, IAmqSong} from '../../../shared/interfaces/database'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
 
@@ -11,8 +11,8 @@ class Emitter {
     this._io = io
   }
 
-  public updateSongList(songList: Array<ISong>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_SONG_LIST', songList)
+  public updateAmqSongList(songList: Array<IAmqSong>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AMQ_SONG_LIST', songList)
   }
 
   public updateEmojiList(emojiList: Array<IEmoji>, sid: string = null): void {
@@ -23,16 +23,16 @@ class Emitter {
     this._client(sid).emit('UPDATE_CHAT_BOT_LIST', chatBotList)
   }
 
-  public updateUsers(users: Array<string>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_USERS', users)
+  public updateAmqUsers(users: Array<string>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AMQ_USERS', users)
   }
 
-  public updateUserSongs(userSongs: Array<string>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_USER_SONGS', userSongs)
+  public updateAmqUserSongs(userSongs: Array<string>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AMQ_USER_SONGS', userSongs)
   }
 
-  public updateChoices(choices: IChoices, sid: string = null): void {
-    this._client(sid).emit('UPDATE_CHOICES', choices)
+  public updateAmqChoices(choices: IAmqChoices, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AMQ_CHOICES', choices)
   }
 
   public updateAdmin(admin: boolean, sid: string): void {

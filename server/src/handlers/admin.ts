@@ -1,19 +1,19 @@
 import {AbstractHandler} from './abstract'
 import {LOG_BASE, Logger} from '../app/logging'
 import {Emitter} from '../app/emitter'
-import {SongDatabase} from '../database/song'
+import {AmqSongDatabase} from '../database/amq-song'
 import {ISocket} from '../interfaces'
-import {IChatBot, IEmoji, ISong} from '../../../shared/interfaces/database'
+import {IChatBot, IEmoji, IAmqSong} from '../../../shared/interfaces/database'
 import {AuthError} from '../exceptions'
 import {EmojiDatabase} from '../database/emoji'
 import {ChatBotDatabase} from '../database/chat-bot'
-import {UserSongDatabase} from '../database/user-song'
+import {AmqUserSongDatabase} from '../database/amq-user-song'
 import {MasterRoomManager} from '../game/rooms/master'
 import {IBannerColor} from '../../../shared/types/game'
 
 class AdminHandler extends AbstractHandler {
-  protected _songDatabase: SongDatabase
-  protected _userSongDatabase: UserSongDatabase
+  protected _songDatabase: AmqSongDatabase
+  protected _userSongDatabase: AmqUserSongDatabase
   protected _emojiDatabase: EmojiDatabase
   protected _chatBotDatabase: ChatBotDatabase
   protected _roomManager: MasterRoomManager
@@ -21,8 +21,8 @@ class AdminHandler extends AbstractHandler {
   constructor(
     logger: Logger,
     emitter: Emitter,
-    songDatabase: SongDatabase,
-    userSongDatabase: UserSongDatabase,
+    songDatabase: AmqSongDatabase,
+    userSongDatabase: AmqUserSongDatabase,
     emojiDatabase: EmojiDatabase,
     chatBotDatabase: ChatBotDatabase,
     roomManager: MasterRoomManager
@@ -36,18 +36,18 @@ class AdminHandler extends AbstractHandler {
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
-    socket.on('EDIT_GAME_SONG', exceptionHandler(socket, (song: ISong): void => {
+    socket.on('EDIT_AMQ_GAME_SONG', exceptionHandler(socket, (song: IAmqSong): void => {
       this._checkAdminAuth(socket)
       this._logger.writeLog(
         LOG_BASE.LIST003,
         Object.assign({}, {id: socket.id, operation: 'edit'}, song)
       )
       this._songDatabase.editSong(song)
-      this._emitter.updateSongList(this._songDatabase.getSongList())
+      this._emitter.updateAmqSongList(this._songDatabase.getSongList())
       this._emitter.systemNotification('success', `${song.anime[0]} - ${song.title} edited`, socket.id)
     }))
 
-    socket.on('ADD_GAME_SONG', exceptionHandler(socket, (song: ISong): void => {
+    socket.on('ADD_AMQ_GAME_SONG', exceptionHandler(socket, (song: IAmqSong): void => {
       this._checkAdminAuth(socket)
       this._logger.writeLog(
         LOG_BASE.LIST003,
@@ -57,14 +57,14 @@ class AdminHandler extends AbstractHandler {
       this._emitter.systemNotification('success', `${song.anime[0]} - ${song.title} added`, socket.id)
     }))
 
-    socket.on('DELETE_GAME_SONG', exceptionHandler(socket, (song: ISong): void => {
+    socket.on('DELETE_AMQ_GAME_SONG', exceptionHandler(socket, (song: IAmqSong): void => {
       this._checkAdminAuth(socket)
       this._logger.writeLog(
         LOG_BASE.LIST003,
         Object.assign({}, {id: socket.id, operation: 'delete'}, song)
       )
       this._songDatabase.deleteSong(song)
-      this._emitter.updateSongList(this._songDatabase.getSongList())
+      this._emitter.updateAmqSongList(this._songDatabase.getSongList())
       this._emitter.systemNotification('success', `${song.anime[0]} - ${song.title} deleted`, socket.id)
     }))
 
@@ -129,8 +129,9 @@ class AdminHandler extends AbstractHandler {
       this._userSongDatabase.loadData()
       this._chatBotDatabase.loadData()
       this._emojiDatabase.loadData()
-      this._emitter.updateSongList(this._songDatabase.getSongList())
-      this._emitter.updateUsers(this._userSongDatabase.getUsers())
+      this._emitter.updateAmqSongList(this._songDatabase.getSongList())
+      this._emitter.updateAmqUsers(this._userSongDatabase.getUsers())
+      this._emitter.updateAmqChoices(this._songDatabase.getChoices())
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList())
       this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
       this._emitter.systemNotification('success', 'Database reloaded', socket.id)
