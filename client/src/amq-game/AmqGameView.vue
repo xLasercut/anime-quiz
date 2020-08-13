@@ -14,12 +14,16 @@ import {socket} from '@/assets/socket'
 import {IChat} from '../../../shared/interfaces/game'
 import AmqGameWindow from '@/amq-game/AmqGameWindow.vue'
 
+interface IState {
+  messages: Array<IChat>
+}
+
 export default defineComponent({
   components: {
     GameChatWindow, AmqGameWindow
   },
   setup(_props, context) {
-    const state = reactive({
+    const state = reactive<IState>({
       messages: []
     })
 

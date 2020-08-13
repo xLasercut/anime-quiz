@@ -38,7 +38,7 @@ export default defineComponent({
       return 'video-hidden'
     }
 
-    watch(() => props.volume, (val: number) => {
+    watch(() => props.volume, (val: any) => {
       player.value.volume = val / 100
     })
 
