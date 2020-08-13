@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
+import {defineComponent, onUnmounted, reactive, toRefs} from '@vue/composition-api'
 import {IBannerColor} from '../../../shared/types/game'
 import {socket} from '@/assets/socket'
 import {EventBus} from '@/assets/event'
@@ -30,30 +30,32 @@ export default defineComponent({
       state.show = true
     }
 
-    onMounted(() => {
-      socket.on('SYSTEM_NOTIFICATION', (color: IBannerColor, message: string): void => {
-        if (state.show) {
-          state.show = false
-          setTimeout((): void => {
-            showNotification(color, message)
-          }, 100)
-        }
-        else {
+    socket.on('SYSTEM_NOTIFICATION', (color: IBannerColor, message: string): void => {
+      if (state.show) {
+        state.show = false
+        setTimeout((): void => {
           showNotification(color, message)
-        }
-      })
+        }, 100)
+      }
+      else {
+        showNotification(color, message)
+      }
+    })
 
-      EventBus.$on('SYSTEM_NOTIFICATION', (color: IBannerColor, message: string): void => {
-        if (state.show) {
-          state.show = false
-          setTimeout((): void => {
-            showNotification(color, message)
-          }, 100)
-        }
-        else {
+    EventBus.$on('SYSTEM_NOTIFICATION', (color: IBannerColor, message: string): void => {
+      if (state.show) {
+        state.show = false
+        setTimeout((): void => {
           showNotification(color, message)
-        }
-      })
+        }, 100)
+      }
+      else {
+        showNotification(color, message)
+      }
+    })
+
+    onUnmounted(() => {
+      socket.off('SYSTEM_NOTIFICATION')
     })
 
     return {...toRefs(state)}

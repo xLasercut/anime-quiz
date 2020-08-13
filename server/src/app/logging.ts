@@ -80,17 +80,17 @@ const LOG_BASE = {
   LIST001: {
     code: 'LIST001',
     level: LOG_LEVEL.INFO,
-    template: 'list data request - id="{{id}}" data="{{data}}"'
+    template: 'amq list data request - id="{{id}}" data="{{data}}"'
   },
   LIST002: {
     code: 'LIST002',
     level: LOG_LEVEL.INFO,
-    template: 'user song data operation - id="{{id}}" user="{{user}}" operation="{{operation}}" songId="{{songId}}"'
+    template: 'amq user song data operation - id="{{id}}" user="{{user}}" operation="{{operation}}" songId="{{songId}}"'
   },
   LIST003: {
     code: 'LIST003',
     level: LOG_LEVEL.INFO,
-    template: 'list data operation - id="{{id}}" operation="{{operation}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
+    template: 'amq list data operation - id="{{id}}" operation="{{operation}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
   },
   EMOJI001: {
     code: 'EMOJI001',
@@ -141,6 +141,11 @@ const LOG_BASE = {
     code: 'GAME003',
     level: LOG_LEVEL.INFO,
     template: 'amq song override - roomId="{{roomId}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
+  },
+  GAME004: {
+    code: 'GAME004',
+    level: LOG_LEVEL.INFO,
+    template: 'amq room list request - id="{{id}}"'
   }
 }
 

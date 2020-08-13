@@ -1,6 +1,8 @@
 import {IAmqSongListFilter, IAmqStoreState, IRootStoreState} from '@/assets/interfaces'
 import {Module} from 'vuex'
 import {IAmqChoices, IAmqSong} from '../../../shared/interfaces/database'
+import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
+import {IRoomSerial} from '../../../shared/interfaces/game'
 
 function _getDefaultState(): IAmqStoreState {
   return {
@@ -72,6 +74,21 @@ const amq: Module<IAmqStoreState, IRootStoreState> = {
     },
     SOCKET_UPDATE_AMQ_USER_SONGS(state: IAmqStoreState, userSongs: Array<string>): void {
       state.userSongs = new Set(userSongs)
+    },
+    SOCKET_UPDATE_AMQ_HOST(state: IAmqStoreState, host: boolean): void {
+      state.host = host
+    },
+    SOCKET_UPDATE_AMQ_PLAYER_LIST(state: IAmqStoreState, playerList: Array<IAmqPlayer>): void {
+      state.playerList = playerList
+    },
+    SOCKET_UPDATE_AMQ_ROOM_LIST(state: IAmqStoreState, roomList: Array<IRoomSerial>): void {
+      state.roomList = roomList
+    },
+    SOCKET_UPDATE_AMQ_SETTINGS(state: IAmqStoreState, settings: IAmqSettings): void {
+      state.settings = settings
+    },
+    SOCKET_UPDATE_AMQ_GAME_STATE(state: IAmqStoreState, gameState: IAmqGameState): void {
+      state.gameState = gameState
     }
   },
   getters: {
@@ -111,6 +128,22 @@ const amq: Module<IAmqStoreState, IRootStoreState> = {
           }
           return -1
         })
+    },
+    isAmqVideoType: (state: IAmqStoreState) => (videoType: string): boolean => {
+      let actualType = 'normal'
+
+      if (state.gameState.currentSong.src.includes('youtube')) {
+        actualType = 'youtube'
+      }
+
+      return actualType === videoType
+    },
+    amqStartPosition: (state: IAmqStoreState) => (videoDuration: number): number => {
+      let maxStart = Math.floor(videoDuration - state.settings.guessTime)
+      if (maxStart > 0) {
+        return Math.floor(state.gameState.startPosition * maxStart)
+      }
+      return 0
     }
   }
 }

@@ -39,8 +39,8 @@ class Emitter {
     this._client(sid).emit('UPDATE_ADMIN', admin)
   }
 
-  public updateRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_ROOM_LIST', roomList)
+  public updateAmqRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AMQ_ROOM_LIST', roomList)
   }
 
   public updateAmqPlayerList(amqPlayerList: Array<IAmqPlayer>, sid: string): void {
@@ -83,11 +83,11 @@ class Emitter {
     this._client(sid).emit('SYSTEM_NOTIFICATION', color, message)
   }
 
-  public sendChat(chat: IChat, sid: string = null): void {
-    this._client(sid).emit('UPDATE_CHAT_MESSAGE', chat)
+  public updateAmqChat(chat: IChat, sid: string): void {
+    this._client(sid).emit('UPDATE_AMQ_CHAT', chat)
   }
 
-  public updateAmqSettings(amqSettings: IAmqSettings, sid: string = null): void {
+  public updateAmqSettings(amqSettings: IAmqSettings, sid: string): void {
     this._client(sid).emit('UPDATE_AMQ_SETTINGS', amqSettings)
   }
 

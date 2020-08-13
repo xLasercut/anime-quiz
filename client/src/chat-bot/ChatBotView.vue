@@ -13,7 +13,7 @@
         ></chat-bot-list-table>
         <game-dialog v-model="show" label="Chat Bot Editor">
           <v-form v-model="valid" @submit.prevent="confirmEdit()">
-            <v-row justify="center">
+            <v-row justify="center" dense>
               <dialog-text
                 label="Regex"
                 v-model="form.regex"

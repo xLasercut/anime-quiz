@@ -8,31 +8,32 @@ import {AuthError} from '../exceptions'
 import {EmojiDatabase} from '../database/emoji'
 import {ChatBotDatabase} from '../database/chat-bot'
 import {AmqUserSongDatabase} from '../database/amq-user-song'
-import {MasterRoomManager} from '../game/rooms/master'
 import {IBannerColor} from '../../../shared/types/game'
+import {Server} from 'socket.io'
 
 class AdminHandler extends AbstractHandler {
   protected _songDatabase: AmqSongDatabase
   protected _userSongDatabase: AmqUserSongDatabase
   protected _emojiDatabase: EmojiDatabase
   protected _chatBotDatabase: ChatBotDatabase
-  protected _roomManager: MasterRoomManager
+  protected _io: Server
+
 
   constructor(
+    io: Server,
     logger: Logger,
     emitter: Emitter,
     songDatabase: AmqSongDatabase,
     userSongDatabase: AmqUserSongDatabase,
     emojiDatabase: EmojiDatabase,
-    chatBotDatabase: ChatBotDatabase,
-    roomManager: MasterRoomManager
+    chatBotDatabase: ChatBotDatabase
   ) {
     super(logger, emitter)
+    this._io = io
     this._userSongDatabase = userSongDatabase
     this._songDatabase = songDatabase
     this._emojiDatabase = emojiDatabase
     this._chatBotDatabase = chatBotDatabase
-    this._roomManager = roomManager
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
@@ -140,7 +141,7 @@ class AdminHandler extends AbstractHandler {
     socket.on('ADMIN_KICK_PLAYER', exceptionHandler(socket, (socketId: string): void => {
       this._checkAdminAuth(socket)
       this._emitter.systemNotification('error', 'You have been kicked', socketId)
-      this._roomManager.getSocket(socketId).disconnect()
+      this._io.sockets.connected[socketId].disconnect()
     }))
 
     socket.on('ADMIN_SYSTEM_MESSAGE', exceptionHandler(socket, (message: string, color: IBannerColor): void => {

@@ -46,6 +46,7 @@ import {NAME_FORMAT, SERVER_PASSWORD_FORMAT} from '@/assets/config/formats'
 import IconBtn from '@/components/buttons/IconBtn.vue'
 import LoginAvatarSelect from '@/login/LoginAvatarSelect.vue'
 import {socket} from '@/assets/socket'
+import {EventBus} from '@/assets/event'
 
 export default defineComponent({
   components: {
@@ -103,6 +104,9 @@ export default defineComponent({
       context.root.$store.commit('RESET_STORE_STATE')
       if (socket.connected) {
         socket.disconnect()
+      }
+      if (!localStorage.GAME_SERVER) {
+        EventBus.$emit('SYSTEM_NOTIFICATION', 'error', 'Game server not set. Please set the game server using settings.')
       }
     })
 

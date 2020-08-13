@@ -5,16 +5,17 @@
         <div class="card-container">
           <v-card width="250px" flat>
             <v-card-title :class="`${card.color}--text`">
-              <v-icon large left :class="`${card.color}--text`">{{card.icon}}</v-icon>
-              <span class="title">{{card.label}}</span>
+              <v-icon large left :class="`${card.color}--text`">{{ card.icon }}</v-icon>
+              <span class="title">{{ card.label }}</span>
             </v-card-title>
 
             <v-card-text>
-              <span>{{card.description}}</span>
+              <span>{{ card.description }}</span>
             </v-card-text>
 
             <v-card-actions>
-              <icon-btn icon="mdi-login" :color="card.color" @click="joinRoom(card.command, card.showRoomList)">Start</icon-btn>
+              <icon-btn icon="mdi-login" :color="card.color" @click="joinRoom(card.command, card.showRoomList)">Start
+              </icon-btn>
             </v-card-actions>
             <div>
             </div>
@@ -22,11 +23,6 @@
         </div>
       </v-col>
     </v-row>
-    <game-dialog v-model="show" width="100%">
-      <v-row justify="center">
-
-      </v-row>
-    </game-dialog>
   </v-main>
 </template>
 
@@ -34,11 +30,10 @@
 import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
 import IconBtn from '@/components/buttons/IconBtn.vue'
 import {socket} from '@/assets/socket'
-import GameDialog from '@/components/GameDialog.vue'
 
 export default defineComponent({
   components: {
-    IconBtn, GameDialog
+    IconBtn
   },
   setup(_props, context) {
     const state = reactive({
@@ -85,7 +80,7 @@ export default defineComponent({
 
     function joinRoom(command: string, showRoomList: boolean): void {
       if (showRoomList) {
-        state.show = true
+        context.root.$store.commit('UPDATE_VIEW', `${command}_room_list`)
       }
       else {
         socket.emit(`JOIN_${command.toUpperCase()}`)

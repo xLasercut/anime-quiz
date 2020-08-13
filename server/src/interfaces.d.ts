@@ -1,6 +1,5 @@
-import {Room, Socket} from 'socket.io'
+import {Socket} from 'socket.io'
 import {AmqPlayer} from './game/players/amq'
-import {IRoomType} from '../../shared/types/game'
 import {AmqSettings} from './game/settings/amq'
 import {AmqGameState} from './game/state/amq'
 import {IAmqSong} from '../../shared/interfaces/database'
@@ -14,15 +13,15 @@ interface ILog {
 interface ISocket extends Socket {
   auth: boolean
   admin: boolean
-  roomId: string
   player: AmqPlayer
   timer: NodeJS.Timeout
 }
 
-interface IRoom extends Room {
+interface IRoom {
   name: string
-  roomId: string
-  type: IRoomType
+  players: Set<string>
+  countdown: NodeJS.Timer
+  timeout: NodeJS.Timeout
 }
 
 interface IAmqRoom extends IRoom {

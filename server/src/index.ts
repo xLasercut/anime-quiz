@@ -9,15 +9,14 @@ import {AmqSongDatabase} from './database/amq-song'
 import {AmqUserSongDatabase} from './database/amq-user-song'
 import {AmqSongListHandler} from './handlers/amq-song-list'
 import {AdminHandler} from './handlers/admin'
-import {MasterRoomManager} from './game/rooms/master'
 import {AmqHandler} from './handlers/amq'
-import {RoomHandler} from './handlers/room'
-import {AmqRoomManager} from './game/rooms/amq'
 import {EmojiDatabase} from './database/emoji'
 import {ChatBotHandler} from './handlers/chat-bot'
 import {ChatBotDatabase} from './database/chat-bot'
 import {ChatManager} from './game/chat'
 import {EmojiHandler} from './handlers/emoji'
+import {AmqGameController} from './game/controllers/amq'
+import {GeneralGameHandler} from './handlers/room'
 
 
 const logger = new Logger()
@@ -36,16 +35,15 @@ const emojiDatabase = new EmojiDatabase()
 const chatBotDatabase = new ChatBotDatabase()
 
 const chatManager = new ChatManager(logger, chatBotDatabase, emojiDatabase)
-const masterRoomManager = new MasterRoomManager(io)
-const amqRoomManager = new AmqRoomManager(io)
+const amqGameController = new AmqGameController(io)
 
+const generalGameHandler = new GeneralGameHandler(logger, emitter)
 const amqSongListHandler = new AmqSongListHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase)
 const emojiHandler = new EmojiHandler(logger, emitter, emojiDatabase)
 const chatBotHandler = new ChatBotHandler(logger, emitter, chatBotDatabase)
-const adminHandler = new AdminHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase, masterRoomManager)
+const adminHandler = new AdminHandler(io, logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase)
 
-const roomHandler = new RoomHandler(logger, emitter, masterRoomManager, chatManager)
-const amqHandler = new AmqHandler(io, logger, emitter, amqRoomManager, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)
+const amqHandler = new AmqHandler(io, logger, emitter, amqGameController, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)
 
 
 io.on('connect', (socket: ISocket) => {
@@ -73,10 +71,10 @@ io.on('connect', (socket: ISocket) => {
 
 function startHandlers(socket: ISocket): void {
   if (socket.auth) {
+    generalGameHandler.start(socket, exceptionHandler)
     amqSongListHandler.start(socket, exceptionHandler)
     emojiHandler.start(socket, exceptionHandler)
     chatBotHandler.start(socket, exceptionHandler)
-    roomHandler.start(socket, exceptionHandler)
     amqHandler.start(socket, exceptionHandler)
 
     if (socket.admin) {

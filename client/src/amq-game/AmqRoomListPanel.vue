@@ -1,24 +1,24 @@
 <template>
   <v-toolbar-items>
-    <nav-btn icon="mdi-cog" color="info" @click="openSettings()"></nav-btn>
+    <nav-btn color="warning" icon="mdi-sync" @click="reloadAmqRoomList()"></nav-btn>
   </v-toolbar-items>
 </template>
 
 <script lang="ts">
 import {defineComponent} from '@vue/composition-api'
 import NavBtn from '@/components/buttons/NavBtn.vue'
-import {EventBus} from '@/assets/event'
+import {socket} from '@/assets/socket'
 
 export default defineComponent({
   components: {
     NavBtn
   },
   setup(_props, _context) {
-    function openSettings(): void {
-      EventBus.$emit('GLOBAL_DIALOG', 'clientSetting', 'Client Settings')
+    function reloadAmqRoomList(): void {
+      socket.emit('GET_AMQ_ROOM_LIST')
     }
 
-    return {openSettings}
+    return {reloadAmqRoomList}
   }
 })
 </script>

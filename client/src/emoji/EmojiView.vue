@@ -13,7 +13,7 @@
         ></emoji-list-table>
         <game-dialog v-model="show" label="Emoji Editor">
           <v-form v-model="valid" @submit.prevent="confirmEmojiEdit()">
-            <v-row justify="center">
+            <v-row justify="center" dense>
               <v-col cols="12">
                 <v-row justify="center" no-gutters>
                   <v-col cols="auto">

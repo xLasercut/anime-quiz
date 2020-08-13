@@ -6,6 +6,7 @@
         <component :is="panelComponent"></component>
       </nav-panel>
       <component :is="viewComponent"></component>
+      <global-dialog></global-dialog>
     </v-container>
   </v-app>
 </template>
@@ -15,10 +16,11 @@ import {computed, defineComponent, onMounted} from '@vue/composition-api'
 import SystemNotification from '@/app/SystemNotification.vue'
 import NavPanel from '@/app/NavPanel.vue'
 import {PANEL_COMPONENTS, VIEW_COMPONENTS} from '@/assets/component'
+import GlobalDialog from '@/app/GlobalDialog.vue'
 
 export default defineComponent({
   components: {
-    SystemNotification, NavPanel
+    SystemNotification, NavPanel, GlobalDialog
   },
   setup(_props, context) {
     const viewComponent = computed(() => {
@@ -41,6 +43,17 @@ export default defineComponent({
 </script>
 
 <style>
+.game-window {
+  height: calc(100vh - 85px);
+  overflow: auto;
+}
+
+.chat-window {
+  height: calc(100vh - 85px);
+  border-radius: 5px;
+  background-color: var(--v-background-darken1) !important;
+}
+
 .v-application {
   background-color: var(--v-background-base) !important;
 }
