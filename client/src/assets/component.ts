@@ -11,9 +11,11 @@ import AmqRoomListPanel from '@/amq-game/AmqRoomListPanel.vue'
 import AmqRoomListView from '@/amq-game/AmqRoomListView.vue'
 import AmqGamePanel from '@/amq-game/AmqGamePanel.vue'
 import AmqGameView from '@/amq-game/AmqGameView.vue'
+import LobbyPanel from '@/lobby/LobbyPanel.vue'
 
 const PANEL_COMPONENTS: { [key: string]: any } = {
   login: LoginPanel,
+  lobby: LobbyPanel,
   amq_song: AmqSongPanel,
   emoji: EmojiPanel,
   chat_bot: ChatBotPanel,

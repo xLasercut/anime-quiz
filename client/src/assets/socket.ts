@@ -17,4 +17,9 @@ for (let mutation in store._mutations) {
   }
 }
 
-export {socket}
+function leaveAllRooms(): void {
+  socket.emit('LEAVE_ALL_ROOM')
+  store.commit('RESET_STORE_STATE')
+}
+
+export {socket, leaveAllRooms}

@@ -125,7 +125,7 @@ const LOG_BASE = {
   SETTING002: {
     code: 'SETTING002',
     level: LOG_LEVEL.INFO,
-    template: 'amq setting update - id="{{id}}" username="{{username}}" songCount="{{songCount}}" guessTime="{{guessTime}}" gameMode="{{gameMode}}" users="{{users}}" duplicate="{{duplicate}}" selectTime="{{selectTime}}" leastPlayed="{{leastPlayed}}"'
+    template: 'amq setting update - id="{{id}}" username="{{username}}" songCount="{{songCount}}" guessTime="{{guessTime}}" gameMode="{{gameMode}}" users="{{users}}" duplicate="{{duplicate}}" leastPlayed="{{leastPlayed}}"'
   },
   GAME001: {
     code: 'GAME001',

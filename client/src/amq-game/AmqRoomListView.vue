@@ -26,13 +26,13 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs} from '@vue/composition-api'
+import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
 import IconBtn from '@/components/buttons/IconBtn.vue'
 import GameDialog from '@/components/GameDialog.vue'
 import DialogText from '@/components/dialog/DialogText.vue'
 import DialogConfirmBtn from '@/components/dialog/DialogConfirmBtn.vue'
 import {NAME_FORMAT} from '@/assets/config/formats'
-import {socket} from '@/assets/socket'
+import {leaveAllRooms, socket} from '@/assets/socket'
 import RoomCard from '@/components/game/RoomCard.vue'
 
 export default defineComponent({
@@ -73,6 +73,11 @@ export default defineComponent({
       )
       context.root.$store.commit('UPDATE_VIEW', 'amq_game')
     }
+
+    onMounted(() => {
+      leaveAllRooms()
+      socket.emit('GET_AMQ_ROOM_LIST')
+    })
 
     return {...toRefs(state), newRoom, joinRoom}
   }

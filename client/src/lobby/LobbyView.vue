@@ -29,7 +29,7 @@
 <script lang="ts">
 import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
 import IconBtn from '@/components/buttons/IconBtn.vue'
-import {socket} from '@/assets/socket'
+import {leaveAllRooms, socket} from '@/assets/socket'
 
 export default defineComponent({
   components: {
@@ -89,8 +89,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      socket.emit('LEAVE_ALL_ROOM')
-      context.root.$store.commit('RESET_STORE_STATE')
+      leaveAllRooms()
     })
 
     return {...toRefs(state), joinRoom}
