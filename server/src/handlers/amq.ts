@@ -240,6 +240,7 @@ class AmqHandler extends AbstractHandler {
 
   protected _resetAmq(roomId: string): void {
     this._controller.getRoom(roomId).state.reset()
+    this._controller.resetTimer(roomId)
     this._emitter.updateAmqGameState(this._controller.getRoom(roomId).state.serialize(), roomId)
     this._emitter.amqReset(roomId)
   }

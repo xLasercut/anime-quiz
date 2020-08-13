@@ -6,12 +6,17 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onUnmounted, reactive, toRefs} from '@vue/composition-api'
+import {defineComponent, onUnmounted, reactive, toRefs, watch} from '@vue/composition-api'
 import {socket} from '@/assets/socket'
 import {getIdFromURL} from 'vue-youtube-embed'
 
 export default defineComponent({
-  setup(_props, context) {
+  props: {
+    volume: {
+      required: true
+    }
+  },
+  setup(props, context) {
     const state = reactive({
       show: false,
       playerVars: {
@@ -81,6 +86,10 @@ export default defineComponent({
     function videoId(): string {
       return getIdFromURL(context.root.$store.state.amq.gameState.currentSong.src)
     }
+
+    watch(() => props.volume, (val) => {
+      player.setVolume(val)
+    })
 
     socket.on('AMQ_START_LOAD', (): void => {
       state.show = false

@@ -6,11 +6,16 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onUnmounted, reactive, ref, toRefs} from '@vue/composition-api'
+import {defineComponent, onUnmounted, reactive, ref, toRefs, watch} from '@vue/composition-api'
 import {socket} from '@/assets/socket'
 
 export default defineComponent({
-  setup(_props, context) {
+  props: {
+    volume: {
+      required: true
+    }
+  },
+  setup(props, context) {
     const player: any = ref(null)
 
     const state = reactive({
@@ -32,6 +37,10 @@ export default defineComponent({
       }
       return 'video-hidden'
     }
+
+    watch(() => props.volume, (val: number) => {
+      player.value.volume = val / 100
+    })
 
     socket.on('AMQ_START_LOAD', (): void => {
       state.show = false

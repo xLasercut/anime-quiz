@@ -67,6 +67,12 @@ class AmqGameController extends AbstractGameController {
     }
   }
 
+  public resetTimer(roomId: string): void {
+    this._validateRoomIdExists(roomId)
+    this._resetTimeout(roomId)
+    this._resetCountdown(roomId)
+  }
+
   public async startCountdown(roomId: string, maxTime: number, readyType: IAmqReadyType): Promise<any> {
     this._validateRoomIdExists(roomId)
     this._resetCountdown(roomId)
