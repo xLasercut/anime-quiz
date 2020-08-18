@@ -4,6 +4,9 @@ build-client:
 build-client-gh:
 	cd client && make build-gh
 
+run-client:
+	cd client && make run
+
 build-server:
 	docker-compose -f docker-compose.yml build
 
