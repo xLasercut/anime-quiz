@@ -1,6 +1,6 @@
 <template>
   <v-form v-model="valid" @submit.prevent="confirmSettingChange()">
-    <v-row justify="center">
+    <v-row justify="center" dense>
       <dialog-slider
         label="Song Count" min="1" max="100"
         :value="$store.state.amq.settings.songCount"

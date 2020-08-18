@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" dense>
     <v-col cols="auto">
       <icon-btn icon="mdi-sync" color="warning" @click="reloadDatabase()">Reload Database</icon-btn>
     </v-col>
