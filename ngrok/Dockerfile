@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM node:11.15.0-alpine
 
 LABEL maintainer="xLasercut"
 
@@ -13,7 +13,7 @@ RUN apk update && apk upgrade \
 WORKDIR ${WRK_DIR}
 
 COPY ./ngrok/entrypoint.sh ${WRK_DIR}/entrypoint.sh
-COPY ./ngrok/ngrok.yml ${WRK_DIR}/ngrok.yml
+COPY ./ngrok/generate-ngrok-config.js ${WRK_DIR}/generate-ngrok-config.js
 
 RUN curl -Lo ./ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip \
   && unzip -o ./ngrok.zip -d . \

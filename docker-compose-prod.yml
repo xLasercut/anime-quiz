@@ -10,6 +10,8 @@ services:
     volumes:
       - ./server/data/:/home/aq_server/server/data
       - ./server/log/:/home/aq_server/server/log
+    env_file:
+      - production.env
     logging:
       options:
         max-size: 50m
@@ -21,6 +23,8 @@ services:
       dockerfile: './ngrok/Dockerfile'
     ports:
       - 4040:4040
+    env_file:
+      - production.env
     logging:
       options:
         max-size: 50m
