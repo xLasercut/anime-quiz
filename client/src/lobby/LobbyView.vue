@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-row justify="center">
-      <v-col cols="auto" v-for="card in cards" :key="card.key">
+      <v-col cols="auto" v-for="card in cards" :key="card.key" v-if="showCard(card.isAdmin)">
         <div class="card-container">
           <v-card width="250px" flat>
             <v-card-title :class="`${card.color}--text`">
@@ -45,7 +45,8 @@ export default defineComponent({
           description: 'Play AMQ',
           color: 'success',
           command: 'amq_game',
-          showRoomList: true
+          showRoomList: true,
+          isAdmin: false
         },
         {
           key: 'amq-song',
@@ -54,7 +55,8 @@ export default defineComponent({
           description: 'Edit your amq song list',
           color: 'primary',
           command: 'amq_song',
-          showRoomList: false
+          showRoomList: false,
+          isAdmin: false
         },
         {
           key: 'emoji',
@@ -63,7 +65,8 @@ export default defineComponent({
           description: 'Add/Edit chat emojis',
           color: 'warning',
           command: 'emoji',
-          showRoomList: false
+          showRoomList: false,
+          isAdmin: false
         },
         {
           key: 'chat-bot',
@@ -72,7 +75,8 @@ export default defineComponent({
           description: 'Add/Edit chat bot responses',
           color: 'info',
           command: 'chat_bot',
-          showRoomList: false
+          showRoomList: false,
+          isAdmin: true
         }
       ],
       show: false
@@ -88,11 +92,18 @@ export default defineComponent({
       }
     }
 
+    function showCard(isAdmin: boolean): boolean {
+      if (isAdmin) {
+        return context.root.$store.state.client.admin
+      }
+      return true
+    }
+
     onMounted(() => {
       leaveAllRooms()
     })
 
-    return {...toRefs(state), joinRoom}
+    return {...toRefs(state), joinRoom, showCard}
   }
 })
 </script>
