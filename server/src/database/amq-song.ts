@@ -1,6 +1,6 @@
 import {IAmqChoices, IAmqSong} from '../../../shared/interfaces/database'
 import {readFile, writeFile} from './helper'
-import {SONG_LIST_PATH} from '../config'
+import {AMQ_SONG_LIST_PATH} from '../config'
 import {ServerDataError} from '../exceptions'
 import {v4 as uuid} from 'uuid'
 
@@ -15,7 +15,7 @@ class AmqSongDatabase {
   }
 
   public loadData(): void {
-    this._songList = readFile(SONG_LIST_PATH)
+    this._songList = readFile(AMQ_SONG_LIST_PATH)
     this._songIds = new Set()
     this._animeChoices = []
     this._titleChoices = []
@@ -109,7 +109,7 @@ class AmqSongDatabase {
   }
 
   protected _saveList(): void {
-    writeFile(SONG_LIST_PATH, this._songList)
+    writeFile(AMQ_SONG_LIST_PATH, this._songList)
   }
 }
 

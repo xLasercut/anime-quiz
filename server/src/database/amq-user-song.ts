@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import {USER_DATA_DIR} from '../config'
+import {AMQ_USER_DATA_DIR} from '../config'
 import * as path from 'path'
 import {readFile, setDifference, setIntersect, setUnion, writeFile} from './helper'
 import {ServerDataError} from '../exceptions'
@@ -19,10 +19,10 @@ class AmqUserSongDatabase {
   public loadData(): void {
     this._userSongList = {}
 
-    for (let filename of fs.readdirSync(USER_DATA_DIR)) {
+    for (let filename of fs.readdirSync(AMQ_USER_DATA_DIR)) {
       if (filename.match(this._fileFormat)) {
         let user = filename.replace('.json', '')
-        let filepath = path.join(USER_DATA_DIR, filename)
+        let filepath = path.join(AMQ_USER_DATA_DIR, filename)
         this._userSongList[user] = new AmqUserSong(filepath)
       }
     }

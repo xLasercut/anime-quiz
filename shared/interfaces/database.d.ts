@@ -29,4 +29,11 @@ interface IChatBot {
   userId: string
 }
 
-export {IAmqSong, IAmqChoices, IEmoji, IChatBot}
+interface IAWQWeapon {
+  weaponId: string
+  anime: Array<string>
+  name: string
+  src: string
+}
+
+export {IAmqSong, IAmqChoices, IEmoji, IChatBot, IAWQWeapon}

@@ -25,7 +25,7 @@ yarn-error.log*
 
 
 # server user data
-server/data/user/*
+server/data/amq-user/*
 
 # server logs
 server/log/
