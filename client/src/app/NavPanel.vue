@@ -4,6 +4,7 @@
       <nav-btn icon="mdi-theme-light-dark" @click="toggleTheme()"></nav-btn>
       <nav-btn icon="mdi-home" color="primary" @click="toLobby()" v-if="showHome()"></nav-btn>
       <nav-btn icon="mdi-arrow-left-bold" color="info" @click="toRoomList()" v-if="showBack()"></nav-btn>
+      <nav-btn icon="mdi-shield-account" color="warning" v-if="$store.state.client.admin" @click="openAdminPanel()"></nav-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <slot></slot>
@@ -13,6 +14,7 @@
 <script lang="ts">
 import {defineComponent} from '@vue/composition-api'
 import NavBtn from '@/components/buttons/NavBtn.vue'
+import {EventBus} from '@/assets/event'
 
 export default defineComponent({
   components: {
@@ -42,7 +44,11 @@ export default defineComponent({
       return showBackList.has(context.root.$store.state.client.view)
     }
 
-    return {toggleTheme, toLobby, showHome, toRoomList, showBack}
+    function openAdminPanel(): void {
+      EventBus.$emit('GLOBAL_DIALOG', 'admin', 'Admin Controls')
+    }
+
+    return {toggleTheme, toLobby, showHome, toRoomList, showBack, openAdminPanel}
   }
 })
 </script>
