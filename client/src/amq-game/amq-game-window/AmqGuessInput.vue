@@ -2,11 +2,11 @@
   <v-row justify="center">
     <guess-input-field
       label="Anime" :items="$store.state.amq.choices.anime"
-      v-model.trim="guess.anime"
+      v-model="anime"
     ></guess-input-field>
     <guess-input-field
       label="Title" :items="$store.state.amq.choices.title"
-      v-model.trim="guess.title"
+      v-model="title"
     ></guess-input-field>
   </v-row>
 </template>
@@ -22,19 +22,21 @@ export default defineComponent({
   },
   setup(_props, _context) {
     const state = reactive({
-      guess: {
-        title: '',
-        anime: ''
-      }
+      title: '',
+      anime: ''
     })
 
     socket.on('AMQ_NEW_SONG', (): void => {
-      state.guess.title = ''
-      state.guess.anime = ''
+      state.title = ''
+      state.anime = ''
     })
 
     socket.on('AMQ_TIME_UP', (): void => {
-      socket.emit('AMQ_GUESS', state.guess)
+      let guess = {
+        title: state.title.trim(),
+        anime: state.anime.trim()
+      }
+      socket.emit('AMQ_GUESS', guess)
     })
 
     onUnmounted(() => {

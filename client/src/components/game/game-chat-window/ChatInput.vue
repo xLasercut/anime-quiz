@@ -5,7 +5,7 @@
         <template #activator="{on}">
           <v-textarea
             solo no-resize flat clearable hide-details
-            v-model.trim="message"
+            v-model="message"
             label="Message" append-icon="mdi-send"
             class="dialog-item"
             rows="3"
@@ -48,7 +48,7 @@ export default defineComponent({
 
     function sendMsg(): void {
       if (state.message) {
-        context.emit('chat', state.message)
+        context.emit('chat', state.message.trim())
         state.message = ''
       }
     }
