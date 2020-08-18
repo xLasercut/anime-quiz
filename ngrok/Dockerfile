@@ -15,7 +15,7 @@ WORKDIR ${WRK_DIR}
 COPY ./ngrok/entrypoint.sh ${WRK_DIR}/entrypoint.sh
 COPY ./ngrok/generate-ngrok-config.js ${WRK_DIR}/generate-ngrok-config.js
 
-RUN curl -Lo ./ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip \
+RUN curl -Lo ./ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip \
   && unzip -o ./ngrok.zip -d . \
   && chmod +x ./ngrok \
   && rm ngrok.zip
