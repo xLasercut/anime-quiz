@@ -11,6 +11,7 @@ interface IClientStoreState {
   username: string
   avatar: string
   avatarMap: { [key: string]: string }
+  roomList: Array<IRoomSerial>
 }
 
 interface IAmqStoreState {
@@ -24,7 +25,6 @@ interface IAmqStoreState {
   currentUser: string
   choices: IAmqChoices
   songListFilter: IAmqSongListFilter
-  roomList: Array<IRoomSerial>
 }
 
 interface IAmqSongListFilter {

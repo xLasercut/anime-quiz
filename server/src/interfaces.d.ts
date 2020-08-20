@@ -29,6 +29,9 @@ interface IAmqRoom extends IRoom {
   state: AmqGameState
 }
 
+interface IAwqRoom extends IRoom {
+}
+
 interface IBalancedAmqSongLists {
   [key: string]: INormalAmqSongLists
 }
@@ -38,4 +41,4 @@ interface INormalAmqSongLists {
   priority: Array<IAmqSong>
 }
 
-export {ILog, ISocket, IRoom, IAmqRoom, IBalancedAmqSongLists, INormalAmqSongLists}
+export {ILog, ISocket, IRoom, IAmqRoom, IBalancedAmqSongLists, INormalAmqSongLists, IAwqRoom}

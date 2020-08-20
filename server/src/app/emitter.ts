@@ -40,7 +40,7 @@ class Emitter {
   }
 
   public updateAmqRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AMQ_ROOM_LIST', roomList)
+    this._client(sid).emit('UPDATE_AMQ_GAME_ROOM_LIST', roomList)
   }
 
   public updateAmqPlayerList(amqPlayerList: Array<IAmqPlayer>, sid: string): void {

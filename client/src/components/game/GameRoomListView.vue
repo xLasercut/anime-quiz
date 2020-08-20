@@ -6,11 +6,11 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="auto" v-for="room in $store.state.amq.roomList" :key="room.roomId">
+      <v-col cols="auto" v-for="room in $store.state.client.roomList" :key="room.roomId">
         <room-card :room="room" @room:join="joinRoom($event)"></room-card>
       </v-col>
     </v-row>
-    <game-dialog v-model="show" label="New AMQ Room">
+    <game-dialog v-model="show" label="New Room">
       <v-form v-model="valid" @submit.prevent="newRoom()">
         <v-row justify="center" dense>
           <dialog-text
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
+import {defineComponent, onMounted, onUnmounted, reactive, toRefs} from '@vue/composition-api'
 import IconBtn from '@/components/buttons/IconBtn.vue'
 import GameDialog from '@/components/GameDialog.vue'
 import DialogText from '@/components/dialog/DialogText.vue'
@@ -34,6 +34,7 @@ import DialogConfirmBtn from '@/components/dialog/DialogConfirmBtn.vue'
 import {NAME_FORMAT} from '@/assets/config/formats'
 import {leaveAllRooms, socket} from '@/assets/socket'
 import RoomCard from '@/components/game/RoomCard.vue'
+import {IRoomSerial} from '../../../../shared/interfaces/game'
 
 export default defineComponent({
   components: {
@@ -54,29 +55,40 @@ export default defineComponent({
     function newRoom(): void {
       if (state.show && state.valid) {
         socket.emit(
-          'JOIN_AMQ_GAME_NEW',
+          context.root.$store.getters.viewCommand('join-new'),
           state.roomName,
           context.root.$store.state.client.username,
           context.root.$store.state.client.avatar
         )
-        context.root.$store.commit('UPDATE_VIEW', 'amq_game')
+        context.root.$store.commit('UPDATE_VIEW', context.root.$store.getters.viewCommand('command'))
       }
 
     }
 
     function joinRoom(roomId: string): void {
       socket.emit(
-        'JOIN_AMQ_GAME_EXIST',
+        context.root.$store.getters.viewCommand('join-exist'),
         roomId,
         context.root.$store.state.client.username,
         context.root.$store.state.client.avatar
       )
-      context.root.$store.commit('UPDATE_VIEW', 'amq_game')
+      context.root.$store.commit('UPDATE_VIEW', context.root.$store.getters.viewCommand('command'))
     }
+
+    const UPDATE_ROOM_LIST_EVENT = context.root.$store.getters.viewCommand('update-room-list')
+
+    socket.on(UPDATE_ROOM_LIST_EVENT, (roomList: Array<IRoomSerial>): void => {
+      context.root.$store.commit('UPDATE_ROOM_LIST', roomList)
+    })
 
     onMounted(() => {
       leaveAllRooms()
-      socket.emit('GET_AMQ_ROOM_LIST')
+      context.root.$store.commit('UPDATE_ROOM_LIST', [])
+      socket.emit(context.root.$store.getters.viewCommand('get-room-list'))
+    })
+
+    onUnmounted(() => {
+      socket.off(UPDATE_ROOM_LIST_EVENT)
     })
 
     return {...toRefs(state), newRoom, joinRoom}

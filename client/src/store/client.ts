@@ -1,5 +1,7 @@
 import {IAvatar, IClientStoreState, IRootStoreState} from '@/assets/interfaces'
 import {Module} from 'vuex'
+import {IRoomSerial} from '../../../shared/interfaces/game'
+import {IViewCommand} from '@/assets/types'
 
 function _getDefaultState(): IClientStoreState {
   return {
@@ -23,7 +25,8 @@ function _getDefaultState(): IClientStoreState {
       'eren': 'https://i.imgur.com/5Dip9VY.jpg',
       'jaden': 'https://i.imgur.com/emAT9yb.png',
       'yugi': 'https://i.imgur.com/Gfb2pnD.png'
-    }
+    },
+    roomList: []
   }
 }
 
@@ -41,6 +44,9 @@ const client: Module<IClientStoreState, IRootStoreState> = {
     },
     RESET_CLIENT_STORE_STATE(state: IClientStoreState): void {
       Object.assign(state, _getDefaultState())
+    },
+    UPDATE_ROOM_LIST(state: IClientStoreState, roomList: Array<IRoomSerial>): void {
+      state.roomList = roomList
     },
     SOCKET_UPDATE_ADMIN(state: IClientStoreState, admin: boolean): void {
       state.admin = admin
@@ -62,6 +68,30 @@ const client: Module<IClientStoreState, IRootStoreState> = {
         })
       }
       return avatarList
+    },
+    viewCommand: (state: IClientStoreState) => (type: IViewCommand): string => {
+      let command = state.view.replace('_room_list', '')
+      if (type === 'join-new') {
+        return `JOIN_${command}_NEW`.toUpperCase()
+      }
+
+      if (type === 'join-exist') {
+        return `JOIN_${command}_EXIST`.toUpperCase()
+      }
+
+      if (type === 'update-room-list') {
+        return `UPDATE_${command}_ROOM_LIST`.toUpperCase()
+      }
+
+      if (type === 'get-room-list') {
+        return `GET_${command}_ROOM_LIST`.toUpperCase()
+      }
+
+      if (type === 'command') {
+        return command
+      }
+
+      return ''
     }
   }
 }

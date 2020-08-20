@@ -49,7 +49,7 @@ export default defineComponent({
           label: 'AWQ Game Room',
           description: 'Play AWQ',
           color: 'success',
-          command: null,
+          command: 'awq_game',
           isAdmin: false
         }
       ],

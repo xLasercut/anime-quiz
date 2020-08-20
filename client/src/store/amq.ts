@@ -2,7 +2,6 @@ import {IAmqSongListFilter, IAmqStoreState, IRootStoreState} from '@/assets/inte
 import {Module} from 'vuex'
 import {IAmqChoices, IAmqSong} from '../../../shared/interfaces/database'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
-import {IRoomSerial} from '../../../shared/interfaces/game'
 
 function _getDefaultState(): IAmqStoreState {
   return {
@@ -42,8 +41,7 @@ function _getDefaultState(): IAmqStoreState {
       title: '',
       anime: '',
       type: 'All'
-    },
-    roomList: []
+    }
   }
 }
 
@@ -57,7 +55,7 @@ const amq: Module<IAmqStoreState, IRootStoreState> = {
     UPDATE_AMQ_SONG_LIST_FILTER(state: IAmqStoreState, songListFilter: IAmqSongListFilter): void {
       state.songListFilter = songListFilter
     },
-    UPDATE_AMQ_CURRENT_USER(state: IAmqStoreState, user: string) : void {
+    UPDATE_AMQ_CURRENT_USER(state: IAmqStoreState, user: string): void {
       state.currentUser = user
       if (!user) {
         state.userSongs = new Set()
@@ -80,9 +78,6 @@ const amq: Module<IAmqStoreState, IRootStoreState> = {
     },
     SOCKET_UPDATE_AMQ_PLAYER_LIST(state: IAmqStoreState, playerList: Array<IAmqPlayer>): void {
       state.playerList = playerList
-    },
-    SOCKET_UPDATE_AMQ_ROOM_LIST(state: IAmqStoreState, roomList: Array<IRoomSerial>): void {
-      state.roomList = roomList
     },
     SOCKET_UPDATE_AMQ_SETTINGS(state: IAmqStoreState, settings: IAmqSettings): void {
       state.settings = settings

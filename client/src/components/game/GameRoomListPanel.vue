@@ -1,6 +1,6 @@
 <template>
   <v-toolbar-items>
-    <nav-btn color="warning" icon="mdi-sync" @click="reloadAmqRoomList()"></nav-btn>
+    <nav-btn icon="mdi-sync" color="warning" @click="reloadRoomList()"></nav-btn>
   </v-toolbar-items>
 </template>
 
@@ -13,12 +13,13 @@ export default defineComponent({
   components: {
     NavBtn
   },
-  setup(_props, _context) {
-    function reloadAmqRoomList(): void {
-      socket.emit('GET_AMQ_ROOM_LIST')
+  setup(_props, context) {
+    function reloadRoomList(): void {
+      context.root.$store.commit('UPDATE_ROOM_LIST', [])
+      socket.emit(context.root.$store.getters.viewCommand('get-room-list'))
     }
 
-    return {reloadAmqRoomList}
+    return {reloadRoomList}
   }
 })
 </script>

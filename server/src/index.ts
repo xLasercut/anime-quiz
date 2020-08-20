@@ -44,7 +44,7 @@ const generalGameHandler = new GeneralGameHandler(logger, emitter)
 const amqSongListHandler = new AmqSongListHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase)
 const emojiHandler = new EmojiHandler(logger, emitter, emojiDatabase)
 const chatBotHandler = new ChatBotHandler(logger, emitter, chatBotDatabase)
-const adminHandler = new AdminHandler(io, logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase)
+const adminHandler = new AdminHandler(io, logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase, awqWeaponDatabase)
 const awqWeaponListHandler = new AwqWeaponListHandler(logger, emitter, awqWeaponDatabase)
 
 const amqHandler = new AmqHandler(io, logger, emitter, amqGameController, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)

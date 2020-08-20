@@ -134,7 +134,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.systemNotification('success', `${song.anime[0]} - ${song.title} selected`, socket.id)
     }))
 
-    socket.on('GET_AMQ_ROOM_LIST', exceptionHandler(socket, (): void => {
+    socket.on('GET_AMQ_GAME_ROOM_LIST', exceptionHandler(socket, (): void => {
       this._logger.writeLog(LOG_BASE.GAME004, {id: socket.id})
       this._emitter.updateAmqRoomList(this._controller.getRoomList(), socket.id)
     }))
