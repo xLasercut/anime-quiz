@@ -39,7 +39,9 @@ export default defineComponent({
     }
 
     watch(() => props.volume, (val: any) => {
-      player.value.volume = val / 100
+      if (player) {
+        player.value.volume = val / 100
+      }
     })
 
     socket.on('AMQ_START_LOAD', (): void => {
