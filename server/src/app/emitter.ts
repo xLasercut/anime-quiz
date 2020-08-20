@@ -1,6 +1,6 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
-import {IChatBot, IAmqChoices, IEmoji, IAmqSong} from '../../../shared/interfaces/database'
+import {IChatBot, IAmqChoices, IEmoji, IAmqSong, IAwqWeapon, IAwqChoices} from '../../../shared/interfaces/database'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
 
@@ -89,6 +89,14 @@ class Emitter {
 
   public updateAmqSettings(amqSettings: IAmqSettings, sid: string): void {
     this._client(sid).emit('UPDATE_AMQ_SETTINGS', amqSettings)
+  }
+
+  public updateAwqWeaponList(weaponList: Array<IAwqWeapon>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AWQ_WEAPON_LIST', weaponList)
+  }
+
+  public updateAwqChoices(choices: IAwqChoices, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AWQ_CHOICES', choices)
   }
 
   protected _client(sid: string = null): socketio.Namespace | socketio.Server {

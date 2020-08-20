@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" no-gutters>
+  <v-row justify="center" dense>
     <v-col cols="12">
       <v-data-table
         disable-sort disable-filtering disable-pagination dense

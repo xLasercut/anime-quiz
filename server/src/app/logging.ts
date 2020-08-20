@@ -92,6 +92,16 @@ const LOG_BASE = {
     level: LOG_LEVEL.INFO,
     template: 'amq list data operation - id="{{id}}" operation="{{operation}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
   },
+  LIST004: {
+    code: 'LIST004',
+    level: LOG_LEVEL.INFO,
+    template: 'awq list data request - id="{{id}}"'
+  },
+  LIST005: {
+    code: 'LIST005',
+    level: LOG_LEVEL.INFO,
+    template: 'awq list data operation - id="{{id}}" operation="{{operation}}" weaponId="{{weaponId}}" anime="{{anime}}" src="{{src}}" name="{{name}}"'
+  },
   EMOJI001: {
     code: 'EMOJI001',
     level: LOG_LEVEL.INFO,

@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" align="center">
+  <v-row justify="center">
     <table-filter-text
       label="Anime" :value="$store.state.amq.songListFilter.anime"
       @input="updateSongFilter($event, 'anime')"

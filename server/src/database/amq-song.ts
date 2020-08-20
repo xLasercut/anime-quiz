@@ -16,6 +16,10 @@ class AmqSongDatabase {
 
   public loadData(): void {
     this._songList = readFile(AMQ_SONG_LIST_PATH)
+    this.loadSecondaryData()
+  }
+
+  public loadSecondaryData(): void {
     this._songIds = new Set()
     this._animeChoices = []
     this._titleChoices = []
@@ -56,7 +60,7 @@ class AmqSongDatabase {
   public editSong(songToEdit: IAmqSong): void {
     this.validateSongIdExists(songToEdit.songId)
     let index = this._songList.findIndex((song: IAmqSong) => {
-      return song.songId == songToEdit.songId
+      return song.songId === songToEdit.songId
     })
     this._songList[index] = songToEdit
     this._saveList()
@@ -77,7 +81,7 @@ class AmqSongDatabase {
   public deleteSong(songToDelete: IAmqSong): void {
     this.validateSongIdExists(songToDelete.songId)
     let index = this._songList.findIndex((song: IAmqSong) => {
-      return song.songId == songToDelete.songId
+      return song.songId === songToDelete.songId
     })
     this._songList.splice(index, 1)
     this._songIds.delete(songToDelete.songId)

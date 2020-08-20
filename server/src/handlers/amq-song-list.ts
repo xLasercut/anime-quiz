@@ -5,11 +5,12 @@ import {AmqSongDatabase} from '../database/amq-song'
 import {AmqUserSongDatabase} from '../database/amq-user-song'
 import {ISocket} from '../interfaces'
 import {IAmqSong} from '../../../shared/interfaces/database'
+import {ROOM_IDS} from '../config'
 
 class AmqSongListHandler extends AbstractHandler {
   protected _songDatabase: AmqSongDatabase
   protected _userSongDatabase: AmqUserSongDatabase
-  protected _roomId = 'amq-song-list'
+  protected _roomId = ROOM_IDS.amqSongList
 
   constructor(logger: Logger, emitter: Emitter, songDatabase: AmqSongDatabase, userSongDatabase: AmqUserSongDatabase) {
     super(logger, emitter)

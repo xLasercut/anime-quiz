@@ -1,6 +1,6 @@
 import {IRoomSerial} from '../../../shared/interfaces/game'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
-import {IAmqChoices, IAmqSong, IChatBot, IEmoji} from '../../../shared/interfaces/database'
+import {IAmqChoices, IAmqSong, IAwqChoices, IAwqWeapon, IChatBot, IEmoji} from '../../../shared/interfaces/database'
 
 interface IRootStoreState {
 }
@@ -56,6 +56,28 @@ interface IAvatar {
   src: string
 }
 
+interface IAwqStoreState {
+  host: boolean
+  weaponList: Array<IAwqWeapon>
+  choices: IAwqChoices
+  weaponListFilter: IAwqWeaponListFilter
+}
+
+interface IAwqWeaponListFilter {
+  anime: string
+  weapon: string
+}
+
+interface ILobbyCard {
+  isAdmin: boolean
+  color: string
+  label: string
+  description: string
+  command: string | null
+  icon: string
+  key: string
+}
+
 export {
   IClientStoreState,
   IRootStoreState,
@@ -65,5 +87,8 @@ export {
   IEmojiListFilter,
   IChatBotStoreState,
   IChatBotListFilter,
-  IAvatar
+  IAwqStoreState,
+  IAvatar,
+  IAwqWeaponListFilter,
+  ILobbyCard
 }

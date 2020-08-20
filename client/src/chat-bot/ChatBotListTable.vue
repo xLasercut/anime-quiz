@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" dense>
     <v-col cols="12">
       <v-data-table
         disable-pagination disable-filtering disable-sort dense
@@ -49,7 +49,7 @@ export default defineComponent({
   components: {
     Pagination, GameAvatar, TableBtn, ChatBotListTableFilter
   },
-  setup(_props, context) {
+  setup(_props, _context) {
     const state = reactive({
       headers: [
         {text: 'Regex', value: 'regex'},

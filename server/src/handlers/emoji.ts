@@ -4,10 +4,11 @@ import {Emitter} from '../app/emitter'
 import {EmojiDatabase} from '../database/emoji'
 import {ISocket} from '../interfaces'
 import {IEmoji} from '../../../shared/interfaces/database'
+import {ROOM_IDS} from '../config'
 
 class EmojiHandler extends AbstractHandler {
   protected _emojiDatabase: EmojiDatabase
-  protected _roomId = 'emoji'
+  protected _roomId = ROOM_IDS.emojiList
 
   constructor(logger: Logger, emitter: Emitter, emojiDatabase: EmojiDatabase) {
     super(logger, emitter)

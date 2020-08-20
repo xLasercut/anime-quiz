@@ -3,10 +3,11 @@ import {LOG_BASE, Logger} from '../app/logging'
 import {Emitter} from '../app/emitter'
 import {ISocket} from '../interfaces'
 import {ChatBotDatabase} from '../database/chat-bot'
+import {ROOM_IDS} from '../config'
 
 class ChatBotHandler extends AbstractHandler {
   protected _chatBotDatabase: ChatBotDatabase
-  protected _roomId = 'chat-bot'
+  protected _roomId = ROOM_IDS.chatBotList
 
   constructor(logger: Logger, emitter: Emitter, chatBotDatabase: ChatBotDatabase) {
     super(logger, emitter)

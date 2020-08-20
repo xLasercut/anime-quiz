@@ -1,26 +1,15 @@
 <template>
   <v-main>
-    <v-row justify="center">
-      <v-col cols="auto" v-for="card in cards" :key="card.key" v-if="showCard(card.isAdmin)">
-        <div class="card-container">
-          <v-card width="250px" flat>
-            <v-card-title :class="`${card.color}--text`">
-              <v-icon large left :class="`${card.color}--text`">{{ card.icon }}</v-icon>
-              <span class="title">{{ card.label }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <span>{{ card.description }}</span>
-            </v-card-text>
-
-            <v-card-actions>
-              <icon-btn icon="mdi-login" :color="card.color" @click="joinRoom(card.command, card.showRoomList)">Start
-              </icon-btn>
-            </v-card-actions>
-            <div>
-            </div>
-          </v-card>
-        </div>
+    <v-row justify="center" no-gutters>
+      <v-col cols="6">
+        <v-row justify="center">
+          <lobby-card v-for="card in gameCards" :card="card" :key="card.key" @join:room="joinGameRoom($event)"></lobby-card>
+        </v-row>
+      </v-col>
+      <v-col cols="6">
+        <v-row justify="center">
+          <lobby-card v-for="card in nonGameCards" :card="card" :key="card.key" @join:room="joinNonGameRoom($event)"></lobby-card>
+        </v-row>
       </v-col>
     </v-row>
   </v-main>
@@ -28,16 +17,23 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, reactive, toRefs} from '@vue/composition-api'
-import IconBtn from '@/components/buttons/IconBtn.vue'
 import {leaveAllRooms, socket} from '@/assets/socket'
+import LobbyCard from '@/lobby/LobbyCard.vue'
+import {ILobbyCard} from '@/assets/interfaces'
+
+interface IState {
+  gameCards: Array<ILobbyCard>
+  nonGameCards: Array<ILobbyCard>
+}
+
 
 export default defineComponent({
   components: {
-    IconBtn
+    LobbyCard
   },
   setup(_props, context) {
-    const state = reactive({
-      cards: [
+    const state = reactive<IState>({
+      gameCards: [
         {
           key: 'amq-game',
           icon: 'mdi-gamepad-variant',
@@ -45,17 +41,35 @@ export default defineComponent({
           description: 'Play AMQ',
           color: 'success',
           command: 'amq_game',
-          showRoomList: true,
           isAdmin: false
         },
+        {
+          key: 'awq-game',
+          icon: 'mdi-rocket-launch',
+          label: 'AWQ Game Room',
+          description: 'Play AWQ',
+          color: 'success',
+          command: null,
+          isAdmin: false
+        }
+      ],
+      nonGameCards: [
         {
           key: 'amq-song',
           icon: 'mdi-playlist-music',
           label: 'AMQ Song List',
-          description: 'Edit your amq song list',
+          description: 'Edit your AMQ song list',
           color: 'primary',
           command: 'amq_song',
-          showRoomList: false,
+          isAdmin: false
+        },
+        {
+          key: 'awq-weapon',
+          icon: 'mdi-chemical-weapon',
+          label: 'AWQ Weapon List',
+          description: 'Add/Edit AWQ weapon list',
+          color: 'error',
+          command: 'awq_weapon',
           isAdmin: false
         },
         {
@@ -65,7 +79,6 @@ export default defineComponent({
           description: 'Add/Edit chat emojis',
           color: 'warning',
           command: 'emoji',
-          showRoomList: false,
           isAdmin: false
         },
         {
@@ -75,35 +88,25 @@ export default defineComponent({
           description: 'Add/Edit chat bot responses',
           color: 'info',
           command: 'chat_bot',
-          showRoomList: false,
           isAdmin: true
         }
-      ],
-      show: false
+      ]
     })
 
-    function joinRoom(command: string, showRoomList: boolean): void {
-      if (showRoomList) {
-        context.root.$store.commit('UPDATE_VIEW', `${command}_room_list`)
-      }
-      else {
-        socket.emit(`JOIN_${command.toUpperCase()}`)
-        context.root.$store.commit('UPDATE_VIEW', command)
-      }
+    function joinNonGameRoom(command: string): void {
+      socket.emit(`JOIN_${command.toUpperCase()}`)
+      context.root.$store.commit('UPDATE_VIEW', command)
     }
 
-    function showCard(isAdmin: boolean): boolean {
-      if (isAdmin) {
-        return context.root.$store.state.client.admin
-      }
-      return true
+    function joinGameRoom(command: string): void {
+      context.root.$store.commit('UPDATE_VIEW', `${command}_room_list`)
     }
 
     onMounted(() => {
       leaveAllRooms()
     })
 
-    return {...toRefs(state), joinRoom, showCard}
+    return {...toRefs(state), joinNonGameRoom, joinGameRoom}
   }
 })
 </script>

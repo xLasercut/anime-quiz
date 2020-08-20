@@ -10,12 +10,15 @@ import {ChatBotDatabase} from '../database/chat-bot'
 import {AmqUserSongDatabase} from '../database/amq-user-song'
 import {IBannerColor} from '../../../shared/types/game'
 import {Server} from 'socket.io'
+import {ROOM_IDS} from '../config'
+import {AwqWeaponDatabase} from '../database/awq-weapon'
 
 class AdminHandler extends AbstractHandler {
   protected _songDatabase: AmqSongDatabase
   protected _userSongDatabase: AmqUserSongDatabase
   protected _emojiDatabase: EmojiDatabase
   protected _chatBotDatabase: ChatBotDatabase
+  protected _weaponDatabase: AwqWeaponDatabase
   protected _io: Server
 
 
@@ -26,7 +29,8 @@ class AdminHandler extends AbstractHandler {
     songDatabase: AmqSongDatabase,
     userSongDatabase: AmqUserSongDatabase,
     emojiDatabase: EmojiDatabase,
-    chatBotDatabase: ChatBotDatabase
+    chatBotDatabase: ChatBotDatabase,
+    weaponDatabase: AwqWeaponDatabase
   ) {
     super(logger, emitter)
     this._io = io
@@ -34,6 +38,7 @@ class AdminHandler extends AbstractHandler {
     this._songDatabase = songDatabase
     this._emojiDatabase = emojiDatabase
     this._chatBotDatabase = chatBotDatabase
+    this._weaponDatabase = weaponDatabase
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
@@ -44,7 +49,9 @@ class AdminHandler extends AbstractHandler {
         Object.assign({}, {id: socket.id, operation: 'edit'}, song)
       )
       this._songDatabase.editSong(song)
-      this._emitter.updateAmqSongList(this._songDatabase.getSongList())
+      this._songDatabase.loadSecondaryData()
+      this._emitter.updateAmqChoices(this._songDatabase.getChoices())
+      this._emitter.updateAmqSongList(this._songDatabase.getSongList(), ROOM_IDS.amqSongList)
       this._emitter.systemNotification('success', `${song.anime[0]} - ${song.title} edited`, socket.id)
     }))
 
@@ -55,6 +62,9 @@ class AdminHandler extends AbstractHandler {
         Object.assign({}, {id: socket.id, operation: 'add'}, song)
       )
       this._songDatabase.addSong(song)
+      this._songDatabase.loadSecondaryData()
+      this._emitter.updateAmqChoices(this._songDatabase.getChoices())
+      this._emitter.updateAmqSongList(this._songDatabase.getSongList(), ROOM_IDS.amqSongList)
       this._emitter.systemNotification('success', `${song.anime[0]} - ${song.title} added`, socket.id)
     }))
 
@@ -65,7 +75,9 @@ class AdminHandler extends AbstractHandler {
         Object.assign({}, {id: socket.id, operation: 'delete'}, song)
       )
       this._songDatabase.deleteSong(song)
-      this._emitter.updateAmqSongList(this._songDatabase.getSongList())
+      this._songDatabase.loadSecondaryData()
+      this._emitter.updateAmqChoices(this._songDatabase.getChoices())
+      this._emitter.updateAmqSongList(this._songDatabase.getSongList(), ROOM_IDS.amqSongList)
       this._emitter.systemNotification('success', `${song.anime[0]} - ${song.title} deleted`, socket.id)
     }))
 
@@ -98,7 +110,7 @@ class AdminHandler extends AbstractHandler {
         Object.assign({id: socket.id, operation: 'add'}, chatBot)
       )
       this._chatBotDatabase.addChatBot(chatBot)
-      this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
+      this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList(), ROOM_IDS.chatBotList)
       this._emitter.systemNotification('success', `${chatBot.regex} added`, socket.id)
     }))
 
@@ -109,7 +121,7 @@ class AdminHandler extends AbstractHandler {
         Object.assign({id: socket.id, operation: 'edit'}, chatBot)
       )
       this._chatBotDatabase.editChatBot(chatBot)
-      this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
+      this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList(), ROOM_IDS.chatBotList)
       this._emitter.systemNotification('success', `${chatBot.regex} edited`, socket.id)
     }))
 
@@ -120,7 +132,7 @@ class AdminHandler extends AbstractHandler {
         Object.assign({id: socket.id, operation: 'delete'}, chatBot)
       )
       this._chatBotDatabase.deleteChatBot(chatBot)
-      this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
+      this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList(), ROOM_IDS.chatBotList)
       this._emitter.systemNotification('success', `${chatBot.regex} deleted`, socket.id)
     }))
 
@@ -130,11 +142,14 @@ class AdminHandler extends AbstractHandler {
       this._userSongDatabase.loadData()
       this._chatBotDatabase.loadData()
       this._emojiDatabase.loadData()
+      this._weaponDatabase.loadData()
       this._emitter.updateAmqSongList(this._songDatabase.getSongList())
       this._emitter.updateAmqUsers(this._userSongDatabase.getUsers())
       this._emitter.updateAmqChoices(this._songDatabase.getChoices())
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList())
       this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
+      this._emitter.updateAwqWeaponList(this._weaponDatabase.getWeaponList())
+      this._emitter.updateAwqChoices(this._weaponDatabase.getChoices())
       this._emitter.systemNotification('success', 'Database reloaded', socket.id)
     }))
 
