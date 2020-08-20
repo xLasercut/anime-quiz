@@ -14,6 +14,8 @@ import AwqWeaponPanel from '@/awq-weapon/AwqWeaponPanel.vue'
 import AwqWeaponView from '@/awq-weapon/AwqWeaponView.vue'
 import GameRoomListPanel from '@/components/game/GameRoomListPanel.vue'
 import GameRoomListView from '@/components/game/GameRoomListView.vue'
+import AwqGamePanel from '@/awq-game/AwqGamePanel.vue'
+import AwqGameView from '@/awq-game/AwqGameView.vue'
 
 const PANEL_COMPONENTS: { [key: string]: any } = {
   login: LoginPanel,
@@ -24,7 +26,8 @@ const PANEL_COMPONENTS: { [key: string]: any } = {
   amq_game_room_list: GameRoomListPanel,
   amq_game: AmqGamePanel,
   awq_weapon: AwqWeaponPanel,
-  awq_game_room_list: GameRoomListPanel
+  awq_game_room_list: GameRoomListPanel,
+  awq_game: AwqGamePanel
 }
 
 const VIEW_COMPONENTS: { [key: string]: any } = {
@@ -36,7 +39,8 @@ const VIEW_COMPONENTS: { [key: string]: any } = {
   amq_game_room_list: GameRoomListView,
   amq_game: AmqGameView,
   awq_weapon: AwqWeaponView,
-  awq_game_room_list: GameRoomListView
+  awq_game_room_list: GameRoomListView,
+  awq_game: AwqGameView
 }
 
 export {PANEL_COMPONENTS, VIEW_COMPONENTS}
