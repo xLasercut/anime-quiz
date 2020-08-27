@@ -1,6 +1,7 @@
 import {IRoomSerial} from '../../../shared/interfaces/game'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IAmqChoices, IAmqSong, IAwqChoices, IAwqWeapon, IChatBot, IEmoji} from '../../../shared/interfaces/database'
+import {IAwqGameState, IAwqPlayer, IAwqSettings} from '../../../shared/interfaces/awq'
 
 interface IRootStoreState {
 }
@@ -61,6 +62,9 @@ interface IAwqStoreState {
   weaponList: Array<IAwqWeapon>
   choices: IAwqChoices
   weaponListFilter: IAwqWeaponListFilter
+  settings: IAwqSettings
+  gameState: IAwqGameState
+  playerList: Array<IAwqPlayer>
 }
 
 interface IAwqWeaponListFilter {

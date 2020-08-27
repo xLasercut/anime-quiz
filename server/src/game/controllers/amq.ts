@@ -28,43 +28,12 @@ class AmqGameController extends AbstractGameController {
     socket.join(roomId)
   }
 
-  public joinRoom(socket: ISocket, roomId: string): void {
-    this._validateRoomIdExists(roomId)
-    this._rooms[roomId].players.add(socket.id)
-    socket.join(roomId)
-  }
-
   public getRoom(roomId: string): IAmqRoom {
-    this._validateRoomIdExists(roomId)
-    return this._rooms[roomId]
+    return this._getRoom(roomId)
   }
 
   public getPlayerList(roomId: string): Array<IAmqPlayer> {
-    this._validateRoomIdExists(roomId)
-    let players = this.getRoom(roomId).players
-    return Object.values(this._io.sockets.connected)
-      .filter((socket: ISocket): ISocket => {
-        if (players.has(socket.id)) {
-          return socket
-        }
-      })
-      .map((socket: ISocket): IAmqPlayer => {
-        return socket.player.serialize()
-      })
-  }
-
-  public leaveRoom(socketId: string): string {
-    for (let roomId in this._rooms) {
-      if (this._rooms[roomId].players.has(socketId)) {
-        this._rooms[roomId].players.delete(socketId)
-        if (this._isRoomEmpty(roomId)) {
-          this._deleteRoom(roomId)
-        }
-        else {
-          return roomId
-        }
-      }
-    }
+    return this._getPlayerList(roomId)
   }
 
   public resetTimer(roomId: string): void {

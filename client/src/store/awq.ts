@@ -1,6 +1,7 @@
 import {IAwqStoreState, IAwqWeaponListFilter, IRootStoreState} from '@/assets/interfaces'
 import {Module} from 'vuex'
 import {IAwqChoices, IAwqWeapon} from '../../../shared/interfaces/database'
+import {IAwqPlayer, IAwqSettings} from '../../../shared/interfaces/awq'
 
 function _getDefaultState(): IAwqStoreState {
   return {
@@ -13,7 +14,24 @@ function _getDefaultState(): IAwqStoreState {
     weaponListFilter: {
       anime: '',
       weapon: ''
-    }
+    },
+    settings: {
+      guessTime: 10,
+      duplicate: false,
+      weaponCount: 20
+    },
+    gameState: {
+      playing: false,
+      currentWeaponCount: 0,
+      maxWeaponCount: 0,
+      currentWeapon: {
+        weaponId: '',
+        anime: [''],
+        src: '',
+        name: ''
+      }
+    },
+    playerList: []
   }
 }
 
@@ -31,6 +49,15 @@ const awq: Module<IAwqStoreState, IRootStoreState> = {
     },
     SOCKET_UPDATE_AWQ_CHOICES(state: IAwqStoreState, choices: IAwqChoices): void {
       state.choices = choices
+    },
+    SOCKET_UPDATE_AWQ_HOST(state: IAwqStoreState, host: boolean): void {
+      state.host = host
+    },
+    SOCKET_UPDATE_AWQ_PLAYER_LIST(state: IAwqStoreState, playerList: Array<IAwqPlayer>): void {
+      state.playerList = playerList
+    },
+    SOCKET_UPDATE_AWQ_SETTINGS(state: IAwqStoreState, settings: IAwqSettings): void {
+      state.settings = settings
     }
   },
   getters: {

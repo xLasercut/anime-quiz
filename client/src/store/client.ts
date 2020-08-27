@@ -71,27 +71,22 @@ const client: Module<IClientStoreState, IRootStoreState> = {
     },
     viewCommand: (state: IClientStoreState) => (type: IViewCommand): string => {
       let command = state.view.replace('_room_list', '')
-      if (type === 'join-new') {
-        return `JOIN_${command}_NEW`.toUpperCase()
+      switch (type) {
+        case 'join-new':
+          return `JOIN_${command}_NEW`.toUpperCase()
+        case 'join-exist':
+          return `JOIN_${command}_EXIST`.toUpperCase()
+        case 'update-room-list':
+          return `UPDATE_${command}_ROOM_LIST`.toUpperCase()
+        case 'get-room-list':
+          return `GET_${command}_ROOM_LIST`.toUpperCase()
+        case 'command':
+          return command
+        case 'chat':
+          return `${command}_CHAT`.toUpperCase()
+        default:
+          return ''
       }
-
-      if (type === 'join-exist') {
-        return `JOIN_${command}_EXIST`.toUpperCase()
-      }
-
-      if (type === 'update-room-list') {
-        return `UPDATE_${command}_ROOM_LIST`.toUpperCase()
-      }
-
-      if (type === 'get-room-list') {
-        return `GET_${command}_ROOM_LIST`.toUpperCase()
-      }
-
-      if (type === 'command') {
-        return command
-      }
-
-      return ''
     }
   }
 }

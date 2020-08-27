@@ -67,6 +67,11 @@ const LOG_BASE = {
     level: LOG_LEVEL.WARN,
     template: 'server data error - reason="{{reason}}"'
   },
+  DATA002: {
+    code: 'DATA002',
+    level: LOG_LEVEL.WARN,
+    template: 'game data error - reason="{{reason}}"'
+  },
   AUTH002: {
     code: 'AUTH002',
     level: LOG_LEVEL.WARN,
@@ -136,6 +141,16 @@ const LOG_BASE = {
     code: 'SETTING002',
     level: LOG_LEVEL.INFO,
     template: 'amq setting update - id="{{id}}" username="{{username}}" songCount="{{songCount}}" guessTime="{{guessTime}}" gameMode="{{gameMode}}" users="{{users}}" duplicate="{{duplicate}}" leastPlayed="{{leastPlayed}}"'
+  },
+  SETTING003: {
+    code: 'SETTING003',
+    level: LOG_LEVEL.INFO,
+    template: 'awq setting request - id="{{id}}" username="{{username}}"'
+  },
+  SETTING004: {
+    code: 'SETTING004',
+    level: LOG_LEVEL.INFO,
+    template: 'awq setting request - id="{{id}}" username="{{username}}" weaponCount="{{weaponCount}}" guessTime="{{guessTime}}" duplicate="{{duplicate}}"'
   },
   GAME001: {
     code: 'GAME001',

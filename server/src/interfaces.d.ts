@@ -3,6 +3,9 @@ import {AmqPlayer} from './game/players/amq'
 import {AmqSettings} from './game/settings/amq'
 import {AmqGameState} from './game/state/amq'
 import {IAmqSong} from '../../shared/interfaces/database'
+import {AwqSettings} from './game/settings/awq'
+import {AwqGameState} from './game/state/awq'
+import {AwqPlayer} from './game/players/awq'
 
 interface ILog {
   code: string
@@ -13,7 +16,7 @@ interface ILog {
 interface ISocket extends Socket {
   auth: boolean
   admin: boolean
-  player: AmqPlayer
+  player: AmqPlayer | AwqPlayer
   timer: NodeJS.Timeout
 }
 
@@ -30,6 +33,8 @@ interface IAmqRoom extends IRoom {
 }
 
 interface IAwqRoom extends IRoom {
+  settings: AwqSettings
+  state: AwqGameState
 }
 
 interface IBalancedAmqSongLists {

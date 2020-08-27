@@ -34,6 +34,7 @@
 import {defineComponent, reactive, ref, toRefs, watch} from '@vue/composition-api'
 import {EMOJI_CHAT_FORMAT} from '@/assets/config/formats'
 import {IEmoji} from '../../../../../shared/interfaces/database'
+import {socket} from '@/assets/socket'
 
 export default defineComponent({
   setup(_props, context) {
@@ -48,7 +49,7 @@ export default defineComponent({
 
     function sendMsg(): void {
       if (state.message) {
-        context.emit('chat', state.message.trim())
+        socket.emit(context.root.$store.getters.viewCommand('chat'), state.message.trim())
         state.message = ''
       }
     }

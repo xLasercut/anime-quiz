@@ -20,7 +20,6 @@ class AmqHandler extends AbstractHandler {
   protected _controller: AmqGameController
 
   constructor(
-    io: Server,
     logger: Logger,
     emitter: Emitter,
     controller: AmqGameController,
@@ -52,7 +51,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateAmqUsers(this._userSongDatabase.getUsers(), socket.id)
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
       this._emitter.updateAmqGameState(this._controller.getRoom(roomId).state.serialize(), socket.id)
-      this._emitter.updateAmqChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
+      this._emitter.updateGameChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
     socket.on('JOIN_AMQ_GAME_EXIST', exceptionHandler(socket, (roomId: string, username: string, avatar: string): void => {
@@ -65,7 +64,7 @@ class AmqHandler extends AbstractHandler {
       this._emitter.updateAmqUsers(this._userSongDatabase.getUsers(), socket.id)
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList(), socket.id)
       this._emitter.updateAmqGameState(this._controller.getRoom(roomId).state.serialize(), socket.id)
-      this._emitter.updateAmqChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
+      this._emitter.updateGameChat(this._chatManager.generateSysMsg(`${username} has joined the room`), roomId)
     }))
 
     socket.on('AMQ_GUESS', exceptionHandler(socket, (amqGuess: IAmqGuess): void => {
@@ -103,7 +102,7 @@ class AmqHandler extends AbstractHandler {
       ))
       this._controller.getRoom(roomId).settings.update(amqSettings)
       this._emitter.updateAmqSettings(this._controller.getRoom(roomId).settings.serialize(), roomId)
-      this._emitter.updateAmqChat(this._chatManager.generateSysMsg('Game settings updated'), roomId)
+      this._emitter.updateGameChat(this._chatManager.generateSysMsg('Game settings updated'), roomId)
 
     }))
 
@@ -142,7 +141,7 @@ class AmqHandler extends AbstractHandler {
     socket.on('AMQ_GAME_CHAT', exceptionHandler(socket, (msg: string): void => {
       let roomId = this._controller.getRoomId(socket.id)
       let player = socket.player.serialize()
-      this._emitter.updateAmqChat(this._chatManager.generateUserMsg(
+      this._emitter.updateGameChat(this._chatManager.generateUserMsg(
         socket.id,
         player.username,
         player.admin,
@@ -151,7 +150,7 @@ class AmqHandler extends AbstractHandler {
       ), roomId)
       let botMsg = this._chatManager.generateBotMsg(msg)
       if (botMsg) {
-        this._emitter.updateAmqChat(botMsg, roomId)
+        this._emitter.updateGameChat(botMsg, roomId)
       }
     }))
   }
@@ -187,7 +186,7 @@ class AmqHandler extends AbstractHandler {
         })
     }
     else {
-      this._emitter.updateAmqChat(this._chatManager.generateSysMsg('Empty song list'), roomId)
+      this._emitter.updateGameChat(this._chatManager.generateSysMsg('Empty song list'), roomId)
     }
   }
 
@@ -201,12 +200,12 @@ class AmqHandler extends AbstractHandler {
   protected async _amqFlowMain(roomId: string): Promise<any> {
     let settings = this._controller.getRoom(roomId).settings
     this._controller.getRoom(roomId).state.newSong(settings.leastPlayed)
+    this._emitter.amqNewSong(roomId)
     this._emitter.updateAmqGameState(this._controller.getRoom(roomId).state.serialize(), roomId)
     this._logger.writeLog(
       LOG_BASE.GAME002,
       Object.assign({roomId: roomId}, this._controller.getRoom(roomId).state.currentSong)
     )
-    this._emitter.amqNewSong(roomId)
     this._emitter.amqStartLoad(roomId)
     await this._controller.startCountdown(roomId, 5000, 'load')
     this._emitter.amqStartCountdown(roomId)
@@ -233,7 +232,7 @@ class AmqHandler extends AbstractHandler {
       this._controller.getSocket(socketId).player.host = true
       this._emitter.updateAmqHost(true, socketId)
       this._emitter.updateAmqPlayerList(this._controller.getPlayerList(roomId), roomId)
-      this._emitter.updateAmqChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
+      this._emitter.updateGameChat(this._chatManager.generateSysMsg(`${player.username} has left the room`), roomId)
       socket.player = null
     }
   }

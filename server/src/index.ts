@@ -3,7 +3,7 @@ import * as socketio from 'socket.io'
 import * as express from 'express'
 import {ADMIN_PASSWORD, SERVER_PASSWORD, SERVER_PORT} from './config'
 import {ISocket} from './interfaces'
-import {AuthError, ServerDataError} from './exceptions'
+import {AuthError, GameDataError, ServerDataError} from './exceptions'
 import {Emitter} from './app/emitter'
 import {AmqSongDatabase} from './database/amq-song'
 import {AmqUserSongDatabase} from './database/amq-user-song'
@@ -19,6 +19,8 @@ import {AmqGameController} from './game/controllers/amq'
 import {GeneralGameHandler} from './handlers/room'
 import {AwqWeaponDatabase} from './database/awq-weapon'
 import {AwqWeaponListHandler} from './handlers/awq-weapon-list'
+import {AwqHandler} from './handlers/awq'
+import {AwqGameController} from './game/controllers/awq'
 
 
 const logger = new Logger()
@@ -39,6 +41,7 @@ const awqWeaponDatabase = new AwqWeaponDatabase()
 
 const chatManager = new ChatManager(logger, chatBotDatabase, emojiDatabase)
 const amqGameController = new AmqGameController(io)
+const awqGameController = new AwqGameController(io)
 
 const generalGameHandler = new GeneralGameHandler(logger, emitter)
 const amqSongListHandler = new AmqSongListHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase)
@@ -47,7 +50,8 @@ const chatBotHandler = new ChatBotHandler(logger, emitter, chatBotDatabase)
 const adminHandler = new AdminHandler(io, logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase, awqWeaponDatabase)
 const awqWeaponListHandler = new AwqWeaponListHandler(logger, emitter, awqWeaponDatabase)
 
-const amqHandler = new AmqHandler(io, logger, emitter, amqGameController, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)
+const amqHandler = new AmqHandler(logger, emitter, amqGameController, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)
+const awqHandler = new AwqHandler(logger, emitter, awqWeaponDatabase, chatManager, emojiDatabase, awqGameController)
 
 
 io.on('connect', (socket: ISocket) => {
@@ -81,6 +85,7 @@ function startHandlers(socket: ISocket): void {
     chatBotHandler.start(socket, exceptionHandler)
     amqHandler.start(socket, exceptionHandler)
     awqWeaponListHandler.start(socket, exceptionHandler)
+    awqHandler.start(socket, exceptionHandler)
 
     if (socket.admin) {
       emitter.updateAdmin(socket.admin, socket.id)
@@ -102,6 +107,10 @@ function exceptionHandler(socket: ISocket, f: Function): any {
         logger.writeLog(LOG_BASE.AUTH003, {id: socket.id})
         emitter.systemNotification('error', e.message, socket.id)
         socket.disconnect()
+      }
+      else if (e instanceof GameDataError) {
+        logger.writeLog(LOG_BASE.DATA002, {reason: e.message})
+        emitter.systemNotification('error', e.message, socket.id)
       }
       else {
         logger.writeLog(LOG_BASE.SERVER004, {stack: e.stack})

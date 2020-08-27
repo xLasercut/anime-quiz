@@ -2,8 +2,9 @@ import {IAmqSong} from '../../../../shared/interfaces/database'
 import {IAmqGameState, IAmqGuess, IAmqSettings} from '../../../../shared/interfaces/amq'
 import {IBalancedAmqSongLists, INormalAmqSongLists} from '../../interfaces'
 import {IBannerColor} from '../../../../shared/types/game'
+import {AbstractGameState} from './abstract'
 
-class AmqGameState {
+class AmqGameState extends AbstractGameState {
   public playing = false
   public maxSongCount = 0
   public currentSongCount = 0
@@ -162,10 +163,6 @@ class AmqGameState {
       }
       sourceList.splice(i, 1)
     }
-  }
-
-  protected _getRandomIndex(list: Array<any>): number {
-    return Math.floor(Math.random() * list.length)
   }
 }
 

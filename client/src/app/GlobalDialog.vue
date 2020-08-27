@@ -16,12 +16,14 @@ import {EventBus} from '@/assets/event'
 import AmqSettings from '@/amq-game/AmqSettings.vue'
 import AmqSelector from '@/amq-game/AmqSelector.vue'
 import AdminControls from '@/app/AdminControls.vue'
+import AwqSettings from '@/awq-game/AwqSettings.vue'
 
 let componentMap: {[key: string]: any} = {
   clientSetting: ClientSettings,
   amqSettings: AmqSettings,
   amqSelector: AmqSelector,
-  admin: AdminControls
+  admin: AdminControls,
+  awqSettings: AwqSettings
 }
 
 export default defineComponent({

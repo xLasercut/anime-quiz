@@ -3,6 +3,7 @@ import {IBannerColor} from '../../../shared/types/game'
 import {IChatBot, IAmqChoices, IEmoji, IAmqSong, IAwqWeapon, IAwqChoices} from '../../../shared/interfaces/database'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
+import {IAwqGameState, IAwqPlayer, IAwqSettings} from '../../../shared/interfaces/awq'
 
 class Emitter {
   protected _io: socketio.Server
@@ -83,8 +84,8 @@ class Emitter {
     this._client(sid).emit('SYSTEM_NOTIFICATION', color, message)
   }
 
-  public updateAmqChat(chat: IChat, sid: string): void {
-    this._client(sid).emit('UPDATE_AMQ_CHAT', chat)
+  public updateGameChat(chat: IChat, sid: string): void {
+    this._client(sid).emit('UPDATE_GAME_CHAT', chat)
   }
 
   public updateAmqSettings(amqSettings: IAmqSettings, sid: string): void {
@@ -97,6 +98,26 @@ class Emitter {
 
   public updateAwqChoices(choices: IAwqChoices, sid: string = null): void {
     this._client(sid).emit('UPDATE_AWQ_CHOICES', choices)
+  }
+
+  public updateAwqHost(host: boolean, sid: string): void {
+    this._client(sid).emit('UPDATE_AWQ_HOST', host)
+  }
+
+  public updateAwqRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AWQ_GAME_ROOM_LIST', roomList)
+  }
+
+  public updateAwqPlayerList(amqPlayerList: Array<IAwqPlayer>, sid: string): void {
+    this._client(sid).emit('UPDATE_AWQ_PLAYER_LIST', amqPlayerList)
+  }
+
+  public updateAwqGameState(amqGameState: IAwqGameState, sid: string): void {
+    this._client(sid).emit('UPDATE_AWQ_GAME_STATE', amqGameState)
+  }
+
+  public updateAwqSettings(amqSettings: IAwqSettings, sid: string): void {
+    this._client(sid).emit('UPDATE_AWQ_SETTINGS', amqSettings)
   }
 
   protected _client(sid: string = null): socketio.Namespace | socketio.Server {

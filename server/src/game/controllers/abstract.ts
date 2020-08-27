@@ -1,7 +1,8 @@
 import {GameDataError} from '../../exceptions'
 import {Server} from 'socket.io'
-import {IRoom, ISocket} from '../../interfaces'
+import {IAmqRoom, IRoom, ISocket} from '../../interfaces'
 import {IRoomSerial} from '../../../../shared/interfaces/game'
+import {IAmqPlayer} from '../../../../shared/interfaces/amq'
 
 class AbstractGameController {
   protected _rooms: {[key: string]: IRoom} = {}
@@ -9,6 +10,12 @@ class AbstractGameController {
 
   constructor(io: Server) {
     this._io = io
+  }
+
+  public joinRoom(socket: ISocket, roomId: string): void {
+    this._validateRoomIdExists(roomId)
+    this._rooms[roomId].players.add(socket.id)
+    socket.join(roomId)
   }
 
   public getSocket(socketId: string): ISocket {
@@ -41,6 +48,39 @@ class AbstractGameController {
     for (let socketId of Array.from(this._rooms[roomId].players)) {
       this.getSocket(socketId).player.resetScore()
     }
+  }
+
+  public leaveRoom(socketId: string): string {
+    for (let roomId in this._rooms) {
+      if (this._rooms[roomId].players.has(socketId)) {
+        this._rooms[roomId].players.delete(socketId)
+        if (this._isRoomEmpty(roomId)) {
+          this._deleteRoom(roomId)
+        }
+        else {
+          return roomId
+        }
+      }
+    }
+  }
+
+  protected _getRoom(roomId: string): any {
+    this._validateRoomIdExists(roomId)
+    return this._rooms[roomId]
+  }
+
+  protected _getPlayerList(roomId: string): Array<any> {
+    this._validateRoomIdExists(roomId)
+    let players = this._getRoom(roomId).players
+    return Object.values(this._io.sockets.connected)
+      .filter((socket: ISocket): ISocket => {
+        if (players.has(socket.id)) {
+          return socket
+        }
+      })
+      .map((socket: ISocket): any => {
+        return socket.player.serialize()
+      })
   }
 
   public newRound(roomId: string): void {

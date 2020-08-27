@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" sm="6" md="5">
     <v-combobox
-      filled clearable hide-details
+      filled hide-details
       :search-input="value" @update:search-input="emitChange($event)"
       v-bind="$attrs"
     ></v-combobox>
