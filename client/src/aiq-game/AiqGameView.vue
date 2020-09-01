@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-row justify="center">
-      <awq-game-window></awq-game-window>
+      <aiq-game-window></aiq-game-window>
       <game-chat-window></game-chat-window>
     </v-row>
   </v-main>
@@ -10,12 +10,12 @@
 <script lang="ts">
 import {defineComponent} from '@vue/composition-api'
 import GameChatWindow from '@/components/game/GameChatWindow.vue'
-import AwqGameWindow from '@/awq-game/AwqGameWindow.vue'
+import AiqGameWindow from '@/aiq-game/AiqGameWindow.vue'
 
 
 export default defineComponent({
   components: {
-    GameChatWindow, AwqGameWindow
+    GameChatWindow, AiqGameWindow
   }
 })
 </script>

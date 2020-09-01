@@ -1,13 +1,13 @@
 <template>
   <v-row justify="center">
     <table-filter-text
-      label="Anime" :value="$store.state.awq.weaponListFilter.anime"
-      @input="updateWeaponFilter($event, 'anime')"
+      label="Anime" :value="$store.state.aiq.imageListFilter.anime"
+      @input="updateFilter($event, 'anime')"
       cols="5"
     ></table-filter-text>
     <table-filter-text
-      label="Weapon" :value="$store.state.awq.weaponListFilter.weapon"
-      @input="updateWeaponFilter($event, 'weapon')"
+      label="Name" :value="$store.state.aiq.imageListFilter.name"
+      @input="updateFilter($event, 'name')"
       cols="5"
     ></table-filter-text>
   </v-row>
@@ -23,13 +23,13 @@ export default defineComponent({
     TableFilterText
   },
   setup(_props, context) {
-    const updateWeaponFilter = debounce((value: string, key: string): void => {
-      let newFilter = context.root.$store.state.awq.weaponListFilter
+    const updateFilter = debounce((value: string, key: string): void => {
+      let newFilter = context.root.$store.state.aiq.imageListFilter
       newFilter[key] = value
-      context.root.$store.commit('UPDATE_AWQ_WEAPON_LIST_FILTER', newFilter)
+      context.root.$store.commit('UPDATE_AIQ_IMAGE_LIST_FILTER', newFilter)
     }, 100)
 
-    return {updateWeaponFilter}
+    return {updateFilter}
   }
 })
 </script>

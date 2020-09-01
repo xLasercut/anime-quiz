@@ -1,14 +1,14 @@
-import {IAmqRoom, ISocket} from '../../interfaces'
 import {AbstractGameController} from './abstract'
-import {v4 as uuid4} from 'uuid'
-import {AmqSettings} from '../settings/amq'
-import {AmqGameState} from '../state/amq'
+import {IAwqRoom, ISocket} from '../../interfaces'
 import {Server} from 'socket.io'
-import {IAmqPlayer} from '../../../../shared/interfaces/amq'
-import {IAmqReadyType} from '../../../../shared/types/amq'
+import {v4 as uuid4} from 'uuid'
+import {AiqSettings} from '../settings/aiq'
+import {AiqGameState} from '../state/aiq'
+import {IAiqPlayer} from '../../../../shared/interfaces/aiq'
+import {IAiqReadyType} from '../../../../shared/types/aiq'
 
-class AmqGameController extends AbstractGameController {
-  protected _rooms: { [key: string]: IAmqRoom } = {}
+class AiqGameController extends AbstractGameController {
+  protected _rooms: { [key: string]: IAwqRoom }
 
   constructor(io: Server) {
     super(io)
@@ -19,8 +19,8 @@ class AmqGameController extends AbstractGameController {
     this._validateRoomIdNotExists(roomId)
     this._rooms[roomId] = {
       name: roomName,
-      settings: new AmqSettings(),
-      state: new AmqGameState(),
+      settings: new AiqSettings(),
+      state: new AiqGameState(),
       players: new Set([socket.id]),
       countdown: null,
       timeout: null
@@ -28,15 +28,15 @@ class AmqGameController extends AbstractGameController {
     socket.join(roomId)
   }
 
-  public getRoom(roomId: string): IAmqRoom {
+  public getRoom(roomId: string): IAwqRoom {
     return this._getRoom(roomId)
   }
 
-  public getPlayerList(roomId: string): Array<IAmqPlayer> {
+  public getPlayerList(roomId: string): Array<IAiqPlayer> {
     return this._getPlayerList(roomId)
   }
 
-  public async startCountdown(roomId: string, maxTime: number, readyType: IAmqReadyType): Promise<any> {
+  public async startCountdown(roomId: string, maxTime: number, readyType: IAiqReadyType): Promise<any> {
     this._validateRoomIdExists(roomId)
     this._resetCountdown(roomId)
     let time = 0
@@ -55,18 +55,7 @@ class AmqGameController extends AbstractGameController {
     })
   }
 
-  public async startTimeout(roomId: string, time: number): Promise<any> {
-    this._validateRoomIdExists(roomId)
-    this._resetTimeout(roomId)
-    return new Promise((resolve, reject) => {
-      this._rooms[roomId].timeout = setTimeout(() => {
-        this._resetTimeout(roomId)
-        resolve(true)
-      }, time)
-    })
-  }
-
-  protected _allPlayerReady(roomId: string, readyType: IAmqReadyType): boolean {
+  protected _allPlayerReady(roomId: string, readyType: IAiqReadyType): boolean {
     this._validateRoomIdExists(roomId)
     for (let socketId of Array.from(this._rooms[roomId].players)) {
       if (!this.getSocket(socketId).player.ready[readyType]) {
@@ -77,4 +66,5 @@ class AmqGameController extends AbstractGameController {
   }
 }
 
-export {AmqGameController}
+
+export {AiqGameController}

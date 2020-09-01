@@ -29,16 +29,16 @@ interface IChatBot {
   userId: string
 }
 
-interface IAwqWeapon {
-  weaponId: string
+interface IAiqImage {
+  imageId: string
   anime: Array<string>
   name: string
   src: string
 }
 
-interface IAwqChoices {
+interface IAiqChoices {
   anime: Array<string>
-  weapon: Array<string>
+  name: Array<string>
 }
 
-export {IAmqSong, IAmqChoices, IEmoji, IChatBot, IAwqWeapon, IAwqChoices}
+export {IAmqSong, IAmqChoices, IEmoji, IChatBot, IAiqImage, IAiqChoices}

@@ -44,12 +44,12 @@ export default defineComponent({
           isAdmin: false
         },
         {
-          key: 'awq-game',
-          icon: 'mdi-rocket-launch',
-          label: 'AWQ Game Room',
-          description: 'Play AWQ',
+          key: 'aiq-game',
+          icon: 'mdi-gamepad-square',
+          label: 'AIQ Game Room',
+          description: 'Play AIQ',
           color: 'success',
-          command: 'awq_game',
+          command: 'aiq_game',
           isAdmin: false
         }
       ],
@@ -64,12 +64,12 @@ export default defineComponent({
           isAdmin: false
         },
         {
-          key: 'awq-weapon',
-          icon: 'mdi-chemical-weapon',
-          label: 'AWQ Weapon List',
-          description: 'Add/Edit AWQ weapon list',
+          key: 'aiq-image',
+          icon: 'mdi-image-edit',
+          label: 'AIQ Image List',
+          description: 'Add/Edit AIQ Image list',
           color: 'error',
-          command: 'awq_weapon',
+          command: 'aiq_image',
           isAdmin: false
         },
         {

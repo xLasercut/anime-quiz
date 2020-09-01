@@ -64,6 +64,12 @@ class AbstractGameController {
     }
   }
 
+  public resetTimer(roomId: string): void {
+    this._validateRoomIdExists(roomId)
+    this._resetTimeout(roomId)
+    this._resetCountdown(roomId)
+  }
+
   protected _getRoom(roomId: string): any {
     this._validateRoomIdExists(roomId)
     return this._rooms[roomId]

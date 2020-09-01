@@ -1,22 +1,19 @@
 <template>
   <v-col cols="10">
-    <v-row no-gutters>
-      <v-col cols="10">
-        <v-slider
-          :min="min" :max="max" :disabled="disabled"
-          v-model.number="model"
-          v-bind="$attrs"
-        ></v-slider>
-      </v-col>
-      <v-col cols="2">
+    <v-slider
+      :min="min" :max="max" :disabled="disabled"
+      v-model.number="model"
+      v-bind="$attrs"
+    >
+      <template #append>
         <v-text-field
-          outlined dense class="dialog-item" type="number"
+          outlined dense class="dialog-item mt-0 pt-0" type="number"
           :min="min" :max="max" :disabled="disabled"
           v-model.number="model"
-          hide-details
+          hide-details :style="{width: '80px'}"
         ></v-text-field>
-      </v-col>
-    </v-row>
+      </template>
+    </v-slider>
   </v-col>
 </template>
 
@@ -57,7 +54,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.v-input__slider {
-  margin-right: 20px;
-}
+
 </style>

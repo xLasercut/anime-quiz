@@ -10,12 +10,12 @@ import ChatBotView from '@/chat-bot/ChatBotView.vue'
 import AmqGamePanel from '@/amq-game/AmqGamePanel.vue'
 import AmqGameView from '@/amq-game/AmqGameView.vue'
 import LobbyPanel from '@/lobby/LobbyPanel.vue'
-import AwqWeaponPanel from '@/awq-weapon/AwqWeaponPanel.vue'
-import AwqWeaponView from '@/awq-weapon/AwqWeaponView.vue'
 import GameRoomListPanel from '@/components/game/GameRoomListPanel.vue'
 import GameRoomListView from '@/components/game/GameRoomListView.vue'
-import AwqGamePanel from '@/awq-game/AwqGamePanel.vue'
-import AwqGameView from '@/awq-game/AwqGameView.vue'
+import AiqImagePanel from '@/aiq-image/AiqImagePanel.vue'
+import AiqImageView from '@/aiq-image/AiqImageView.vue'
+import AiqGamePanel from '@/aiq-game/AiqGamePanel.vue'
+import AiqGameView from '@/aiq-game/AiqGameView.vue'
 
 const PANEL_COMPONENTS: { [key: string]: any } = {
   login: LoginPanel,
@@ -25,9 +25,9 @@ const PANEL_COMPONENTS: { [key: string]: any } = {
   chat_bot: ChatBotPanel,
   amq_game_room_list: GameRoomListPanel,
   amq_game: AmqGamePanel,
-  awq_weapon: AwqWeaponPanel,
-  awq_game_room_list: GameRoomListPanel,
-  awq_game: AwqGamePanel
+  aiq_image: AiqImagePanel,
+  aiq_game_room_list: GameRoomListPanel,
+  aiq_game: AiqGamePanel
 }
 
 const VIEW_COMPONENTS: { [key: string]: any } = {
@@ -38,9 +38,9 @@ const VIEW_COMPONENTS: { [key: string]: any } = {
   chat_bot: ChatBotView,
   amq_game_room_list: GameRoomListView,
   amq_game: AmqGameView,
-  awq_weapon: AwqWeaponView,
-  awq_game_room_list: GameRoomListView,
-  awq_game: AwqGameView
+  aiq_image: AiqImageView,
+  aiq_game_room_list: GameRoomListView,
+  aiq_game: AiqGameView
 }
 
 export {PANEL_COMPONENTS, VIEW_COMPONENTS}

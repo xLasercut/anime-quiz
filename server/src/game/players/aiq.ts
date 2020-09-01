@@ -1,11 +1,11 @@
 import {AbstractPlayer} from './abstract'
 import {IBannerColor} from '../../../../shared/types/game'
-import {IAwqGuess, IAwqPlayer} from '../../../../shared/interfaces/awq'
+import {IAiqGuess, IAiqPlayer} from '../../../../shared/interfaces/aiq'
 
-class AwqPlayer extends AbstractPlayer {
+class AiqPlayer extends AbstractPlayer {
   public color: IBannerColor = 'error'
-  public guess: IAwqGuess = {
-    weapon: '',
+  public guess: IAiqGuess = {
+    name: '',
     anime: ''
   }
   public ready = {
@@ -19,7 +19,7 @@ class AwqPlayer extends AbstractPlayer {
 
   public reset(): void {
     this.guess = {
-      weapon: '',
+      name: '',
       anime: ''
     }
 
@@ -31,7 +31,7 @@ class AwqPlayer extends AbstractPlayer {
     this.color = 'error'
   }
 
-  public serialize(): IAwqPlayer {
+  public serialize(): IAiqPlayer {
     return {
       username: this._username,
       avatar: this._avatar,
@@ -45,4 +45,4 @@ class AwqPlayer extends AbstractPlayer {
   }
 }
 
-export {AwqPlayer}
+export {AiqPlayer}

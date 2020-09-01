@@ -1,9 +1,9 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
-import {IChatBot, IAmqChoices, IEmoji, IAmqSong, IAwqWeapon, IAwqChoices} from '../../../shared/interfaces/database'
+import {IChatBot, IAmqChoices, IEmoji, IAmqSong, IAiqImage, IAiqChoices} from '../../../shared/interfaces/database'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
-import {IAwqGameState, IAwqPlayer, IAwqSettings} from '../../../shared/interfaces/awq'
+import {IAiqGameState, IAiqPlayer, IAiqSettings} from '../../../shared/interfaces/aiq'
 
 class Emitter {
   protected _io: socketio.Server
@@ -92,32 +92,48 @@ class Emitter {
     this._client(sid).emit('UPDATE_AMQ_SETTINGS', amqSettings)
   }
 
-  public updateAwqWeaponList(weaponList: Array<IAwqWeapon>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AWQ_WEAPON_LIST', weaponList)
+  public updateAiqImageList(imageList: Array<IAiqImage>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AIQ_IMAGE_LIST', imageList)
   }
 
-  public updateAwqChoices(choices: IAwqChoices, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AWQ_CHOICES', choices)
+  public updateAiqChoices(choices: IAiqChoices, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AIQ_CHOICES', choices)
   }
 
-  public updateAwqHost(host: boolean, sid: string): void {
-    this._client(sid).emit('UPDATE_AWQ_HOST', host)
+  public updateAiqHost(host: boolean, sid: string): void {
+    this._client(sid).emit('UPDATE_AIQ_HOST', host)
   }
 
-  public updateAwqRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AWQ_GAME_ROOM_LIST', roomList)
+  public updateAiqRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
+    this._client(sid).emit('UPDATE_AIQ_GAME_ROOM_LIST', roomList)
   }
 
-  public updateAwqPlayerList(amqPlayerList: Array<IAwqPlayer>, sid: string): void {
-    this._client(sid).emit('UPDATE_AWQ_PLAYER_LIST', amqPlayerList)
+  public updateAiqPlayerList(playerList: Array<IAiqPlayer>, sid: string): void {
+    this._client(sid).emit('UPDATE_AIQ_PLAYER_LIST', playerList)
   }
 
-  public updateAwqGameState(amqGameState: IAwqGameState, sid: string): void {
-    this._client(sid).emit('UPDATE_AWQ_GAME_STATE', amqGameState)
+  public updateAiqGameState(gameState: IAiqGameState, sid: string): void {
+    this._client(sid).emit('UPDATE_AIQ_GAME_STATE', gameState)
   }
 
-  public updateAwqSettings(amqSettings: IAwqSettings, sid: string): void {
-    this._client(sid).emit('UPDATE_AWQ_SETTINGS', amqSettings)
+  public updateAiqSettings(settings: IAiqSettings, sid: string): void {
+    this._client(sid).emit('UPDATE_AIQ_SETTINGS', settings)
+  }
+
+  public aiqReset(sid: string): void {
+    this._client(sid).emit('AIQ_RESET')
+  }
+
+  public aiqNewImage(sid: string): void {
+    this._client(sid).emit('AIQ_NEW_IMAGE')
+  }
+
+  public aiqStartLoad(sid: string): void {
+    this._client(sid).emit('AIQ_START_LOAD')
+  }
+
+  public aiqStartCountdown(sid: string): void {
+    this._client(sid).emit('AIQ_START_COUNTDOWN')
   }
 
   protected _client(sid: string = null): socketio.Namespace | socketio.Server {

@@ -5,10 +5,10 @@
         disable-pagination disable-filtering disable-sort dense
         hide-default-footer
         :headers="headers"
-        :items="displayData($store.getters.filteredAwqWeaponList)"
+        :items="displayData($store.getters.filteredAiqImageList)"
       >
         <template #top>
-          <awq-weapon-list-table-filter></awq-weapon-list-table-filter>
+          <aiq-image-list-table-filter></aiq-image-list-table-filter>
         </template>
 
         <template #item.anime="{item}">
@@ -23,12 +23,12 @@
           <table-btn
             icon="mdi-pencil"
             color="warning"
-            @click="$emit('weapon:edit', item)"
+            @click="$emit('image:edit', item)"
           ></table-btn>
           <table-btn
             icon="mdi-delete"
             color="error"
-            @click="$emit('weapon:delete', item)"
+            @click="$emit('image:delete', item)"
           ></table-btn>
         </template>
 
@@ -53,17 +53,17 @@ import {defineComponent, reactive, toRefs} from '@vue/composition-api'
 import Pagination from '@/components/Pagination.vue'
 import TableBtn from '@/components/buttons/TableBtn.vue'
 import paginationApi from '@/assets/pagination'
-import AwqWeaponListTableFilter from '@/awq-weapon/AwqWeaponListTableFilter.vue'
+import AiqImageListTableFilter from '@/aiq-image/AiqImageListTableFilter.vue'
 
 export default defineComponent({
   components: {
-    Pagination, TableBtn, AwqWeaponListTableFilter
+    Pagination, TableBtn, AiqImageListTableFilter
   },
   setup(_props, context) {
     const state = reactive({
       headers: [
         {text: 'Anime', value: 'anime', sortable: false},
-        {text: 'Weapon', value: 'name', sortable: false},
+        {text: 'Name', value: 'name', sortable: false},
         {text: 'Image', value: 'src', sortable: false, width: 200},
         {text: 'Action', value: 'action', sortable: false, width: 200}
       ],

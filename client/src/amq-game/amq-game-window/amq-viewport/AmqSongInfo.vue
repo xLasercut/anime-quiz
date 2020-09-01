@@ -61,10 +61,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-.info-container {
-  max-width: 300px;
-  text-align: center;
-}
-</style>

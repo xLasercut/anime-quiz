@@ -4,7 +4,7 @@ import client from '@/store/client'
 import amq from '@/store/amq'
 import emoji from '@/store/emoji'
 import chatBot from '@/store/chat-bot'
-import awq from '@/store/awq'
+import aiq from '@/store/aiq'
 
 Vue.use(Vuex)
 
@@ -14,6 +14,6 @@ export default new Vuex.Store({
     amq: amq,
     emoji: emoji,
     chatBot: chatBot,
-    awq: awq
+    aiq: aiq
   }
 })

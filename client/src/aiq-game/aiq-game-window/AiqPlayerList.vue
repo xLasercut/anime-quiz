@@ -2,7 +2,7 @@
   <v-row justify="center">
     <player-card
       :player="player"
-      v-for="player in $store.state.awq.playerList"
+      v-for="player in $store.state.aiq.playerList"
       v-model="show"
     >
       {{ guess(player.guess) }}
@@ -14,7 +14,7 @@
 import {defineComponent, onUnmounted, reactive, toRefs} from '@vue/composition-api'
 import PlayerCard from '@/components/game/PlayerCard.vue'
 import {socket} from '@/assets/socket'
-import {IAwqGuess} from '../../../../shared/interfaces/awq'
+import {IAiqGuess} from '../../../../shared/interfaces/aiq'
 
 
 export default defineComponent({
@@ -38,19 +38,19 @@ export default defineComponent({
       socket.off('AMQ_SHOW_GUESS')
     })
 
-    function guess(guess: IAwqGuess): string {
+    function guess(guess: IAiqGuess): string {
       let anime = '...'
-      let weapon = '...'
+      let name = '...'
 
       if (guess.anime) {
         anime = guess.anime
       }
 
-      if (guess.weapon) {
-        weapon = guess.weapon
+      if (guess.name) {
+        name = guess.name
       }
 
-      return `${anime} - ${weapon}`
+      return `${anime} - ${name}`
     }
 
     return {...toRefs(state), guess}

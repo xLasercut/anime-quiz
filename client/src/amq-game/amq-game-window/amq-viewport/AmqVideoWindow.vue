@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" sm="6">
     <v-row justify="center" no-gutters>
-      <v-col class="video-container">
+      <v-col class="game-display-container">
         <amq-countdown-timer></amq-countdown-timer>
         <amq-normal-video :volume="volume"></amq-normal-video>
         <amq-youtube-video :volume="volume"></amq-youtube-video>
@@ -37,11 +37,3 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-.video-container {
-  height: 200px;
-  text-align: center;
-  padding: 10px;
-  max-width: 352px;
-}
-</style>

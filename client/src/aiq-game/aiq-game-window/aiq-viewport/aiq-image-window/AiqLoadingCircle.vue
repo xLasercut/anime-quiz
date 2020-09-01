@@ -16,22 +16,22 @@ export default defineComponent({
       show: false
     })
 
-    socket.on('AMQ_START_LOAD', (): void => {
+    socket.on('AIQ_START_LOAD', (): void => {
       state.show = true
     })
 
-    socket.on('AMQ_START_COUNTDOWN', (): void => {
+    socket.on('AIQ_START_COUNTDOWN', (): void => {
       state.show = false
     })
 
-    socket.on('AMQ_RESET', (): void => {
+    socket.on('AIQ_RESET', (): void => {
       state.show = false
     })
 
     onUnmounted(() => {
-      socket.off('AMQ_START_LOAD')
-      socket.off('AMQ_START_COUNTDOWN')
-      socket.off('AMQ_RESET')
+      socket.off('AIQ_START_LOAD')
+      socket.off('AIQ_START_COUNTDOWN')
+      socket.off('AIQ_RESET')
     })
 
     return {...toRefs(state)}

@@ -17,10 +17,10 @@ import {ChatManager} from './game/chat'
 import {EmojiHandler} from './handlers/emoji'
 import {AmqGameController} from './game/controllers/amq'
 import {GeneralGameHandler} from './handlers/room'
-import {AwqWeaponDatabase} from './database/awq-weapon'
-import {AwqWeaponListHandler} from './handlers/awq-weapon-list'
-import {AwqHandler} from './handlers/awq'
-import {AwqGameController} from './game/controllers/awq'
+import {AiqImageDatabase} from './database/aiq-image'
+import {AiqImageListHandler} from './handlers/aiq-image-list'
+import {AiqHandler} from './handlers/aiq'
+import {AiqGameController} from './game/controllers/aiq'
 
 
 const logger = new Logger()
@@ -37,21 +37,21 @@ const amqSongDatabase = new AmqSongDatabase()
 const amqUserSongDatabase = new AmqUserSongDatabase(amqSongDatabase)
 const emojiDatabase = new EmojiDatabase()
 const chatBotDatabase = new ChatBotDatabase()
-const awqWeaponDatabase = new AwqWeaponDatabase()
+const aiqImageDatabase = new AiqImageDatabase()
 
 const chatManager = new ChatManager(logger, chatBotDatabase, emojiDatabase)
 const amqGameController = new AmqGameController(io)
-const awqGameController = new AwqGameController(io)
+const aiqGameController = new AiqGameController(io)
 
 const generalGameHandler = new GeneralGameHandler(logger, emitter)
 const amqSongListHandler = new AmqSongListHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase)
 const emojiHandler = new EmojiHandler(logger, emitter, emojiDatabase)
 const chatBotHandler = new ChatBotHandler(logger, emitter, chatBotDatabase)
-const adminHandler = new AdminHandler(io, logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase, awqWeaponDatabase)
-const awqWeaponListHandler = new AwqWeaponListHandler(logger, emitter, awqWeaponDatabase)
+const adminHandler = new AdminHandler(io, logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase, aiqImageDatabase)
+const aiqImageListHandler = new AiqImageListHandler(logger, emitter, aiqImageDatabase)
 
 const amqHandler = new AmqHandler(logger, emitter, amqGameController, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)
-const awqHandler = new AwqHandler(logger, emitter, awqWeaponDatabase, chatManager, emojiDatabase, awqGameController)
+const aiqHandler = new AiqHandler(logger, emitter, aiqImageDatabase, chatManager, emojiDatabase, aiqGameController)
 
 
 io.on('connect', (socket: ISocket) => {
@@ -84,8 +84,8 @@ function startHandlers(socket: ISocket): void {
     emojiHandler.start(socket, exceptionHandler)
     chatBotHandler.start(socket, exceptionHandler)
     amqHandler.start(socket, exceptionHandler)
-    awqWeaponListHandler.start(socket, exceptionHandler)
-    awqHandler.start(socket, exceptionHandler)
+    aiqImageListHandler.start(socket, exceptionHandler)
+    aiqHandler.start(socket, exceptionHandler)
 
     if (socket.admin) {
       emitter.updateAdmin(socket.admin, socket.id)

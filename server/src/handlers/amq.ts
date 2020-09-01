@@ -194,7 +194,6 @@ class AmqHandler extends AbstractHandler {
     this._controller.newRound(roomId)
     this._emitter.updateAmqPlayerList(this._controller.getPlayerList(roomId), roomId)
     await this._amqFlowMain(roomId)
-
   }
 
   protected async _amqFlowMain(roomId: string): Promise<any> {

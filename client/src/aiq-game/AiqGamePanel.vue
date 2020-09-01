@@ -22,16 +22,16 @@ export default defineComponent({
     const store = context.root.$store
 
     function showPlayBtn(): boolean {
-      return (!store.state.awq.gameState.playing && (store.state.client.admin || store.state.awq.host))
+      return (!store.state.aiq.gameState.playing && (store.state.client.admin || store.state.aiq.host))
     }
 
     function showStopBtn(): boolean {
-      return (store.state.awq.gameState.playing && (store.state.client.admin || store.state.awq.host))
+      return (store.state.aiq.gameState.playing && (store.state.client.admin || store.state.aiq.host))
     }
 
     function showSettings(): void {
-      socket.emit('GET_AWQ_SETTINGS')
-      EventBus.$emit('GLOBAL_DIALOG', 'awqSettings', 'AWQ Settings')
+      socket.emit('GET_AIQ_SETTINGS')
+      EventBus.$emit('GLOBAL_DIALOG', 'aiqSettings', 'AIQ Settings')
     }
 
     return {showPlayBtn, showStopBtn, showSettings}

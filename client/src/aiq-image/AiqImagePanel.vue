@@ -15,8 +15,8 @@ export default defineComponent({
   },
   setup(_props, context) {
     function reload(): void {
-      context.root.$store.commit('SOCKET_UPDATE_AWQ_WEAPON_LIST', [])
-      socket.emit('GET_AWQ_WEAPON_LIST')
+      context.root.$store.commit('SOCKET_UPDATE_AIQ_IMAGE_LIST', [])
+      socket.emit('GET_AIQ_IMAGE_LIST')
     }
 
     return {reload}

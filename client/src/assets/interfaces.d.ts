@@ -1,7 +1,7 @@
 import {IRoomSerial} from '../../../shared/interfaces/game'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
-import {IAmqChoices, IAmqSong, IAwqChoices, IAwqWeapon, IChatBot, IEmoji} from '../../../shared/interfaces/database'
-import {IAwqGameState, IAwqPlayer, IAwqSettings} from '../../../shared/interfaces/awq'
+import {IAmqChoices, IAmqSong, IAiqChoices, IAiqImage, IChatBot, IEmoji} from '../../../shared/interfaces/database'
+import {IAiqGameState, IAiqPlayer, IAiqSettings} from '../../../shared/interfaces/aiq'
 
 interface IRootStoreState {
 }
@@ -57,19 +57,19 @@ interface IAvatar {
   src: string
 }
 
-interface IAwqStoreState {
+interface IAiqStoreState {
   host: boolean
-  weaponList: Array<IAwqWeapon>
-  choices: IAwqChoices
-  weaponListFilter: IAwqWeaponListFilter
-  settings: IAwqSettings
-  gameState: IAwqGameState
-  playerList: Array<IAwqPlayer>
+  imageList: Array<IAiqImage>
+  choices: IAiqChoices
+  imageListFilter: IAiqImageListFilter
+  settings: IAiqSettings
+  gameState: IAiqGameState
+  playerList: Array<IAiqPlayer>
 }
 
-interface IAwqWeaponListFilter {
+interface IAiqImageListFilter {
   anime: string
-  weapon: string
+  name: string
 }
 
 interface ILobbyCard {
@@ -91,8 +91,8 @@ export {
   IEmojiListFilter,
   IChatBotStoreState,
   IChatBotListFilter,
-  IAwqStoreState,
+  IAiqStoreState,
   IAvatar,
-  IAwqWeaponListFilter,
+  IAiqImageListFilter,
   ILobbyCard
 }

@@ -54,6 +54,18 @@ export default defineComponent({
   background-color: var(--v-background-darken1) !important;
 }
 
+.info-container {
+  max-width: 300px;
+  text-align: center;
+}
+
+.game-display-container {
+  height: 200px;
+  text-align: center;
+  padding: 10px;
+  max-width: 352px;
+}
+
 .v-application {
   background-color: var(--v-background-base) !important;
 }

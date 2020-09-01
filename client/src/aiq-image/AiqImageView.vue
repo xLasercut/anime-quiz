@@ -4,18 +4,18 @@
       <v-container fluid>
         <v-row justify="center">
           <v-col cols="auto">
-            <icon-btn icon="mdi-plus" color="success" @click="openDialog(null)">Add Weapon</icon-btn>
+            <icon-btn icon="mdi-plus" color="success" @click="openDialog(null)">Add Image</icon-btn>
           </v-col>
         </v-row>
-        <awq-weapon-list-table
-          @weapon:edit="openDialog($event)"
-          @weapon:delete="deleteGameWeapon($event)"
-        ></awq-weapon-list-table>
+        <aiq-image-list-table
+          @image:edit="openDialog($event)"
+          @image:delete="deleteGameImage($event)"
+        ></aiq-image-list-table>
         <game-dialog
-          label="Weapon Editor"
+          label="Image Editor"
           v-model="show"
         >
-          <v-form v-model="valid" @submit.prevent="confirmWeaponEdit()">
+          <v-form v-model="valid" @submit.prevent="confirmImageEdit()">
             <v-row justify="center" dense>
               <v-col cols="auto">
                 <v-img :src="form.src" width="100px"></v-img>
@@ -23,7 +23,7 @@
               <dialog-multi-select
                 label="Anime"
                 v-model="form.anime"
-                :items="$store.state.awq.choices.anime"
+                :items="$store.state.aiq.choices.anime"
                 :rules="animeRules"
               ></dialog-multi-select>
               <dialog-text
@@ -47,20 +47,20 @@
 
 <script lang="ts">
 import {defineComponent, reactive, toRefs} from '@vue/composition-api'
-import AwqWeaponListTable from '@/awq-weapon/AwqWeaponListTable.vue'
 import IconBtn from '@/components/buttons/IconBtn.vue'
 import GameDialog from '@/components/GameDialog.vue'
-import {IAwqWeapon} from '../../../shared/interfaces/database'
+import {IAiqImage} from '../../../shared/interfaces/database'
 import DialogText from '@/components/dialog/DialogText.vue'
 import DialogConfirmBtn from '@/components/dialog/DialogConfirmBtn.vue'
 import DialogMultiSelect from '@/components/dialog/DialogMultiSelect.vue'
 import {socket} from '@/assets/socket'
+import AiqImageListTable from '@/aiq-image/AiqImageListTable.vue'
 
 export default defineComponent({
   components: {
-    AwqWeaponListTable, IconBtn, GameDialog, DialogText, DialogConfirmBtn, DialogMultiSelect
+    AiqImageListTable, IconBtn, GameDialog, DialogText, DialogConfirmBtn, DialogMultiSelect
   },
-  setup(_props, context) {
+  setup(_props, _context) {
     const state = reactive({
       show: false,
       valid: false,
@@ -78,16 +78,16 @@ export default defineComponent({
       showOverlay: false
     })
 
-    function getDefaultForm(): IAwqWeapon {
+    function getDefaultForm(): IAiqImage {
       return {
         anime: [],
         name: '',
         src: '',
-        weaponId: ''
+        imageId: ''
       }
     }
 
-    function openDialog(weapon: IAwqWeapon | null): void {
+    function openDialog(weapon: IAiqImage | null): void {
       if (weapon) {
         state.form = Object.assign({}, weapon)
         state.isEdit = true
@@ -99,23 +99,23 @@ export default defineComponent({
       state.show = true
     }
 
-    function confirmWeaponEdit(): void {
+    function confirmImageEdit(): void {
       if (state.valid && state.show) {
         if (state.isEdit) {
-          socket.emit('EDIT_AWQ_GAME_WEAPON', state.form)
+          socket.emit('EDIT_AIQ_GAME_IMAGE', state.form)
         }
         else {
-          socket.emit('ADD_AWQ_GAME_WEAPON', state.form)
+          socket.emit('ADD_AIQ_GAME_IMAGE', state.form)
         }
         state.show = false
       }
     }
 
-    function deleteGameWeapon(weapon: IAwqWeapon): void {
-      socket.emit('DELETE_AWQ_GAME_WEAPON', weapon)
+    function deleteGameImage(image: IAiqImage): void {
+      socket.emit('DELETE_AIQ_GAME_IMAGE', image)
     }
 
-    return {...toRefs(state), openDialog, confirmWeaponEdit, deleteGameWeapon}
+    return {...toRefs(state), openDialog, confirmImageEdit, deleteGameImage}
   }
 })
 </script>
