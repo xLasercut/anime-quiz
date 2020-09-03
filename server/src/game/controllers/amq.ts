@@ -55,17 +55,6 @@ class AmqGameController extends AbstractGameController {
     })
   }
 
-  public async startTimeout(roomId: string, time: number): Promise<any> {
-    this._validateRoomIdExists(roomId)
-    this._resetTimeout(roomId)
-    return new Promise((resolve, reject) => {
-      this._rooms[roomId].timeout = setTimeout(() => {
-        this._resetTimeout(roomId)
-        resolve(true)
-      }, time)
-    })
-  }
-
   protected _allPlayerReady(roomId: string, readyType: IAmqReadyType): boolean {
     this._validateRoomIdExists(roomId)
     for (let socketId of Array.from(this._rooms[roomId].players)) {

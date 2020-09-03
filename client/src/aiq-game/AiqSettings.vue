@@ -20,12 +20,14 @@
         :value="$store.state.aiq.settings.minFactor"
         @input="updateAiqSettings('minFactor', $event)"
         :disabled="disabled()"
+        :rules="minFactorRules"
       ></dialog-slider>
       <dialog-slider
         label="Max Blur Factor" min="5" max="200"
         :value="$store.state.aiq.settings.maxFactor"
         @input="updateAiqSettings('maxFactor', $event)"
         :disabled="disabled()"
+        :rules="maxFactorRules"
       ></dialog-slider>
       <dialog-radio
         label="Duplicate"
@@ -59,10 +61,10 @@ export default defineComponent({
         {label: 'No', value: false}
       ],
       minFactorRules: [
-
+        (v) => v < context.root.$store.state.aiq.settings.maxFactor || 'Min factor must be smaller than max factor'
       ],
       maxFactorRules: [
-
+        (v) => v > context.root.$store.state.aiq.settings.minFactor || 'Max factor must be greater than min factor'
       ]
     })
 
@@ -73,8 +75,10 @@ export default defineComponent({
     }
 
     function confirmSettingChange(): void {
-      socket.emit('UPDATE_AIQ_SETTINGS', context.root.$store.state.aiq.settings)
-      context.emit('dialog:close')
+      if (state.valid) {
+        socket.emit('UPDATE_AIQ_SETTINGS', context.root.$store.state.aiq.settings)
+        context.emit('dialog:close')
+      }
     }
 
     function disabled(): boolean {

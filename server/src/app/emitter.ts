@@ -136,6 +136,14 @@ class Emitter {
     this._client(sid).emit('AIQ_START_COUNTDOWN')
   }
 
+  public aiqTimeUp(sid: string): void {
+    this._client(sid).emit('AIQ_TIME_UP')
+  }
+
+  public aiqShowGuess(sid: string): void {
+    this._client(sid).emit('AIQ_SHOW_GUESS')
+  }
+
   protected _client(sid: string = null): socketio.Namespace | socketio.Server {
     if (sid) {
       return this._io.to(sid)

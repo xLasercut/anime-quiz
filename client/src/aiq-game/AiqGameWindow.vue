@@ -31,20 +31,20 @@ export default defineComponent({
     })
 
     const answer = computed(() => {
-      return `${context.root.$store.state.aiq.gameState.currentImage.anime[0]}\n${context.root.$store.state.aiq.gameState.currentImage.name}`
+      return context.root.$store.state.aiq.gameState.currentImage.anime[0]
     })
 
     socket.on('AIQ_NEW_IMAGE', (): void => {
       state.show = false
     })
 
-    socket.on('AMQ_TIME_UP', (): void => {
+    socket.on('AIQ_TIME_UP', (): void => {
       state.show = true
     })
 
     onUnmounted(() => {
       socket.off('AIQ_NEW_IMAGE')
-      socket.off('AMQ_TIME_UP')
+      socket.off('AIQ_TIME_UP')
     })
 
     return {...toRefs(state), answer}

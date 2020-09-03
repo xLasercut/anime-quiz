@@ -34,7 +34,15 @@ export default defineComponent({
       EventBus.$emit('GLOBAL_DIALOG', 'aiqSettings', 'AIQ Settings')
     }
 
-    return {showPlayBtn, showStopBtn, showSettings}
+    function startGame(): void {
+      socket.emit('START_AIQ_GAME')
+    }
+
+    function stopGame(): void {
+      socket.emit('STOP_AIQ_GAME')
+    }
+
+    return {showPlayBtn, showStopBtn, showSettings, startGame, stopGame}
   }
 })
 </script>

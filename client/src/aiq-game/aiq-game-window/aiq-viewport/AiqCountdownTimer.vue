@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="12" sm="3" align-self="center" class="countdown-container">
+  <v-col cols="12" sm="3" align-self="center" :class="classes()">
     <v-progress-circular
       :rotate="270"
       :size="100"
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onUnmounted, toRefs} from '@vue/composition-api'
+import {defineComponent, onUnmounted, reactive, toRefs} from '@vue/composition-api'
 import {socket} from '@/assets/socket'
 import {countdownApi} from '@/assets/countdown'
 
@@ -25,7 +25,7 @@ export default defineComponent({
       startCountdown(context.root.$store.state.aiq.settings.guessTime)
     })
 
-    socket.on('AMQ_TIME_UP', (): void => {
+    socket.on('AIQ_TIME_UP', (): void => {
       stopCountdown()
     })
 
@@ -35,11 +35,21 @@ export default defineComponent({
 
     onUnmounted(() => {
       socket.off('AIQ_START_COUNTDOWN')
-      socket.off('AMQ_TIME_UP')
+      socket.off('AIQ_TIME_UP')
       socket.off('AIQ_RESET')
     })
 
-    return {...toRefs(state), countdownColor, countdownPercentage}
+    function classes(): string {
+      let classes = ['countdown-container']
+
+      if (!state.show) {
+        classes.push('countdown-hidden')
+      }
+
+      return classes.join(' ')
+    }
+
+    return {...toRefs(state), countdownColor, countdownPercentage, classes}
   }
 })
 </script>
@@ -49,5 +59,10 @@ export default defineComponent({
   height: 100%;
   text-align: center;
   max-width: 150px;
+}
+
+.countdown-hidden {
+  position: absolute;
+  top: -200%;
 }
 </style>

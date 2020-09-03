@@ -31,17 +31,17 @@ export default defineComponent({
       state.anime = ''
     })
 
-    socket.on('AMQ_TIME_UP', (): void => {
+    socket.on('AIQ_TIME_UP', (): void => {
       let guess = {
-        title: state.name.trim(),
+        name: state.name.trim(),
         anime: state.anime.trim()
       }
-      socket.emit('AMQ_GUESS', guess)
+      socket.emit('AIQ_GUESS', guess)
     })
 
     onUnmounted(() => {
       socket.off('AIQ_NEW_IMAGE')
-      socket.off('AMQ_TIME_UP')
+      socket.off('AIQ_TIME_UP')
     })
 
     return {...toRefs(state)}

@@ -10,7 +10,7 @@ function countdownApi() {
 
   let countdown: any = null
 
-  function startCountdown(time: number): void {
+  function startCountdown(time: number, f: Function | null = null): void {
     state.show = true
     state.time = time
     state.maxTime = time
@@ -18,6 +18,9 @@ function countdownApi() {
       state.time -= 1
       if (state.time <= 0) {
         stopCountdown()
+      }
+      else if (f) {
+          f()
       }
     }, 1000)
   }

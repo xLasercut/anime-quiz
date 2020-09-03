@@ -1,7 +1,7 @@
 import {IAiqStoreState, IAiqImageListFilter, IRootStoreState} from '@/assets/interfaces'
 import {Module} from 'vuex'
 import {IAiqChoices, IAiqImage} from '../../../shared/interfaces/database'
-import {IAiqPlayer, IAiqSettings} from '../../../shared/interfaces/aiq'
+import {IAiqGameState, IAiqPlayer, IAiqSettings} from '../../../shared/interfaces/aiq'
 
 function _getDefaultState(): IAiqStoreState {
   return {
@@ -60,6 +60,9 @@ const aiq: Module<IAiqStoreState, IRootStoreState> = {
     },
     SOCKET_UPDATE_AIQ_SETTINGS(state: IAiqStoreState, settings: IAiqSettings): void {
       state.settings = settings
+    },
+    SOCKET_UPDATE_AIQ_GAME_STATE(state: IAiqStoreState, gameState: IAiqGameState): void {
+      state.gameState = gameState
     }
   },
   getters: {
@@ -95,6 +98,10 @@ const aiq: Module<IAiqStoreState, IRootStoreState> = {
           return -1
         })
     },
+    factorDecreaseRate: (state: IAiqStoreState): number => {
+      let factorRange = state.settings.maxFactor - state.settings.minFactor
+      return factorRange / state.settings.guessTime
+    }
   }
 }
 

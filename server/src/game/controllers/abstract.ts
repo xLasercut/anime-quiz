@@ -101,6 +101,17 @@ class AbstractGameController {
     return Array.from(this._rooms[roomId].players)[0]
   }
 
+  public async startTimeout(roomId: string, time: number): Promise<any> {
+    this._validateRoomIdExists(roomId)
+    this._resetTimeout(roomId)
+    return new Promise((resolve, reject) => {
+      this._rooms[roomId].timeout = setTimeout(() => {
+        this._resetTimeout(roomId)
+        resolve(true)
+      }, time)
+    })
+  }
+
   protected _validateRoomIdNotExists(roomId: string): void {
     if (roomId in this._rooms) {
       throw new GameDataError('Room ID already in use')

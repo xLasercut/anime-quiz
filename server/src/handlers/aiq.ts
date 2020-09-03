@@ -7,7 +7,8 @@ import {ChatManager} from '../game/chat'
 import {EmojiDatabase} from '../database/emoji'
 import {AiqImageDatabase} from '../database/aiq-image'
 import {AiqPlayer} from '../game/players/aiq'
-import {IAiqSettings} from '../../../shared/interfaces/aiq'
+import {IAiqGuess, IAiqSettings} from '../../../shared/interfaces/aiq'
+
 
 class AiqHandler extends AbstractHandler {
   protected _imageDatabase: AiqImageDatabase
@@ -112,9 +113,22 @@ class AiqHandler extends AbstractHandler {
       this._generateGameList(roomId)
     }))
 
-    socket.on('STOP_AWQ_GAME', exceptionHandler(socket, (): void => {
+    socket.on('STOP_AIQ_GAME', exceptionHandler(socket, (): void => {
       let roomId = this._controller.getRoomId(socket.id)
       this._resetAiq(roomId)
+    }))
+
+    socket.on('AIQ_SONG_LOADED', exceptionHandler(socket, (): void => {
+      socket.player.ready.load = true
+    }))
+
+    socket.on('AIQ_GUESS', exceptionHandler(socket, (guess: IAiqGuess): void => {
+      let roomId = this._controller.getRoomId(socket.id)
+      socket.player.guess = guess
+      let {point, color} = this._controller.getRoom(roomId).state.calculateScore(guess)
+      socket.player.score += point
+      socket.player.color = color
+      socket.player.ready.guess = true
     }))
   }
 
@@ -174,18 +188,18 @@ class AiqHandler extends AbstractHandler {
     this._emitter.aiqStartLoad(roomId)
     await this._controller.startCountdown(roomId, 5000, 'load')
     this._emitter.aiqStartCountdown(roomId)
-   /* await this._controller.startTimeout(roomId, settings.guessTime * 1000)
-    this._emitter.amqTimeUp(roomId)
+    await this._controller.startTimeout(roomId, settings.guessTime * 1000)
+    this._emitter.aiqTimeUp(roomId)
     await this._controller.startCountdown(roomId, 5000, 'guess')
-    this._emitter.updateAmqPlayerList(this._controller.getPlayerList(roomId), roomId)
-    this._emitter.amqShowGuess(roomId)
-    if (this._controller.getRoom(roomId).state.currentSongCount >= this._controller.getRoom(roomId).state.maxSongCount) {
-      this._resetAmq(roomId)
+    this._emitter.updateAiqPlayerList(this._controller.getPlayerList(roomId), roomId)
+    this._emitter.aiqShowGuess(roomId)
+    if (this._controller.getRoom(roomId).state.currentImageCount >= this._controller.getRoom(roomId).state.maxImageCount) {
+      this._resetAiq(roomId)
     }
     else {
       await this._controller.startTimeout(roomId, 10000)
       await this._newRound(roomId)
-    }*/
+    }
 
   }
 

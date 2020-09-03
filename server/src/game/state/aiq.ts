@@ -21,7 +21,7 @@ class AiqGameState extends AbstractGameState {
     let dupes: Set<string> = new Set()
     let weaponCount = settings.imageCount
     let duplicate = settings.duplicate
-    let gameImageList = imageList
+    let gameImageList = [].concat(imageList)
 
     this._addToGameList(gameImageList, weaponCount, dupes, duplicate)
   }
@@ -43,18 +43,18 @@ class AiqGameState extends AbstractGameState {
     this.currentImageCount += 1
   }
 
-  public calculateScore(amqGuess: IAiqGuess) {
+  public calculateScore(guess: IAiqGuess) {
     let point = 0
     let color: IBannerColor = 'error'
     let animes = this.currentImage.anime.map((anime: string) => {
       return anime.toLowerCase()
     })
 
-    if (amqGuess.anime && animes.includes(amqGuess.anime.toLowerCase())) {
+    if (guess.anime && animes.includes(guess.anime.toLowerCase())) {
       point += 1
     }
 
-    if (amqGuess.name && amqGuess.name.toLowerCase() === this.currentImage.name.toLowerCase()) {
+    if (guess.name && guess.name.toLowerCase() === this.currentImage.name.toLowerCase()) {
       point += 1
     }
 

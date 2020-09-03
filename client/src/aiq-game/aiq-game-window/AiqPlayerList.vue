@@ -26,7 +26,7 @@ export default defineComponent({
       show: false
     })
 
-    socket.on('AMQ_SHOW_GUESS', (): void => {
+    socket.on('AIQ_SHOW_GUESS', (): void => {
       state.show = true
 
       setTimeout(() => {
@@ -35,7 +35,7 @@ export default defineComponent({
     })
 
     onUnmounted(() => {
-      socket.off('AMQ_SHOW_GUESS')
+      socket.off('AIQ_SHOW_GUESS')
     })
 
     function guess(guess: IAiqGuess): string {
