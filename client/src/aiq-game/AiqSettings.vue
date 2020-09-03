@@ -61,10 +61,10 @@ export default defineComponent({
         {label: 'No', value: false}
       ],
       minFactorRules: [
-        (v) => v < context.root.$store.state.aiq.settings.maxFactor || 'Min factor must be smaller than max factor'
+        (v: number) => v < context.root.$store.state.aiq.settings.maxFactor || 'Min factor must be smaller than max factor'
       ],
       maxFactorRules: [
-        (v) => v > context.root.$store.state.aiq.settings.minFactor || 'Max factor must be greater than min factor'
+        (v: number) => v > context.root.$store.state.aiq.settings.minFactor || 'Max factor must be greater than min factor'
       ]
     })
 
