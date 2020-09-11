@@ -66,7 +66,7 @@ io.on('connect', (socket: ISocket) => {
     checkPassword(socket, password)
     startHandlers(socket)
     if (!socket.auth) {
-      emitter.systemNotification('error', 'Incorrect server password')
+      emitter.systemNotification('error', 'Incorrect server password', socket.id)
     }
     callback(socket.auth)
   }))
