@@ -17906,7 +17906,7 @@
     "anime": [
       "Evangelion: 1.0 You Are (Not) Alone"
     ],
-    "src": "https://www.youtube.com/watch?v=f9Wh8DgWDts",
+    "src": "https://www.youtube.com/watch?v=jm08XffC_Qs",
     "title": "Angel of Doom",
     "artist": "",
     "type": "Insert"
@@ -64557,7 +64557,8 @@
   {
     "songId": "d904d90d-d9eb-4b62-b3bf-4a01cefb714f",
     "anime": [
-      "Shokugeki no Souma: Shin no Sara"
+      "Shokugeki no Souma: Shin no Sara",
+      "Food Wars! The Fourth Plate"
     ],
     "src": "https://animethemes.moe/video/ShokugekiNoSoumaShinNoSara-OP1.webm",
     "title": "Chronos",
@@ -64567,7 +64568,8 @@
   {
     "songId": "1fc90c13-155a-4f7f-b38d-4b9e518951bc",
     "anime": [
-      "Shokugeki no Souma: Shin no Sara"
+      "Shokugeki no Souma: Shin no Sara",
+      "Food Wars! The Fourth Plate"
     ],
     "src": "https://animethemes.moe/video/ShokugekiNoSoumaShinNoSara-ED1.webm",
     "title": "Emblem",
@@ -80297,5 +80299,37 @@
     "title": "dual existence",
     "artist": "",
     "type": "OP"
+  },
+  {
+    "anime": [
+      "Shokugeki no Souma: Gou no Sara",
+      "Food Wars! The Fifth Plate"
+    ],
+    "title": "Last Chapter",
+    "src": "https://animethemes.moe/video/ShokugekiNoSoumaGouNoSara-OP1.webm",
+    "artist": "",
+    "type": "OP",
+    "songId": "c4b0819f-f9d5-457c-a04f-653351c94e57"
+  },
+  {
+    "anime": [
+      "Shokugeki no Souma: Gou no Sara",
+      "Food Wars! The Fifth Plate"
+    ],
+    "title": "Crossing Road",
+    "src": "https://animethemes.moe/video/ShokugekiNoSoumaGouNoSara-ED1.webm",
+    "artist": "",
+    "type": "ED",
+    "songId": "aa1a7684-1da2-4524-91fe-8fa3b6ea6809"
+  },
+  {
+    "anime": [
+      "Sword Art Online: Alicization - War of Underworld"
+    ],
+    "title": "ANIMA",
+    "src": "https://animethemes.moe/video/SwordArtOnlineAlicizationS3-OP1.webm",
+    "artist": "",
+    "type": "OP",
+    "songId": "ffd06090-4365-4b2c-9835-7bcedff57f1d"
   }
 ]
