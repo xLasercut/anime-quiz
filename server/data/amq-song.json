@@ -80331,5 +80331,38 @@
     "artist": "",
     "type": "OP",
     "songId": "ffd06090-4365-4b2c-9835-7bcedff57f1d"
+  },
+  {
+    "anime": [
+      "Tower of God",
+      "Kami no Tou"
+    ],
+    "title": "TOP",
+    "src": "https://animethemes.moe/video/KamiNoTouDub-OP1.webm",
+    "artist": "",
+    "type": "OP",
+    "songId": "e393300a-4f17-4664-81d2-cb900c73f391"
+  },
+  {
+    "anime": [
+      "Tower of God",
+      "Kami no Tou"
+    ],
+    "title": "SLUMP",
+    "src": "https://animethemes.moe/video/KamiNoTouDub-ED1.webm",
+    "artist": "",
+    "type": "ED",
+    "songId": "b7c5eb77-2201-46ef-8ac8-1ad32537eec5"
+  },
+  {
+    "anime": [
+      "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen",
+      "Kaguya-sama: Love is War Season 2"
+    ],
+    "title": "DADDY! DADDY! DO!",
+    "src": "https://animethemes.moe/video/KaguyaSamaWaKokurasetaiS2-OP1.webm",
+    "artist": "",
+    "type": "OP",
+    "songId": "4db32751-9623-4812-9095-117dab936b90"
   }
 ]
