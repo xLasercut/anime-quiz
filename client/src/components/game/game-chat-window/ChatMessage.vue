@@ -14,21 +14,18 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from '@vue/composition-api'
+import {computed, defineComponent, PropType} from '@vue/composition-api'
 import GameAvatar from '@/components/GameAvatar.vue'
 import {IChat} from '../../../../../shared/interfaces/game'
 
-interface IProps {
-  message: IChat
-}
-
-export default defineComponent<IProps>({
+export default defineComponent({
   components: {
     GameAvatar
   },
   props: {
     message: {
-      required: true
+      required: true,
+      type: Object as PropType<IChat>
     }
   },
   setup(props, _context) {

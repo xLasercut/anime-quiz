@@ -28,21 +28,18 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from '@vue/composition-api'
+import {computed, defineComponent, PropType} from '@vue/composition-api'
 import IconBtn from '@/components/buttons/IconBtn.vue'
 import {ILobbyCard} from '@/assets/interfaces'
 
-interface IProp {
-  card: ILobbyCard
-}
-
-export default defineComponent<IProp>({
+export default defineComponent({
   components: {
     IconBtn
   },
   props: {
     card: {
-      required: true
+      required: true,
+      type: Object as PropType<ILobbyCard>
     }
   },
   setup(props, context) {

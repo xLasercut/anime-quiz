@@ -6,18 +6,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from '@vue/composition-api'
+import {defineComponent, PropType} from '@vue/composition-api'
 import {IEmoji} from '../../../shared/interfaces/database'
 
-
-interface IProp {
-  emoji: IEmoji
-}
-
-export default defineComponent<IProp>({
+export default defineComponent({
   props: {
     emoji: {
-      required: true
+      required: true,
+      type: Object as PropType<IEmoji>
     }
   }
 })
