@@ -16,14 +16,14 @@
         :disabled="disabled()"
       ></dialog-slider>
       <dialog-slider
-        label="Min Blur Factor" min="5" max="200"
+        label="Min Blur Factor" min="5" max="100"
         :value="$store.state.aiq.settings.minFactor"
         @input="updateAiqSettings('minFactor', $event)"
         :disabled="disabled()"
         :rules="minFactorRules"
       ></dialog-slider>
       <dialog-slider
-        label="Max Blur Factor" min="5" max="200"
+        label="Max Blur Factor" min="5" max="100"
         :value="$store.state.aiq.settings.maxFactor"
         @input="updateAiqSettings('maxFactor', $event)"
         :disabled="disabled()"
