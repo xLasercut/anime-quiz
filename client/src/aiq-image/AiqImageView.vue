@@ -87,9 +87,9 @@ export default defineComponent({
       }
     }
 
-    function openDialog(weapon: IAiqImage | null): void {
-      if (weapon) {
-        state.form = Object.assign({}, weapon)
+    function openDialog(image: IAiqImage | null): void {
+      if (image) {
+        state.form = Object.assign({}, image)
         state.isEdit = true
       }
       else {
