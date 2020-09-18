@@ -54703,7 +54703,7 @@
     "anime": [
       "Pokemon Advanced Generation"
     ],
-    "src": "https://www.youtube.com/watch?v=-7aISWhDJNE",
+    "src": "https://www.youtube.com/watch?v=aPptE7CiEzs",
     "title": "I Wanna Be a Hero",
     "artist": "",
     "type": "OP"
@@ -80364,5 +80364,36 @@
     "artist": "",
     "type": "OP",
     "songId": "4db32751-9623-4812-9095-117dab936b90"
+  },
+  {
+    "anime": [
+      "Great Pretender"
+    ],
+    "title": "The Great Pretender",
+    "src": "https://www.youtube.com/watch?v=Vk86fxEklq8",
+    "artist": "Freddie Mercury",
+    "type": "ED",
+    "songId": "c3365afc-1da6-499e-a223-cee573641834"
+  },
+  {
+    "anime": [
+      "Sword Art Online: Alicization",
+      "Sword Art Online: Alicization - War of Underworld"
+    ],
+    "title": "She Was Sitting Under The Osmanthus Tree",
+    "src": "https://www.youtube.com/watch?v=5d0iAU2H-eY",
+    "artist": "",
+    "type": "Insert",
+    "songId": "e1cf0833-e78e-4b11-ad97-de63ddc47498"
+  },
+  {
+    "anime": [
+      "JoJo no Kimyou na Bouken: Ougon no Kaze"
+    ],
+    "title": "~Giorno's Theme~ Il vento d'oro",
+    "src": "https://www.youtube.com/watch?v=2MtOpB5LlUA",
+    "artist": "",
+    "type": "Insert",
+    "songId": "561854aa-977a-4d9a-83e3-7e0b5bc27b23"
   }
 ]
