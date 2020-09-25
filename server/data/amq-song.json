@@ -80395,5 +80395,16 @@
     "artist": "",
     "type": "Insert",
     "songId": "561854aa-977a-4d9a-83e3-7e0b5bc27b23"
+  },
+  {
+    "anime": [
+      "Sword Art Online: Alicization",
+      "Sword Art Online: Alicization - War of Underworld"
+    ],
+    "title": "Blue Rose Sword Battle",
+    "src": "https://www.youtube.com/watch?v=eRNPp1mbV2s",
+    "artist": "",
+    "type": "Insert",
+    "songId": "a2b36139-7b63-4f61-b431-5088bed69431"
   }
 ]
