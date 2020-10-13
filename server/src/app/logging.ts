@@ -97,16 +97,6 @@ const LOG_BASE = {
     level: LOG_LEVEL.INFO,
     template: 'amq list data operation - id="{{id}}" operation="{{operation}}" songId="{{songId}}" anime="{{anime}}" src="{{src}}" title="{{title}}" artist="{{artist}}" type="{{type}}"'
   },
-  LIST004: {
-    code: 'LIST004',
-    level: LOG_LEVEL.INFO,
-    template: 'aiq list data request - id="{{id}}"'
-  },
-  LIST005: {
-    code: 'LIST005',
-    level: LOG_LEVEL.INFO,
-    template: 'aiq list data operation - id="{{id}}" operation="{{operation}}" imageId="{{imageId}}" anime="{{anime}}" src="{{src}}" name="{{name}}"'
-  },
   EMOJI001: {
     code: 'EMOJI001',
     level: LOG_LEVEL.INFO,
@@ -142,16 +132,6 @@ const LOG_BASE = {
     level: LOG_LEVEL.INFO,
     template: 'amq setting update - id="{{id}}" username="{{username}}" songCount="{{songCount}}" guessTime="{{guessTime}}" gameMode="{{gameMode}}" users="{{users}}" duplicate="{{duplicate}}" leastPlayed="{{leastPlayed}}"'
   },
-  SETTING003: {
-    code: 'SETTING003',
-    level: LOG_LEVEL.INFO,
-    template: 'aiq setting request - id="{{id}}" username="{{username}}"'
-  },
-  SETTING004: {
-    code: 'SETTING004',
-    level: LOG_LEVEL.INFO,
-    template: 'aiq setting request - id="{{id}}" username="{{username}}" imageCount="{{imageCount}}" guessTime="{{guessTime}}" duplicate="{{duplicate}}"'
-  },
   GAME001: {
     code: 'GAME001',
     level: LOG_LEVEL.INFO,
@@ -171,22 +151,7 @@ const LOG_BASE = {
     code: 'GAME004',
     level: LOG_LEVEL.INFO,
     template: 'amq room list request - id="{{id}}"'
-  },
-  GAME005: {
-    code: 'GAME005',
-    level: LOG_LEVEL.INFO,
-    template: 'aiq room list request - id="{{id}}"'
-  },
-  GAME006: {
-    code: 'GAME006',
-    level: LOG_LEVEL.INFO,
-    template: 'aiq new game - roomId="{{roomId}}" imageCount="{{imageCount}}"'
-  },
-  GAME007: {
-    code: 'GAME007',
-    level: LOG_LEVEL.INFO,
-    template: 'aiq new image - roomId="{{roomId}}" imageId="{{imageId}}" anime="{{anime}}" src="{{src}}" name="{{name}}"'
-  },
+  }
 }
 
 

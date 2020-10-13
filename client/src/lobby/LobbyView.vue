@@ -42,15 +42,6 @@ export default defineComponent({
           color: 'success',
           command: 'amq_game',
           isAdmin: false
-        },
-        {
-          key: 'aiq-game',
-          icon: 'mdi-gamepad-square',
-          label: 'AIQ Game Room',
-          description: 'Play AIQ',
-          color: 'success',
-          command: 'aiq_game',
-          isAdmin: false
         }
       ],
       nonGameCards: [
@@ -61,15 +52,6 @@ export default defineComponent({
           description: 'Edit your AMQ song list',
           color: 'primary',
           command: 'amq_song',
-          isAdmin: false
-        },
-        {
-          key: 'aiq-image',
-          icon: 'mdi-image-edit',
-          label: 'AIQ Image List',
-          description: 'Add/Edit AIQ Image list',
-          color: 'error',
-          command: 'aiq_image',
           isAdmin: false
         },
         {

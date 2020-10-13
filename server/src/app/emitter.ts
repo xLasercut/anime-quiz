@@ -1,9 +1,8 @@
 import * as socketio from 'socket.io'
 import {IBannerColor} from '../../../shared/types/game'
-import {IChatBot, IAmqChoices, IEmoji, IAmqSong, IAiqImage, IAiqChoices} from '../../../shared/interfaces/database'
+import {IAmqChoices, IAmqSong, IChatBot, IEmoji} from '../../../shared/interfaces/database'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
 import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
-import {IAiqGameState, IAiqPlayer, IAiqSettings} from '../../../shared/interfaces/aiq'
 
 class Emitter {
   protected _io: socketio.Server
@@ -90,58 +89,6 @@ class Emitter {
 
   public updateAmqSettings(amqSettings: IAmqSettings, sid: string): void {
     this._client(sid).emit('UPDATE_AMQ_SETTINGS', amqSettings)
-  }
-
-  public updateAiqImageList(imageList: Array<IAiqImage>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AIQ_IMAGE_LIST', imageList)
-  }
-
-  public updateAiqChoices(choices: IAiqChoices, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AIQ_CHOICES', choices)
-  }
-
-  public updateAiqHost(host: boolean, sid: string): void {
-    this._client(sid).emit('UPDATE_AIQ_HOST', host)
-  }
-
-  public updateAiqRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AIQ_GAME_ROOM_LIST', roomList)
-  }
-
-  public updateAiqPlayerList(playerList: Array<IAiqPlayer>, sid: string): void {
-    this._client(sid).emit('UPDATE_AIQ_PLAYER_LIST', playerList)
-  }
-
-  public updateAiqGameState(gameState: IAiqGameState, sid: string): void {
-    this._client(sid).emit('UPDATE_AIQ_GAME_STATE', gameState)
-  }
-
-  public updateAiqSettings(settings: IAiqSettings, sid: string): void {
-    this._client(sid).emit('UPDATE_AIQ_SETTINGS', settings)
-  }
-
-  public aiqReset(sid: string): void {
-    this._client(sid).emit('AIQ_RESET')
-  }
-
-  public aiqNewImage(sid: string): void {
-    this._client(sid).emit('AIQ_NEW_IMAGE')
-  }
-
-  public aiqStartLoad(sid: string): void {
-    this._client(sid).emit('AIQ_START_LOAD')
-  }
-
-  public aiqStartCountdown(sid: string): void {
-    this._client(sid).emit('AIQ_START_COUNTDOWN')
-  }
-
-  public aiqTimeUp(sid: string): void {
-    this._client(sid).emit('AIQ_TIME_UP')
-  }
-
-  public aiqShowGuess(sid: string): void {
-    this._client(sid).emit('AIQ_SHOW_GUESS')
   }
 
   protected _client(sid: string = null): socketio.Namespace | socketio.Server {

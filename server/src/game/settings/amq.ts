@@ -8,6 +8,7 @@ class AmqSettings {
   public duplicate = false
   public users: Array<string> = []
   public leastPlayed = false
+  public quickDraw = false
 
   public update(amqSettings: IAmqSettings): void {
     this.songCount = amqSettings.songCount
@@ -16,6 +17,7 @@ class AmqSettings {
     this.duplicate = amqSettings.duplicate
     this.users = amqSettings.users
     this.leastPlayed = amqSettings.leastPlayed
+    this.quickDraw = amqSettings.quickDraw
   }
 
   public serialize(): IAmqSettings {
@@ -25,7 +27,8 @@ class AmqSettings {
       gameMode: this.gameMode,
       duplicate: this.duplicate,
       users: this.users,
-      leastPlayed: this.leastPlayed
+      leastPlayed: this.leastPlayed,
+      quickDraw: this.quickDraw
     }
   }
 }

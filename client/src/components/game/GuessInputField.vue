@@ -4,6 +4,9 @@
       filled hide-details
       :search-input="value" @update:search-input="emitChange($event)"
       v-bind="$attrs"
+      @keyup.native.enter="$emit('key:enter')"
+      :error="!submitted"
+      :success="submitted"
     ></v-combobox>
   </v-col>
 </template>
@@ -14,6 +17,9 @@ import {defineComponent} from '@vue/composition-api'
 export default defineComponent({
   props: {
     value: {
+      required: true
+    },
+    submitted: {
       required: true
     }
   },

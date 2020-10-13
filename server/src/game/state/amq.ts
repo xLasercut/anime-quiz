@@ -19,6 +19,8 @@ class AmqGameState extends AbstractGameState {
     type: '',
     songId: ''
   }
+  public animeScoreMultiplier = 5
+  public titleScoreMultiplier = 5
 
   public playedSongIds: Set<string> = new Set()
 
@@ -96,25 +98,42 @@ class AmqGameState extends AbstractGameState {
     }
   }
 
-  public calculateScore(amqGuess: IAmqGuess) {
+  public calculateScore(amqGuess: IAmqGuess, quickDraw: boolean) {
     let point = 0
-    let color: IBannerColor = 'error'
+    let animeCorrect = false
+    let titleCorrect = false
+
     let animes = this.currentSong.anime.map((anime: string) => {
       return anime.toLowerCase()
     })
 
     if (amqGuess.anime && animes.includes(amqGuess.anime.toLowerCase())) {
-      point += 1
+      animeCorrect = true
+      if (quickDraw && this.animeScoreMultiplier > 1) {
+        point += this.animeScoreMultiplier
+        this.animeScoreMultiplier -= 2
+      }
+      else {
+        point += 1
+      }
     }
 
     if (amqGuess.title && amqGuess.title.toLowerCase() === this.currentSong.title.toLowerCase()) {
-      point += 1
+      titleCorrect = true
+      if (quickDraw && this.titleScoreMultiplier > 1) {
+        point += this.titleScoreMultiplier
+        this.titleScoreMultiplier -= 2
+      }
+      else {
+        point += 1
+      }
     }
 
-    if (point === 2) {
+    let color: IBannerColor = 'error'
+    if (animeCorrect && titleCorrect) {
       color = 'success'
     }
-    else if (point === 1) {
+    else if (animeCorrect || titleCorrect) {
       color = 'warning'
     }
 

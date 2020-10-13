@@ -39,6 +39,14 @@
         row hide-details
         :disabled="disabled()"
       ></dialog-radio>
+      <dialog-radio
+        label="Quick Draw"
+        :items="duplicateItems"
+        :value="$store.state.amq.settings.quickDraw"
+        @input="updateAmqSettings('quickDraw', $event)"
+        row hide-details
+        :disabled="disabled()"
+      ></dialog-radio>
       <dialog-checkbox
         :value="$store.state.amq.settings.users"
         @input="updateAmqSettings('users', $event)"

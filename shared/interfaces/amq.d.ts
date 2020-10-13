@@ -21,6 +21,7 @@ interface IAmqSettings {
   duplicate: boolean
   users: Array<string>
   leastPlayed: boolean
+  quickDraw: boolean
 }
 
 interface IAmqGameState {

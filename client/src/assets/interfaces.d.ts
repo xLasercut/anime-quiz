@@ -1,7 +1,6 @@
 import {IRoomSerial} from '../../../shared/interfaces/game'
 import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
-import {IAmqChoices, IAmqSong, IAiqChoices, IAiqImage, IChatBot, IEmoji} from '../../../shared/interfaces/database'
-import {IAiqGameState, IAiqPlayer, IAiqSettings} from '../../../shared/interfaces/aiq'
+import {IAmqChoices, IAmqSong, IChatBot, IEmoji} from '../../../shared/interfaces/database'
 
 interface IRootStoreState {
 }
@@ -57,20 +56,6 @@ interface IAvatar {
   src: string
 }
 
-interface IAiqStoreState {
-  host: boolean
-  imageList: Array<IAiqImage>
-  choices: IAiqChoices
-  imageListFilter: IAiqImageListFilter
-  settings: IAiqSettings
-  gameState: IAiqGameState
-  playerList: Array<IAiqPlayer>
-}
-
-interface IAiqImageListFilter {
-  anime: string
-  name: string
-}
 
 interface ILobbyCard {
   isAdmin: boolean
@@ -91,8 +76,6 @@ export {
   IEmojiListFilter,
   IChatBotStoreState,
   IChatBotListFilter,
-  IAiqStoreState,
   IAvatar,
-  IAiqImageListFilter,
   ILobbyCard
 }

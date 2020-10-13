@@ -4,7 +4,6 @@ import {AbstractPlayer} from './abstract'
 
 class AmqPlayer extends AbstractPlayer {
   public color: IBannerColor = 'error'
-  public selector = false
   public guess: IAmqGuess = {
     title: '',
     anime: ''
@@ -13,6 +12,7 @@ class AmqPlayer extends AbstractPlayer {
     load: false,
     guess: false
   }
+  public guessTime: Date = null
 
   constructor(username: string, avatar: string, admin: boolean, socketId: string) {
     super(username, avatar, admin, socketId)
@@ -31,7 +31,7 @@ class AmqPlayer extends AbstractPlayer {
 
     this.color = 'error'
 
-    this.selector = false
+    this.guessTime = new Date()
   }
 
   public serialize(): IAmqPlayer {

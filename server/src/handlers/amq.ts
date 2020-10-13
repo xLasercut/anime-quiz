@@ -68,11 +68,8 @@ class AmqHandler extends AbstractHandler {
     }))
 
     socket.on('AMQ_GUESS', exceptionHandler(socket, (amqGuess: IAmqGuess): void => {
-      let roomId = this._controller.getRoomId(socket.id)
       socket.player.guess = amqGuess
-      let {point, color} = this._controller.getRoom(roomId).state.calculateScore(amqGuess)
-      socket.player.score += point
-      socket.player.color = color
+      socket.player.guessTime = new Date()
       socket.player.ready.guess = true
     }))
 
@@ -211,6 +208,12 @@ class AmqHandler extends AbstractHandler {
     await this._controller.startTimeout(roomId, settings.guessTime * 1000)
     this._emitter.amqTimeUp(roomId)
     await this._controller.startCountdown(roomId, 5000, 'guess')
+    let quickDraw = this._controller.getRoom(roomId).settings.quickDraw
+    for (let playerGuess of this._controller.getPlayerTimedGuessList(roomId)) {
+      let {point, color} = this._controller.getRoom(roomId).state.calculateScore(playerGuess.guess, quickDraw)
+      this._controller.getSocket(playerGuess.socketId).player.score += point
+      this._controller.getSocket(playerGuess.socketId).player.color = color
+    }
     this._emitter.updateAmqPlayerList(this._controller.getPlayerList(roomId), roomId)
     this._emitter.amqShowGuess(roomId)
     if (this._controller.getRoom(roomId).state.currentSongCount >= this._controller.getRoom(roomId).state.maxSongCount) {

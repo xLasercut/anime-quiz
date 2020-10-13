@@ -12,10 +12,6 @@ import AmqGameView from '@/amq-game/AmqGameView.vue'
 import LobbyPanel from '@/lobby/LobbyPanel.vue'
 import GameRoomListPanel from '@/components/game/GameRoomListPanel.vue'
 import GameRoomListView from '@/components/game/GameRoomListView.vue'
-import AiqImagePanel from '@/aiq-image/AiqImagePanel.vue'
-import AiqImageView from '@/aiq-image/AiqImageView.vue'
-import AiqGamePanel from '@/aiq-game/AiqGamePanel.vue'
-import AiqGameView from '@/aiq-game/AiqGameView.vue'
 
 const PANEL_COMPONENTS: { [key: string]: any } = {
   login: LoginPanel,
@@ -24,10 +20,7 @@ const PANEL_COMPONENTS: { [key: string]: any } = {
   emoji: EmojiPanel,
   chat_bot: ChatBotPanel,
   amq_game_room_list: GameRoomListPanel,
-  amq_game: AmqGamePanel,
-  aiq_image: AiqImagePanel,
-  aiq_game_room_list: GameRoomListPanel,
-  aiq_game: AiqGamePanel
+  amq_game: AmqGamePanel
 }
 
 const VIEW_COMPONENTS: { [key: string]: any } = {
@@ -37,10 +30,7 @@ const VIEW_COMPONENTS: { [key: string]: any } = {
   emoji: EmojiView,
   chat_bot: ChatBotView,
   amq_game_room_list: GameRoomListView,
-  amq_game: AmqGameView,
-  aiq_image: AiqImageView,
-  aiq_game_room_list: GameRoomListView,
-  aiq_game: AiqGameView
+  amq_game: AmqGameView
 }
 
 export {PANEL_COMPONENTS, VIEW_COMPONENTS}

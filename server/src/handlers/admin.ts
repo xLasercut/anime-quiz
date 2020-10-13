@@ -3,7 +3,7 @@ import {LOG_BASE, Logger} from '../app/logging'
 import {Emitter} from '../app/emitter'
 import {AmqSongDatabase} from '../database/amq-song'
 import {ISocket} from '../interfaces'
-import {IChatBot, IEmoji, IAmqSong} from '../../../shared/interfaces/database'
+import {IAmqSong, IChatBot, IEmoji} from '../../../shared/interfaces/database'
 import {AuthError} from '../exceptions'
 import {EmojiDatabase} from '../database/emoji'
 import {ChatBotDatabase} from '../database/chat-bot'
@@ -11,14 +11,12 @@ import {AmqUserSongDatabase} from '../database/amq-user-song'
 import {IBannerColor} from '../../../shared/types/game'
 import {Server} from 'socket.io'
 import {ROOM_IDS} from '../config'
-import {AiqImageDatabase} from '../database/aiq-image'
 
 class AdminHandler extends AbstractHandler {
   protected _songDatabase: AmqSongDatabase
   protected _userSongDatabase: AmqUserSongDatabase
   protected _emojiDatabase: EmojiDatabase
   protected _chatBotDatabase: ChatBotDatabase
-  protected _imageDatabase: AiqImageDatabase
   protected _io: Server
 
 
@@ -29,8 +27,7 @@ class AdminHandler extends AbstractHandler {
     songDatabase: AmqSongDatabase,
     userSongDatabase: AmqUserSongDatabase,
     emojiDatabase: EmojiDatabase,
-    chatBotDatabase: ChatBotDatabase,
-    imageDatabase: AiqImageDatabase
+    chatBotDatabase: ChatBotDatabase
   ) {
     super(logger, emitter)
     this._io = io
@@ -38,7 +35,6 @@ class AdminHandler extends AbstractHandler {
     this._songDatabase = songDatabase
     this._emojiDatabase = emojiDatabase
     this._chatBotDatabase = chatBotDatabase
-    this._imageDatabase = imageDatabase
   }
 
   public start(socket: ISocket, exceptionHandler: Function) {
@@ -142,14 +138,11 @@ class AdminHandler extends AbstractHandler {
       this._userSongDatabase.loadData()
       this._chatBotDatabase.loadData()
       this._emojiDatabase.loadData()
-      this._imageDatabase.loadData()
       this._emitter.updateAmqSongList(this._songDatabase.getSongList())
       this._emitter.updateAmqUsers(this._userSongDatabase.getUsers())
       this._emitter.updateAmqChoices(this._songDatabase.getChoices())
       this._emitter.updateEmojiList(this._emojiDatabase.getEmojiList())
       this._emitter.updateChatBotList(this._chatBotDatabase.getChatBotList())
-      this._emitter.updateAiqImageList(this._imageDatabase.getImageList())
-      this._emitter.updateAiqChoices(this._imageDatabase.getChoices())
       this._emitter.systemNotification('success', 'Database reloaded', socket.id)
     }))
 

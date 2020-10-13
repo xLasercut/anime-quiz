@@ -13,7 +13,8 @@ function _getDefaultState(): IAmqStoreState {
       users: [],
       gameMode: 'normal',
       duplicate: false,
-      leastPlayed: false
+      leastPlayed: false,
+      quickDraw: false
     },
     gameState: {
       currentSong: {

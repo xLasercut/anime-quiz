@@ -89,13 +89,6 @@ class AbstractGameController {
       })
   }
 
-  public newRound(roomId: string): void {
-    this._validateRoomIdExists(roomId)
-    for (let socketId of Array.from(this._rooms[roomId].players)) {
-      this.getSocket(socketId).player.reset()
-    }
-  }
-
   public getNextHostId(roomId: string): string {
     this._validateRoomIdExists(roomId)
     return Array.from(this._rooms[roomId].players)[0]

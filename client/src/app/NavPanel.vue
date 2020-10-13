@@ -21,7 +21,7 @@ export default defineComponent({
     NavBtn
   },
   setup(_props, context) {
-    const showBackList = new Set(['amq_game', 'aiq_game'])
+    const showBackList = new Set(['amq_game'])
 
     function toggleTheme(): void {
       context.root.$vuetify.theme.dark = !context.root.$vuetify.theme.dark
