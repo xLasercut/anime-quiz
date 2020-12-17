@@ -46,7 +46,7 @@ export default defineComponent({
     }
 
     watch(() => props.volume, (val: any) => {
-      if (player) {
+      if (player && player.value) {
         player.value.volume = val / 100
       }
     })
