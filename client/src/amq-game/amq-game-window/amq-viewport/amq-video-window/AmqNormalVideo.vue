@@ -1,5 +1,5 @@
 <template>
-  <video ref="player" @loadeddata="songLoaded()" :class="videoClasses()">
+  <video ref="player" @loadeddata="songLoaded()" :class="videoClasses()" @seeked="songSeeked()" :muted="muted">
     <source :src="$store.state.amq.gameState.currentSong.src">
     Your browser does not support video element
   </video>
@@ -19,11 +19,18 @@ export default defineComponent({
     const player: any = ref(null)
 
     const state = reactive({
-      show: false
+      show: false,
+      muted: false
     })
 
     function songLoaded(): void {
       player.value.currentTime = context.root.$store.getters.amqStartPosition(player.value.duration)
+      state.muted = true
+    }
+
+    function songSeeked(): void {
+      player.value.pause()
+      state.muted = false
       socket.emit('AMQ_SONG_LOADED')
     }
 
@@ -76,7 +83,7 @@ export default defineComponent({
       socket.off('AMQ_RESET')
     })
 
-    return {player, songLoaded, ...toRefs(state), videoClasses}
+    return {player, songLoaded, ...toRefs(state), videoClasses, songSeeked}
   }
 })
 </script>

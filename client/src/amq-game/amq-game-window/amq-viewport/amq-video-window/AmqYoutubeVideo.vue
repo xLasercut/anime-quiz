@@ -88,7 +88,9 @@ export default defineComponent({
     }
 
     watch(() => props.volume, (val) => {
-      player.setVolume(val)
+      if (player) {
+        player.setVolume(val)
+      }
     })
 
     socket.on('AMQ_START_LOAD', (): void => {
