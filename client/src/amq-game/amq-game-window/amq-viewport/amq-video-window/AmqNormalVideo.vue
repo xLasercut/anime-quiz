@@ -24,15 +24,16 @@ export default defineComponent({
     })
 
     function songLoaded(): void {
+      console.log('song loaded')
       player.value.currentTime = context.root.$store.getters.amqStartPosition(player.value.duration)
       state.muted = true
       player.value.play()
     }
 
     function songSeeked(): void {
+      console.log('song seeked')
       player.value.pause()
       state.muted = false
-      console.log('song seeked')
       socket.emit('AMQ_SONG_LOADED')
     }
 
