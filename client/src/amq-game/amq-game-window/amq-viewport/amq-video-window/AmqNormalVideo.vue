@@ -26,11 +26,13 @@ export default defineComponent({
     function songLoaded(): void {
       player.value.currentTime = context.root.$store.getters.amqStartPosition(player.value.duration)
       state.muted = true
+      player.value.play()
     }
 
     function songSeeked(): void {
       player.value.pause()
       state.muted = false
+      console.log('song seeked')
       socket.emit('AMQ_SONG_LOADED')
     }
 
@@ -61,6 +63,7 @@ export default defineComponent({
 
     socket.on('AMQ_START_COUNTDOWN', (): void => {
       if (isNormalVideo()) {
+        state.muted = false
         player.value.play()
       }
     })
