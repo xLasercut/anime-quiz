@@ -20,7 +20,8 @@ export default defineComponent({
 
     const state = reactive({
       show: false,
-      muted: false
+      muted: false,
+      alreadyPlaying: false
     })
 
     function songLoaded(): void {
@@ -32,7 +33,9 @@ export default defineComponent({
 
     function songSeeked(): void {
       console.log('song seeked')
-      player.value.pause()
+      if (!state.alreadyPlaying) {
+        player.value.pause()
+      }
       state.muted = false
       socket.emit('AMQ_SONG_LOADED')
     }
@@ -55,6 +58,7 @@ export default defineComponent({
     })
 
     socket.on('AMQ_START_LOAD', (): void => {
+      state.alreadyPlaying = false
       state.show = false
       player.value.pause()
       if (isNormalVideo()) {
@@ -64,6 +68,7 @@ export default defineComponent({
 
     socket.on('AMQ_START_COUNTDOWN', (): void => {
       if (isNormalVideo()) {
+        state.alreadyPlaying = true
         state.muted = false
         player.value.play()
       }
