@@ -1,0 +1,14 @@
+{
+  "name": "anime-quiz-ngrok",
+  "version": "1.0.0",
+  "description": "ngrok container for anime-quiz",
+  "main": "main.js",
+  "scripts": {
+    "generate-config": "node generate-ngrok-config.js"
+  },
+  "author": "xLasercut",
+  "license": "MIT",
+  "dependencies": {
+    "mustache": "^4.1.0"
+  }
+}

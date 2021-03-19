@@ -1,18 +1,13 @@
 const fs = require('fs')
 const path = require('path')
+const mustache = require('mustache')
 
-const region = process.env.NGROK_REGION || 'eu'
-const token = process.env.NGROK_TOKEN
-
-var config = [
-  'web_addr: 0.0.0.0:4040',
-  `region: ${region}`
-]
-
-if (token) {
-  config.push(`authtoken: ${token}`)
+const valuesToTemplate = {
+  authtoken: process.env.NGROK_TOKEN,
+  region: process.env.NGROK_REGION || 'eu',
+  serverAddr: process.env.server
 }
 
-const filepath = path.join(__dirname, 'ngrok.yml')
+let templateString = fs.readFileSync(path.join(__dirname, 'ngrok.yml.template'), 'utf-8')
 
-fs.writeFileSync(filepath, config.join('\n'))
+fs.writeFileSync(path.join(__dirname, 'ngrok.yml'), mustache.render(templateString, valuesToTemplate))
