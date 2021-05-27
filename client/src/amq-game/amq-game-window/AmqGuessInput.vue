@@ -43,9 +43,7 @@ export default defineComponent({
     })
 
     socket.on('AMQ_TIME_UP', (): void => {
-      if (!state.submitted) {
-        submitGuess()
-      }
+      submitGuess()
       state.disabled = true
     })
 

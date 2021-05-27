@@ -1,12 +1,14 @@
 <template>
   <v-col cols="12" sm="6" md="5">
     <v-combobox
-      filled hide-details
+      filled
       :search-input="value" @update:search-input="emitChange($event)"
       v-bind="$attrs"
       @keyup.native.enter="$emit('key:enter')"
       :error="!submitted"
       :success="submitted"
+      persistent-hint
+      :hint="value"
     ></v-combobox>
   </v-col>
 </template>

@@ -1,6 +1,14 @@
 <template>
-  <video ref="player" @loadeddata="songLoaded()" :class="videoClasses()" @seeked="songSeeked()" :muted="muted">
-    <source :src="$store.state.amq.gameState.currentSong.src">
+  <video
+    ref="player"
+    @loadedmetadata="metadataLoaded()"
+    @loadeddata="songLoaded()"
+    :class="videoClasses()"
+    @seeked="songSeeked()"
+    :muted="muted"
+    :src="$store.state.amq.gameState.currentSong.src"
+    type="video/webm"
+  >
     Your browser does not support video element
   </video>
 </template>
@@ -26,6 +34,13 @@ export default defineComponent({
 
     function songLoaded(): void {
       console.log('song loaded')
+      // player.value.currentTime = context.root.$store.getters.amqStartPosition(player.value.duration)
+      // state.muted = true
+      // player.value.play()
+    }
+
+    function metadataLoaded(): void {
+      console.log('song metadata loaded')
       player.value.currentTime = context.root.$store.getters.amqStartPosition(player.value.duration)
       state.muted = true
       player.value.play()
@@ -92,7 +107,7 @@ export default defineComponent({
       socket.off('AMQ_RESET')
     })
 
-    return {player, songLoaded, ...toRefs(state), videoClasses, songSeeked}
+    return {player, songLoaded, ...toRefs(state), videoClasses, songSeeked, metadataLoaded}
   }
 })
 </script>
