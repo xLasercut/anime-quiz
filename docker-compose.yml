@@ -14,11 +14,22 @@ services:
       options:
         max-size: 50m
 
-  ngrok:
+  ngrok_arm:
     restart: unless-stopped
     build:
       context: '.'
-      dockerfile: './ngrok/Dockerfile'
+      dockerfile: 'ngrok/arm.dockerfile'
+    ports:
+      - 4040:4040
+    logging:
+      options:
+        max-size: 50m
+
+  ngrok_x86:
+    restart: unless-stopped
+    build:
+      context: '.'
+      dockerfile: 'ngrok/x86_64.dockerfile'
     ports:
       - 4040:4040
     logging:
