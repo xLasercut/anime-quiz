@@ -31,6 +31,15 @@ make build-server-x86
 make run-server-x86-prod
 ```
 
+## Adding user song lists
+Create <filename>.json in `server/data/amq-user` with a blank list, then restart the server.
+
+e.g. user1.json
+```json
+[]
+````
+You can then add songs to the list by going to song list editor via the client
+
 ## Running client
 In root of project
 ```bash
