@@ -1,0 +1,21 @@
+{
+  "name": "anime-quiz-database-tools",
+  "version": "1.0.0",
+  "description": "anime quiz database tools",
+  "main": "index.js",
+  "scripts": {
+    "get:animethemes": "ts-node src/fetch-animethemes.ts",
+    "start": "ts-node src/anime-quiz-db.ts",
+    "init": "ts-node src/init-db.ts"
+  },
+  "author": "xLasercut",
+  "license": "MIT",
+  "dependencies": {
+    "@types/sqlite3": "^3.1.8",
+    "axios": "^0.27.2",
+    "sqlite3": "^5.0.6",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4",
+    "uuid": "^8.3.2"
+  }
+}

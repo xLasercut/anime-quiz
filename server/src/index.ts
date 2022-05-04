@@ -26,7 +26,18 @@ const server = app.listen(SERVER_PORT, () => {
   logger.writeLog(LOG_BASE.SERVER001, {port: SERVER_PORT})
 })
 
-const io = socketio(server)
+const io = socketio(server, {
+  origins: ["*"],
+  handlePreflightRequest: (_req, res) => {
+    //@ts-ignore
+    res.writeHead(200, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*",
+    })
+    //@ts-ignore
+    res.end()
+  }
+})
 const emitter = new Emitter(io)
 
 const amqSongDatabase = new AmqSongDatabase()

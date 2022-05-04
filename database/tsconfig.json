@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "module": "CommonJS",
+    "lib": [
+      "ESNext"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
