@@ -5,68 +5,52 @@ import {ANIME_QUIZ_DATA_DIR, DATA_DIR} from './constants'
 import {v4} from 'uuid'
 
 const db = new Database(path.join(ANIME_QUIZ_DATA_DIR, 'anime-quiz.db'))
-// const animeData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'anime-names.json'), 'utf-8'))
-//   .map(item => {
-//     return [item.animeId, item.animeName]
-//   })
-//
-//
-// const query = 'INSERT INTO animes (anime_id, anime_name) VALUES (?, ?)'
-// const statement = db.prepare(query)
-//
-// for (const anime of animeData) {
-//   statement.run(anime, (err) => {
-//     if (err) {
-//       throw err
-//     }
-//   })
-// }
-//
-// statement.finalize()
 
 
-const animeData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'anime-names.json'), 'utf-8'))
-
-function getAnime(name) {
-  for (const anime of animeData) {
-    if (anime.animeName === name) {
-      return anime.animeId
-    }
-  }
-  return 'NOT_FOUND'
-}
-
-const unmatchedAnimeThemes = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'unmatched-animethemes.json'), 'utf-8'))
-  .map(song => {
-    const {anime, songId, ...rest} = song
-    return {
-      ...rest,
-      anime: getAnime(anime[0]),
-      songId: `song-${v4()}`
-    }
-  })
-  .map(song => {
-    return [
-      song.songId,
-      song.anime,
-      song.title || null,
-      song.src || null,
-      song.artist || null,
-      song.type || null
-    ]
-  })
-
-const query = 'INSERT INTO songs (song_id, anime_id, song_title, src, artist, type) VALUES (?, ?, ?, ?, ?, ?)'
-const statement = db.prepare(query)
-
-for (const songData of unmatchedAnimeThemes) {
-  statement.run(songData, (err) => {
-    if (err) {
-      throw err
-    }
+async function dbRun(db, query) {
+  return new Promise((resolve, reject) => {
+    db.run(query, (err) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(true)
+    })
   })
 }
 
-statement.finalize()
+async function dbAll(db, query) {
+  return new Promise((resolve, reject) => {
+    db.all(query, (err, rows) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(rows)
+    })
+  })
+}
 
-db.close()
+dbRun(db, `ATTACH DATABASE '${path.join(ANIME_QUIZ_DATA_DIR, 'anime-quiz-user.db')}' as user;`)
+  .then(() => {
+    return dbAll(db, `
+select
+    *,
+    json_group_array(anime_name) as anime_name
+from
+    user.user_songs
+inner join songs
+on user.user_songs.song_id = songs.song_id
+inner join animes
+on songs.anime_id = animes.anime_id
+group by songs.song_id;
+`)
+  })
+  .then((rows) => {
+    console.log(rows)
+    return dbRun(db, `DETACH user;`)
+  })
+  .then(() => {
+    db.close()
+  })
+  .catch(err => console.log(err))
+
+
