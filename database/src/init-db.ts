@@ -21,14 +21,13 @@ db.run(`CREATE TABLE animes
     anime_id   text not null
         constraint animes_pk
             primary key,
-    anime_name text not null,
-    anime_slug text not null
+    anime_name text not null
 )`)
 
 db.run(`CREATE TABLE alternate_anime_names
 (
     anime_id           text not null,
-    alternate_anime_id text not null
+    alternate_anime_name text not null
 )`)
 
 db.close()

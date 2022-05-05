@@ -22,7 +22,7 @@ RUN npm ci
 WORKDIR ${WRK_DIR}
 
 COPY ./server/. ${SERVER_DIR}/.
-COPY ./shared/. ${SHARED_DIR}/.
+COPY src/shared/. ${SHARED_DIR}/.
 
 WORKDIR ${SERVER_DIR}
 

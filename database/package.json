@@ -4,7 +4,10 @@
   "description": "anime quiz database tools",
   "main": "index.js",
   "scripts": {
-    "get:animethemes": "ts-node src/fetch-animethemes.ts",
+    "animethemes:get": "ts-node src/fetch-animethemes.ts",
+    "animethemes:parse": "ts-node src/parse-animethemes.ts",
+    "animethemes:crosscheck": "ts-node src/crosscheck-animethemes.ts",
+    "crosscheck:user": "ts-node src/crosscheck-user.ts",
     "start": "ts-node src/anime-quiz-db.ts",
     "init": "ts-node src/init-db.ts"
   },
