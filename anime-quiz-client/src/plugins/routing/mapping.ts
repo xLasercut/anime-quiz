@@ -1,8 +1,9 @@
 import {Component} from 'vue'
 import LoginPanel from '../../login/LoginPanel.vue'
 import Login from '../../views/Login.vue'
+import LoginSettings from '../../login/LoginSettings.vue'
 import {store} from '../store'
-import {ROUTES} from './routes'
+import {DIALOG_ROUTES, ROUTES} from './routes'
 
 const _PANEL_MAPPING: {[key: string]: Component} = {
   [ROUTES.LOGIN]: LoginPanel
@@ -10,6 +11,10 @@ const _PANEL_MAPPING: {[key: string]: Component} = {
 
 const _VIEW_MAPPING: {[key: string]: Component} = {
   [ROUTES.LOGIN]: Login
+}
+
+const _DIALOG_MAPPING: {[key: string]: Component} = {
+  [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings
 }
 
 function viewComponent(): any {
@@ -20,7 +25,12 @@ function panelComponent(): any {
   return _PANEL_MAPPING[store.state.client.view]
 }
 
+function dialogComponent(): any {
+  return _DIALOG_MAPPING[store.state.client.dialogView]
+}
+
 export {
   viewComponent,
-  panelComponent
+  panelComponent,
+  dialogComponent
 }

@@ -2,4 +2,11 @@ const ROUTES = {
   LOGIN: 'LOGIN'
 }
 
-export {ROUTES}
+const DIALOG_ROUTES = {
+  LOGIN_SETTINGS: 'LOGIN_SETTINGS'
+}
+
+export {
+  ROUTES,
+  DIALOG_ROUTES
+}

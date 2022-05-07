@@ -5,6 +5,7 @@
       <component :is="viewComponent()"></component>
     </v-container>
     <system-notification></system-notification>
+    <global-dialog></global-dialog>
   </v-app>
 </template>
 
@@ -14,9 +15,10 @@ import {computed, onMounted, onUnmounted, provide} from 'vue'
 import {useStore} from 'vuex'
 import {viewComponent} from './plugins/routing/mapping'
 import SystemNotification from './app/SystemNotification.vue'
+import GlobalDialog from './app/GlobalDialog.vue'
 import {NotificationColor} from './assets/shared/types'
 import {SHARED_EVENTS} from './assets/shared/events'
-import {socket} from './assets/socket'
+import {socket} from './plugins/socket'
 import {CLIENT_EVENTS} from './assets/events'
 
 const store = useStore()
@@ -28,18 +30,25 @@ const theme = computed((): string => {
   return 'nordLight'
 })
 
-let _sendNotification: Function
-provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (sendNotification: Function): void => {
-  _sendNotification = sendNotification
+let sendNotification: Function
+let openDialog: Function
+provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: Function): void => {
+  sendNotification = _sendNotification
+})
+provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: Function): void => {
+  openDialog = _openDialog
 })
 
+provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
+  openDialog(route, label)
+})
 provide(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColor, message: string): void => {
-  _sendNotification(color, message)
+  sendNotification(color, message)
 })
 
 onMounted((): void => {
   socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColor, message: string): void => {
-    _sendNotification(color, message)
+    sendNotification(color, message)
   })
 })
 

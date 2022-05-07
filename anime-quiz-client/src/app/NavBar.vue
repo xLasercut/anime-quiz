@@ -9,11 +9,12 @@
 <script setup lang="ts">
 import {useStore} from 'vuex'
 import {panelComponent} from '../plugins/routing/mapping'
+import {MUTATIONS} from '../plugins/store/mutations'
 
 const store = useStore()
 
 function changeTheme(): void {
-  store.commit('client/CHANGE_THEME')
+  store.commit(MUTATIONS.CHANGE_THEME)
   localStorage.darkTheme = store.state.client.darkTheme
 }
 </script>

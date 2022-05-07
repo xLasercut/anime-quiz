@@ -6,21 +6,27 @@
       </v-col>
     </v-row>
     <v-form v-model="state.valid" @submit="login()">
-      <v-row justify="center">
-        <v-col cols="10">
-          <v-text-field
-            label="Display Name"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="10">
-          <v-text-field label="Server Password"></v-text-field>
-        </v-col>
-      </v-row>
+      <login-input
+        label="Display Name"
+        v-model="state.username"
+        :rules="state.usernameRules"
+        counter="20"
+      ></login-input>
+      <login-input
+        label="Server Password"
+        v-model="state.password"
+        :rules="state.passwordRules"
+      ></login-input>
       <v-row justify="center">
         <v-col cols="auto">
-          <v-btn type="submit" :flat="true" size="large" color="success" append-icon="fa-solid fa-right-to-bracket">Login</v-btn>
+          <v-btn
+            type="submit"
+            :flat="true"
+            size="large"
+            color="success"
+            append-icon="fa-solid fa-right-to-bracket"
+            :disabled="state.disabled"
+          >Login</v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -30,17 +36,33 @@
 <script setup lang="ts">
 import {inject, reactive} from 'vue'
 import {SHARED_EVENTS} from '../assets/shared/events'
+import LoginInput from '../login/LoginInput.vue'
+import {CLIENT_EVENTS} from '../assets/events'
+
+const NAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
+const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$')
 
 const state = reactive({
   valid: false,
   username: '',
-  password: ''
+  password: '',
+  usernameRules: [
+    (v: string): boolean | string => (!!v) || 'Display name required',
+    (v: string): boolean | string => NAME_FORMAT.test(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
+    (v: string): boolean | string => (v && v.length <= 20) || 'Display name must be under 20 characters'
+  ],
+  passwordRules: [
+    (v: string): boolean | string => (!!v) || 'Server password required',
+    (v: string): boolean | string => SERVER_PASSWORD_FORMAT.test(v) || 'Valid characters A-Z, a-z, 0-9'
+  ],
+  disabled: false
 })
 
-const _systemNotification = inject<Function>(SHARED_EVENTS.SYSTEM_NOTIFICATION)
+const systemNotification = inject<Function>(SHARED_EVENTS.SYSTEM_NOTIFICATION)
 
 function login() {
-  _systemNotification('error', 'test2')
-  //socket.emit(EVENTS.AUTHENTICATE, 'test message')
+  if (state.valid) {
+
+  }
 }
 </script>

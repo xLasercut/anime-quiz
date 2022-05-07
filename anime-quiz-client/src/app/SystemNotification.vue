@@ -5,7 +5,7 @@
       <v-btn
         :icon="true"
         text
-        size="small"
+        size="x-small"
         @click="state.show = false"
       >
         <v-icon icon="fa-solid fa-xmark"></v-icon>
