@@ -11,7 +11,7 @@
           </v-col>
           <v-col cols="auto">
             <v-btn
-              icon="fa-solid fa-xmark"
+              icon="mdi-close"
               :flat="true"
               text
               size="x-small"

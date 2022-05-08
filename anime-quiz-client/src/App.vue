@@ -20,6 +20,7 @@ import {NotificationColor} from './assets/shared/types'
 import {SHARED_EVENTS} from './assets/shared/events'
 import {socket} from './plugins/socket'
 import {CLIENT_EVENTS} from './assets/events'
+import {NOTIFICATION_COLOR} from './assets/shared/constants'
 
 const store = useStore()
 
@@ -47,6 +48,10 @@ provide(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColor, message: s
 })
 
 onMounted((): void => {
+  if (!localStorage.GAME_SERVER) {
+    sendNotification(NOTIFICATION_COLOR.ERROR, 'Server URL not set')
+  }
+
   socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColor, message: string): void => {
     sendNotification(color, message)
   })

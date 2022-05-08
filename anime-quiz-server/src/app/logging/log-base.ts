@@ -25,6 +25,11 @@ const LOG_BASE = {
     reference: 'SERVER004',
     level: LOG_LEVEL.ERROR,
     template: 'unhandled error - stack="{{{stack}}}"'
+  },
+  AUTH002: {
+    reference: 'AUTH002',
+    level: LOG_LEVEL.WARN,
+    template: 'unauthorised connection - id="{{{id}}}"'
   }
 }
 

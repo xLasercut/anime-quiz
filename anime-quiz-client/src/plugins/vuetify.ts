@@ -1,8 +1,9 @@
 import 'vuetify/styles'
-import '@fortawesome/fontawesome-free/js/all.js'
+import '@mdi/font/css/materialdesignicons.css'
 import {createVuetify, ThemeDefinition} from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
 const nordDark: ThemeDefinition = {
   dark: true,
@@ -48,35 +49,19 @@ const nordLight: ThemeDefinition = {
   }
 }
 
-const oneDark: ThemeDefinition = {
-  dark: true,
-  colors: {
-    background: '#1e2127',
-    surface: '#1e2127',
-    primary: '#61afef',
-    secondary: '#5e81ac',
-    error: '#e06c75',
-    info: '#56b6c2',
-    success: '#98c379',
-    warning: '#d19a66',
-    'on-background': '#eceff4',
-    'on-surface': '#eceff4',
-    'on-primary': '#eceff4',
-    'on-secondary': '#eceff4',
-    'on-error': '#eceff4',
-    'on-info': '#eceff4',
-    'on-success': '#eceff4',
-    'on-warning': '#eceff4',
-  }
-}
-
 const vuetify = createVuetify({
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    }
+  },
   theme: {
     defaultTheme: 'nordDark',
     themes: {
       nordDark,
-      nordLight,
-      oneDark
+      nordLight
     }
   },
   components,

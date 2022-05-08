@@ -24,7 +24,7 @@
             :flat="true"
             size="large"
             color="success"
-            append-icon="fa-solid fa-right-to-bracket"
+            append-icon="mdi-login"
             :disabled="state.disabled"
           >Login</v-btn>
         </v-col>
@@ -37,7 +37,12 @@
 import {inject, reactive} from 'vue'
 import {SHARED_EVENTS} from '../assets/shared/events'
 import LoginInput from '../login/LoginInput.vue'
-import {CLIENT_EVENTS} from '../assets/events'
+import {socket} from '../plugins/socket'
+import {useStore} from 'vuex'
+import {MUTATIONS} from '../plugins/store/mutations'
+import {ROUTES} from '../plugins/routing/routes'
+
+const store = useStore()
 
 const NAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
 const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$')
@@ -62,7 +67,12 @@ const systemNotification = inject<Function>(SHARED_EVENTS.SYSTEM_NOTIFICATION)
 
 function login() {
   if (state.valid) {
-
+    socket.connect()
+    socket.emit(SHARED_EVENTS.AUTHENTICATE, state.username, state.password, (auth: boolean): void => {
+      if (auth) {
+        store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
+      }
+    })
   }
 }
 </script>

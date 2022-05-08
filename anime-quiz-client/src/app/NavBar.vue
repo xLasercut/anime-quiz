@@ -1,6 +1,6 @@
 <template>
   <v-app-bar flat absolute>
-    <v-btn size="large" append-icon="fa-solid fa-sun" @click="changeTheme()">Theme</v-btn>
+    <v-btn size="large" append-icon="mdi-theme-light-dark" @click="changeTheme()" variant="outlined">Theme</v-btn>
     <v-spacer></v-spacer>
     <component :is="panelComponent()"></component>
   </v-app-bar>

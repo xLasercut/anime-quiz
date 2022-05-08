@@ -18,6 +18,9 @@ const client: Module<any, any> = {
     },
     [MUTATIONS.CHANGE_DIALOG_VIEW]: (state, route: string): void => {
       state.dialogView = route
+    },
+    [MUTATIONS.CHANGE_VIEW]: (state, route: string): void => {
+      state.view = route
     }
   }
 }

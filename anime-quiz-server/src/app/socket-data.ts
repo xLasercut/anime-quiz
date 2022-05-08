@@ -3,6 +3,7 @@ class SocketData {
   public admin: boolean
   protected _username: string
   protected _id: string
+  public clientAuthTimer: NodeJS.Timeout
 
   constructor(id: string) {
     this.auth = false

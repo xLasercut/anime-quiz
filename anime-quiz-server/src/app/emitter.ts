@@ -1,6 +1,5 @@
 import {Server} from 'socket.io'
 import {SHARED_EVENTS} from '../shared/events'
-import {NotificationColor} from '../shared/types'
 
 class Emitter {
   protected _io: Server
@@ -9,7 +8,7 @@ class Emitter {
     this._io = io
   }
 
-  public systemNotification(color: NotificationColor, message: string, sid: string = null): void {
+  public systemNotification(color: string, message: string, sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.SYSTEM_NOTIFICATION, color, message)
   }
 

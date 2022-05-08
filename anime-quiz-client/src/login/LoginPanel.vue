@@ -2,8 +2,9 @@
   <v-btn
     size="large"
     color="primary"
-    append-icon="fa-solid fa-cog"
+    append-icon="mdi-cog"
     @click="openSettings()"
+    variant="outlined"
   >Settings</v-btn>
 </template>
 
@@ -19,4 +20,5 @@ function openSettings(): void {
     openDialog(DIALOG_ROUTES.LOGIN_SETTINGS, 'Settings')
   }
 }
+
 </script>

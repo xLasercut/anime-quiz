@@ -8,6 +8,7 @@ class ServerConfig {
   public serverPassword: string
   public adminPassword: string
   public corsConfig: string
+  public clientAuthDelay: number
 
   constructor() {
     this.rootDir = path.join(__dirname, '..', '..')
@@ -17,6 +18,7 @@ class ServerConfig {
     this.serverPassword = process.env.SERVER_PASSWORD || 'server'
     this.adminPassword = process.env.ADMIN_PASSWORD || 'admin'
     this.corsConfig = process.env.CORS_CONFIG || '*'
+    this.clientAuthDelay = 2000
   }
 }
 

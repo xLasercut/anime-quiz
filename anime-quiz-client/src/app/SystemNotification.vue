@@ -8,7 +8,7 @@
         size="x-small"
         @click="state.show = false"
       >
-        <v-icon icon="fa-solid fa-xmark"></v-icon>
+        <v-icon icon="mdi-close"></v-icon>
       </v-btn>
     </template>
   </v-snackbar>
