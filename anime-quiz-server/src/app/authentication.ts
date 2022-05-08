@@ -2,7 +2,6 @@ import {Socket} from '../types'
 import {ServerConfig} from './config'
 import {Logger} from './logging/logger'
 import {LOG_BASE} from './logging/log-base'
-import {Emitter} from './emitter'
 
 function checkPassword(socket: Socket, username: string, password: string, config: ServerConfig): void {
   if (password === config.serverPassword || password === config.adminPassword) {
