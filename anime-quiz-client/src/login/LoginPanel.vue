@@ -4,7 +4,6 @@
     color="primary"
     append-icon="mdi-cog"
     @click="openSettings()"
-    variant="outlined"
   >Settings</v-btn>
 </template>
 

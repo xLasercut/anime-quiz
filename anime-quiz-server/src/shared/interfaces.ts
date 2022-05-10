@@ -8,6 +8,12 @@ interface AqSongSerialised {
   src: string
 }
 
+interface AqAnimeSerialised {
+  anime_id: string
+  anime_name: string
+}
+
 export {
-  AqSongSerialised
+  AqSongSerialised,
+  AqAnimeSerialised
 }

@@ -5,6 +5,34 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
+const discordDark: ThemeDefinition = {
+  dark: true,
+  colors: {
+    background: '#36393f',
+    surface: '#292b2f',
+    primary: '#7289da',
+    secondary: '#7289da',
+    error: '#f04740',
+    info: '#8e9297',
+    success: '#3fb581',
+    warning: '#faa61a'
+  }
+}
+
+const discordLight: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#ffffff',
+    surface: '#e3e5e8',
+    primary: '#7289da',
+    secondary: '#7289da',
+    error: '#f04740',
+    info: '#8e9297',
+    success: '#3fb581',
+    warning: '#faa61a'
+  }
+}
+
 const nordDark: ThemeDefinition = {
   dark: true,
   colors: {
@@ -61,7 +89,9 @@ const vuetify = createVuetify({
     defaultTheme: 'nordDark',
     themes: {
       nordDark,
-      nordLight
+      nordLight,
+      discordDark,
+      discordLight
     }
   },
   components,

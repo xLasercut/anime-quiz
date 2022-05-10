@@ -11,6 +11,7 @@ import {Emitter} from './app/emitter'
 import {checkClientAuth, checkPassword} from './app/authentication'
 import {NOTIFICATION_COLOR} from './shared/constants'
 import {AnimeQuizDb} from './app/database'
+import {SongListHandler} from './handlers/song-list-handler'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -23,6 +24,14 @@ const io = new Server(httpServer, {
 const emitter = new Emitter(io)
 const logger = new Logger(config)
 const db = new AnimeQuizDb(config)
+
+const songListHandler = new SongListHandler(logger, db)
+
+function startHandlers(socket: Socket, errorHandler: Function): void {
+  if (socket.data.auth) {
+    songListHandler.start(socket, errorHandler)
+  }
+}
 
 io.on('connection', (socket: Socket) => {
   logger.writeLog(LOG_BASE.SERVER002, { id: socket.id })
@@ -44,6 +53,7 @@ io.on('connection', (socket: Socket) => {
   socket.on(SHARED_EVENTS.AUTHENTICATE, (username: string, password: string, callback: Function) => {
     try {
       checkPassword(socket, username, password, config)
+      startHandlers(socket, errorHandler)
       if (!socket.data.auth) {
         emitter.systemNotification(NOTIFICATION_COLOR.ERROR, 'Incorrect server password', socket.id)
       }

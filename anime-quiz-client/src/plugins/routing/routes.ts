@@ -1,6 +1,7 @@
 const ROUTES = {
   LOGIN: 'LOGIN',
-  LOBBY: 'LOBBY'
+  LOBBY: 'LOBBY',
+  SONG_LIST: 'SONG_LIST'
 }
 
 const DIALOG_ROUTES = {

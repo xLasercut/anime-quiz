@@ -4,17 +4,21 @@ import Login from '../../views/Login.vue'
 import LoginSettings from '../../login/LoginSettings.vue'
 import Lobby from '../../views/Lobby.vue'
 import LobbyPanel from '../../lobby/LobbyPanel.vue'
+import SongListPanel from '../../song-list/SongListPanel.vue'
+import SongList from '../../views/SongList.vue'
 import {store} from '../store'
 import {DIALOG_ROUTES, ROUTES} from './routes'
 
 const _PANEL_MAPPING: {[key: string]: Component} = {
   [ROUTES.LOGIN]: LoginPanel,
-  [ROUTES.LOBBY]: LobbyPanel
+  [ROUTES.LOBBY]: LobbyPanel,
+  [ROUTES.SONG_LIST]: SongListPanel
 }
 
 const _VIEW_MAPPING: {[key: string]: Component} = {
   [ROUTES.LOGIN]: Login,
-  [ROUTES.LOBBY]: Lobby
+  [ROUTES.LOBBY]: Lobby,
+  [ROUTES.SONG_LIST]: SongList
 }
 
 const _DIALOG_MAPPING: {[key: string]: Component} = {

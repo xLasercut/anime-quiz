@@ -5,7 +5,7 @@ import {store} from './store'
 const GAME_SERVER = localStorage.GAME_SERVER || ''
 const socket = io(GAME_SERVER, { autoConnect: false })
 
-for (const mutation in MUTATIONS) {
+for (const mutation of Object.values(MUTATIONS)) {
   if (mutation.startsWith('SOCKET_')) {
     socket.on(mutation.replace('SOCKET_', ''), (data: any): void => {
       store.commit(mutation, data)

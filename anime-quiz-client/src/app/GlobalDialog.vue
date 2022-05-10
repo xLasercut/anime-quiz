@@ -1,27 +1,31 @@
 <template>
   <v-dialog
     v-model="state.show"
-    transition="dialog-bottom-transition"
+    transition="fade-transition"
   >
-    <v-card width="800px">
-      <template #title>
-        <v-row justify="space-between">
-          <v-col cols="auto">
-            <span>{{ state.label }}</span>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn
-              icon="mdi-close"
-              :flat="true"
-              text
-              size="x-small"
-              @click="state.show = false"
-            ></v-btn>
-          </v-col>
-        </v-row>
-      </template>
-      <component :is="dialogComponent()" @dialog:close="state.show = false"></component>
-    </v-card>
+    <v-container>
+      <v-row>
+        <v-card width="800px" flat>
+          <template #title>
+            <v-row justify="space-between">
+              <v-col cols="auto">
+                <span>{{ state.label }}</span>
+              </v-col>
+              <v-col cols="auto">
+                <v-btn
+                  icon="mdi-close"
+                  flat
+                  text
+                  size="x-small"
+                  @click="state.show = false"
+                ></v-btn>
+              </v-col>
+            </v-row>
+          </template>
+          <component :is="dialogComponent()" @dialog:close="state.show = false"></component>
+        </v-card>
+      </v-row>
+    </v-container>
   </v-dialog>
 </template>
 

@@ -1,6 +1,6 @@
 import {Database} from 'sqlite3'
 import {ServerConfig} from './config'
-import {AqSongSerialised} from '../shared/interfaces'
+import {AqAnimeSerialised, AqSongSerialised} from '../shared/interfaces'
 import {AqSongRaw} from '../interfaces'
 
 class AnimeQuizDb {
@@ -44,6 +44,14 @@ class AnimeQuizDb {
         ...rest
       }
     })
+  }
+
+  public async getAnimeList(): Promise<AqAnimeSerialised[]> {
+    return await this._all(`
+      SELECT
+        *
+      FROM animes
+    `)
   }
 }
 

@@ -61,4 +61,3 @@ onUnmounted((): void => {
   socket.off(SHARED_EVENTS.SYSTEM_NOTIFICATION)
 })
 </script>
-
