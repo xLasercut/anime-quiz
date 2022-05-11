@@ -1,11 +1,12 @@
-import {createStore} from 'vuex'
+import Vue from 'vue'
+import Vuex from 'vuex'
 import {client} from './client'
-import {songList} from './song-list'
 
-const store = createStore({
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
   modules: {
-    client,
-    songList
+    client
   }
 })
 

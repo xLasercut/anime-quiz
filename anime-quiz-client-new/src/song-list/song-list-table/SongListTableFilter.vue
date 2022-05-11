@@ -2,13 +2,13 @@
   <v-form @submit="updateFilter()">
     <v-row dense>
       <v-col>
-        <v-autocomplete
+        <v-combobox
           density="compact"
           v-model="state.animeFilter"
           variant="outlined"
           label="Anime"
-          :items="animes()"
-        ></v-autocomplete>
+          :items="state.items"
+        ></v-combobox>
       </v-col>
       <v-col>
         <v-text-field density="compact" variant="outlined" label="Song"></v-text-field>
@@ -35,7 +35,8 @@ const state = reactive({
   items: [
     'test',
     'google'
-  ]
+  ],
+  show: true
 })
 
 function animes() {

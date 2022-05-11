@@ -1,10 +1,15 @@
-import 'vuetify/styles'
-import { createApp } from 'vue'
+import Vue from 'vue'
 import App from './App.vue'
-import {vuetify} from './plugins/vuetify'
 import {store} from './plugins/store'
+import vuetify from './plugins/vuetify'
+import VueCompositionAPI from '@vue/composition-api'
 
-const app = createApp(App)
-app.use(vuetify)
-app.use(store)
-app.mount('#app')
+Vue.config.productionTip = false
+
+Vue.use(VueCompositionAPI)
+
+new Vue({
+  store,
+  vuetify,
+  render: h => h(App)
+}).$mount('#app')

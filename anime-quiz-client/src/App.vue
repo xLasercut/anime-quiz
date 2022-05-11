@@ -1,5 +1,5 @@
 <template>
-  <v-app :theme="theme">
+  <v-app>
     <nav-bar></nav-bar>
     <v-container fluid>
       <component :is="viewComponent()"></component>
@@ -9,55 +9,64 @@
   </v-app>
 </template>
 
-<script setup lang="ts">
-import NavBar from './app/NavBar.vue'
-import {computed, onMounted, onUnmounted, provide} from 'vue'
-import {useStore} from 'vuex'
-import {viewComponent} from './plugins/routing/mapping'
-import SystemNotification from './app/SystemNotification.vue'
-import GlobalDialog from './app/GlobalDialog.vue'
-import {NotificationColor} from './assets/shared/types'
-import {SHARED_EVENTS} from './assets/shared/events'
-import {socket} from './plugins/socket'
+<script lang="ts">
+import {defineComponent, onMounted, onUnmounted, provide} from '@vue/composition-api'
+import NavBar from './components/app/NavBar.vue'
 import {CLIENT_EVENTS} from './assets/events'
+import {SHARED_EVENTS} from './assets/shared/events'
 import {NOTIFICATION_COLOR} from './assets/shared/constants'
+import {LOCAL_STORAGE_CONSTANTS} from './assets/constants'
+import {socket} from './plugins/socket'
+import {viewComponent} from './plugins/routing/mapping'
+import GlobalDialog from './components/app/GlobalDialog.vue'
+import SystemNotification from './components/app/SystemNotification.vue'
 
-const store = useStore()
+export default defineComponent({
+  components: {SystemNotification, GlobalDialog, NavBar},
+  setup() {
+    let sendNotification: Function
+    let openDialog: Function
+    provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: Function): void => {
+      sendNotification = _sendNotification
+    })
+    provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: Function): void => {
+      openDialog = _openDialog
+    })
 
-const theme = computed((): string => {
-  if (store.state.client.darkTheme) {
-    return 'nordDark'
+    provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
+      openDialog(route, label)
+    })
+    provide(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
+      sendNotification(color, message)
+    })
+
+    onMounted((): void => {
+      if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
+        sendNotification(NOTIFICATION_COLOR.ERROR, 'Server URL not set')
+      }
+
+      socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
+        sendNotification(color, message)
+      })
+    })
+
+    onUnmounted((): void => {
+      socket.off(SHARED_EVENTS.SYSTEM_NOTIFICATION)
+    })
+
+    return {
+      viewComponent
+    }
   }
-  return 'nordLight'
-})
-
-let sendNotification: Function
-let openDialog: Function
-provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: Function): void => {
-  sendNotification = _sendNotification
-})
-provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: Function): void => {
-  openDialog = _openDialog
-})
-
-provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
-  openDialog(route, label)
-})
-provide(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColor, message: string): void => {
-  sendNotification(color, message)
-})
-
-onMounted((): void => {
-  if (!localStorage.GAME_SERVER) {
-    sendNotification(NOTIFICATION_COLOR.ERROR, 'Server URL not set')
-  }
-
-  socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColor, message: string): void => {
-    sendNotification(color, message)
-  })
-})
-
-onUnmounted((): void => {
-  socket.off(SHARED_EVENTS.SYSTEM_NOTIFICATION)
 })
 </script>
+
+<style>
+.v-application {
+  background-color: var(--v-background-base) !important;
+}
+
+.v-sheet {
+  background-color: var(--v-background-darken1) !important;
+}
+</style>

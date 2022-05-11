@@ -1,10 +1,12 @@
 <template>
-  <v-btn
-    size="large"
+  <q-btn
+    flat
+    stretch
     color="primary"
-    append-icon="mdi-cog"
+    icon-right="mdi-cog"
     @click="openSettings()"
-  >Settings</v-btn>
+    label="Settings"
+  ></q-btn>
 </template>
 
 <script setup lang="ts">

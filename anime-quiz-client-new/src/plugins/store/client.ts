@@ -1,15 +1,17 @@
-import {ClientStoreState, RootStoreState} from '../../assets/interfaces'
+import {Module} from 'vuex'
 import {DIALOG_ROUTES, ROUTES} from '../routing/routes'
 import {MUTATIONS} from './mutations'
-import {Module} from 'vuex'
+import {ClientStoreState, RootStoreState} from '../../assets/interfaces'
 
-const DEFAULT_STATE: ClientStoreState = {
-  view: ROUTES.LOGIN,
-  dialogView: DIALOG_ROUTES.LOGIN_SETTINGS
+const defaultClientState = (): ClientStoreState => {
+  return {
+    view: ROUTES.LOGIN,
+    dialogView: DIALOG_ROUTES.LOGIN_SETTINGS
+  }
 }
 
 const client: Module<ClientStoreState, RootStoreState> = {
-  state: Object.assign({}, DEFAULT_STATE),
+  state: defaultClientState,
   mutations: {
     [MUTATIONS.CHANGE_DIALOG_VIEW]: (state: ClientStoreState, route: string): void => {
       state.dialogView = route
