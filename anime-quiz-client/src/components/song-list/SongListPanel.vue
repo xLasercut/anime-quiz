@@ -16,7 +16,7 @@ import NavBtn from '../shared/buttons/NavBtn.vue'
 
 
 export default defineComponent({
-  components: {NavBtn},
+  components: { NavBtn },
   setup() {
     function back(): void {
       store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
@@ -25,6 +25,7 @@ export default defineComponent({
     function reload(): void {
       socket.emit(SHARED_EVENTS.GET_SONG_LIST)
       socket.emit(SHARED_EVENTS.GET_ANIME_LIST)
+      socket.emit(SHARED_EVENTS.GET_SONG_TITLE_LIST)
     }
 
     return {

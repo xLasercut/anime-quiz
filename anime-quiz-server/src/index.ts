@@ -12,6 +12,7 @@ import { checkClientAuth, checkPassword } from './app/authentication'
 import { NOTIFICATION_COLOR } from './shared/constants'
 import { AnimeQuizDb } from './app/database'
 import { SongListHandler } from './handlers/song-list-handler'
+import { RoomHandler } from './handlers/room-handler'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -25,11 +26,13 @@ const emitter = new Emitter(io)
 const logger = new Logger(config)
 const db = new AnimeQuizDb(config)
 
-const songListHandler = new SongListHandler(logger, db)
+const songListHandler = new SongListHandler(logger, emitter, db)
+const roomHandler = new RoomHandler(logger)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
   if (socket.data.auth) {
     songListHandler.start(socket, errorHandler)
+    roomHandler.start(socket, errorHandler)
   }
 }
 
@@ -40,15 +43,6 @@ io.on('connection', (socket: Socket) => {
   socket.data.clientAuthTimer = setTimeout((): void => {
     checkClientAuth(logger, socket)
   }, config.clientAuthDelay)
-
-  socket.on('TEST', async () => {
-    try {
-      console.log(await db.getAllSongList())
-    } catch (e) {
-      errorHandler(e)
-    }
-
-  })
 
   socket.on(SHARED_EVENTS.AUTHENTICATE, (username: string, password: string, callback: Function) => {
     try {

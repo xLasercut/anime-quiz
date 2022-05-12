@@ -1,7 +1,7 @@
 class SocketData {
   public auth: boolean
   public admin: boolean
-  protected _username: string
+  public username: string
   protected _id: string
   public clientAuthTimer: NodeJS.Timeout
 
@@ -12,7 +12,7 @@ class SocketData {
   }
 
   public userLogin(username: string): void {
-    this._username = username
+    this.username = username
   }
 }
 

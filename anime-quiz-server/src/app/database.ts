@@ -38,9 +38,10 @@ class AnimeQuizDb {
     `)
 
     return songList.map((row) => {
-      const { anime_name, ...rest } = row
+      const { anime_name, song_title, ...rest } = row
       return {
         anime_name: JSON.parse(anime_name),
+        song_title: song_title || '',
         ...rest
       }
     })
@@ -51,6 +52,14 @@ class AnimeQuizDb {
       SELECT
         *
       FROM animes
+    `)
+  }
+
+  public async getSongTitleList(): Promise<string[]> {
+    return await this._all(`
+      SELECT
+        song_title
+      FROM songs
     `)
   }
 }

@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, provide } from '@vue/composition-api'
+import { defineComponent, onMounted, provide } from '@vue/composition-api'
 import NavBar from './components/app/NavBar.vue'
 import { CLIENT_EVENTS } from './assets/events'
 import { SHARED_EVENTS } from './assets/shared/events'
@@ -50,14 +50,10 @@ export default defineComponent({
       })
     })
 
-    onUnmounted((): void => {
-      socket.off(SHARED_EVENTS.SYSTEM_NOTIFICATION)
-    })
-
     return {
-      viewComponent,
+      viewComponent
     }
-  },
+  }
 })
 </script>
 
@@ -67,6 +63,34 @@ export default defineComponent({
 }
 
 .v-sheet {
+  background-color: var(--v-background-darken1) !important;
+}
+
+.v-data-table {
+  background-color: var(--v-background-darken1) !important;
+}
+
+.v-data-table th {
+  background-color: var(--v-background-darken1) !important;
+}
+
+.v-data-table tr:hover {
+  background-color: var(--v-background-darken2) !important;
+}
+
+.v-pagination__item {
+  background-color: var(--v-background-base) !important;
+}
+
+.v-pagination__item:hover {
+  background-color: var(--v-background-darken1) !important;
+}
+
+.v-pagination__navigation {
+  background-color: var(--v-background-base) !important;
+}
+
+.v-pagination__navigation:hover {
   background-color: var(--v-background-darken1) !important;
 }
 </style>

@@ -7,7 +7,7 @@ import { LOG_LEVEL } from './log-base'
 
 const { combine, timestamp, printf } = winston.format
 
-const logFormat = printf(({level, message, timestamp}) => {
+const logFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} | ${level} | ${message}`
 })
 
@@ -53,4 +53,4 @@ class Logger {
   }
 }
 
-export {Logger}
+export { Logger }

@@ -5,7 +5,10 @@ interface SongListStoreState {
   currentPage: number
   itemsPerPage: number
   animeFilter: string
-  animeList: AqAnimeSerialised[]
+  songTypeFilter: string
+  songTitleFilter: string
+  animeList: AqAnimeSerialised[],
+  songTitleList: string[]
 }
 
 interface RootStoreState {
