@@ -2,7 +2,7 @@
   <v-snackbar top :timeout="6000" :color="color" v-model="show">
     {{ message }}
     <template #action>
-      <v-btn depressed icon @click="show = false" >
+      <v-btn depressed icon @click="show = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </template>
@@ -48,6 +48,4 @@ export default defineComponent({
     }
   }
 })
-
-
 </script>

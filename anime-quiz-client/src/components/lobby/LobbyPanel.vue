@@ -1,6 +1,5 @@
 <template>
-  <v-toolbar-items>
-  </v-toolbar-items>
+  <v-toolbar-items> </v-toolbar-items>
 </template>
 
 <script lang="ts">

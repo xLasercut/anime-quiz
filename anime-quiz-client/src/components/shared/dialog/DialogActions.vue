@@ -14,6 +14,6 @@ import { defineComponent } from '@vue/composition-api'
 import IconBtn from '../buttons/IconBtn.vue'
 
 export default defineComponent({
-  components: {IconBtn}
+  components: { IconBtn }
 })
 </script>

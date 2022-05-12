@@ -1,4 +1,4 @@
-import {SHARED_EVENTS} from '../../assets/shared/events'
+import { SHARED_EVENTS } from '../../assets/shared/events'
 
 const MUTATIONS = {
   CHANGE_DIALOG_VIEW: 'CHANGE_DIALOG_VIEW',

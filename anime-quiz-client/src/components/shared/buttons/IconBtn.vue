@@ -1,7 +1,7 @@
 <template>
   <v-btn v-bind="$attrs" depressed @click="$emit('click')">
     <slot></slot>
-    <v-icon right>{{icon}}</v-icon>
+    <v-icon right>{{ icon }}</v-icon>
   </v-btn>
 </template>
 

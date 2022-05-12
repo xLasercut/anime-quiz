@@ -32,15 +32,12 @@ export default defineComponent({
   setup() {
     const state = reactive({
       animeFilter: store.state.songList.animeFilter,
-      items: [
-        'test',
-        'google'
-      ],
+      items: ['test', 'google'],
       show: true
     })
 
     function animes() {
-      return store.state.songList.animeList.map(anime => anime.anime_name)
+      return store.state.songList.animeList.map((anime) => anime.anime_name)
     }
 
     function updateFilter(): void {

@@ -10,12 +10,7 @@
     <v-card-actions>
       <v-row justify="end">
         <v-col cols="auto">
-          <icon-btn
-            :color="color"
-            icon="mdi-login"
-            large
-            @click="$emit('click')"
-          >Go</icon-btn>
+          <icon-btn :color="color" icon="mdi-login" large @click="$emit('click')">Go</icon-btn>
         </v-col>
       </v-row>
     </v-card-actions>
@@ -27,7 +22,7 @@ import { defineComponent } from '@vue/composition-api'
 import IconBtn from '../shared/buttons/IconBtn.vue'
 
 export default defineComponent({
-  components: {IconBtn},
+  components: { IconBtn },
   props: {
     title: {
       type: String,

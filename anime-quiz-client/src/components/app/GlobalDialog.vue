@@ -1,9 +1,5 @@
 <template>
-  <v-dialog
-    v-model="show"
-    transition="fade-transition"
-    width="800px"
-  >
+  <v-dialog v-model="show" transition="fade-transition" width="800px">
     <v-card flat>
       <v-card-title>
         <v-row justify="space-between">
@@ -53,6 +49,4 @@ export default defineComponent({
     }
   }
 })
-
-
 </script>

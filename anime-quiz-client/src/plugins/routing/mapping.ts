@@ -9,19 +9,19 @@ import LobbyPanel from '../../components/lobby/LobbyPanel.vue'
 import SongListPanel from '../../components/song-list/SongListPanel.vue'
 import SongList from '../../views/SongList.vue'
 
-const _PANEL_MAPPING: {[key: string]: Component} = {
+const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
   [ROUTES.LOBBY]: LobbyPanel,
   [ROUTES.SONG_LIST]: SongListPanel
 }
 
-const _VIEW_MAPPING: {[key: string]: Component} = {
+const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: Login,
   [ROUTES.LOBBY]: Lobby,
   [ROUTES.SONG_LIST]: SongList
 }
 
-const _DIALOG_MAPPING: {[key: string]: Component} = {
+const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings
 }
 

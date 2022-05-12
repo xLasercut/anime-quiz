@@ -22,7 +22,7 @@ import GlobalDialog from './components/app/GlobalDialog.vue'
 import SystemNotification from './components/app/SystemNotification.vue'
 
 export default defineComponent({
-  components: {SystemNotification, GlobalDialog, NavBar},
+  components: { SystemNotification, GlobalDialog, NavBar },
   setup() {
     let sendNotification: Function
     let openDialog: Function
@@ -55,9 +55,9 @@ export default defineComponent({
     })
 
     return {
-      viewComponent
+      viewComponent,
     }
-  }
+  },
 })
 </script>
 

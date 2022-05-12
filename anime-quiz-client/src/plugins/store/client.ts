@@ -1,7 +1,7 @@
-import {ClientStoreState, RootStoreState} from '../../assets/interfaces'
-import {DIALOG_ROUTES, ROUTES} from '../routing/routes'
-import {MUTATIONS} from './mutations'
-import {Module} from 'vuex'
+import { ClientStoreState, RootStoreState } from '../../assets/interfaces'
+import { DIALOG_ROUTES, ROUTES } from '../routing/routes'
+import { MUTATIONS } from './mutations'
+import { Module } from 'vuex'
 
 const DEFAULT_STATE: ClientStoreState = {
   view: ROUTES.LOGIN,

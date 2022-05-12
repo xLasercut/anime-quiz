@@ -24,7 +24,7 @@ import { store } from '../plugins/store'
 import LobbyMenuCard from '../components/lobby/LobbyMenuCard.vue'
 
 export default defineComponent({
-  components: {LobbyMenuCard},
+  components: { LobbyMenuCard },
   setup() {
     function openSongList() {
       store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.SONG_LIST)
@@ -35,6 +35,4 @@ export default defineComponent({
     }
   }
 })
-
-
 </script>

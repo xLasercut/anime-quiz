@@ -5,7 +5,7 @@ import { LogTemplate } from '../../interfaces'
 import { ServerConfig } from '../config'
 import { LOG_LEVEL } from './log-base'
 
-const {combine, timestamp, printf} = winston.format
+const { combine, timestamp, printf } = winston.format
 
 const logFormat = printf(({level, message, timestamp}) => {
   return `${timestamp} | ${level} | ${message}`

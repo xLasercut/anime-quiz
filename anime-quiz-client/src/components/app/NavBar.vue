@@ -22,7 +22,7 @@ import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
 import { panelComponent } from '../../plugins/routing/mapping'
 
 export default defineComponent({
-  components: {NavBtn},
+  components: { NavBtn },
   setup(_props, context) {
     const vuetify = context.root.$vuetify
 

@@ -37,8 +37,8 @@ class AnimeQuizDb {
       GROUP BY songs.song_id
     `)
 
-    return songList.map(row => {
-      const {anime_name, ...rest} = row
+    return songList.map((row) => {
+      const { anime_name, ...rest } = row
       return {
         anime_name: JSON.parse(anime_name),
         ...rest
