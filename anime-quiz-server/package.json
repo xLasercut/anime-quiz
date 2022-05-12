@@ -6,7 +6,9 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc -b",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "init:userdb": "ts-node tools/init-user-db.ts",
+    "create:user": "ts-node tools/create-user.ts"
   },
   "author": "",
   "license": "MIT",
@@ -19,6 +21,7 @@
     "sqlite3": "^5.0.8",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4",
+    "uuid": "^8.3.2",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.6.1"
   }
