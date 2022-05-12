@@ -1,6 +1,6 @@
-import {Logger} from './logging/logger'
-import {Socket} from '../types'
-import {LOG_BASE} from './logging/log-base'
+import { Logger } from './logging/logger'
+import { Socket } from '../types'
+import { LOG_BASE } from './logging/log-base'
 
 function newErrorHandler(socket: Socket, logger: Logger) {
   function errorHandler(e: Error) {

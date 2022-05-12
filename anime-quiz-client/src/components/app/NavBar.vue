@@ -5,18 +5,21 @@
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <component :is="panelComponent()"></component>
+    <v-toolbar-items>
+      <nav-btn icon="mdi-logout" @click="logOut()" color="error" v-if="showLogout()">Logout</nav-btn>
+    </v-toolbar-items>
   </v-app-bar>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted} from '@vue/composition-api'
+import { defineComponent, onMounted } from '@vue/composition-api'
 import NavBtn from '@/components/shared/buttons/NavBtn.vue'
-import {socket} from '../../plugins/socket'
-import {store} from '../../plugins/store'
-import {MUTATIONS} from '../../plugins/store/mutations'
-import {ROUTES} from '../../plugins/routing/routes'
-import {LOCAL_STORAGE_CONSTANTS} from '../../assets/constants'
-import {panelComponent} from '../../plugins/routing/mapping'
+import { socket } from '../../plugins/socket'
+import { store } from '../../plugins/store'
+import { MUTATIONS } from '../../plugins/store/mutations'
+import { ROUTES } from '../../plugins/routing/routes'
+import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
+import { panelComponent } from '../../plugins/routing/mapping'
 
 export default defineComponent({
   components: {NavBtn},

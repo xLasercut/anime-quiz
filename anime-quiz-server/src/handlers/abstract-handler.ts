@@ -1,5 +1,5 @@
-import {Logger} from '../app/logging/logger'
-import {Socket} from '../types'
+import { Logger } from '../app/logging/logger'
+import { Socket } from '../types'
 
 class AbstractHandler {
   protected _logger: Logger

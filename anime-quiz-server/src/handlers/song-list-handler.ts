@@ -1,7 +1,7 @@
-import {AnimeQuizDb} from '../app/database'
-import {Logger} from '../app/logging/logger'
-import {AbstractHandler} from './abstract-handler'
-import {SHARED_EVENTS} from '../shared/events'
+import { AnimeQuizDb } from '../app/database'
+import { Logger } from '../app/logging/logger'
+import { AbstractHandler } from './abstract-handler'
+import { SHARED_EVENTS } from '../shared/events'
 
 class SongListHandler extends AbstractHandler {
   protected _db: AnimeQuizDb

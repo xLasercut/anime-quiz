@@ -26,13 +26,18 @@
   </v-table>
 </template>
 
-<script setup lang="ts">
-import {reactive, ref} from 'vue'
-import {CLIENT_CONSTANTS} from '../assets/constants'
-import SongListTableFilter from './song-list-table/SongListTableFilter.vue'
-import SongListTablePagination from './song-list-table/SongListTablePagination.vue'
+<script lang="ts">
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
-const state = reactive({
-  headers: ['Anime', 'Title', 'Artist', 'Type']
+export default defineComponent({
+  setup() {
+    const state = reactive({
+      headers: ['Anime', 'Title', 'Artist', 'Type']
+    })
+
+    return {
+      ...toRefs(state)
+    }
+  }
 })
 </script>

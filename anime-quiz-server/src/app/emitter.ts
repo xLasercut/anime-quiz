@@ -1,5 +1,5 @@
-import {Server} from 'socket.io'
-import {SHARED_EVENTS} from '../shared/events'
+import { Server } from 'socket.io'
+import { SHARED_EVENTS } from '../shared/events'
 
 class Emitter {
   protected _io: Server

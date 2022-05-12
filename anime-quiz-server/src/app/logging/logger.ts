@@ -1,9 +1,9 @@
 import * as winston from 'winston'
 import * as DailyRotateFile from 'winston-daily-rotate-file'
 import * as mustache from 'mustache'
-import {LogTemplate} from '../../interfaces'
-import {ServerConfig} from '../config'
-import {LOG_LEVEL} from './log-base'
+import { LogTemplate } from '../../interfaces'
+import { ServerConfig } from '../config'
+import { LOG_LEVEL } from './log-base'
 
 const {combine, timestamp, printf} = winston.format
 

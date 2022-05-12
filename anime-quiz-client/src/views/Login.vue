@@ -24,7 +24,7 @@
           ></login-input>
           <v-row justify="center">
             <v-col cols="auto">
-              <icon-btn color="success" type="submit" large icon="mdi-login">Login</icon-btn>
+              <icon-btn color="success" type="submit" large icon="mdi-login" :disabled="disabled">Login</icon-btn>
             </v-col>
           </v-row>
         </v-form>
@@ -71,9 +71,11 @@ export default defineComponent({
 
     function login() {
       if (state.valid) {
+        state.disabled = true
         localStorage.AQ_USERNAME = state.username
         socket.connect()
         socket.emit(SHARED_EVENTS.AUTHENTICATE, state.username, state.password, (auth: boolean): void => {
+          state.disabled = false
           if (auth) {
             store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
           }

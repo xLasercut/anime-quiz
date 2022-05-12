@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject, reactive, toRefs} from '@vue/composition-api'
-import {CLIENT_EVENTS} from '../../assets/events'
+import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
+import { CLIENT_EVENTS } from '../../assets/events'
 
 export default defineComponent({
   setup() {

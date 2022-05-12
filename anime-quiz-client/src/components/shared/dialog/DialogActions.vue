@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import IconBtn from '../buttons/IconBtn.vue'
 
 export default defineComponent({

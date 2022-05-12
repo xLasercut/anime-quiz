@@ -1,7 +1,7 @@
-import {Database} from 'sqlite3'
-import {ServerConfig} from './config'
-import {AqAnimeSerialised, AqSongSerialised} from '../shared/interfaces'
-import {AqSongRaw} from '../interfaces'
+import { Database } from 'sqlite3'
+import { ServerConfig } from './config'
+import { AqAnimeSerialised, AqSongSerialised } from '../shared/interfaces'
+import { AqSongRaw } from '../interfaces'
 
 class AnimeQuizDb {
   protected _db: Database

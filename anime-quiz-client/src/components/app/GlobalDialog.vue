@@ -23,11 +23,11 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject, reactive, toRefs} from '@vue/composition-api'
-import {MUTATIONS} from '../../plugins/store/mutations'
-import {store} from '../../plugins/store'
-import {CLIENT_EVENTS} from '../../assets/events'
-import {dialogComponent} from '../../plugins/routing/mapping'
+import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
+import { MUTATIONS } from '../../plugins/store/mutations'
+import { store } from '../../plugins/store'
+import { CLIENT_EVENTS } from '../../assets/events'
+import { dialogComponent } from '../../plugins/routing/mapping'
 
 export default defineComponent({
   setup() {

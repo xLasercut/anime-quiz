@@ -1,7 +1,7 @@
-import {Socket} from '../types'
-import {ServerConfig} from './config'
-import {Logger} from './logging/logger'
-import {LOG_BASE} from './logging/log-base'
+import { Socket } from '../types'
+import { ServerConfig } from './config'
+import { Logger } from './logging/logger'
+import { LOG_BASE } from './logging/log-base'
 
 function checkPassword(socket: Socket, username: string, password: string, config: ServerConfig): void {
   if (password === config.serverPassword || password === config.adminPassword) {
