@@ -10,9 +10,10 @@ import { SHARED_EVENTS } from './shared/events'
 import { Emitter } from './app/emitter'
 import { checkClientAuth, checkPassword } from './app/authentication'
 import { NOTIFICATION_COLOR } from './shared/constants'
-import { AnimeQuizDb } from './app/database'
-import { SongListHandler } from './handlers/song-list-handler'
-import { RoomHandler } from './handlers/room-handler'
+import { AnimeQuizSongDb } from './database/song'
+import { SongListHandler } from './handlers/song-list'
+import { RoomHandler } from './handlers/room'
+import { AnimeQuizUserDb } from './database/user'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -24,9 +25,10 @@ const io = new Server(httpServer, {
 
 const emitter = new Emitter(io)
 const logger = new Logger(config)
-const db = new AnimeQuizDb(config)
+const songDb = new AnimeQuizSongDb(config, logger)
+const userDb = new AnimeQuizUserDb(config, logger)
 
-const songListHandler = new SongListHandler(logger, emitter, db)
+const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
@@ -38,7 +40,7 @@ function startHandlers(socket: Socket, errorHandler: Function): void {
 
 io.on('connection', (socket: Socket) => {
   logger.writeLog(LOG_BASE.SERVER002, { id: socket.id })
-  const errorHandler = newErrorHandler(socket, logger)
+  const errorHandler = newErrorHandler(socket, logger, emitter)
   socket.data = new SocketData(socket.id)
   socket.data.clientAuthTimer = setTimeout((): void => {
     checkClientAuth(logger, socket)
@@ -67,6 +69,6 @@ io.on('connection', (socket: Socket) => {
   })
 })
 
-httpServer.listen(config.serverPort, (): void => {
+httpServer.listen(config.serverPort, async () => {
   logger.writeLog(LOG_BASE.SERVER001, { port: config.serverPort })
 })

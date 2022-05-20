@@ -78,6 +78,10 @@ export default defineComponent({
   background-color: var(--v-background-darken2) !important;
 }
 
+.v-data-table .v-data-table__selected {
+  background-color: var(--v-background-darken2) !important;
+}
+
 .v-pagination__item {
   background-color: var(--v-background-base) !important;
 }

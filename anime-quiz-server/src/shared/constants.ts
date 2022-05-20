@@ -4,6 +4,13 @@ const NOTIFICATION_COLOR = {
   ERROR: 'error'
 }
 
+const SONG_LIST_EDIT_MODE = {
+  ADD: 'add',
+  REMOVE: 'remove',
+  NONE: 'none'
+}
+
 export {
-  NOTIFICATION_COLOR
+  NOTIFICATION_COLOR,
+  SONG_LIST_EDIT_MODE
 }

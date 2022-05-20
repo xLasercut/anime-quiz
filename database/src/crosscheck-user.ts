@@ -13,7 +13,7 @@ const userfiles = fs.readdirSync(USER_DATA_DIR).filter(file => file.includes('.j
 function isInNoMatchCurrentSongs(songId) {
   for (const song of noMatchCurrentSongs) {
     if (song.songId.includes(songId)) {
-      return true
+      return song
     }
   }
   return false
@@ -23,7 +23,7 @@ function isInNoMatchCurrentSongs(songId) {
 function isInMatchedAnimeThemesSongs(songId) {
   for (const song of matchedAnimeThemesSongs) {
     if (song.songId.includes(songId)) {
-      return true
+      return song
     }
   }
   return false
@@ -36,10 +36,12 @@ for (const file of userfiles) {
   const userData = JSON.parse(fs.readFileSync(path.join(USER_DATA_DIR, file), 'utf-8'))
 
   for (const songId of userData) {
-    if (isInMatchedAnimeThemesSongs(songId)) {
-      inMatchedAnimeThemesSongs.push(songId)
-    } else if (isInNoMatchCurrentSongs(songId)) {
-      inNoMatchCurrentSongs.push(songId)
+    const matchedAnimeThemesSong = isInMatchedAnimeThemesSongs(songId)
+    const noMatchCurrentSong = isInNoMatchCurrentSongs(songId)
+    if (matchedAnimeThemesSong) {
+      inMatchedAnimeThemesSongs.push(matchedAnimeThemesSong)
+    } else if (noMatchCurrentSong) {
+      inNoMatchCurrentSongs.push(noMatchCurrentSong)
     } else {
       notMatchAtAll.push(songId)
     }
@@ -49,4 +51,6 @@ for (const file of userfiles) {
   console.log(`in anime theme: ${inMatchedAnimeThemesSongs.length}`)
   console.log(`in unmatched current: ${inNoMatchCurrentSongs.length}`)
   console.log(`no match: ${notMatchAtAll.length}`)
+  fs.writeFileSync(path.join(DATA_DIR, 'matched', file), JSON.stringify(inMatchedAnimeThemesSongs, null, 2))
+  fs.writeFileSync(path.join(DATA_DIR, 'notmatched', file), JSON.stringify(inNoMatchCurrentSongs, null, 2))
 }

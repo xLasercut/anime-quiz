@@ -31,6 +31,31 @@ const LOG_BASE = {
     level: LOG_LEVEL.INFO,
     template: 'joined room - id="{{{id}}}" username="{{{username}}}" roomId="{{{roomId}}}"'
   },
+  SONG001: {
+    reference: 'SONG001',
+    level: LOG_LEVEL.WARN,
+    template: 'song edit user does not exist - userId="{{{userId}}}"'
+  },
+  SONG002: {
+    reference: 'SONG002',
+    level: LOG_LEVEL.WARN,
+    template: 'song edit song does not exist - songIds="{{{songIds}}}"'
+  },
+  SONG003: {
+    reference: 'SONG003',
+    level: LOG_LEVEL.WARN,
+    template: 'song edit song already exists in user list - songIds="{{{songIds}}}"'
+  },
+  SONG004: {
+    reference: 'SONG004',
+    level: LOG_LEVEL.WARN,
+    template: 'song edit song not exists in user list - songIds="{{{songIds}}}"'
+  },
+  DATA001: {
+    reference: 'DATA001',
+    level: LOG_LEVEL.WARN,
+    template: 'game data validation error - id="{{{id}}}" username="{{{username}}}"'
+  },
   AUTH002: {
     reference: 'AUTH002',
     level: LOG_LEVEL.WARN,

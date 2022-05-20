@@ -2,7 +2,12 @@
   <v-main>
     <v-row>
       <v-col>
-        <lobby-menu-card color="success" title="Game Room" description="Play anime music quiz"></lobby-menu-card>
+        <lobby-menu-card
+          color="success"
+          title="Game Room"
+          description="Play anime music quiz"
+          @click="openRoomList()"
+        ></lobby-menu-card>
       </v-col>
       <v-col>
         <lobby-menu-card
@@ -33,12 +38,17 @@ export default defineComponent({
       store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.SONG_LIST)
     }
 
+    function openRoomList() {
+      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.ROOM_LIST)
+    }
+
     onMounted(() => {
       socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
     })
 
     return {
-      openSongList
+      openSongList,
+      openRoomList
     }
   }
 })

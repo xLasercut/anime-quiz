@@ -1,6 +1,6 @@
 import { Server } from 'socket.io'
 import { SHARED_EVENTS } from '../shared/events'
-import { AqAnimeSerialised, AqSongSerialised } from '../shared/interfaces'
+import { AqSongSerialised, AqUserSongsSerialised } from '../shared/interfaces'
 
 class Emitter {
   protected _io: Server
@@ -17,12 +17,16 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_LIST, songList)
   }
 
-  public updateAnimeList(animeList: AqAnimeSerialised[], sid: string = null): void {
+  public updateAnimeList(animeList: string[], sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_ANIME_LIST, animeList)
   }
 
   public updateSongTitleList(songTitleList: string[], sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_TITLE_LIST, songTitleList)
+  }
+
+  public updateUserLists(userLists: AqUserSongsSerialised[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_USER_LISTS, userLists)
   }
 
   protected _client(sid: string) {

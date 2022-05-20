@@ -1,7 +1,7 @@
 import { RootStoreState, SongListStoreState } from '../../assets/interfaces'
 import { Module } from 'vuex'
 import { MUTATIONS } from './mutations'
-import { AqAnimeSerialised, AqSongSerialised } from '../../assets/shared/interfaces'
+import { AqSongSerialised, AqUserSongsSerialised } from '../../assets/shared/interfaces'
 
 const DEFAULT_STATE: SongListStoreState = {
   songList: [],
@@ -11,7 +11,8 @@ const DEFAULT_STATE: SongListStoreState = {
   songTitleFilter: '',
   songTypeFilter: '',
   animeList: [],
-  songTitleList: []
+  songTitleList: [],
+  userLists: []
 }
 
 const songList: Module<SongListStoreState, RootStoreState> = {
@@ -20,11 +21,14 @@ const songList: Module<SongListStoreState, RootStoreState> = {
     [MUTATIONS.SOCKET_UPDATE_SONG_LIST]: (state: SongListStoreState, songList: AqSongSerialised[]) => {
       state.songList = songList
     },
-    [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: SongListStoreState, animeList: AqAnimeSerialised[]) => {
+    [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: SongListStoreState, animeList: string[]) => {
       state.animeList = animeList
     },
     [MUTATIONS.SOCKET_UPDATE_SONG_TITLE_LIST]: (state: SongListStoreState, titleList: string[]) => {
       state.songTitleList = titleList
+    },
+    [MUTATIONS.SOCKET_UPDATE_USER_LISTS]: (state: SongListStoreState, userLists: AqUserSongsSerialised[]) => {
+      state.userLists = userLists
     },
     [MUTATIONS.UPDATE_SONG_LIST_ANIME_FILTER]: (state: SongListStoreState, filter: string) => {
       state.animeFilter = filter
@@ -43,6 +47,18 @@ const songList: Module<SongListStoreState, RootStoreState> = {
           song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())
       })
+    },
+    userList: (state: SongListStoreState): Function => (userId: string): string[] => {
+      if (!userId) {
+        return []
+      }
+      const filteredList = state.userLists.filter((userList) => {
+        return userList.user_id === userId
+      })
+      if (filteredList.length > 0) {
+        return filteredList[0].song_id
+      }
+      return []
     }
   }
 }

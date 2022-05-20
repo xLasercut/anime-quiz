@@ -1,0 +1,104 @@
+import { Database, OPEN_READWRITE } from 'sqlite3'
+import { ServerConfig } from '../app/config'
+import { AbstractDb } from './abstract'
+import { AqUserSongsSerialised } from '../shared/interfaces'
+import { AqUserSongsRaw } from '../interfaces'
+import { GameDataValidationError } from '../app/exceptions'
+import { LOG_BASE } from '../app/logging/log-base'
+import { Logger } from '../app/logging/logger'
+
+class AnimeQuizUserDb extends AbstractDb {
+  constructor(config: ServerConfig, logger: Logger) {
+    super(new Database(config.userDbPath, OPEN_READWRITE), logger)
+  }
+
+  public async getUserLists(): Promise<AqUserSongsSerialised[]> {
+    const userLists: AqUserSongsRaw[] = await this._all(`
+      SELECT 
+        users.user_id,
+        username,
+        json_group_array(song_id) as song_id 
+      FROM users
+        LEFT JOIN user_songs
+        ON users.user_id = user_songs.user_id
+      GROUP BY users.user_id
+    `)
+    return userLists.map((userList) => {
+      const { song_id, ...rest } = userList
+      return {
+        song_id: JSON.parse(song_id),
+        ...rest
+      }
+    })
+  }
+
+  public async addSongs(userId: string, songIds: string[]): Promise<void> {
+    const sql = `INSERT INTO user_songs (user_id, song_id) VALUES (?,?)`
+    for (const songId of songIds) {
+      await this._run(sql, [ userId, songId ])
+    }
+  }
+
+  public async removeSongs(userId: string, songIds: string[]): Promise<void> {
+    const sql = `DELETE FROM user_songs WHERE user_id = ? AND song_id = ?`
+    for (const songId of songIds) {
+      await this._run(sql, [ userId, songId ])
+    }
+  }
+
+  public async validateUserExist(userId: string): Promise<void> {
+    const sql = `
+      SELECT
+        *
+      FROM users
+      WHERE user_id = ?
+    `
+    const users = await this._all(sql, [ userId ])
+
+    if (users.length !== 1) {
+      this._logger.writeLog(LOG_BASE.SONG001, { userId: userId })
+      throw new GameDataValidationError('User does not exist')
+    }
+  }
+
+  public async validateSongsNotExistsInUserList(userId: string, songIds: string[]): Promise<void> {
+    const params = [ userId ].concat(songIds)
+    const sql = `
+      SELECT 
+        song_id 
+      FROM user_songs 
+      WHERE user_id = ? AND 
+            song_id IN (${this._questionString(songIds.length)})
+    `
+
+    const existSongs = await this._all(sql, params)
+
+    if (existSongs.length > 0) {
+      this._logger.writeLog(LOG_BASE.SONG003, { songIds: existSongs })
+      throw new GameDataValidationError('Song already exists in list')
+    }
+  }
+
+  public async validateSongsExistsInUserList(userId: string, songIds: string[]): Promise<void> {
+    const params = [ userId ].concat(songIds)
+    const sql = `
+      SELECT 
+        song_id 
+      FROM user_songs 
+      WHERE user_id = ? AND 
+            song_id NOT IN (${this._questionString(songIds.length)})
+    `
+
+    const notExistsSongs = await this._all(sql, params)
+
+    if (notExistsSongs.length > 0) {
+      this._logger.writeLog(LOG_BASE.SONG004, { songIds: notExistsSongs })
+      throw new GameDataValidationError('Song does not exist in list')
+    }
+  }
+}
+
+
+export {
+  AnimeQuizUserDb
+}

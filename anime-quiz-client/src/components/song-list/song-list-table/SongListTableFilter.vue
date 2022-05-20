@@ -1,42 +1,50 @@
 <template>
-  <v-container fluid>
-    <v-form @submit.prevent="updateFilter()">
-      <v-row>
-        <v-col>
-          <v-combobox
-            @keyup.native.enter="updateFilter()"
-            item-text="anime_name"
-            item-value="anime_name"
-            dense outlined
-            v-model.trim="animeFilter"
-            label="Anime"
-            :items="$store.state.songList.animeList"
-            hide-details
-          ></v-combobox>
-        </v-col>
-        <v-col>
-          <v-combobox
-            @keyup.native.enter="updateFilter()"
-            v-model.trim="songTitleFilter"
-            dense outlined label="Title"
-            hide-details
-          ></v-combobox>
-        </v-col>
-        <v-col>
-          <v-select
-            @change="updateFilter()"
-            v-model="songTypeFilter"
-            :items="songTypes"
-            dense outlined label="Type"
-            hide-details
-          ></v-select>
-        </v-col>
-        <v-col cols="auto">
-          <icon-btn type="submit" color="success" icon="mdi-magnify">Search</icon-btn>
-        </v-col>
-      </v-row>
-    </v-form>
-  </v-container>
+  <v-row dense>
+    <v-col>
+      <v-combobox
+        @change="updateFilter()"
+        dense outlined
+        v-model.trim="animeFilter"
+        label="Anime"
+        :items="$store.state.songList.animeList"
+        hide-details
+        clearable
+      ></v-combobox>
+    </v-col>
+    <v-col>
+      <v-combobox
+        @change="updateFilter()"
+        v-model.trim="songTitleFilter"
+        dense outlined label="Title"
+        :items="$store.state.songList.songTitleList"
+        hide-details
+        clearable
+      ></v-combobox>
+    </v-col>
+    <v-col>
+      <v-select
+        @change="updateFilter()"
+        v-model="songTypeFilter"
+        :items="songTypes"
+        dense outlined label="Type"
+        hide-details
+      ></v-select>
+    </v-col>
+    <v-col>
+      <v-select
+        :value="value"
+        @input="$emit('input', $event)"
+        :items="$store.state.songList.userLists"
+        hide-details
+        outlined
+        dense
+        label="User"
+        item-text="username"
+        item-value="user_id"
+        clearable
+      ></v-select>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -44,8 +52,14 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { store } from '../../../plugins/store'
 import { MUTATIONS } from '../../../plugins/store/mutations'
 import IconBtn from '../../shared/buttons/IconBtn.vue'
+import { debounce } from '../../../assets/debounce'
 
 export default defineComponent({
+  props: {
+    value: {
+      required: true
+    }
+  },
   components: { IconBtn },
   setup() {
     const state = reactive({
@@ -60,11 +74,11 @@ export default defineComponent({
       show: true
     })
 
-    function updateFilter(): void {
+    const updateFilter = debounce(() => {
       store.commit(MUTATIONS.UPDATE_SONG_LIST_ANIME_FILTER, state.animeFilter || '')
       store.commit(MUTATIONS.UPDATE_SONG_LIST_TITLE_FILTER, state.songTitleFilter || '')
       store.commit(MUTATIONS.UPDATE_SONG_LIST_TYPE_FILTER, state.songTypeFilter || '')
-    }
+    }, 100)
 
     return {
       ...toRefs(state),
