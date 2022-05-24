@@ -12,7 +12,14 @@
       <v-card-text>
         <v-form v-model="valid" @submit.prevent="login()">
           <login-input label="Display Name" v-model.trim="username" :rules="usernameRules" counter="20"></login-input>
-          <login-input label="Server Password" v-model.trim="password" :rules="passwordRules"></login-input>
+          <login-input
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            label="Server Password"
+            :type="showPassword ? 'text' : 'password'"
+            v-model.trim="password"
+            :rules="passwordRules"
+            @click:append="showPassword = !showPassword"
+          ></login-input>
           <v-row justify="center">
             <v-col cols="auto">
               <icon-btn color="success" type="submit" large icon="mdi-login" :disabled="disabled">Login</icon-btn>
@@ -55,7 +62,8 @@ export default defineComponent({
         (v: string): boolean | string => !!v || 'Server password required',
         (v: string): boolean | string => SERVER_PASSWORD_FORMAT.test(v) || 'Valid characters A-Z, a-z, 0-9'
       ],
-      disabled: false
+      disabled: false,
+      showPassword: false
     })
 
     const systemNotification = inject<Function>(SHARED_EVENTS.SYSTEM_NOTIFICATION)

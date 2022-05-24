@@ -14,6 +14,8 @@ import { AnimeQuizSongDb } from './database/song'
 import { SongListHandler } from './handlers/song-list'
 import { RoomHandler } from './handlers/room'
 import { AnimeQuizUserDb } from './database/user'
+import { GameHandler } from './handlers/game'
+import { GameController } from './game/controller'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -27,14 +29,17 @@ const emitter = new Emitter(io)
 const logger = new Logger(config)
 const songDb = new AnimeQuizSongDb(config, logger)
 const userDb = new AnimeQuizUserDb(config, logger)
+const gameController = new GameController(logger, io)
 
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
-const roomHandler = new RoomHandler(logger)
+const roomHandler = new RoomHandler(logger, gameController, emitter)
+const gameHandler = new GameHandler(logger, gameController, emitter)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
   if (socket.data.auth) {
     songListHandler.start(socket, errorHandler)
     roomHandler.start(socket, errorHandler)
+    gameHandler.start(socket, errorHandler)
   }
 }
 
@@ -63,6 +68,8 @@ io.on('connection', (socket: Socket) => {
     try {
       logger.writeLog(LOG_BASE.SERVER003, { id: socket.id })
       clearTimeout(socket.data.clientAuthTimer)
+      gameController.syncRoomStates()
+      console.log(gameController.getRoomList())
     } catch (e) {
       errorHandler(e)
     }

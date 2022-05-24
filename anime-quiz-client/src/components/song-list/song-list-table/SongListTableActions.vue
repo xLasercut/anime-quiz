@@ -13,7 +13,8 @@
         icon="mdi-check"
         color="success"
         @click="$emit('confirm:edit')"
-      >Confirm</icon-btn>
+      >Confirm
+      </icon-btn>
     </v-col>
     <v-col cols="auto">
       <icon-btn color="info" @click="reload()" icon="mdi-refresh">Reload</icon-btn>
@@ -22,12 +23,13 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, ref, watch } from '@vue/composition-api'
 import IconBtn from '../../shared/buttons/IconBtn.vue'
 import { socket } from '../../../plugins/socket'
 import { SHARED_EVENTS } from '../../../assets/shared/events'
 import { SONG_LIST_EDIT_MODE } from '../../../assets/shared/constants'
+import { store } from '../../../plugins/store'
+import { MUTATIONS } from '../../../plugins/store/mutations'
 
 export default defineComponent({
   components: { IconBtn },
@@ -52,6 +54,7 @@ export default defineComponent({
     })
 
     function reload(): void {
+      store.commit(MUTATIONS.SOCKET_UPDATE_SONG_LIST, [])
       socket.emit(SHARED_EVENTS.RELOAD_SONG_LIST_DATA)
     }
 

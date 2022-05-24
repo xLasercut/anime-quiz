@@ -1,0 +1,5 @@
+const ROOM_NAME_PREFIX = 'ANIME_QUIZ'
+
+export {
+  ROOM_NAME_PREFIX
+}

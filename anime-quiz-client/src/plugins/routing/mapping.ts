@@ -10,23 +10,29 @@ import SongListPanel from '../../components/song-list/SongListPanel.vue'
 import SongList from '../../views/SongList.vue'
 import RoomList from '../../views/RoomList.vue'
 import RoomListPanel from '../../components/room-list/RoomListPanel.vue'
+import GameRoom from '../../views/GameRoom.vue'
+import GameRoomPanel from '../../components/game-room/GameRoomPanel.vue'
+import RoomListNewRoom from '../../components/room-list/RoomListNewRoom.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
   [ROUTES.LOBBY]: LobbyPanel,
   [ROUTES.SONG_LIST]: SongListPanel,
-  [ROUTES.ROOM_LIST]: RoomListPanel
+  [ROUTES.ROOM_LIST]: RoomListPanel,
+  [ROUTES.GAME_ROOM]: GameRoomPanel
 }
 
 const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: Login,
   [ROUTES.LOBBY]: Lobby,
   [ROUTES.SONG_LIST]: SongList,
-  [ROUTES.ROOM_LIST]: RoomList
+  [ROUTES.ROOM_LIST]: RoomList,
+  [ROUTES.GAME_ROOM]: GameRoom
 }
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {
-  [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings
+  [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings,
+  [DIALOG_ROUTES.NEW_ROOM]: RoomListNewRoom
 }
 
 function viewComponent(): any {

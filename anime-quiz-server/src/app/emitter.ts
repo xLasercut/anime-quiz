@@ -29,6 +29,10 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_USER_LISTS, userLists)
   }
 
+  public updateRoomList(roomList: string[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_ROOM_LIST, roomList)
+  }
+
   protected _client(sid: string) {
     if (sid) {
       return this._io.to(sid)

@@ -10,7 +10,10 @@ const SONG_LIST_EDIT_MODE = {
   NONE: 'none'
 }
 
+const ROOM_NAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
+
 export {
   NOTIFICATION_COLOR,
-  SONG_LIST_EDIT_MODE
+  SONG_LIST_EDIT_MODE,
+  ROOM_NAME_FORMAT
 }

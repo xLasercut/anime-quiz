@@ -14,7 +14,16 @@ interface AqUserSongsSerialised {
   song_id: string[]
 }
 
+interface AqGameSettingsSerialised {
+  songCount: number
+  guessTime: number
+  gameMode: string
+  duplicate: boolean
+  users: string[]
+}
+
 export {
   AqSongSerialised,
-  AqUserSongsSerialised
+  AqUserSongsSerialised,
+  AqGameSettingsSerialised
 }
