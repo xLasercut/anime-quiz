@@ -18,7 +18,7 @@ class RoomHandler extends AbstractHandler {
   public start(socket: Socket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.LEAVE_ALL_ROOMS, () => {
       try {
-        for (const roomId in socket.rooms) {
+        for (const roomId of Array.from(socket.rooms)) {
           if (roomId !== socket.id) {
             socket.leave(roomId)
           }

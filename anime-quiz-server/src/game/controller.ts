@@ -4,6 +4,9 @@ import { ROOM_NAME_PREFIX } from '../constants'
 import { ROOM_NAME_FORMAT } from '../shared/constants'
 import { GameDataValidationError } from '../app/exceptions'
 import { Logger } from '../app/logging/logger'
+import { GameSettings } from './settings'
+import { LOG_BASE } from '../app/logging/log-base'
+import { Socket } from '../types'
 
 class GameController {
   protected _rooms: AqGameRooms
@@ -14,6 +17,20 @@ class GameController {
     this._logger = logger
     this._io = io
     this._rooms = {}
+  }
+
+  public getSocketGameRoom(socket: Socket): string {
+    const allRooms = Array.from(socket.rooms)
+    const gameRooms = allRooms.filter((roomName) => {
+      return roomName.includes(ROOM_NAME_PREFIX)
+    })
+
+    if (gameRooms.length !== 1) {
+      this._logger.writeLog(LOG_BASE.ROOM003, { roomNames: gameRooms })
+      throw new GameDataValidationError('User not in game room')
+    }
+
+    return gameRooms[0]
   }
 
   public getRoomList(): string[] {
@@ -30,6 +47,7 @@ class GameController {
 
   public validateNewRoomName(roomName: string): void {
     if (!ROOM_NAME_FORMAT.test(roomName)) {
+      this._logger.writeLog(LOG_BASE.ROOM002, { roomName: roomName })
       throw new GameDataValidationError('Invalid room name')
     }
   }
@@ -37,6 +55,7 @@ class GameController {
   public validateExistingRoomName(roomName: string): void {
     const roomList = this.getRoomList()
     if (!roomList.includes(roomName)) {
+      this._logger.writeLog(LOG_BASE.ROOM001, { roomName: roomName })
       throw new GameDataValidationError('Room does not exist')
     }
   }
@@ -51,13 +70,7 @@ class GameController {
     for (const roomName of roomList) {
       if (!(roomName in this._rooms)) {
         this._rooms[roomName] = {
-          settings: {
-            songCount: 20,
-            guessTime: 30,
-            gameMode: 'balanced',
-            duplicate: false,
-            users: []
-          }
+          settings: new GameSettings()
         }
       }
     }

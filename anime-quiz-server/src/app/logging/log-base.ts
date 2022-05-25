@@ -51,6 +51,21 @@ const LOG_BASE = {
     level: LOG_LEVEL.WARN,
     template: 'song edit song not exists in user list - songIds="{{{songIds}}}"'
   },
+  ROOM001: {
+    reference: 'ROOM001',
+    level: LOG_LEVEL.WARN,
+    template: 'room name does not exist - roomName="{{{roomName}}}"'
+  },
+  ROOM002: {
+    reference: 'ROOM002',
+    level: LOG_LEVEL.WARN,
+    template: 'invalid room name - roomName="{{{roomName}}}"'
+  },
+  ROOM003: {
+    reference: 'ROOM003',
+    level: LOG_LEVEL.WARN,
+    template: 'user not in game room/in multiple rooms - roomNames="{{{roomNames}}}"'
+  },
   DATA001: {
     reference: 'DATA001',
     level: LOG_LEVEL.WARN,

@@ -22,8 +22,18 @@ interface AqGameSettingsSerialised {
   users: string[]
 }
 
+interface AqGameChatMessage {
+  username: string
+  text: string
+  avatar: string
+  sid: string
+  repeat: boolean
+  admin: boolean
+}
+
 export {
   AqSongSerialised,
   AqUserSongsSerialised,
-  AqGameSettingsSerialised
+  AqGameSettingsSerialised,
+  AqGameChatMessage
 }

@@ -1,4 +1,5 @@
 import { AqGameSettingsSerialised } from './shared/interfaces'
+import { GameSettings } from './game/settings'
 
 interface LogTemplate {
   reference: string
@@ -34,7 +35,7 @@ interface AqUserRaw {
 
 interface AqGameRooms {
   [key: string]: {
-    settings: AqGameSettingsSerialised
+    settings: GameSettings
   }
 }
 

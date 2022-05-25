@@ -8,7 +8,7 @@ import { Socket } from './types'
 import { LOG_BASE } from './app/logging/log-base'
 import { SHARED_EVENTS } from './shared/events'
 import { Emitter } from './app/emitter'
-import { checkClientAuth, checkPassword } from './app/authentication'
+import { checkClientAuth, authenticateUser } from './app/authentication'
 import { NOTIFICATION_COLOR } from './shared/constants'
 import { AnimeQuizSongDb } from './database/song'
 import { SongListHandler } from './handlers/song-list'
@@ -16,6 +16,7 @@ import { RoomHandler } from './handlers/room'
 import { AnimeQuizUserDb } from './database/user'
 import { GameHandler } from './handlers/game'
 import { GameController } from './game/controller'
+import { ChatManager } from './game/chat'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -30,10 +31,11 @@ const logger = new Logger(config)
 const songDb = new AnimeQuizSongDb(config, logger)
 const userDb = new AnimeQuizUserDb(config, logger)
 const gameController = new GameController(logger, io)
+const chatManager = new ChatManager(logger)
 
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger, gameController, emitter)
-const gameHandler = new GameHandler(logger, gameController, emitter)
+const gameHandler = new GameHandler(logger, gameController, emitter, chatManager)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
   if (socket.data.auth) {
@@ -51,9 +53,9 @@ io.on('connection', (socket: Socket) => {
     checkClientAuth(logger, socket)
   }, config.clientAuthDelay)
 
-  socket.on(SHARED_EVENTS.AUTHENTICATE, (username: string, password: string, callback: Function) => {
+  socket.on(SHARED_EVENTS.AUTHENTICATE, (username: string, password: string, avatar: string, callback: Function) => {
     try {
-      checkPassword(socket, username, password, config)
+      authenticateUser(socket, username, password, avatar, config)
       startHandlers(socket, errorHandler)
       if (!socket.data.auth) {
         emitter.systemNotification(NOTIFICATION_COLOR.ERROR, 'Incorrect server password', socket.id)
@@ -69,7 +71,6 @@ io.on('connection', (socket: Socket) => {
       logger.writeLog(LOG_BASE.SERVER003, { id: socket.id })
       clearTimeout(socket.data.clientAuthTimer)
       gameController.syncRoomStates()
-      console.log(gameController.getRoomList())
     } catch (e) {
       errorHandler(e)
     }

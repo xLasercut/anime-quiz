@@ -20,6 +20,10 @@
             :rules="passwordRules"
             @click:append="showPassword = !showPassword"
           ></login-input>
+          <login-avatar-select
+            v-model="avatar"
+            :rules="avatarRules"
+          ></login-avatar-select>
           <v-row justify="center">
             <v-col cols="auto">
               <icon-btn color="success" type="submit" large icon="mdi-login" :disabled="disabled">Login</icon-btn>
@@ -38,42 +42,46 @@ import { socket } from '../plugins/socket'
 import { MUTATIONS } from '../plugins/store/mutations'
 import { ROUTES } from '../plugins/routing/routes'
 import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants'
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { store } from '../plugins/store'
 import IconBtn from '../components/shared/buttons/IconBtn.vue'
+import LoginAvatarSelect from '../components/login/LoginAvatarSelect.vue'
+import { AVATARS, USERNAME_FORMAT } from '../assets/shared/constants'
 
-const NAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
 const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$')
 
 export default defineComponent({
-  components: { IconBtn, LoginInput },
+  components: { IconBtn, LoginInput, LoginAvatarSelect },
   setup() {
     const state = reactive({
       valid: false,
       username: localStorage[LOCAL_STORAGE_CONSTANTS.AQ_USERNAME] || '',
       password: '',
+      avatar: localStorage[LOCAL_STORAGE_CONSTANTS.AQ_AVATAR] || AVATARS.ZERO_TWO,
       usernameRules: [
         (v: string): boolean | string => !!v || 'Display name required',
         (v: string): boolean | string =>
-          NAME_FORMAT.test(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
+          USERNAME_FORMAT.test(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
         (v: string): boolean | string => (v && v.length <= 20) || 'Display name must be under 20 characters'
       ],
       passwordRules: [
         (v: string): boolean | string => !!v || 'Server password required',
         (v: string): boolean | string => SERVER_PASSWORD_FORMAT.test(v) || 'Valid characters A-Z, a-z, 0-9'
       ],
+      avatarRules: [
+        (v: string): boolean | string => !!v || 'Avatar required'
+      ],
       disabled: false,
       showPassword: false
     })
 
-    const systemNotification = inject<Function>(SHARED_EVENTS.SYSTEM_NOTIFICATION)
-
     function login() {
       if (state.valid) {
         state.disabled = true
-        localStorage.AQ_USERNAME = state.username
+        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_USERNAME] = state.username
+        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_AVATAR] = state.avatar
         socket.connect()
-        socket.emit(SHARED_EVENTS.AUTHENTICATE, state.username, state.password, (auth: boolean): void => {
+        socket.emit(SHARED_EVENTS.AUTHENTICATE, state.username, state.password, state.avatar, (auth: boolean): void => {
           state.disabled = false
           if (auth) {
             store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)

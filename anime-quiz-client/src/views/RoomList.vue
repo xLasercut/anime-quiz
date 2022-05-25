@@ -53,6 +53,7 @@ export default defineComponent({
         state.roomList = roomList
       })
 
+      socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
       socket.emit(SHARED_EVENTS.GET_ROOM_LIST)
     })
 
