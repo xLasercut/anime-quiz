@@ -1,6 +1,8 @@
 import { SHARED_EVENTS } from '../shared/events'
 import {
-  AqGameChatMessage,
+  AqClientData,
+  AqGameChatMessage, AqGameGuess,
+  AqGamePlayer,
   AqGameSettingsSerialised,
   AqSongSerialised,
   AqUserSongsSerialised
@@ -44,6 +46,25 @@ class Emitter {
 
   public updateGameSetting(settings: AqGameSettingsSerialised, sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_SETTINGS, settings)
+  }
+
+  public updateClientData(clientData: AqClientData, sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_CLIENT_DATA, clientData)
+  }
+
+  public updateGamePlayerList(playerList: AqGamePlayer[], sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_PLAYERS, playerList)
+  }
+
+  public updateSongListData(songList: AqSongSerialised[], animeList: string[], songTitleList: string[], userLists: AqUserSongsSerialised[], sid: string = null): void {
+    this.updateSongList(songList, sid)
+    this.updateAnimeList(animeList, sid)
+    this.updateSongTitleList(songTitleList, sid)
+    this.updateUserLists(userLists, sid)
+  }
+
+  public updateGuess(guess: AqGameGuess, sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GUESS, guess)
   }
 
   protected _client(sid: string) {

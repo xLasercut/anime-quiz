@@ -31,9 +31,32 @@ interface AqGameChatMessage {
   admin: boolean
 }
 
+interface AqClientData {
+  username: string
+  avatar: string
+  admin: boolean
+  host: boolean
+}
+
+interface AqGamePlayer {
+  username: string
+  avatar: string
+  admin: boolean
+  host: boolean
+  score: number
+}
+
+interface AqGameGuess {
+  anime: string
+  title: string
+}
+
 export {
   AqSongSerialised,
   AqUserSongsSerialised,
   AqGameSettingsSerialised,
-  AqGameChatMessage
+  AqGameChatMessage,
+  AqClientData,
+  AqGamePlayer,
+  AqGameGuess
 }

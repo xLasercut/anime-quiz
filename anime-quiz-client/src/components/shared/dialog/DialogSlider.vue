@@ -8,6 +8,7 @@
         :value="value"
         @input="$emit('input', $event)"
         outlined
+        :disabled="disabled"
       >
         <template #append>
           <v-text-field
@@ -22,6 +23,7 @@
             style="width: 100px"
             :min="min"
             :max="max"
+            :disabled="disabled"
           ></v-text-field>
         </template>
       </v-slider>
@@ -42,6 +44,12 @@ export default defineComponent({
     },
     max: {
       type: Number
+    },
+    disabled: {
+      type: Boolean,
+      default: (): boolean => {
+        return false
+      }
     }
   }
 })

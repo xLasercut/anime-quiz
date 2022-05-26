@@ -7,22 +7,26 @@
           v-model.number="songCount"
           :min="1"
           :max="100"
+          :disabled="disabled()"
         ></dialog-slider>
         <dialog-slider
           label="Guess Time"
           v-model.number="guessTime"
           :min="20"
           :max="100"
+          :disabled="disabled()"
         ></dialog-slider>
         <dialog-select
           label="Game Mode"
           :items="gameModes"
           v-model="gameMode"
+          :disabled="disabled()"
         ></dialog-select>
         <dialog-select
           label="Duplicate"
           :items="toggleItems"
           v-model="duplicate"
+          :disabled="disabled()"
         ></dialog-select>
         <dialog-select
           label="User Lists"
@@ -31,8 +35,9 @@
           item-value="user_id"
           multiple
           v-model="users"
+          :disabled="disabled()"
         ></dialog-select>
-        <dialog-actions @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions :disabled="disabled()" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -47,6 +52,7 @@ import { GAME_MODE } from '../../assets/shared/constants'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import { AqGameSettingsSerialised } from '../../assets/shared/interfaces'
+import { store } from '../../plugins/store'
 
 interface GameModeItem {
   text: string
@@ -118,9 +124,14 @@ export default defineComponent({
       socket.off(SHARED_EVENTS.UPDATE_GAME_SETTINGS)
     })
 
+    function disabled(): boolean {
+      return !store.state.client.admin && !store.state.client.host
+    }
+
     return {
       ...toRefs(state),
-      setSettings
+      setSettings,
+      disabled
     }
   }
 })

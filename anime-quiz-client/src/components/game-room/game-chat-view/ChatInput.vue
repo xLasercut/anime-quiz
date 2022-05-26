@@ -26,7 +26,7 @@ export default defineComponent({
     function sendMsg(): void {
       if (state.message) {
         socket.emit(SHARED_EVENTS.GAME_CHAT, state.message)
-        //state.message = ''
+        state.message = ''
       }
     }
 

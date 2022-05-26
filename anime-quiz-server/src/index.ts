@@ -14,7 +14,6 @@ import { SongListHandler } from './handlers/song-list'
 import { RoomHandler } from './handlers/room'
 import { AnimeQuizUserDb } from './database/user'
 import { GameHandler } from './handlers/game'
-import { ChatManager } from './game/chat'
 import { GameSettings } from './game/settings'
 import { isGameRoom } from './helpers'
 import { Server } from './app/server'
@@ -39,7 +38,7 @@ const ioErrorHandler = newIoErrorHandler(logger)
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
 const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)
-const gameHandler = new GameHandler(logger, io, emitter, gameSettings)
+const gameHandler = new GameHandler(logger, io, emitter, userDb, songDb, gameSettings)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
   if (socket.data.auth) {
@@ -47,6 +46,7 @@ function startHandlers(socket: Socket, errorHandler: Function): void {
     roomHandler.start(socket, errorHandler)
     gameHandler.start(socket, errorHandler)
     gameSettingsHandler.start(socket, errorHandler)
+    emitter.updateClientData(socket.data.getClientData(), socket.id)
   }
 }
 
@@ -85,6 +85,7 @@ io.of('/').adapter.on('create-room', (roomId: string) => {
   try {
     if (isGameRoom(roomId)) {
       gameSettings.addRoom(roomId)
+      emitter.updateRoomList(io.getGameRoomList())
     }
   } catch (e) {
     ioErrorHandler(e)
@@ -95,6 +96,7 @@ io.of('/').adapter.on('delete-room', (roomId: string) => {
   try {
     if (isGameRoom(roomId)) {
       gameSettings.deleteRoom(roomId)
+      emitter.updateRoomList(io.getGameRoomList())
     }
   } catch (e) {
     ioErrorHandler(e)
@@ -109,6 +111,9 @@ io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
       username: socket.data.username,
       roomId: roomId
     })
+    if (isGameRoom(roomId)) {
+      emitter.updateGamePlayerList(io.getPlayerList(roomId), roomId)
+    }
   } catch (e) {
     ioErrorHandler(e)
   }
@@ -122,6 +127,10 @@ io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
       username: socket.data.username,
       roomId: roomId
     })
+    if (isGameRoom(roomId)) {
+      io.reassignHost(roomId)
+      emitter.updateGamePlayerList(io.getPlayerList(roomId), roomId)
+    }
   } catch (e) {
     ioErrorHandler(e)
   }

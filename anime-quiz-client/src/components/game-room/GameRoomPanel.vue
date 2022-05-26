@@ -1,5 +1,6 @@
 <template>
   <v-toolbar-items>
+    <nav-btn v-if="$store.state.client.admin" icon="mdi-shield">Admin</nav-btn>
     <nav-btn color="info" icon="mdi-cog" @click="openSettings()">Settings</nav-btn>
     <nav-btn color="warning" icon="mdi-backspace-reverse-outline" @click="back()">Back</nav-btn>
   </v-toolbar-items>

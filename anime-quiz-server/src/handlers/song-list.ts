@@ -25,10 +25,13 @@ class SongListHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.JOIN_SONG_LIST, async () => {
       try {
         socket.join(this._roomId)
-        this._emitter.updateSongList(await this._songDb.getAllSongList(), socket.id)
-        this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
-        this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), socket.id)
-        this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
+        this._emitter.updateSongListData(
+          await this._songDb.getAllSongList(),
+          await this._songDb.getAnimeList(),
+          await this._songDb.getSongTitleList(),
+          await this._userDb.getUserLists(),
+          socket.id
+        )
       } catch (e) {
         errorHandler(e)
       }
@@ -36,10 +39,13 @@ class SongListHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.RELOAD_SONG_LIST_DATA, async () => {
       try {
-        this._emitter.updateSongList(await this._songDb.getAllSongList(), socket.id)
-        this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
-        this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), socket.id)
-        this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
+        this._emitter.updateSongListData(
+          await this._songDb.getAllSongList(),
+          await this._songDb.getAnimeList(),
+          await this._songDb.getSongTitleList(),
+          await this._userDb.getUserLists(),
+          socket.id
+        )
       } catch (e) {
         errorHandler(e)
       }

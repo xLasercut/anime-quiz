@@ -2,8 +2,8 @@
   <v-card-text>
     <v-form v-model="valid" @submit.prevent="newRoom()">
       <v-container fluid>
-        <dialog-text-field counter="20" label="Room Name" v-model.trim="roomName" :rules="rules"></dialog-text-field>
-        <dialog-actions @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-text-field :disabled="disabled" counter="20" label="Room Name" v-model.trim="roomName" :rules="rules"></dialog-text-field>
+        <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -32,13 +32,16 @@ export default defineComponent({
           ROOM_NAME_FORMAT.test(v) || 'Room name can only contain: 0-9, A-Z, a-z and space',
         (v: string): boolean | string => (v && v.length <= 20) || 'Room name must be under 20 characters'
       ],
-      valid: false
+      valid: false,
+      disabled: false
     })
 
     function newRoom(): void {
       if (state.valid) {
+        state.disabled = true
         socket.emit(SHARED_EVENTS.NEW_GAME_ROOM, state.roomName, (proceed: boolean) => {
           if (proceed) {
+            state.disabled = false
             state.roomName = ''
             context.emit('dialog:close')
             store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.GAME_ROOM)

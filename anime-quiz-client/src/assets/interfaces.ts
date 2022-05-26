@@ -1,4 +1,4 @@
-import { AqSongSerialised, AqUserSongsSerialised } from './shared/interfaces'
+import { AqGamePlayer, AqSongSerialised, AqUserSongsSerialised } from './shared/interfaces'
 
 interface SongListStoreState {
   songList: AqSongSerialised[],
@@ -20,10 +20,19 @@ interface RootStoreState {
 interface ClientStoreState {
   view: string
   dialogView: string
+  username: string
+  avatar: string
+  admin: boolean
+  host: boolean
+}
+
+interface GameStoreState {
+  players: AqGamePlayer[]
 }
 
 export {
   SongListStoreState,
   RootStoreState,
-  ClientStoreState
+  ClientStoreState,
+  GameStoreState
 }
