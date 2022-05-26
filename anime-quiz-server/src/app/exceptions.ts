@@ -10,11 +10,21 @@ class GameDataValidationError extends Error {
   }
 }
 
-function newErrorHandler(socket: Socket, logger: Logger, emitter: Emitter) {
+class GameDataValidationDcError extends Error {
+  constructor(message: string) {
+    super(message)
+  }
+}
+
+function newSocketErrorHandler(socket: Socket, logger: Logger, emitter: Emitter) {
   function errorHandler(e: Error) {
     if (e instanceof GameDataValidationError) {
       logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username })
       emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
+    } else if (e instanceof GameDataValidationDcError) {
+      logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username })
+      emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
+      socket.disconnect()
     } else {
       logger.writeLog(LOG_BASE.SERVER004, { stack: e.stack })
     }
@@ -24,7 +34,17 @@ function newErrorHandler(socket: Socket, logger: Logger, emitter: Emitter) {
 }
 
 
+function newIoErrorHandler(logger: Logger) {
+  function errorHandler(e: Error) {
+    logger.writeLog(LOG_BASE.SERVER004, { stack: e.stack })
+  }
+
+  return errorHandler
+}
+
 export {
-  newErrorHandler,
-  GameDataValidationError
+  newSocketErrorHandler,
+  newIoErrorHandler,
+  GameDataValidationError,
+  GameDataValidationDcError
 }

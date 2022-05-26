@@ -13,6 +13,7 @@ import RoomListPanel from '../../components/room-list/RoomListPanel.vue'
 import GameRoom from '../../views/GameRoom.vue'
 import GameRoomPanel from '../../components/game-room/GameRoomPanel.vue'
 import RoomListNewRoom from '../../components/room-list/RoomListNewRoom.vue'
+import GameRoomSettings from '../../components/game-room/GameRoomSettings.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -32,7 +33,8 @@ const _VIEW_MAPPING: { [key: string]: Component } = {
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings,
-  [DIALOG_ROUTES.NEW_ROOM]: RoomListNewRoom
+  [DIALOG_ROUTES.NEW_ROOM]: RoomListNewRoom,
+  [DIALOG_ROUTES.GAME_ROOM_SETTINGS]: GameRoomSettings
 }
 
 function viewComponent(): any {

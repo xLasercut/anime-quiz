@@ -1,10 +1,10 @@
 <template>
   <v-main>
     <v-row justify="center">
-      <v-col cols="auto" v-for="room in roomList">
+      <v-col cols="auto" v-for="room in roomList" :key="room">
         <v-card width="200" flat>
           <v-card-title>
-            {{ room.split('|')[0] }}
+            {{ room.split('|')[1] }}
           </v-card-title>
           <v-divider></v-divider>
           <v-card-actions>
@@ -48,11 +48,11 @@ export default defineComponent({
       })
     }
 
-    onMounted(() => {
-      socket.on(SHARED_EVENTS.UPDATE_ROOM_LIST, (roomList: string[]) => {
-        state.roomList = roomList
-      })
+    socket.on(SHARED_EVENTS.UPDATE_ROOM_LIST, (roomList: string[]) => {
+      state.roomList = roomList
+    })
 
+    onMounted(() => {
       socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
       socket.emit(SHARED_EVENTS.GET_ROOM_LIST)
     })

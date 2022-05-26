@@ -28,7 +28,7 @@ const AVATARS = {
   HORO: 'Horo',
   MADOKA: 'Madoka',
   LELOUCH: 'Lelouch',
-  MIYU: 'miyu',
+  MIYU: 'Miyu',
   RAWR: 'Rawr',
   PIKACHU: 'Pikachu',
   EREN: 'Eren',

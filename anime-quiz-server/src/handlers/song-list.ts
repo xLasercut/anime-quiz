@@ -25,11 +25,6 @@ class SongListHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.JOIN_SONG_LIST, async () => {
       try {
         socket.join(this._roomId)
-        this._logger.writeLog(LOG_BASE.SERVER005, {
-          id: socket.id,
-          username: socket.data.username,
-          roomId: this._roomId
-        })
         this._emitter.updateSongList(await this._songDb.getAllSongList(), socket.id)
         this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
         this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), socket.id)

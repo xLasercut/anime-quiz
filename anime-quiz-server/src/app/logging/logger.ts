@@ -1,26 +1,30 @@
 import * as winston from 'winston'
 import * as DailyRotateFile from 'winston-daily-rotate-file'
-import * as mustache from 'mustache'
 import { LogTemplate } from '../../interfaces'
 import { ServerConfig } from '../config'
 import { LOG_LEVEL } from './log-base'
 
-const { combine, timestamp, printf } = winston.format
+const { combine, timestamp, json } = winston.format
 
-const logFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} | ${level} | ${message}`
-})
+const logFormat = combine(
+  timestamp(),
+  winston.format(transformLogInfo)(),
+  json()
+)
+
+function transformLogInfo(info) {
+  info.level = info.level.toUpperCase()
+  return info
+}
 
 class Logger {
   protected _logger: winston.Logger
+  protected _reservedFields: string[]
 
   constructor(config: ServerConfig) {
     this._logger = winston.createLogger({
       level: 'debug',
-      format: combine(
-        timestamp(),
-        logFormat
-      ),
+      format: logFormat,
       transports: [
         new DailyRotateFile({
           frequency: '24h',
@@ -32,10 +36,21 @@ class Logger {
         new winston.transports.Console()
       ]
     })
+    this._reservedFields = [
+      'timestamp',
+      'log_reference',
+      'level',
+      'message'
+    ]
   }
 
   public writeLog(logTemplate: LogTemplate, logArgs: object = {}): void {
-    const logMsg = `${logTemplate.reference} | ${mustache.render(logTemplate.template, logArgs)}`
+    const cleanedLogArgs = this._removeReservedFields(logArgs)
+    const logMsg = {
+      ['log_reference']: logTemplate.reference,
+      ['message']: logTemplate.message,
+      ...cleanedLogArgs
+    }
     switch (logTemplate.level) {
       case LOG_LEVEL.INFO:
         this._logger.info(logMsg)
@@ -50,6 +65,16 @@ class Logger {
         this._logger.error(logMsg)
         break
     }
+  }
+
+  protected _removeReservedFields(logArgs: object = {}): object {
+    const cleanedArgs = Object.assign({}, logArgs)
+    for (const field in cleanedArgs) {
+      if (this._reservedFields.includes(field)) {
+        delete cleanedArgs[field]
+      }
+    }
+    return cleanedArgs
   }
 }
 

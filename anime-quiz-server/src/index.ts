@@ -1,22 +1,24 @@
 import { createServer } from 'http'
-import { Server } from 'socket.io'
 import { ServerConfig } from './app/config'
 import { Logger } from './app/logging/logger'
-import { newErrorHandler } from './app/exceptions'
+import { newIoErrorHandler, newSocketErrorHandler } from './app/exceptions'
 import { SocketData } from './app/socket-data'
 import { Socket } from './types'
 import { LOG_BASE } from './app/logging/log-base'
 import { SHARED_EVENTS } from './shared/events'
 import { Emitter } from './app/emitter'
-import { checkClientAuth, authenticateUser } from './app/authentication'
+import { authenticateUser, checkClientAuth } from './app/authentication'
 import { NOTIFICATION_COLOR } from './shared/constants'
 import { AnimeQuizSongDb } from './database/song'
 import { SongListHandler } from './handlers/song-list'
 import { RoomHandler } from './handlers/room'
 import { AnimeQuizUserDb } from './database/user'
 import { GameHandler } from './handlers/game'
-import { GameController } from './game/controller'
 import { ChatManager } from './game/chat'
+import { GameSettings } from './game/settings'
+import { isGameRoom } from './helpers'
+import { Server } from './app/server'
+import { GameSettingsHandler } from './handlers/settings'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -30,24 +32,27 @@ const emitter = new Emitter(io)
 const logger = new Logger(config)
 const songDb = new AnimeQuizSongDb(config, logger)
 const userDb = new AnimeQuizUserDb(config, logger)
-const gameController = new GameController(logger, io)
-const chatManager = new ChatManager(logger)
+const gameSettings = new GameSettings(logger)
+
+const ioErrorHandler = newIoErrorHandler(logger)
 
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
-const roomHandler = new RoomHandler(logger, gameController, emitter)
-const gameHandler = new GameHandler(logger, gameController, emitter, chatManager)
+const roomHandler = new RoomHandler(logger, io, emitter)
+const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)
+const gameHandler = new GameHandler(logger, io, emitter, gameSettings)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
   if (socket.data.auth) {
     songListHandler.start(socket, errorHandler)
     roomHandler.start(socket, errorHandler)
     gameHandler.start(socket, errorHandler)
+    gameSettingsHandler.start(socket, errorHandler)
   }
 }
 
 io.on('connection', (socket: Socket) => {
   logger.writeLog(LOG_BASE.SERVER002, { id: socket.id })
-  const errorHandler = newErrorHandler(socket, logger, emitter)
+  const errorHandler = newSocketErrorHandler(socket, logger, emitter)
   socket.data = new SocketData(socket.id)
   socket.data.clientAuthTimer = setTimeout((): void => {
     checkClientAuth(logger, socket)
@@ -70,11 +75,56 @@ io.on('connection', (socket: Socket) => {
     try {
       logger.writeLog(LOG_BASE.SERVER003, { id: socket.id })
       clearTimeout(socket.data.clientAuthTimer)
-      gameController.syncRoomStates()
     } catch (e) {
       errorHandler(e)
     }
   })
+})
+
+io.of('/').adapter.on('create-room', (roomId: string) => {
+  try {
+    if (isGameRoom(roomId)) {
+      gameSettings.addRoom(roomId)
+    }
+  } catch (e) {
+    ioErrorHandler(e)
+  }
+})
+
+io.of('/').adapter.on('delete-room', (roomId: string) => {
+  try {
+    if (isGameRoom(roomId)) {
+      gameSettings.deleteRoom(roomId)
+    }
+  } catch (e) {
+    ioErrorHandler(e)
+  }
+})
+
+io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
+  try {
+    const socket = io.sockets.sockets.get(sid)
+    logger.writeLog(LOG_BASE.SERVER005, {
+      id: sid,
+      username: socket.data.username,
+      roomId: roomId
+    })
+  } catch (e) {
+    ioErrorHandler(e)
+  }
+})
+
+io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
+  try {
+    const socket = io.sockets.sockets.get(sid)
+    logger.writeLog(LOG_BASE.SERVER006, {
+      id: sid,
+      username: socket.data.username,
+      roomId: roomId
+    })
+  } catch (e) {
+    ioErrorHandler(e)
+  }
 })
 
 httpServer.listen(config.serverPort, async () => {

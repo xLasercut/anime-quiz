@@ -40,14 +40,14 @@ export default defineComponent({
       sendNotification(color, message)
     })
 
+    socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
+      sendNotification(color, message)
+    })
+
     onMounted((): void => {
       if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
         sendNotification(NOTIFICATION_COLOR.ERROR, 'Server URL not set')
       }
-
-      socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
-        sendNotification(color, message)
-      })
     })
 
     return {

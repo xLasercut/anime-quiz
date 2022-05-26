@@ -1,6 +1,11 @@
-import { Server } from 'socket.io'
 import { SHARED_EVENTS } from '../shared/events'
-import { AqGameChatMessage, AqSongSerialised, AqUserSongsSerialised } from '../shared/interfaces'
+import {
+  AqGameChatMessage,
+  AqGameSettingsSerialised,
+  AqSongSerialised,
+  AqUserSongsSerialised
+} from '../shared/interfaces'
+import { Server } from './server'
 
 class Emitter {
   protected _io: Server
@@ -35,6 +40,10 @@ class Emitter {
 
   public updateGameChat(msg: AqGameChatMessage, sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_CHAT, msg)
+  }
+
+  public updateGameSetting(settings: AqGameSettingsSerialised, sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_SETTINGS, settings)
   }
 
   protected _client(sid: string) {

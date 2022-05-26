@@ -9,72 +9,82 @@ const LOG_BASE = {
   SERVER001: {
     reference: 'SERVER001',
     level: LOG_LEVEL.INFO,
-    template: 'server running on port="{{{port}}}"'
+    message: 'server running'
   },
   SERVER002: {
     reference: 'SERVER002',
     level: LOG_LEVEL.INFO,
-    template: 'new connection - id="{{{id}}}"'
+    message: 'new connection'
   },
   SERVER003: {
     reference: 'SERVER003',
     level: LOG_LEVEL.INFO,
-    template: 'client disconnected - id="{{{id}}}"'
+    message: 'client disconnected'
   },
   SERVER004: {
     reference: 'SERVER004',
     level: LOG_LEVEL.ERROR,
-    template: 'unhandled error - stack="{{{stack}}}"'
+    message: 'unhandled error'
   },
   SERVER005: {
     reference: 'SERVER005',
     level: LOG_LEVEL.INFO,
-    template: 'joined room - id="{{{id}}}" username="{{{username}}}" roomId="{{{roomId}}}"'
+    message: 'joined room'
+  },
+  SERVER006: {
+    reference: 'SERVER006',
+    level: LOG_LEVEL.INFO,
+    message: 'left room'
   },
   SONG001: {
     reference: 'SONG001',
     level: LOG_LEVEL.WARN,
-    template: 'song edit user does not exist - userId="{{{userId}}}"'
+    message: 'song edit user does not exist'
   },
   SONG002: {
     reference: 'SONG002',
     level: LOG_LEVEL.WARN,
-    template: 'song edit song does not exist - songIds="{{{songIds}}}"'
+    message: 'song edit song does not exist'
   },
   SONG003: {
     reference: 'SONG003',
     level: LOG_LEVEL.WARN,
-    template: 'song edit song already exists in user list - songIds="{{{songIds}}}"'
+    message: 'song edit song already exists in user list'
   },
   SONG004: {
     reference: 'SONG004',
     level: LOG_LEVEL.WARN,
-    template: 'song edit song not exists in user list - songIds="{{{songIds}}}"'
+    message: 'song edit song not exists in user list'
   },
   ROOM001: {
     reference: 'ROOM001',
     level: LOG_LEVEL.WARN,
-    template: 'room name does not exist - roomName="{{{roomName}}}"'
+    message: 'room name does not exist'
   },
   ROOM002: {
     reference: 'ROOM002',
     level: LOG_LEVEL.WARN,
-    template: 'invalid room name - roomName="{{{roomName}}}"'
+    message: 'invalid room name'
   },
   ROOM003: {
     reference: 'ROOM003',
     level: LOG_LEVEL.WARN,
-    template: 'user not in game room/in multiple rooms - roomNames="{{{roomNames}}}"'
+    message: 'user not in game room/in multiple rooms'
+  },
+  SETTINGS001: {
+    reference: 'SETTINGS001',
+    level: LOG_LEVEL.WARN,
+    message: 'invalid settings'
   },
   DATA001: {
     reference: 'DATA001',
     level: LOG_LEVEL.WARN,
-    template: 'game data validation error - id="{{{id}}}" username="{{{username}}}"'
+    message: 'game data validation error'
   },
   AUTH002: {
     reference: 'AUTH002',
     level: LOG_LEVEL.WARN,
-    template: 'unauthorised connection - id="{{{id}}}"'
+    message: 'unauthorised connection'
   }
 }
 
