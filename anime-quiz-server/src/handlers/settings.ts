@@ -5,7 +5,7 @@ import { GameSettings } from '../game/settings'
 import { Logger } from '../app/logging/logger'
 import { Server } from '../app/server'
 import { Emitter } from '../app/emitter'
-import { AqGameSettingsSerialised } from '../shared/interfaces'
+import { AqGameSettings } from '../shared/interfaces'
 import { NOTIFICATION_COLOR } from '../shared/constants'
 
 class GameSettingsHandler extends AbstractHandler {
@@ -31,7 +31,7 @@ class GameSettingsHandler extends AbstractHandler {
       }
     })
 
-    socket.on(SHARED_EVENTS.EDIT_GAME_SETTINGS, (settings: AqGameSettingsSerialised, callback: Function) => {
+    socket.on(SHARED_EVENTS.EDIT_GAME_SETTINGS, (settings: AqGameSettings, callback: Function) => {
       try {
         const roomId = this._getSocketGameRoom(socket)
         this._settings.editSettings(roomId, settings)

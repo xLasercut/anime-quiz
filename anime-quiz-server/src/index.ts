@@ -18,6 +18,7 @@ import { GameSettings } from './game/settings'
 import { isGameRoom } from './helpers'
 import { Server } from './app/server'
 import { GameSettingsHandler } from './handlers/settings'
+import { GameStates } from './game/state'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -32,13 +33,14 @@ const logger = new Logger(config)
 const songDb = new AnimeQuizSongDb(config, logger)
 const userDb = new AnimeQuizUserDb(config, logger)
 const gameSettings = new GameSettings(logger)
+const gameStates = new GameStates(logger)
 
 const ioErrorHandler = newIoErrorHandler(logger)
 
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
 const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)
-const gameHandler = new GameHandler(logger, io, emitter, userDb, songDb, gameSettings)
+const gameHandler = new GameHandler(logger, io, emitter, userDb, songDb, gameSettings, gameStates)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
   if (socket.data.auth) {
@@ -85,6 +87,7 @@ io.of('/').adapter.on('create-room', (roomId: string) => {
   try {
     if (isGameRoom(roomId)) {
       gameSettings.addRoom(roomId)
+      gameStates.addRoom(roomId)
       emitter.updateRoomList(io.getGameRoomList())
     }
   } catch (e) {
@@ -96,6 +99,7 @@ io.of('/').adapter.on('delete-room', (roomId: string) => {
   try {
     if (isGameRoom(roomId)) {
       gameSettings.deleteRoom(roomId)
+      gameStates.deleteRoom(roomId)
       emitter.updateRoomList(io.getGameRoomList())
     }
   } catch (e) {

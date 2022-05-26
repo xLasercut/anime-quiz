@@ -69,7 +69,7 @@ import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-
 import { CLIENT_CONSTANTS } from '../../assets/constants'
 import SongListTableFilter from './song-list-table/SongListTableFilter.vue'
 import { store } from '../../plugins/store'
-import { AqSongSerialised } from '../../assets/shared/interfaces'
+import { AqSong } from '../../assets/shared/interfaces'
 import SongListTableActions from './song-list-table/SongListTableActions.vue'
 import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants'
 import { socket } from '../../plugins/socket'
@@ -94,13 +94,13 @@ export default defineComponent({
       loading: false
     })
 
-    const songSelected = ref<AqSongSerialised[]>([])
+    const songSelected = ref<AqSong[]>([])
 
     watch(() => state.editMode, () => {
       songSelected.value = []
     })
 
-    function isSelectDisabled(song: AqSongSerialised): boolean {
+    function isSelectDisabled(song: AqSong): boolean {
       if (!state.selectedUser || state.editMode === SONG_LIST_EDIT_MODE.NONE) {
         return false
       }

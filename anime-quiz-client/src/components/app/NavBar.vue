@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app flat height="60" min-height="60">
+  <v-app-bar app flat height="40" min-height="40">
     <v-toolbar-items>
       <nav-btn icon="mdi-theme-light-dark" @click="changeTheme()">Theme</nav-btn>
     </v-toolbar-items>

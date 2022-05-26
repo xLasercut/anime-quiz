@@ -3,9 +3,9 @@ import {
   AqClientData,
   AqGameChatMessage, AqGameGuess,
   AqGamePlayer,
-  AqGameSettingsSerialised,
-  AqSongSerialised,
-  AqUserSongsSerialised
+  AqGameSettings,
+  AqSong,
+  AqUserSongs
 } from '../shared/interfaces'
 import { Server } from './server'
 
@@ -20,7 +20,7 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.SYSTEM_NOTIFICATION, color, message)
   }
 
-  public updateSongList(songList: AqSongSerialised[], sid: string = null): void {
+  public updateSongList(songList: AqSong[], sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_LIST, songList)
   }
 
@@ -32,7 +32,7 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_TITLE_LIST, songTitleList)
   }
 
-  public updateUserLists(userLists: AqUserSongsSerialised[], sid: string = null): void {
+  public updateUserLists(userLists: AqUserSongs[], sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_USER_LISTS, userLists)
   }
 
@@ -44,7 +44,7 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_CHAT, msg)
   }
 
-  public updateGameSetting(settings: AqGameSettingsSerialised, sid: string = null): void {
+  public updateGameSetting(settings: AqGameSettings, sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_SETTINGS, settings)
   }
 
@@ -56,7 +56,7 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_PLAYERS, playerList)
   }
 
-  public updateSongListData(songList: AqSongSerialised[], animeList: string[], songTitleList: string[], userLists: AqUserSongsSerialised[], sid: string = null): void {
+  public updateSongListData(songList: AqSong[], animeList: string[], songTitleList: string[], userLists: AqUserSongs[], sid: string = null): void {
     this.updateSongList(songList, sid)
     this.updateAnimeList(animeList, sid)
     this.updateSongTitleList(songTitleList, sid)

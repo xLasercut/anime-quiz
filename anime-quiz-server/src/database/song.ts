@@ -1,6 +1,6 @@
 import { Database, OPEN_READWRITE } from 'sqlite3'
 import { ServerConfig } from '../app/config'
-import { AqSongSerialised } from '../shared/interfaces'
+import { AqSong } from '../shared/interfaces'
 import { AqAnimeRaw, AqSongRaw } from '../interfaces'
 import { AbstractDb } from './abstract'
 import { Logger } from '../app/logging/logger'
@@ -12,7 +12,7 @@ class AnimeQuizSongDb extends AbstractDb {
     super(new Database(config.songDbPath, OPEN_READWRITE), logger)
   }
 
-  public async getAllSongList(): Promise<AqSongSerialised[]> {
+  public async getAllSongList(): Promise<AqSong[]> {
     const songList: AqSongRaw[] = await this._all(`
       SELECT
         songs.song_id,

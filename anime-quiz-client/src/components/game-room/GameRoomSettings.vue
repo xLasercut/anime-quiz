@@ -44,14 +44,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
 import DialogActions from '../shared/dialog/DialogActions.vue'
 import DialogSlider from '../shared/dialog/DialogSlider.vue'
 import DialogSelect from '../shared/dialog/DialogSelect.vue'
 import { GAME_MODE } from '../../assets/shared/constants'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
-import { AqGameSettingsSerialised } from '../../assets/shared/interfaces'
+import { AqGameSettings } from '../../assets/shared/interfaces'
 import { store } from '../../plugins/store'
 
 interface GameModeItem {
@@ -97,7 +97,7 @@ export default defineComponent({
 
     function setSettings() {
       if (state.valid) {
-        const settings: AqGameSettingsSerialised = {
+        const settings: AqGameSettings = {
           songCount: state.songCount,
           guessTime: state.guessTime,
           gameMode: state.gameMode,
@@ -112,7 +112,7 @@ export default defineComponent({
       }
     }
 
-    socket.on(SHARED_EVENTS.UPDATE_GAME_SETTINGS, (settings: AqGameSettingsSerialised) => {
+    socket.on(SHARED_EVENTS.UPDATE_GAME_SETTINGS, (settings: AqGameSettings) => {
       state.songCount = settings.songCount
       state.guessTime = settings.guessTime
       state.gameMode = settings.gameMode

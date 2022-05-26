@@ -1,4 +1,4 @@
-import { AqGameSettingsSerialised } from '../shared/interfaces'
+import { AqGameSettings } from '../shared/interfaces'
 import { GAME_MODE } from '../shared/constants'
 import { Logger } from '../app/logging/logger'
 import { LOG_BASE } from '../app/logging/log-base'
@@ -6,19 +6,19 @@ import { GameDataValidationError } from '../app/exceptions'
 
 class GameSettings {
   protected _logger: Logger
-  protected _settings: { [key: string]: AqGameSettingsSerialised }
+  protected _settings: { [key: string]: AqGameSettings }
 
   constructor(logger: Logger) {
     this._logger = logger
     this._settings = {}
   }
 
-  public getGameSettings(roomId: string): AqGameSettingsSerialised {
+  public getGameSettings(roomId: string): AqGameSettings {
     this._validateRoomExists(roomId)
     return this._settings[roomId]
   }
 
-  public editSettings(roomId: string, settings: AqGameSettingsSerialised): void {
+  public editSettings(roomId: string, settings: AqGameSettings): void {
     this._validateRoomExists(roomId)
     this._validateSettings(settings)
     this._settings[roomId].songCount = settings.songCount
@@ -42,7 +42,7 @@ class GameSettings {
     delete this._settings[roomId]
   }
 
-  protected _validateSettings(settings: AqGameSettingsSerialised): void {
+  protected _validateSettings(settings: AqGameSettings): void {
     this._validateNumber(settings.songCount, 1, 100, 'Invalid song count')
     this._validateNumber(settings.guessTime, 20, 100, 'Invalid guess time')
     this._validateGameMode(settings.gameMode, 'Invalid game mode')

@@ -14,21 +14,24 @@ import { GameSettings } from '../game/settings'
 import { AnimeQuizUserDb } from '../database/user'
 import { AnimeQuizSongDb } from '../database/song'
 import { AqGameGuess } from '../shared/interfaces'
+import { GameStates } from '../game/state'
 
 class GameHandler extends AbstractHandler {
   protected _io: Server
   protected _emitter: Emitter
   protected _chat: ChatManager
   protected _settings: GameSettings
+  protected _states: GameStates
   protected _userDb: AnimeQuizUserDb
   protected _songDb: AnimeQuizSongDb
 
-  constructor(logger: Logger, io: Server, emitter: Emitter, userDb: AnimeQuizUserDb, songDb: AnimeQuizSongDb, settings: GameSettings) {
+  constructor(logger: Logger, io: Server, emitter: Emitter, userDb: AnimeQuizUserDb, songDb: AnimeQuizSongDb, settings: GameSettings, states: GameStates) {
     super(logger)
     this._io = io
     this._emitter = emitter
     this._chat = new ChatManager(logger)
     this._settings = settings
+    this._states = states
     this._userDb = userDb
     this._songDb = songDb
   }

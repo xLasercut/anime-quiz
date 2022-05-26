@@ -1,7 +1,7 @@
-import { AqGamePlayer, AqSongSerialised, AqUserSongsSerialised } from './shared/interfaces'
+import { AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces'
 
 interface SongListStoreState {
-  songList: AqSongSerialised[],
+  songList: AqSong[],
   currentPage: number
   itemsPerPage: number
   animeFilter: string
@@ -9,7 +9,7 @@ interface SongListStoreState {
   songTitleFilter: string
   animeList: string[]
   songTitleList: string[]
-  userLists: AqUserSongsSerialised[]
+  userLists: AqUserSongs[]
 }
 
 interface RootStoreState {

@@ -64,7 +64,7 @@ export default defineComponent({
 
 <style scoped>
 .chat-message-container {
-  height: calc(100vh - 272px);
+  height: calc(100vh - 252px);
   overflow: auto;
   word-wrap: break-word;
 }

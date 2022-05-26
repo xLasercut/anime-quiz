@@ -1,4 +1,4 @@
-interface AqSongSerialised {
+interface AqSong {
   anime_name: string[]
   anime_id: string
   song_id: string
@@ -8,13 +8,13 @@ interface AqSongSerialised {
   src: string
 }
 
-interface AqUserSongsSerialised {
+interface AqUserSongs {
   user_id: string
   username: string
   song_id: string[]
 }
 
-interface AqGameSettingsSerialised {
+interface AqGameSettings {
   songCount: number
   guessTime: number
   gameMode: string
@@ -51,12 +51,23 @@ interface AqGameGuess {
   title: string
 }
 
+interface AqGameState {
+  playing: boolean
+  currentSongCount: number
+  maxSongCount: number
+  startPosition: number
+  gameList: AqSong[]
+  songOverride: AqSong | null
+  currentSong: AqSong
+}
+
 export {
-  AqSongSerialised,
-  AqUserSongsSerialised,
-  AqGameSettingsSerialised,
+  AqSong,
+  AqUserSongs,
+  AqGameSettings,
   AqGameChatMessage,
   AqClientData,
   AqGamePlayer,
-  AqGameGuess
+  AqGameGuess,
+  AqGameState
 }

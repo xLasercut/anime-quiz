@@ -1,7 +1,7 @@
 import { RootStoreState, SongListStoreState } from '../../assets/interfaces'
 import { Module } from 'vuex'
 import { MUTATIONS } from './mutations'
-import { AqSongSerialised, AqUserSongsSerialised } from '../../assets/shared/interfaces'
+import { AqSong, AqUserSongs } from '../../assets/shared/interfaces'
 
 const DEFAULT_STATE: SongListStoreState = {
   songList: [],
@@ -18,7 +18,7 @@ const DEFAULT_STATE: SongListStoreState = {
 const songList: Module<SongListStoreState, RootStoreState> = {
   state: Object.assign({}, DEFAULT_STATE),
   mutations: {
-    [MUTATIONS.SOCKET_UPDATE_SONG_LIST]: (state: SongListStoreState, songList: AqSongSerialised[]) => {
+    [MUTATIONS.SOCKET_UPDATE_SONG_LIST]: (state: SongListStoreState, songList: AqSong[]) => {
       state.songList = songList
     },
     [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: SongListStoreState, animeList: string[]) => {
@@ -27,7 +27,7 @@ const songList: Module<SongListStoreState, RootStoreState> = {
     [MUTATIONS.SOCKET_UPDATE_SONG_TITLE_LIST]: (state: SongListStoreState, titleList: string[]) => {
       state.songTitleList = titleList
     },
-    [MUTATIONS.SOCKET_UPDATE_USER_LISTS]: (state: SongListStoreState, userLists: AqUserSongsSerialised[]) => {
+    [MUTATIONS.SOCKET_UPDATE_USER_LISTS]: (state: SongListStoreState, userLists: AqUserSongs[]) => {
       state.userLists = userLists
     },
     [MUTATIONS.UPDATE_SONG_LIST_ANIME_FILTER]: (state: SongListStoreState, filter: string) => {
@@ -41,7 +41,7 @@ const songList: Module<SongListStoreState, RootStoreState> = {
     }
   },
   getters: {
-    filteredSongList: (state: SongListStoreState): AqSongSerialised[] => {
+    filteredSongList: (state: SongListStoreState): AqSong[] => {
       return state.songList.filter((song) => {
         return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
           song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&

@@ -1,9 +1,11 @@
 <template>
-  <v-card-text>
-    <v-row>
+  <v-col cols="12" sm="6">
+    <v-row justify="center" no-gutters>
+      <v-col class="game-display-container">
 
+      </v-col>
     </v-row>
-  </v-card-text>
+  </v-col>
 </template>
 
 <script lang="ts">
