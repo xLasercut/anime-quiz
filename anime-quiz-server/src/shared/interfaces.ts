@@ -1,6 +1,6 @@
 interface AqSong {
   anime_name: string[]
-  anime_id: string
+  anime_id: string[]
   song_id: string
   type: string
   artist: string
@@ -52,12 +52,9 @@ interface AqGameGuess {
 }
 
 interface AqGameState {
-  playing: boolean
   currentSongCount: number
   maxSongCount: number
-  startPosition: number
-  gameList: AqSong[]
-  songOverride: AqSong | null
+  playing: boolean
   currentSong: AqSong
 }
 

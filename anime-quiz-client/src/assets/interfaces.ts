@@ -14,7 +14,8 @@ interface SongListStoreState {
 
 interface RootStoreState {
   client: ClientStoreState,
-  songList: SongListStoreState
+  songList: SongListStoreState,
+  game: GameStoreState
 }
 
 interface ClientStoreState {
@@ -28,6 +29,10 @@ interface ClientStoreState {
 
 interface GameStoreState {
   players: AqGamePlayer[]
+  currentSong: AqSong
+  currentSongCount: number
+  maxSongCount: number
+  playing: boolean
 }
 
 export {

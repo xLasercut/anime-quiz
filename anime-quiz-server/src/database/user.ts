@@ -32,6 +32,21 @@ class AnimeQuizUserDb extends AbstractDb {
     })
   }
 
+  public async getSelectedUserSongIds(userIds: string[]): Promise<string[]> {
+    const sql = `
+      SELECT DISTINCT
+        song_id
+      FROM user_songs
+      WHERE user_id in (${this._questionString(userIds.length)})
+    `
+
+    const userSongs: AqUserSongsRaw[] = await this._all(sql, userIds)
+
+    return userSongs.map((song) => {
+      return song.song_id
+    })
+  }
+
   public async addSongs(userId: string, songIds: string[]): Promise<void> {
     const sql = `INSERT INTO user_songs (user_id, song_id) VALUES (?,?)`
     for (const songId of songIds) {

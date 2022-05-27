@@ -10,6 +10,7 @@ class SocketData {
   public host: boolean
   public score: number
   public gameGuess: AqGameGuess
+  public songLoaded: boolean
 
   constructor(id: string) {
     this.auth = false
@@ -23,6 +24,7 @@ class SocketData {
       anime: '',
       title: ''
     }
+    this.songLoaded = false
   }
 
   public userLogin(username: string, avatar: string): void {
@@ -46,6 +48,14 @@ class SocketData {
       admin: this.admin,
       host: this.host,
       score: this.score
+    }
+  }
+
+  public newRound(): void {
+    this.songLoaded = false
+    this.gameGuess = {
+      anime: '',
+      title: ''
     }
   }
 }

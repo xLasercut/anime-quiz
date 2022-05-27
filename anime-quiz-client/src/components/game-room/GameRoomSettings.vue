@@ -125,6 +125,9 @@ export default defineComponent({
     })
 
     function disabled(): boolean {
+      if (store.state.game.playing) {
+        return true
+      }
       return !store.state.client.admin && !store.state.client.host
     }
 

@@ -33,7 +33,7 @@ const logger = new Logger(config)
 const songDb = new AnimeQuizSongDb(config, logger)
 const userDb = new AnimeQuizUserDb(config, logger)
 const gameSettings = new GameSettings(logger)
-const gameStates = new GameStates(logger)
+const gameStates = new GameStates(logger, io)
 
 const ioErrorHandler = newIoErrorHandler(logger)
 

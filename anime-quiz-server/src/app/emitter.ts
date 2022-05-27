@@ -1,9 +1,11 @@
 import { SHARED_EVENTS } from '../shared/events'
 import {
   AqClientData,
-  AqGameChatMessage, AqGameGuess,
+  AqGameChatMessage,
+  AqGameGuess,
   AqGamePlayer,
   AqGameSettings,
+  AqGameState,
   AqSong,
   AqUserSongs
 } from '../shared/interfaces'
@@ -65,6 +67,18 @@ class Emitter {
 
   public updateGuess(guess: AqGameGuess, sid: string): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GUESS, guess)
+  }
+
+  public updateGameState(gameState: AqGameState, sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_STATE, gameState)
+  }
+
+  public gameStartLoad(startPosition: number, guessTime: number, sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_START_LOAD, startPosition, guessTime)
+  }
+
+  public gameStartCountdown(guessTime: number, sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_START_COUNTDOWN, guessTime)
   }
 
   protected _client(sid: string) {

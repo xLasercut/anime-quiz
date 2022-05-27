@@ -20,7 +20,7 @@ class AnimeQuizSongDb extends AbstractDb {
         song_title,
         type,
         artist,
-        song_animes.anime_id,
+        json_group_array(song_animes.anime_id) as anime_id,
         json_group_array(anime_name) as anime_name
       FROM animes
         INNER JOIN song_animes ON animes.anime_id = song_animes.anime_id
@@ -29,10 +29,40 @@ class AnimeQuizSongDb extends AbstractDb {
     `)
 
     return songList.map((row) => {
-      const { anime_name, song_title, ...rest } = row
+      const { anime_name, song_title, anime_id, ...rest } = row
       return {
         anime_name: JSON.parse(anime_name),
         song_title: song_title || '',
+        anime_id: JSON.parse(anime_id),
+        ...rest
+      }
+    })
+  }
+
+  public async getSelectedUserSongs(songIds: string[]): Promise<AqSong[]> {
+    const sql = `
+      SELECT
+        songs.song_id,
+        src,
+        song_title,
+        type,
+        artist,
+        json_group_array(song_animes.anime_id) as anime_id,
+        json_group_array(anime_name) as anime_name
+      FROM animes
+        INNER JOIN song_animes ON animes.anime_id = song_animes.anime_id
+        INNER JOIN songs ON songs.song_id = song_animes.song_id
+      WHERE songs.song_id in (${this._questionString(songIds.length)})
+      GROUP BY songs.song_id
+      ORDER BY RANDOM()
+    `
+    const songList: AqSongRaw[] = await this._all(sql, songIds)
+    return songList.map((row) => {
+      const { anime_name, song_title, anime_id, ...rest } = row
+      return {
+        anime_name: JSON.parse(anime_name),
+        song_title: song_title || '',
+        anime_id: JSON.parse(anime_id),
         ...rest
       }
     })

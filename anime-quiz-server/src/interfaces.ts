@@ -1,4 +1,5 @@
 import { GameSettings } from './game/settings'
+import { AqSong } from './shared/interfaces'
 
 interface LogTemplate {
   reference: string
@@ -32,10 +33,21 @@ interface AqUserRaw {
   username: string
 }
 
+interface AqGameStateRaw {
+  playing: boolean
+  currentSongCount: number
+  startPosition: number
+  gameList: AqSong[]
+  songOverride: AqSong | null
+  countdown: NodeJS.Timer
+  timeout: NodeJS.Timeout
+}
+
 export {
   LogTemplate,
   AqSongRaw,
   AqAnimeRaw,
   AqUserSongsRaw,
-  AqUserRaw
+  AqUserRaw,
+  AqGameStateRaw
 }

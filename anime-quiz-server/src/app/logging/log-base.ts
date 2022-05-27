@@ -85,6 +85,11 @@ const LOG_BASE = {
     reference: 'AUTH002',
     level: LOG_LEVEL.WARN,
     message: 'unauthorised connection'
+  },
+  GAME001: {
+    reference: 'GAME001',
+    level: LOG_LEVEL.INFO,
+    message: 'new game'
   }
 }
 

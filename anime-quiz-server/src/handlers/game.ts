@@ -7,13 +7,13 @@ import { ROOM_NAME_PREFIX } from '../constants'
 import { v4 } from 'uuid'
 import { ChatManager } from '../game/chat'
 import { Server } from '../app/server'
-import { ROOM_NAME_FORMAT } from '../shared/constants'
+import { GAME_MODE, NOTIFICATION_COLOR, ROOM_NAME_FORMAT } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationError } from '../app/exceptions'
 import { GameSettings } from '../game/settings'
 import { AnimeQuizUserDb } from '../database/user'
 import { AnimeQuizSongDb } from '../database/song'
-import { AqGameGuess } from '../shared/interfaces'
+import { AqGameGuess, AqGameSettings, AqSong } from '../shared/interfaces'
 import { GameStates } from '../game/state'
 
 class GameHandler extends AbstractHandler {
@@ -93,6 +93,97 @@ class GameHandler extends AbstractHandler {
         errorHandler(e)
       }
     })
+
+    socket.on(SHARED_EVENTS.START_GAME, async () => {
+      try {
+        const roomId = this._getSocketGameRoom(socket)
+        const settings = this._settings.getGameSettings(roomId)
+        const gameList = await this._generateGameList(settings)
+        this._validateGameSongList(gameList)
+        this._states.startGame(roomId, gameList)
+        const gameState = this._states.getGameState(roomId)
+        this._emitter.updateGameState(gameState, roomId)
+        this._io.resetScore(roomId)
+        this._emitter.updateGamePlayerList(this._io.getPlayerList(roomId), roomId)
+        this._logger.writeLog(LOG_BASE.GAME001, {
+          roomId: roomId,
+          settings: settings,
+          state: gameState
+        })
+        await this._newRound(roomId, settings)
+      } catch (e) {
+        errorHandler(e)
+      }
+    })
+
+    socket.on(SHARED_EVENTS.STOP_GAME, () => {
+      try {
+        const roomId = this._getSocketGameRoom(socket)
+        this._states.stopGame(roomId)
+        this._emitter.updateGameState(this._states.getGameState(roomId), roomId)
+      } catch (e) {
+        errorHandler(e)
+      }
+    })
+
+    socket.on(SHARED_EVENTS.GAME_SONG_LOADED, () => {
+      try {
+        socket.data.songLoaded = true
+      } catch (e) {
+        errorHandler(e)
+      }
+    })
+  }
+
+  protected async _newRound(roomId: string, settings: AqGameSettings): Promise<void> {
+    const startPosition = Math.random()
+    const gameState = this._states.getGameState(roomId)
+    this._emitter.updateGameState(gameState, roomId)
+    this._io.newRound(roomId)
+    this._emitter.gameStartLoad(startPosition, settings.guessTime, roomId)
+    await this._states.waitPlayerLoaded(30000, roomId)
+    this._emitter.gameStartCountdown(settings.guessTime, roomId)
+  }
+
+  protected async _generateGameList(settings: AqGameSettings): Promise<AqSong[]> {
+    if (settings.gameMode === GAME_MODE.NORMAL) {
+      return await this._generateNormalGameList(settings)
+    }
+  }
+
+  protected async _generateNormalGameList(settings: AqGameSettings): Promise<AqSong[]> {
+    const userSongIds = await this._userDb.getSelectedUserSongIds(settings.users)
+    const userSongs = await this._songDb.getSelectedUserSongs(userSongIds)
+    if (settings.duplicate) {
+      return userSongs.slice(0, settings.songCount)
+    }
+    let animeIds = []
+    const dedupedSongList = []
+    for (const song of userSongs) {
+      if (!this._isDupeAnime(animeIds, song)) {
+        dedupedSongList.push(song)
+        animeIds = animeIds.concat(song.anime_id)
+        if (dedupedSongList.length >= settings.songCount) {
+          return dedupedSongList
+        }
+      }
+    }
+    return dedupedSongList
+  }
+
+  protected _isDupeAnime(animeIds: string[], song: AqSong): boolean {
+    for (const animeId of song.anime_id) {
+      if (animeIds.includes(animeId)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  protected _validateGameSongList(songList: AqSong[]): void {
+    if (songList.length === 0) {
+      throw new GameDataValidationError('Empty song list')
+    }
   }
 
   protected _validateNewRoomName(roomName: string): void {

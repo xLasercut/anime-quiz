@@ -36,7 +36,7 @@ class GameSettingsHandler extends AbstractHandler {
         const roomId = this._getSocketGameRoom(socket)
         this._settings.editSettings(roomId, settings)
         this._emitter.updateGameSetting(this._settings.getGameSettings(roomId))
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Settings updated', roomId)
+        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Settings updated', socket.id)
         callback(true)
       } catch (e) {
         errorHandler(e)
