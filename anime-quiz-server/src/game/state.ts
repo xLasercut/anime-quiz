@@ -1,6 +1,6 @@
 import { Logger } from '../app/logging/logger'
 import { AqGameStateRaw } from '../interfaces'
-import { AqGameState, AqSong } from '../shared/interfaces'
+import { AqGameGuess, AqGameState, AqSong } from '../shared/interfaces'
 import { Server } from '../app/server'
 
 class GameStates {
@@ -26,7 +26,18 @@ class GameStates {
     }
   }
 
+  public nextSong(roomId: string): void {
+    this._states[roomId].currentSongCount += 1
+  }
+
+  public isLastSong(roomId: string): boolean {
+    const state = this._states[roomId]
+    return state.currentSongCount >= (state.gameList.length - 1)
+  }
+
   public deleteRoom(roomId: string): void {
+    this._clearCountdown(roomId)
+    this._clearTimeout(roomId)
     delete this._states[roomId]
   }
 
@@ -37,6 +48,8 @@ class GameStates {
   }
 
   public stopGame(roomId: string): void {
+    this._clearCountdown(roomId)
+    this._clearTimeout(roomId)
     this._states[roomId].playing = false
   }
 
@@ -45,13 +58,38 @@ class GameStates {
     return {
       currentSongCount: state.currentSongCount,
       maxSongCount: state.gameList.length,
-      currentSong: state.gameList[state.currentSongCount],
+      currentSong: this._getCurrentSong(roomId),
       playing: state.playing
     }
   }
 
+  public calculateScore(guess: AqGameGuess, roomId: string): number {
+    const currentSong = this._getCurrentSong(roomId)
+    let score = 0
+    if (guess.title.toLowerCase() === currentSong.song_title.toLowerCase()) {
+      score += 1
+    }
+
+    for (const anime of currentSong.anime_name) {
+      if (anime.toLowerCase() === guess.anime.toLowerCase()) {
+        score += 1
+      }
+    }
+
+    return score
+  }
+
+  protected _getCurrentSong(roomId: string): AqSong {
+    const state = this._states[roomId]
+    return state.gameList[state.currentSongCount]
+  }
+
   protected _clearCountdown(roomId: string): void {
     clearInterval(this._states[roomId].countdown)
+  }
+
+  protected _clearTimeout(roomId: string): void {
+    clearTimeout(this._states[roomId].timeout)
   }
 
   public async waitPlayerLoaded(duration: number, roomId: string): Promise<void> {
@@ -62,9 +100,20 @@ class GameStates {
       time += tick
       this._states[roomId].countdown = setInterval(() => {
         if (time >= duration || this._io.isLoaded(roomId)) {
+          this._clearCountdown(roomId)
           resolve()
         }
       }, tick)
+    })
+  }
+
+  public async startTimeout(duration: number, roomId: string): Promise<void> {
+    this._clearTimeout(roomId)
+    return new Promise((resolve) => {
+      this._states[roomId].timeout = setTimeout(() => {
+        this._clearTimeout(roomId)
+        resolve()
+      }, duration)
     })
   }
 }

@@ -7,7 +7,7 @@ import { ROOM_NAME_PREFIX } from '../constants'
 import { v4 } from 'uuid'
 import { ChatManager } from '../game/chat'
 import { Server } from '../app/server'
-import { GAME_MODE, NOTIFICATION_COLOR, ROOM_NAME_FORMAT } from '../shared/constants'
+import { GAME_MODE, ROOM_NAME_FORMAT } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationError } from '../app/exceptions'
 import { GameSettings } from '../game/settings'
@@ -87,7 +87,9 @@ class GameHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.EDIT_GUESS, (guess: AqGameGuess) => {
       try {
+        const roomId = this._getSocketGameRoom(socket)
         socket.data.gameGuess = guess
+        socket.data.pendingScore = this._states.calculateScore(guess, roomId)
         this._emitter.updateGuess(socket.data.gameGuess, socket.id)
       } catch (e) {
         errorHandler(e)
@@ -119,8 +121,7 @@ class GameHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.STOP_GAME, () => {
       try {
         const roomId = this._getSocketGameRoom(socket)
-        this._states.stopGame(roomId)
-        this._emitter.updateGameState(this._states.getGameState(roomId), roomId)
+        this._stopGame(roomId)
       } catch (e) {
         errorHandler(e)
       }
@@ -142,7 +143,24 @@ class GameHandler extends AbstractHandler {
     this._io.newRound(roomId)
     this._emitter.gameStartLoad(startPosition, settings.guessTime, roomId)
     await this._states.waitPlayerLoaded(30000, roomId)
-    this._emitter.gameStartCountdown(settings.guessTime, roomId)
+    this._emitter.gameStartCountdown(roomId)
+    await this._states.startTimeout(settings.guessTime * 1000, roomId)
+    this._io.updateScore(roomId)
+    this._emitter.updateGamePlayerList(this._io.getPlayerList(roomId), roomId)
+    this._emitter.gameShowGuess(roomId)
+    if (!this._states.isLastSong(roomId)) {
+      await this._states.startTimeout(10000, roomId)
+      this._states.nextSong(roomId)
+      await this._newRound(roomId, settings)
+    } else {
+      this._stopGame(roomId)
+    }
+  }
+
+  protected _stopGame(roomId: string): void {
+    this._states.stopGame(roomId)
+    this._emitter.updateGameState(this._states.getGameState(roomId), roomId)
+    this._emitter.stopClientGame(roomId)
   }
 
   protected async _generateGameList(settings: AqGameSettings): Promise<AqSong[]> {

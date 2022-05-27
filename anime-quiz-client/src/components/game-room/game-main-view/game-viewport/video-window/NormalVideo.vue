@@ -41,6 +41,16 @@ export default defineComponent({
       }
     })
 
+    socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
+      state.show = true
+    })
+
+    socket.on(SHARED_EVENTS.STOP_CLIENT_GAME, () => {
+      if (player.value) {
+        player.value.pause()
+      }
+    })
+
     function metaDataLoaded(): void {
       if (player.value) {
         player.value.currentTime = calculateStartPosition(state.startPosition, state.guessTime, player.value.duration)
@@ -54,6 +64,8 @@ export default defineComponent({
 
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.GAME_START_LOAD)
+      socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN)
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
     })
 
     return {
@@ -68,8 +80,8 @@ export default defineComponent({
 
 <style scoped>
 video {
-  max-height: 100%;
   max-width: 100%;
+  max-height: 180px;
   margin: 0;
   padding: 0;
 }

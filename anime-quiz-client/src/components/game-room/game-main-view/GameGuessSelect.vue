@@ -22,6 +22,11 @@ export default defineComponent({
       title: ''
     })
 
+    socket.on(SHARED_EVENTS.GAME_START_LOAD, () => {
+      state.anime = ''
+      state.title = ''
+    })
+
     socket.on(SHARED_EVENTS.UPDATE_GUESS, (guess: AqGameGuess) => {
       state.anime = guess.anime
       state.title = guess.title
@@ -29,6 +34,7 @@ export default defineComponent({
 
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.UPDATE_GUESS)
+      socket.off(SHARED_EVENTS.GAME_START_LOAD)
     })
 
     return {

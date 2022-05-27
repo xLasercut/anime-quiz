@@ -77,8 +77,16 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.GAME_START_LOAD, startPosition, guessTime)
   }
 
-  public gameStartCountdown(guessTime: number, sid: string): void {
-    this._client(sid).emit(SHARED_EVENTS.GAME_START_COUNTDOWN, guessTime)
+  public gameStartCountdown(sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_START_COUNTDOWN)
+  }
+
+  public gameShowGuess(sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_SHOW_GUESS)
+  }
+
+  public stopClientGame(sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.STOP_CLIENT_GAME)
   }
 
   protected _client(sid: string) {

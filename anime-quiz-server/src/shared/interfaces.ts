@@ -44,6 +44,8 @@ interface AqGamePlayer {
   admin: boolean
   host: boolean
   score: number
+  guess: AqGameGuess
+  scoreColor: string
 }
 
 interface AqGameGuess {

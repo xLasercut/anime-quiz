@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
 import { socket } from '../../../plugins/socket'
 import { SHARED_EVENTS } from '../../../assets/shared/events'
 import { AqGameGuess } from '../../../assets/shared/interfaces'
@@ -36,6 +36,11 @@ export default defineComponent({
       title: ''
     })
 
+    socket.on(SHARED_EVENTS.GAME_START_LOAD, () => {
+      state.anime = ''
+      state.title = ''
+    })
+
     function sendGuess(): void {
       const guess: AqGameGuess = {
         anime: state.anime,
@@ -43,6 +48,10 @@ export default defineComponent({
       }
       socket.emit(SHARED_EVENTS.EDIT_GUESS, guess)
     }
+
+    onUnmounted(() => {
+      socket.off(SHARED_EVENTS.GAME_START_LOAD)
+    })
 
     return {
       ...toRefs(state),

@@ -3,8 +3,13 @@ import { ROOM_NAME_PREFIX } from '../constants'
 import { SHARED_EVENTS } from '../shared/events'
 import { Socket } from '../types'
 import { AqGamePlayer } from '../shared/interfaces'
+import { Namespace } from 'socket.io/dist/namespace'
+import { DefaultEventsMap } from 'socket.io/dist/typed-events'
+import { SocketData } from './socket-data'
 
 class Server extends SocketIoServer {
+  declare readonly sockets: Namespace<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>
+
   public getGameRoomList(): string[] {
     const roomList = []
     for (const room of this.sockets.adapter.rooms) {
@@ -60,6 +65,13 @@ class Server extends SocketIoServer {
       }
     }
     return true
+  }
+
+  public updateScore(roomId: string): void {
+    const socketIds = Array.from(this.sockets.adapter.rooms.get(roomId))
+    for (const sid of socketIds) {
+      this.sockets.sockets.get(sid).data.updateScore()
+    }
   }
 }
 

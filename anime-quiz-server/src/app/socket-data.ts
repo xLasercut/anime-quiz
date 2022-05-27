@@ -1,4 +1,5 @@
 import { AqClientData, AqGameGuess, AqGamePlayer } from '../shared/interfaces'
+import { NOTIFICATION_COLOR } from '../shared/constants'
 
 class SocketData {
   public auth: boolean
@@ -11,6 +12,8 @@ class SocketData {
   public score: number
   public gameGuess: AqGameGuess
   public songLoaded: boolean
+  public pendingScore: number
+  public scoreColor: string
 
   constructor(id: string) {
     this.auth = false
@@ -20,11 +23,13 @@ class SocketData {
     this.username = ''
     this.avatar = ''
     this.score = 0
+    this.scoreColor = NOTIFICATION_COLOR.ERROR
     this.gameGuess = {
       anime: '',
       title: ''
     }
     this.songLoaded = false
+    this.pendingScore = 0
   }
 
   public userLogin(username: string, avatar: string): void {
@@ -47,7 +52,9 @@ class SocketData {
       avatar: this.avatar,
       admin: this.admin,
       host: this.host,
-      score: this.score
+      score: this.score,
+      guess: this.gameGuess,
+      scoreColor: this.scoreColor
     }
   }
 
@@ -57,6 +64,25 @@ class SocketData {
       anime: '',
       title: ''
     }
+    this.pendingScore = 0
+    this.scoreColor = NOTIFICATION_COLOR.ERROR
+  }
+
+  public updateScore(): void {
+    this.score += this.pendingScore
+    this.scoreColor = this._getScoreColor()
+  }
+
+  protected _getScoreColor(): string {
+    if (this.pendingScore >= 2) {
+      return NOTIFICATION_COLOR.SUCCESS
+    }
+
+    if (this.pendingScore >= 1) {
+      return NOTIFICATION_COLOR.WARNING
+    }
+
+    return NOTIFICATION_COLOR.ERROR
   }
 }
 

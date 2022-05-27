@@ -35,12 +35,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
+import { SHARED_EVENTS } from '../../../../assets/shared/events'
+import { socket } from '../../../../plugins/socket'
 
 export default defineComponent({
   setup() {
     const state = reactive({
       show: false
+    })
+
+    socket.on(SHARED_EVENTS.GAME_START_LOAD, () => {
+      state.show = false
+    })
+
+    socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
+      state.show = true
+    })
+
+    onUnmounted(() => {
+      socket.off(SHARED_EVENTS.GAME_START_LOAD)
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
     })
 
     return {
