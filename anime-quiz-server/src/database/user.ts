@@ -13,7 +13,7 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 
   public async getUserLists(): Promise<AqUserSongs[]> {
-    const userLists: AqUserSongsRaw[] = await this._all(`
+    const sql = `
       SELECT 
         users.user_id,
         username,
@@ -22,7 +22,34 @@ class AnimeQuizUserDb extends AbstractDb {
         LEFT JOIN user_songs
         ON users.user_id = user_songs.user_id
       GROUP BY users.user_id
-    `)
+    `
+    const userLists: AqUserSongsRaw[] = await this._all(sql)
+    return userLists.map((userList) => {
+      const { song_id, ...rest } = userList
+      return {
+        song_id: JSON.parse(song_id),
+        ...rest
+      }
+    })
+  }
+
+  public async getSelectedUserLists(userIds: string[]): Promise<AqUserSongs[]> {
+    if (userIds.length <= 0) {
+      return []
+    }
+
+    const sql = `
+      SELECT 
+        users.user_id,
+        username,
+        json_group_array(song_id) as song_id 
+      FROM users
+        LEFT JOIN user_songs
+        ON users.user_id = user_songs.user_id
+      WHERE users.user_id IN (${this._questionString(userIds.length)})
+      GROUP BY users.user_id
+    `
+    const userLists: AqUserSongsRaw[] = await this._all(sql, userIds)
     return userLists.map((userList) => {
       const { song_id, ...rest } = userList
       return {

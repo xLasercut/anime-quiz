@@ -100,7 +100,7 @@ class GameHandler extends AbstractHandler {
       try {
         const roomId = this._getSocketGameRoom(socket)
         const settings = this._settings.getGameSettings(roomId)
-        const gameList = await this._generateGameList(settings)
+        const gameList = this._shuffleSongList(await this._generateGameList(settings))
         this._validateGameSongList(gameList)
         this._states.startGame(roomId, gameList)
         const gameState = this._states.getGameState(roomId)
@@ -139,8 +139,8 @@ class GameHandler extends AbstractHandler {
   protected async _newRound(roomId: string, settings: AqGameSettings): Promise<void> {
     const startPosition = Math.random()
     const gameState = this._states.getGameState(roomId)
-    this._emitter.updateGameState(gameState, roomId)
     this._io.newRound(roomId)
+    this._emitter.updateGameState(gameState, roomId)
     this._emitter.gameStartLoad(startPosition, settings.guessTime, roomId)
     await this._states.waitPlayerLoaded(30000, roomId)
     this._emitter.gameStartCountdown(roomId)
@@ -164,9 +164,58 @@ class GameHandler extends AbstractHandler {
   }
 
   protected async _generateGameList(settings: AqGameSettings): Promise<AqSong[]> {
-    if (settings.gameMode === GAME_MODE.NORMAL) {
-      return await this._generateNormalGameList(settings)
+    if (settings.gameMode === GAME_MODE.BALANCED) {
+      return await this._generateBalancedGameList(settings)
     }
+    return await this._generateNormalGameList(settings)
+  }
+
+  protected async _generateBalancedGameList(settings: AqGameSettings): Promise<AqSong[]> {
+    const userLists = await this._userDb.getSelectedUserLists(settings.users)
+    if (userLists.length <= 0) {
+      return []
+    }
+    const songIds = new Set()
+    let animeIds = []
+    const songList = []
+    const songsPerUser = Math.floor(settings.songCount / userLists.length)
+    for (const userList of userLists) {
+      let songCount = 0
+      const userSongs = await this._songDb.getSelectedUserSongs(userList.song_id)
+      for (const song of userSongs) {
+        if (!songIds.has(song.song_id)) {
+          if (settings.duplicate) {
+            if (!this._isDupeAnime(animeIds, song)) {
+              songList.push(song)
+              songIds.add(song.song_id)
+              animeIds = animeIds.concat(song.anime_id)
+              songCount += 1
+            }
+          } else {
+            songList.push(song)
+            songIds.add(song.song_id)
+            songCount += 1
+          }
+        }
+
+        if (songCount >= songsPerUser) {
+          break
+        }
+      }
+    }
+    return songList
+  }
+
+  protected _shuffleSongList(songList: AqSong[]): AqSong[] {
+    const shuffledList = songList
+    let currentIndex = shuffledList.length,  randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [shuffledList[currentIndex], shuffledList[randomIndex]] = [
+        shuffledList[randomIndex], shuffledList[currentIndex]];
+    }
+    return shuffledList
   }
 
   protected async _generateNormalGameList(settings: AqGameSettings): Promise<AqSong[]> {

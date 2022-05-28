@@ -56,7 +56,7 @@ class GameStates {
   public getGameState(roomId: string): AqGameState {
     const state = this._states[roomId]
     return {
-      currentSongCount: state.currentSongCount,
+      currentSongCount: state.currentSongCount + 1,
       maxSongCount: state.gameList.length,
       currentSong: this._getCurrentSong(roomId),
       playing: state.playing
