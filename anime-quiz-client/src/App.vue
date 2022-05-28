@@ -14,11 +14,12 @@ import { defineComponent, onMounted, provide } from '@vue/composition-api'
 import NavBar from './components/app/NavBar.vue'
 import { CLIENT_EVENTS } from './assets/events'
 import { SHARED_EVENTS } from './assets/shared/events'
-import { LOCAL_STORAGE_CONSTANTS, NOTIFICATION_COLOR } from './assets/shared/constants'
+import { NOTIFICATION_COLOR } from './assets/shared/constants'
 import { socket } from './plugins/socket'
 import { viewComponent } from './plugins/routing/mapping'
 import GlobalDialog from './components/app/GlobalDialog.vue'
 import SystemNotification from './components/app/SystemNotification.vue'
+import { LOCAL_STORAGE_CONSTANTS } from './assets/constants'
 
 export default defineComponent({
   components: { SystemNotification, GlobalDialog, NavBar },

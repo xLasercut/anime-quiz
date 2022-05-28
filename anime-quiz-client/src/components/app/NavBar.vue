@@ -19,7 +19,7 @@ import { store } from '../../plugins/store'
 import { MUTATIONS } from '../../plugins/store/mutations'
 import { ROUTES } from '../../plugins/routing/routes'
 import { panelComponent } from '../../plugins/routing/mapping'
-import { LOCAL_STORAGE_CONSTANTS } from '../../assets/shared/constants'
+import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
 
 export default defineComponent({
   components: { NavBtn },

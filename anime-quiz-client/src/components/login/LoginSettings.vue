@@ -13,7 +13,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import DialogTextField from '../shared/dialog/DialogTextField.vue'
 import DialogActions from '../shared/dialog/DialogActions.vue'
-import { LOCAL_STORAGE_CONSTANTS } from '../../assets/shared/constants'
+import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
 
 export default defineComponent({
   components: { DialogTextField, DialogActions },

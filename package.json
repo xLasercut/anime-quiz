@@ -8,8 +8,7 @@
   },
   "workspaces": [
     "anime-quiz-client",
-    "anime-quiz-server",
-    "anime-quiz-database-tool"
+    "anime-quiz-server"
   ],
   "repository": {
     "type": "git",

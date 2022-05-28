@@ -1,8 +1,0 @@
-const MUTATIONS = {
-  CHANGE_VIEW: 'CHANGE_VIEW',
-  UPDATE_DB_PATH: 'UPDATE_DB_PATH'
-}
-
-export {
-  MUTATIONS
-}

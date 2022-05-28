@@ -45,7 +45,8 @@ import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-a
 import { store } from '../plugins/store'
 import IconBtn from '../components/shared/buttons/IconBtn.vue'
 import LoginAvatarSelect from '../components/login/LoginAvatarSelect.vue'
-import { AVATARS, LOCAL_STORAGE_CONSTANTS, USERNAME_FORMAT } from '../assets/shared/constants'
+import { AVATARS, USERNAME_FORMAT } from '../assets/shared/constants'
+import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants'
 
 const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$')
 
