@@ -54,7 +54,8 @@ class SocketData {
       host: this.host,
       score: this.score,
       guess: this.gameGuess,
-      scoreColor: this.scoreColor
+      scoreColor: this.scoreColor,
+      sid: this._id
     }
   }
 

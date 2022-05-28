@@ -46,6 +46,7 @@ interface AqGamePlayer {
   score: number
   guess: AqGameGuess
   scoreColor: string
+  sid: string
 }
 
 interface AqGameGuess {

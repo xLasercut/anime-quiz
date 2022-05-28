@@ -34,6 +34,11 @@ const game: Module<GameStoreState, RootStoreState> = {
     [MUTATIONS.RESET_STORE_STATE]: (state: GameStoreState) => {
       Object.assign(state, DEFAULT_STATE)
     }
+  },
+  getters: {
+    isYoutubeVideo: (state: GameStoreState): boolean => {
+      return state.currentSong.src.includes('youtube')
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <video
     ref="player"
-    :src="$store.state.game.currentSong.src"
+    :src="videoSrc()"
     @loadedmetadata="metaDataLoaded()"
     @canplaythrough="fullLoaded()"
     preload="none"
@@ -14,6 +14,7 @@ import { defineComponent, onUnmounted, reactive, ref, toRefs } from '@vue/compos
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { socket } from '../../../../../plugins/socket'
 import { calculateStartPosition } from '../../../../../assets/game-helper'
+import { store } from '../../../../../plugins/store'
 
 export default defineComponent({
   setup() {
@@ -26,53 +27,83 @@ export default defineComponent({
     })
 
     socket.on(SHARED_EVENTS.GAME_START_LOAD, (startPosition: number, guessTime: number) => {
+      pause()
       state.show = false
       state.guessTime = guessTime
       state.startPosition = startPosition
-      if (player.value) {
-        player.value.pause()
-        player.value.load()
+      if (!store.getters.isYoutubeVideo) {
+        load()
       }
     })
 
     socket.on(SHARED_EVENTS.GAME_START_COUNTDOWN, () => {
-      if (player.value) {
-        player.value.play()
+      if (!store.getters.isYoutubeVideo) {
+        play()
       }
     })
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
-      state.show = true
-    })
-
-    socket.on(SHARED_EVENTS.STOP_CLIENT_GAME, () => {
-      if (player.value) {
-        player.value.pause()
+      if (!store.getters.isYoutubeVideo) {
+        state.show = true
       }
     })
 
-    function metaDataLoaded(): void {
+    socket.on(SHARED_EVENTS.STOP_CLIENT_GAME, () => {
+      pause()
+    })
+
+    function load(): void {
       if (player.value) {
+        player.value.load()
+      }
+    }
+
+    function pause(): void {
+      if (player.value) {
+        player.value.pause()
+      }
+    }
+
+    function play(): void {
+      if (player.value) {
+        player.value.play()
+      }
+    }
+
+    function metaDataLoaded(): void {
+      if (player.value && !store.getters.isYoutubeVideo) {
         player.value.currentTime = calculateStartPosition(state.startPosition, state.guessTime, player.value.duration)
       }
     }
 
     function fullLoaded(): void {
-      console.log('Song Loaded')
-      socket.emit(SHARED_EVENTS.GAME_SONG_LOADED)
+      if (!store.getters.isYoutubeVideo) {
+        console.log('Song Loaded')
+        socket.emit(SHARED_EVENTS.GAME_SONG_LOADED)
+      }
+    }
+
+    function videoSrc(): string {
+      if (!store.getters.isYoutubeVideo) {
+        return store.state.game.currentSong.src
+      }
+
+      return ''
     }
 
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.GAME_START_LOAD)
       socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN)
       socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
+      socket.off(SHARED_EVENTS.STOP_CLIENT_GAME)
     })
 
     return {
       ...toRefs(state),
       player,
       metaDataLoaded,
-      fullLoaded
+      fullLoaded,
+      videoSrc
     }
   }
 })

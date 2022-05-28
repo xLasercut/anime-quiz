@@ -4,6 +4,7 @@
       <v-col cols="12" align-self="center" :style="styles()">
         <loading-circle></loading-circle>
         <countdown-timer></countdown-timer>
+        <youtube-video></youtube-video>
         <normal-video></normal-video>
       </v-col>
     </v-row>
@@ -15,9 +16,10 @@ import { defineComponent } from '@vue/composition-api'
 import NormalVideo from './video-window/NormalVideo.vue'
 import LoadingCircle from './video-window/LoadingCircle.vue'
 import CountdownTimer from './video-window/CountdownTimer.vue'
+import YoutubeVideo from './video-window/YoutubeVideo.vue'
 
 export default defineComponent({
-  components: { CountdownTimer, LoadingCircle, NormalVideo },
+  components: { YoutubeVideo, CountdownTimer, LoadingCircle, NormalVideo },
   setup() {
     function styles() {
       return {

@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col v-for="player in $store.state.game.players" cols="auto">
+    <v-col v-for="player in $store.state.game.players" cols="auto" :key="player.sid">
       <v-row no-gutters justify="center">
         <v-tooltip
           top v-model="show"
