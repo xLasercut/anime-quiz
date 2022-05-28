@@ -41,12 +41,11 @@ import LoginInput from '../components/login/LoginInput.vue'
 import { socket } from '../plugins/socket'
 import { MUTATIONS } from '../plugins/store/mutations'
 import { ROUTES } from '../plugins/routing/routes'
-import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants'
 import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-api'
 import { store } from '../plugins/store'
 import IconBtn from '../components/shared/buttons/IconBtn.vue'
 import LoginAvatarSelect from '../components/login/LoginAvatarSelect.vue'
-import { AVATARS, USERNAME_FORMAT } from '../assets/shared/constants'
+import { AVATARS, LOCAL_STORAGE_CONSTANTS, USERNAME_FORMAT } from '../assets/shared/constants'
 
 const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$')
 

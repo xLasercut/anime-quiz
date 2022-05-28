@@ -1,8 +1,8 @@
 import { io } from 'socket.io-client'
 import { MUTATIONS } from './store/mutations'
 import { store } from './store'
-import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants'
 import { ROUTES } from './routing/routes'
+import { LOCAL_STORAGE_CONSTANTS } from '../assets/shared/constants'
 
 const GAME_SERVER = localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER] || ''
 const socket = io(GAME_SERVER, { autoConnect: false })

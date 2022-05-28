@@ -1,17 +1,16 @@
 {
-  "name": "anime-quiz-client",
+  "name": "anime-quiz-database-tool",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
+    "dev": "vue-cli-service serve --port 8081",
     "build": "vue-cli-service build"
   },
   "dependencies": {
     "@vue/composition-api": "^1.6.2",
     "core-js": "^3.8.3",
-    "socket.io-client": "^4.5.0",
+    "sqlite3": "^5.0.8",
     "vue": "^2.6.14",
-    "vue-youtube-embed": "^2.2.2",
     "vuetify": "^2.6.0",
     "vuex": "^3.6.2"
   },

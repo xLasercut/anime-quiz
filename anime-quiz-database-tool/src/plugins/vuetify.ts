@@ -6,7 +6,7 @@ Vue.use(Vuetify)
 export default new Vuetify({
   theme: {
     options: {
-      customProperties: true,
+      customProperties: true
     },
     themes: {
       light: {
@@ -40,5 +40,5 @@ export default new Vuetify({
         warning: '#d08770'
       }
     },
-  },
+  }
 })
