@@ -22,14 +22,17 @@ const DEFAULT_STATE: GameStoreState = {
 const game: Module<GameStoreState, RootStoreState> = {
   state: Object.assign({}, DEFAULT_STATE),
   mutations: {
-    [MUTATIONS.SOCKET_UPDATE_GAME_PLAYERS]: (state: GameStoreState, players: AqGamePlayer[]): void => {
+    [MUTATIONS.SOCKET_UPDATE_GAME_PLAYERS]: (state: GameStoreState, players: AqGamePlayer[]) => {
       state.players = players
     },
-    [MUTATIONS.SOCKET_UPDATE_GAME_STATE]: (state: GameStoreState, gameState: AqGameState): void => {
+    [MUTATIONS.SOCKET_UPDATE_GAME_STATE]: (state: GameStoreState, gameState: AqGameState) => {
       state.currentSong = gameState.currentSong
       state.playing = gameState.playing
       state.maxSongCount = gameState.maxSongCount
       state.currentSongCount = gameState.currentSongCount
+    },
+    [MUTATIONS.RESET_STORE_STATE]: (state: GameStoreState) => {
+      Object.assign(state, DEFAULT_STATE)
     }
   }
 }

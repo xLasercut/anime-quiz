@@ -44,6 +44,7 @@ export default defineComponent({
 
     onMounted(() => {
       socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
+      store.commit(MUTATIONS.RESET_STORE_STATE)
     })
 
     return {

@@ -55,6 +55,7 @@ export default defineComponent({
     onMounted(() => {
       socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
       socket.emit(SHARED_EVENTS.GET_ROOM_LIST)
+      store.commit(MUTATIONS.RESET_STORE_STATE)
     })
 
     onUnmounted(() => {

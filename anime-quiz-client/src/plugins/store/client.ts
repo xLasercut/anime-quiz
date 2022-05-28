@@ -16,13 +16,13 @@ const DEFAULT_STATE: ClientStoreState = {
 const client: Module<ClientStoreState, RootStoreState> = {
   state: Object.assign({}, DEFAULT_STATE),
   mutations: {
-    [MUTATIONS.CHANGE_DIALOG_VIEW]: (state: ClientStoreState, route: string): void => {
+    [MUTATIONS.CHANGE_DIALOG_VIEW]: (state: ClientStoreState, route: string) => {
       state.dialogView = route
     },
-    [MUTATIONS.CHANGE_VIEW]: (state: ClientStoreState, route: string): void => {
+    [MUTATIONS.CHANGE_VIEW]: (state: ClientStoreState, route: string) => {
       state.view = route
     },
-    [MUTATIONS.SOCKET_UPDATE_CLIENT_DATA]: (state: ClientStoreState, clientData: AqClientData): void => {
+    [MUTATIONS.SOCKET_UPDATE_CLIENT_DATA]: (state: ClientStoreState, clientData: AqClientData) => {
       state.username = clientData.username
       state.avatar = clientData.avatar
       state.admin = clientData.admin

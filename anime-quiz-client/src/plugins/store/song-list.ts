@@ -38,6 +38,9 @@ const songList: Module<SongListStoreState, RootStoreState> = {
     },
     [MUTATIONS.UPDATE_SONG_LIST_TYPE_FILTER]: (state: SongListStoreState, filter: string) => {
       state.songTypeFilter = filter
+    },
+    [MUTATIONS.RESET_STORE_STATE]: (state: SongListStoreState) => {
+      Object.assign(state, DEFAULT_STATE)
     }
   },
   getters: {

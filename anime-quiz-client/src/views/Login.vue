@@ -42,7 +42,7 @@ import { socket } from '../plugins/socket'
 import { MUTATIONS } from '../plugins/store/mutations'
 import { ROUTES } from '../plugins/routing/routes'
 import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants'
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-api'
 import { store } from '../plugins/store'
 import IconBtn from '../components/shared/buttons/IconBtn.vue'
 import LoginAvatarSelect from '../components/login/LoginAvatarSelect.vue'
@@ -89,6 +89,10 @@ export default defineComponent({
         })
       }
     }
+
+    onMounted(() => {
+      store.commit(MUTATIONS.RESET_STORE_STATE)
+    })
 
     return {
       ...toRefs(state),
