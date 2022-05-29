@@ -11,7 +11,14 @@ const LOCAL_STORAGE_CONSTANTS = {
   AQ_AVATAR: 'AQ_AVATAR'
 }
 
+const SONG_TYPES = [
+  { text: 'OP', value: 'OP' },
+  { text: 'ED', value: 'ED' },
+  { text: 'INSERT', value: 'INSERT' }
+]
+
 export {
   CLIENT_CONSTANTS,
-  LOCAL_STORAGE_CONSTANTS
+  LOCAL_STORAGE_CONSTANTS,
+  SONG_TYPES
 }

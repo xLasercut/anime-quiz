@@ -30,32 +30,14 @@
         hide-details
       ></v-select>
     </v-col>
-    <v-col>
-      <v-select
-        :value="selectedUser"
-        @input="updateFilter('selected-user', $event)"
-        :items="$store.state.songList.userLists"
-        hide-details
-        outlined
-        dense
-        label="User"
-        item-text="username"
-        item-value="user_id"
-        clearable
-      ></v-select>
-    </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { SONG_TYPES } from '../../../assets/constants'
 
 export default defineComponent({
   props: {
-    selectedUser: {
-      required: true
-    },
     animeFilter: {
       required: true
     },
@@ -69,8 +51,11 @@ export default defineComponent({
   setup(_props, context) {
     const state = reactive({
       songTypes: [
-        { text: 'ALL', value: '' }
-      ].concat(SONG_TYPES)
+        { text: 'ALL', value: '' },
+        { text: 'OP', value: 'OP' },
+        { text: 'ED', value: 'ED' },
+        { text: 'INSERT', value: 'INSERT' }
+      ]
     })
 
     function updateFilter(prop: string, event: string | null): void {

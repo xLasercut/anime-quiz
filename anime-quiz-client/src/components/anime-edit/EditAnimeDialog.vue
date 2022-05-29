@@ -26,7 +26,6 @@ import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue'
 import DialogTextField from '../shared/dialog/DialogTextField.vue'
 import { store } from '../../plugins/store'
 import { MUTATIONS } from '../../plugins/store/mutations'
-import { AqAnime } from '../../assets/shared/interfaces'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
@@ -44,7 +43,7 @@ export default defineComponent({
 
     function validAnimeName(animeNames: string[]): boolean {
       for (const animeName of animeNames) {
-        if (!animeNames || typeof animeName !== 'string') {
+        if (!animeName || typeof animeName !== 'string') {
           return false
         }
       }
@@ -57,18 +56,15 @@ export default defineComponent({
 
     function submitEdit(): void {
       if (state.valid) {
-        const anime: AqAnime = {
-          anime_id: store.state.admin.animeInEdit.anime_id,
-          anime_name: store.state.admin.animeInEdit.anime_name
-        }
         if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_ANIME_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_EDIT_ANIME, anime, (proceed: boolean) => {
+          socket.emit(SHARED_EVENTS.ADMIN_EDIT_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
             if (proceed) {
               context.emit('dialog:close')
             }
           })
-        } else if (store.state.client.dialogView === DIALOG_ROUTES.NEW_ANIME_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_NEW_ANIME, anime, (proceed: boolean) => {
+        }
+        else if (store.state.client.dialogView === DIALOG_ROUTES.NEW_ANIME_DIALOG) {
+          socket.emit(SHARED_EVENTS.ADMIN_NEW_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
             if (proceed) {
               context.emit('dialog:close')
             }

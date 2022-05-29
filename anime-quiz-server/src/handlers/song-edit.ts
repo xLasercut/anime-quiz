@@ -15,10 +15,26 @@ class SongEditHandler extends AbstractHandler {
   }
 
   public start(socket: Socket, errorHandler: Function) {
-    socket.on(SHARED_EVENTS.JOIN_SONG_EDIT, () => {
+    socket.on(SHARED_EVENTS.JOIN_SONG_EDIT, async () => {
       try {
         this._validateIsAdmin(socket)
         socket.join(ROOM_IDS.SONG_EDIT)
+        this._emitter.adminUpdateSongList(await this._songDb.getAllSongList(), socket.id)
+        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), socket.id)
+        this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), socket.id)
+        this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
+      } catch (e) {
+        errorHandler(e)
+      }
+    })
+
+    socket.on(SHARED_EVENTS.ADMIN_RELOAD_SONG_LIST_DATA, async () => {
+      try {
+        this._validateIsAdmin(socket)
+        this._emitter.adminUpdateSongList(await this._songDb.getAllSongList(), socket.id)
+        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), socket.id)
+        this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), socket.id)
+        this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
       } catch (e) {
         errorHandler(e)
       }

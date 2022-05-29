@@ -13,21 +13,22 @@
   >
     <template #top>
       <v-container fluid>
-        <anime-edit-table-filter
-          :anime-id-filter.sync="animeIdFilter"
-          :anime-name-filter.sync="animeNameFilter"
-        ></anime-edit-table-filter>
-        <anime-edit-table-actions></anime-edit-table-actions>
+        <song-edit-table-filter
+          :song-type-filter.sync="songTypeFilter"
+          :anime-filter.sync="animeFilter"
+          :song-title-filter.sync="songTitleFilter"
+        ></song-edit-table-filter>
+        <song-edit-table-actions></song-edit-table-actions>
       </v-container>
     </template>
 
-    <template #item.anime_name="{item}">
-      <v-chip small v-for="(name, index) in item.anime_name" color="primary" :key="`${item.anime_id}_${index}`">{{ name }}</v-chip>
+    <template #item.src="{ item }">
+      <a :href="item.src" target="_blank">View</a>
     </template>
 
     <template #item.action="{item}">
-      <v-icon color="warning" @click="editAnime(item)">mdi-pencil</v-icon>
-      <v-icon color="error" @click="deleteAnime(item)">mdi-delete</v-icon>
+      <v-icon color="warning" @click="editSong(item)">mdi-pencil</v-icon>
+      <v-icon color="error" @click="deleteSong(item)">mdi-delete</v-icon>
     </template>
 
     <template #footer="{ props }">
@@ -45,51 +46,65 @@
 import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
 import TablePagination from '../shared/TablePagination.vue'
 import { CLIENT_CONSTANTS } from '../../assets/constants'
-import AnimeEditTableFilter from './AnimeEditTableFilter.vue'
-import { AqAnime, AqSong } from '../../assets/shared/interfaces'
+import { AqSong } from '../../assets/shared/interfaces'
 import { store } from '../../plugins/store'
-import AnimeEditTableActions from './AnimeEditTableActions.vue'
 import { MUTATIONS } from '../../plugins/store/mutations'
 import { CLIENT_EVENTS } from '../../assets/events'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
+import SongEditTableFilter from './SongEditTableFilter.vue'
+import SongEditTableActions from './SongEditTableActions.vue'
 
 export default defineComponent({
-  components: { AnimeEditTableActions, TablePagination, AnimeEditTableFilter },
+  components: { SongEditTableActions, SongEditTableFilter, TablePagination },
   setup() {
     const state = reactive({
       headers: [
-        { text: 'Anime ID', value: 'anime_id' },
-        { text: 'Name', value: 'anime_name' },
+        { text: 'Song ID', value: 'song_id' },
+        { text: 'Anime', value: 'anime_name' },
+        { text: 'Title', value: 'song_title' },
+        { text: 'Artist', value: 'artist' },
+        { text: 'Source', value: 'src' },
+        { text: 'Type', value: 'type' },
         { text: 'Action', value: 'action' }
       ],
       itemsPerPage: 10,
       currentPage: 0,
-      animeIdFilter: '',
-      animeNameFilter: ''
+      animeFilter: '',
+      songTypeFilter: '',
+      songTitleFilter: ''
     })
 
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
 
     function filteredSongList(): AqSong[] {
-      return store.state.admin.animeList.filter((anime) => {
-        return anime.anime_name.join(',').toLowerCase().includes(state.animeNameFilter.toLowerCase()) &&
-          anime.anime_id.toLowerCase().includes(state.animeIdFilter.toLowerCase())
+      return store.state.admin.songList.filter((song) => {
+        return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
+          song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
+          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())
       })
     }
 
-    function editAnime(anime: AqAnime): void {
+    function updateStore(song: AqSong): void {
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_NAME, song.anime_name)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_ID, song.anime_id)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ID, song.song_id)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TITLE, song.song_title)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ARTIST, song.artist)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_SRC, song.src)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, song.type)
+    }
+
+    function editSong(song: AqSong): void {
       if (openDialog) {
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_ID, anime.anime_id)
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, anime.anime_name)
-        openDialog(DIALOG_ROUTES.EDIT_ANIME_DIALOG, 'Edit Anime')
+        updateStore(song)
+        openDialog(DIALOG_ROUTES.EDIT_SONG_DIALOG, 'Edit Song')
       }
     }
 
-    function deleteAnime(anime: AqAnime): void {
+    function deleteSong(song: AqSong): void {
       if (openDialog) {
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_ID, anime.anime_id)
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, anime.anime_name)
-        openDialog(DIALOG_ROUTES.DELETE_ANIME_DIALOG, 'Delete Anime')
+        updateStore(song)
+        openDialog(DIALOG_ROUTES.DELETE_SONG_DIALOG, 'Delete Song')
       }
     }
 
@@ -97,8 +112,8 @@ export default defineComponent({
       ...toRefs(state),
       CLIENT_CONSTANTS,
       filteredSongList,
-      editAnime,
-      deleteAnime
+      editSong,
+      deleteSong
     }
   }
 })
