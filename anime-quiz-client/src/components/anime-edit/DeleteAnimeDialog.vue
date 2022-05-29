@@ -12,7 +12,7 @@
           :value="$store.state.admin.animeInEdit.anime_name"
           disabled
         ></dialog-multi-combobox>
-        <dialog-actions @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -31,13 +31,16 @@ export default defineComponent({
   components: { DialogMultiCombobox, DialogTextField, DialogActions },
   setup(_props, context) {
     const state = reactive({
-      valid: false
+      valid: false,
+      disabled: false
     })
 
     function submitEdit(): void {
       if (state.valid) {
+        state.disabled = true
         socket.emit(SHARED_EVENTS.ADMIN_DELETE_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
           if (proceed) {
+            state.disabled = false
             context.emit('dialog:close')
           }
         })

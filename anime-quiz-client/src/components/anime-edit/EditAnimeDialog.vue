@@ -12,8 +12,9 @@
           :rules="rules"
           @input="updateAnimeNames($event)"
           :value="$store.state.admin.animeInEdit.anime_name"
+          :disabled="disabled"
         ></dialog-multi-combobox>
-        <dialog-actions @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -38,7 +39,8 @@ export default defineComponent({
       rules: [
         (v: string[]) => v.length > 0 || 'Name can\'t be blank',
         (v: string[]) => validAnimeName(v) || 'Invalid anime name'
-      ]
+      ],
+      disabled: false
     })
 
     function validAnimeName(animeNames: string[]): boolean {
@@ -56,9 +58,11 @@ export default defineComponent({
 
     function submitEdit(): void {
       if (state.valid) {
+        state.disabled = true
         if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_ANIME_DIALOG) {
           socket.emit(SHARED_EVENTS.ADMIN_EDIT_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
             if (proceed) {
+              state.disabled = false
               context.emit('dialog:close')
             }
           })
@@ -66,6 +70,7 @@ export default defineComponent({
         else if (store.state.client.dialogView === DIALOG_ROUTES.NEW_ANIME_DIALOG) {
           socket.emit(SHARED_EVENTS.ADMIN_NEW_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
             if (proceed) {
+              state.disabled = false
               context.emit('dialog:close')
             }
           })

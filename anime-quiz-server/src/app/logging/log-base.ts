@@ -76,6 +76,21 @@ const LOG_BASE = {
     level: LOG_LEVEL.INFO,
     message: 'admin delete anime'
   },
+  ADMIN005: {
+    reference: 'ADMIN005',
+    level: LOG_LEVEL.INFO,
+    message: 'admin add song'
+  },
+  ADMIN006: {
+    reference: 'ADMIN006',
+    level: LOG_LEVEL.INFO,
+    message: 'admin edit song'
+  },
+  ADMIN007: {
+    reference: 'ADMIN007',
+    level: LOG_LEVEL.INFO,
+    message: 'admin delete song'
+  },
   ROOM001: {
     reference: 'ROOM001',
     level: LOG_LEVEL.WARN,

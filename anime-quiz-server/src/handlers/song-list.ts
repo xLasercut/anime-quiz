@@ -6,6 +6,7 @@ import { Emitter } from '../app/emitter'
 import { AnimeQuizUserDb } from '../database/user'
 import { NOTIFICATION_COLOR, SONG_LIST_EDIT_MODE } from '../shared/constants'
 import { ROOM_IDS } from '../constants'
+import { Socket } from '../types'
 
 class SongListHandler extends AbstractHandler {
   protected _songDb: AnimeQuizSongDb
@@ -17,17 +18,11 @@ class SongListHandler extends AbstractHandler {
     this._userDb = userDb
   }
 
-  public start(socket, errorHandler: Function): void {
+  public start(socket: Socket, errorHandler: Function): void {
     socket.on(SHARED_EVENTS.JOIN_SONG_LIST, async () => {
       try {
         socket.join(ROOM_IDS.SONG_LIST)
-        this._emitter.updateSongListData(
-          await this._songDb.getAllSongList(),
-          await this._songDb.getAnimeList(),
-          await this._songDb.getSongTitleList(),
-          await this._userDb.getUserLists(),
-          socket.id
-        )
+        await this._reloadSongListData(socket.id)
       } catch (e) {
         errorHandler(e)
       }
@@ -35,13 +30,7 @@ class SongListHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.RELOAD_SONG_LIST_DATA, async () => {
       try {
-        this._emitter.updateSongListData(
-          await this._songDb.getAllSongList(),
-          await this._songDb.getAnimeList(),
-          await this._songDb.getSongTitleList(),
-          await this._userDb.getUserLists(),
-          socket.id
-        )
+        await this._reloadSongListData(socket.id)
       } catch (e) {
         errorHandler(e)
       }
@@ -68,6 +57,13 @@ class SongListHandler extends AbstractHandler {
         errorHandler(e)
       }
     })
+  }
+
+  protected async _reloadSongListData(sid: string): Promise<void> {
+    this._emitter.updateSongList(await this._songDb.getAllSongList(), sid)
+    this._emitter.updateAnimeList(await this._songDb.getAnimeList(), sid)
+    this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), sid)
+    this._emitter.updateUserLists(await this._userDb.getUserLists(), sid)
   }
 }
 

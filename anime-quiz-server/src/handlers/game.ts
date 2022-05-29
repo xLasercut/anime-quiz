@@ -39,13 +39,9 @@ class GameHandler extends AbstractHandler {
       try {
         this._validateNewRoomName(roomName)
         const roomId = `${ROOM_NAME_PREFIX}|${roomName}|${v4()}`
-        this._emitter.updateSongListData(
-          await this._songDb.getAllSongList(),
-          await this._songDb.getAnimeList(),
-          await this._songDb.getSongTitleList(),
-          await this._userDb.getUserLists(),
-          socket.id
-        )
+        this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
+        this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), socket.id)
+        this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
         socket.data.host = true
         this._emitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomId)
@@ -58,13 +54,9 @@ class GameHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.JOIN_GAME_ROOM, async (roomName: string, callback: Function) => {
       try {
         this._validateExistingRoomName(roomName)
-        this._emitter.updateSongListData(
-          await this._songDb.getAllSongList(),
-          await this._songDb.getAnimeList(),
-          await this._songDb.getSongTitleList(),
-          await this._userDb.getUserLists(),
-          socket.id
-        )
+        this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
+        this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), socket.id)
+        this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
         socket.data.host = false
         this._emitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomName)

@@ -7,6 +7,7 @@ import { Logger } from '../app/logging/logger'
 import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationError } from '../app/exceptions'
 import { v4 } from 'uuid'
+import { VALID_SONG_TYPES } from '../shared/constants'
 
 class AnimeQuizSongDb extends AbstractDb {
   constructor(config: ServerConfig, logger: Logger) {
@@ -125,30 +126,87 @@ class AnimeQuizSongDb extends AbstractDb {
     await this._deleteAnime(anime.anime_id)
   }
 
-  public async validateAnimeExist(animeId: string): Promise<void> {
+  public async newSong(song: AqSong): Promise<void> {
+    this._validateSong(song)
+    const songId = `song-${v4()}`
+    await this._addSong(songId, song)
+    await this._addSongAnime(songId, song.anime_id)
+  }
+
+  public async deleteSong(song: AqSong): Promise<void> {
+    await this._deleteSong(song.song_id)
+    await this._deleteSongAnime(song.song_id)
+  }
+
+  protected _validateSong(song: AqSong): void {
+    this._validateString(song.song_title, 'Invalid title')
+    this._validateString(song.src, 'Invalid src')
+    this._validateSongType(song.type)
+  }
+
+  protected async _deleteSong(songId: string): Promise<void> {
+    const sql = `DELETE FROM songs WHERE song_id = ?`
+    await this._run(sql, [ songId ])
+  }
+
+  protected async _deleteSongAnime(songId: string): Promise<void> {
+    const sql = `DELETE FROM song_animes WHERE song_id = ?`
+    await this._run(sql, [ songId ])
+  }
+
+  protected async _addSong(songId: string, song: AqSong): Promise<void> {
+    const sql = `
+      INSERT INTO songs 
+        (song_id, song_title, src, artist, type) 
+      VALUES 
+        (?,?,?,?,?)
+    `
+    await this._run(sql, [ songId, song.song_title, song.src, song.artist, song.type ])
+  }
+
+  protected async _addSongAnime(songId: string, animeIds: string[]): Promise<void> {
+    const sql = `INSERT INTO song_animes (song_id, anime_id) VALUES (?,?)`
+    for (const animeId of animeIds) {
+      await this._run(sql, [ songId, animeId ])
+    }
+  }
+
+  protected _validateString(val: string, msg: string): void {
+    if (!val || typeof val !== 'string') {
+      throw new GameDataValidationError(msg)
+    }
+  }
+
+  protected _validateSongType(type: string): void {
+    if (!VALID_SONG_TYPES.includes(type)) {
+      throw new GameDataValidationError('Invalid type')
+    }
+  }
+
+  public async validateAnimeExist(animeIds: string[]): Promise<void> {
     const sql = `
       SELECT
         *
       FROM animes
-      WHERE animes.anime_id = ?
+      WHERE animes.anime_id IN (${this._questionString(animeIds.length)})
     `
 
-    const existAnimes = await this._all(sql, [animeId])
-    if (existAnimes.length <= 0) {
-      this._logger.writeLog(LOG_BASE.ADMIN001, { animeId: animeId })
+    const existAnimes = await this._all(sql, animeIds)
+    if (existAnimes.length < animeIds.length) {
+      this._logger.writeLog(LOG_BASE.ADMIN001, { animeIds: animeIds })
       throw new GameDataValidationError('Anime does not exist')
     }
   }
 
   protected async _deleteAnime(animeId: string): Promise<void> {
-    const deleteSql = `DELETE FROM animes WHERE anime_id = ?`
-    await this._run(deleteSql, [animeId])
+    const sql = `DELETE FROM animes WHERE anime_id = ?`
+    await this._run(sql, [ animeId ])
   }
 
   protected async _addAnime(animeId: string, animeNames: string[]): Promise<void> {
     const sql = `INSERT INTO animes (anime_id, anime_name) VALUES (?,?)`
     for (const animeName of animeNames) {
-      await this._run(sql, [animeId, animeName])
+      await this._run(sql, [ animeId, animeName ])
     }
   }
 

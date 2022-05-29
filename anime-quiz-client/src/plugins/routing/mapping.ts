@@ -21,6 +21,7 @@ import DeleteAnimeDialog from '../../components/anime-edit/DeleteAnimeDialog.vue
 import SongEdit from '../../views/SongEdit.vue'
 import SongEditPanel from '../../components/song-edit/SongEditPanel.vue'
 import EditSongDialog from '../../components/song-edit/EditSongDialog.vue'
+import DeleteSongDialog from '../../components/song-edit/DeleteSongDialog.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -49,7 +50,8 @@ const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.EDIT_ANIME_DIALOG]: EditAnimeDialog,
   [DIALOG_ROUTES.DELETE_ANIME_DIALOG]: DeleteAnimeDialog,
   [DIALOG_ROUTES.EDIT_SONG_DIALOG]: EditSongDialog,
-  [DIALOG_ROUTES.NEW_SONG_DIALOG]: EditSongDialog
+  [DIALOG_ROUTES.NEW_SONG_DIALOG]: EditSongDialog,
+  [DIALOG_ROUTES.DELETE_SONG_DIALOG]: DeleteSongDialog
 }
 
 function viewComponent(): any {

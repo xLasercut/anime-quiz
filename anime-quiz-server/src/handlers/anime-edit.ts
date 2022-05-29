@@ -41,9 +41,9 @@ class AnimeEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN003, { anime: anime })
         this._validateIsAdmin(socket)
-        await this._songDb.validateAnimeExist(anime.anime_id)
+        await this._songDb.validateAnimeExist([anime.anime_id])
         await this._songDb.editAnime(anime)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} edited`)
+        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} edited`, socket.id)
         this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
@@ -56,7 +56,7 @@ class AnimeEditHandler extends AbstractHandler {
         this._logger.writeLog(LOG_BASE.ADMIN002, { anime: anime })
         this._validateIsAdmin(socket)
         await this._songDb.newAnime(anime)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} added`)
+        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} added`, socket.id)
         this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
@@ -68,9 +68,9 @@ class AnimeEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN004, { anime: anime })
         this._validateIsAdmin(socket)
-        await this._songDb.validateAnimeExist(anime.anime_id)
+        await this._songDb.validateAnimeExist([anime.anime_id])
         await this._songDb.deleteAnime(anime)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} deleted`)
+        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} deleted`, socket.id)
         this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {

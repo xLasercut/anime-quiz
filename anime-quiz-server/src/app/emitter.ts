@@ -67,13 +67,6 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_PLAYERS, playerList)
   }
 
-  public updateSongListData(songList: AqSong[], animeList: string[], songTitleList: string[], userLists: AqUserSongs[], sid: string = null): void {
-    this.updateSongList(songList, sid)
-    this.updateAnimeList(animeList, sid)
-    this.updateSongTitleList(songTitleList, sid)
-    this.updateUserLists(userLists, sid)
-  }
-
   public updateGuess(guess: AqGameGuess, sid: string): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GUESS, guess)
   }
