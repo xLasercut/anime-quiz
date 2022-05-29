@@ -63,7 +63,7 @@ interface AqGameState {
 
 interface AqAnime {
   anime_id: string
-  anime_name: string
+  anime_name: string[]
 }
 
 export {

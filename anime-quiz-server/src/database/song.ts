@@ -1,7 +1,7 @@
 import { Database, OPEN_READWRITE } from 'sqlite3'
 import { ServerConfig } from '../app/config'
 import { AqAnime, AqSong } from '../shared/interfaces'
-import { AqSongRaw } from '../interfaces'
+import { AqAnimeRaw, AqSongRaw } from '../interfaces'
 import { AbstractDb } from './abstract'
 import { Logger } from '../app/logging/logger'
 import { LOG_BASE } from '../app/logging/log-base'
@@ -68,12 +68,33 @@ class AnimeQuizSongDb extends AbstractDb {
     })
   }
 
-  public async getAnimeList(): Promise<AqAnime[]> {
-    return await this._all(`
+  public async getAnimeList(): Promise<string[]> {
+    const animeList: AqAnimeRaw[] = await this._all(`
       SELECT
         *
       FROM animes
     `)
+
+    return animeList.map((anime) => {
+      return anime.anime_name
+    })
+  }
+
+  public async getAnimeListAdmin(): Promise<AqAnime[]> {
+    const animeList: AqAnimeRaw[] = await this._all(`
+      SELECT
+        anime_id,
+        json_group_array(anime_name) as anime_name
+      FROM animes
+      GROUP BY anime_id
+    `)
+
+    return animeList.map((anime) => {
+      return {
+        anime_id: anime.anime_id,
+        anime_name: JSON.parse(anime.anime_name)
+      }
+    })
   }
 
   public async getSongTitleList(): Promise<string[]> {

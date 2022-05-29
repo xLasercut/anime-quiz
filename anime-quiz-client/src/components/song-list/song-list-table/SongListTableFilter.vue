@@ -6,7 +6,7 @@
         :value="animeFilter"
         @input="updateFilter('anime-filter', $event)"
         label="Anime"
-        :items="$store.getters.animeList"
+        :items="$store.state.songList.animeList"
         hide-details
         clearable
       ></v-combobox>

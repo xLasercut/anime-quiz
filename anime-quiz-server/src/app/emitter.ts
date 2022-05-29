@@ -27,8 +27,12 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_LIST, songList)
   }
 
-  public updateAnimeList(animeList: AqAnime[], sid: string = null): void {
+  public updateAnimeList(animeList: string[], sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_ANIME_LIST, animeList)
+  }
+
+  public updateAnimeListAdmin(animeList: AqAnime[], sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_ANIME_LIST_ADMIN, animeList)
   }
 
   public updateSongTitleList(songTitleList: string[], sid: string = null): void {
@@ -59,7 +63,7 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_PLAYERS, playerList)
   }
 
-  public updateSongListData(songList: AqSong[], animeList: AqAnime[], songTitleList: string[], userLists: AqUserSongs[], sid: string = null): void {
+  public updateSongListData(songList: AqSong[], animeList: string[], songTitleList: string[], userLists: AqUserSongs[], sid: string = null): void {
     this.updateSongList(songList, sid)
     this.updateAnimeList(animeList, sid)
     this.updateSongTitleList(songTitleList, sid)

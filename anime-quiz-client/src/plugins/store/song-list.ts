@@ -1,7 +1,7 @@
 import { RootStoreState, SongListStoreState } from '../../assets/interfaces'
 import { Module } from 'vuex'
 import { MUTATIONS } from './mutations'
-import { AqAnime, AqSong, AqUserSongs } from '../../assets/shared/interfaces'
+import { AqSong, AqUserSongs } from '../../assets/shared/interfaces'
 
 const DEFAULT_STATE: SongListStoreState = {
   songList: [],
@@ -16,7 +16,7 @@ const songList: Module<SongListStoreState, RootStoreState> = {
     [MUTATIONS.SOCKET_UPDATE_SONG_LIST]: (state: SongListStoreState, songList: AqSong[]) => {
       state.songList = songList
     },
-    [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: SongListStoreState, animeList: AqAnime[]) => {
+    [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: SongListStoreState, animeList: string[]) => {
       state.animeList = animeList
     },
     [MUTATIONS.SOCKET_UPDATE_SONG_TITLE_LIST]: (state: SongListStoreState, titleList: string[]) => {
@@ -41,11 +41,6 @@ const songList: Module<SongListStoreState, RootStoreState> = {
         return filteredList[0].song_id
       }
       return []
-    },
-    animeList: (state: SongListStoreState): string[] => {
-      return state.animeList.map((anime) => {
-        return anime.anime_name
-      })
     }
   }
 }

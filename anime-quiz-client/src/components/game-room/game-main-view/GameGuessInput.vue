@@ -5,7 +5,7 @@
         filled
         label="Anime"
         v-model.trim="anime"
-        :items="$store.getters.animeList"
+        :items="$store.state.songList.animeList"
         hide-details
         @keyup.enter.native="sendGuess()"
       ></v-combobox>

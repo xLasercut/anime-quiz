@@ -33,9 +33,15 @@ interface AqGameStateRaw {
   timeout: NodeJS.Timeout
 }
 
+interface AqAnimeRaw {
+  anime_id: string
+  anime_name: string
+}
+
 export {
   LogTemplate,
   AqSongRaw,
   AqUserSongsRaw,
-  AqGameStateRaw
+  AqGameStateRaw,
+  AqAnimeRaw
 }

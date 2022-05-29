@@ -19,7 +19,7 @@ class AnimeListEditHandler extends AbstractHandler {
       try {
         this._validateIsAdmin(socket)
         socket.join(ROOM_IDS.ANIME_LIST_EDIT)
-        this._emitter.updateAnimeList(await this._songDb.getAnimeList(), socket.id)
+        this._emitter.updateAnimeListAdmin(await this._songDb.getAnimeListAdmin(), socket.id)
       } catch (e) {
         errorHandler(e)
       }

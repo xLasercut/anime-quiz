@@ -2,15 +2,20 @@ import { AqAnime, AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces'
 
 interface SongListStoreState {
   songList: AqSong[],
-  animeList: AqAnime[]
+  animeList: string[]
   songTitleList: string[]
   userLists: AqUserSongs[]
+}
+
+interface AdminStoreState {
+  animeList: AqAnime[]
 }
 
 interface RootStoreState {
   client: ClientStoreState,
   songList: SongListStoreState,
-  game: GameStoreState
+  game: GameStoreState,
+  admin: AdminStoreState
 }
 
 interface ClientStoreState {
@@ -34,5 +39,6 @@ export {
   SongListStoreState,
   RootStoreState,
   ClientStoreState,
-  GameStoreState
+  GameStoreState,
+  AdminStoreState
 }
