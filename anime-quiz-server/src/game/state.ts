@@ -73,6 +73,7 @@ class GameStates {
     for (const anime of currentSong.anime_name) {
       if (anime.toLowerCase() === guess.anime.toLowerCase()) {
         score += 1
+        break
       }
     }
 

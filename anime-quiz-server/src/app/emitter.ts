@@ -31,8 +31,8 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_ANIME_LIST, animeList)
   }
 
-  public updateAnimeListAdmin(animeList: AqAnime[], sid: string): void {
-    this._client(sid).emit(SHARED_EVENTS.UPDATE_ANIME_LIST_ADMIN, animeList)
+  public adminUpdateAnimeList(animeList: AqAnime[], sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.ADMIN_UPDATE_ANIME_LIST, animeList)
   }
 
   public updateSongTitleList(songTitleList: string[], sid: string = null): void {

@@ -5,7 +5,6 @@
         <game-main-answer-display></game-main-answer-display>
         <game-viewport></game-viewport>
         <game-guess-input></game-guess-input>
-        <game-guess-select></game-guess-select>
         <game-players></game-players>
       </v-card-text>
     </v-card>
@@ -19,10 +18,9 @@ import GamePlayers from './game-main-view/GamePlayers.vue'
 import GameGuessInput from './game-main-view/GameGuessInput.vue'
 import GameViewport from './game-main-view/GameViewport.vue'
 import GameMainAnswerDisplay from './game-main-view/GameMainAnswerDisplay.vue'
-import GameGuessSelect from './game-main-view/GameGuessSelect.vue'
 
 export default defineComponent({
-  components: { GameGuessSelect, GameMainAnswerDisplay, GameGuessInput, GamePlayers, GameViewport },
+  components: { GameMainAnswerDisplay, GameGuessInput, GamePlayers, GameViewport },
   setup() {
     return {
       CLIENT_CONSTANTS

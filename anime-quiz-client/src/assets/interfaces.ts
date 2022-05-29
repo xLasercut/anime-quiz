@@ -9,6 +9,7 @@ interface SongListStoreState {
 
 interface AdminStoreState {
   animeList: AqAnime[]
+  animeInEdit: AqAnime
 }
 
 interface RootStoreState {

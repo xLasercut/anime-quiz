@@ -6,6 +6,7 @@ import { AbstractDb } from './abstract'
 import { Logger } from '../app/logging/logger'
 import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationError } from '../app/exceptions'
+import { v4 } from 'uuid'
 
 class AnimeQuizSongDb extends AbstractDb {
   constructor(config: ServerConfig, logger: Logger) {
@@ -108,6 +109,47 @@ class AnimeQuizSongDb extends AbstractDb {
     })
   }
 
+  public async newAnime(anime: AqAnime): Promise<void> {
+    const animeId = `anime-${v4()}`
+    await this._addAnime(animeId, anime.anime_name)
+  }
+
+  public async editAnime(anime: AqAnime): Promise<void> {
+    await this._deleteAnime(anime.anime_id)
+    await this._addAnime(anime.anime_id, anime.anime_name)
+  }
+
+  public async deleteAnime(anime: AqAnime): Promise<void> {
+    await this._deleteAnime(anime.anime_id)
+  }
+
+  public async validateAnimeExist(animeId: string): Promise<void> {
+    const sql = `
+      SELECT
+        *
+      FROM animes
+      WHERE animes.anime_id = ?
+    `
+
+    const existAnimes = await this._all(sql, [animeId])
+    if (existAnimes.length <= 0) {
+      this._logger.writeLog(LOG_BASE.ADMIN001, { animeId: animeId })
+      throw new GameDataValidationError('Anime does not exist')
+    }
+  }
+
+  protected async _deleteAnime(animeId: string): Promise<void> {
+    const deleteSql = `DELETE FROM animes WHERE anime_id = ?`
+    await this._run(deleteSql, [animeId])
+  }
+
+  protected async _addAnime(animeId: string, animeNames: string[]): Promise<void> {
+    const sql = `INSERT INTO animes (anime_id, anime_name) VALUES (?,?)`
+    for (const animeName of animeNames) {
+      await this._run(sql, [animeId, animeName])
+    }
+  }
+
   public async validateSongsExist(songIds: string[]): Promise<void> {
     const sql = `
       SELECT
@@ -117,7 +159,7 @@ class AnimeQuizSongDb extends AbstractDb {
     `
     const existSongs = await this._all(sql, songIds)
 
-    if (existSongs.length != songIds.length) {
+    if (existSongs.length !== songIds.length) {
       this._logger.writeLog(LOG_BASE.SONG002, { songIds: songIds })
       throw new GameDataValidationError('Song does not exist')
     }

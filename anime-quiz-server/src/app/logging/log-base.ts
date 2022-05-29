@@ -56,6 +56,26 @@ const LOG_BASE = {
     level: LOG_LEVEL.WARN,
     message: 'song edit song not exists in user list'
   },
+  ADMIN001: {
+    reference: 'ADMIN001',
+    level: LOG_LEVEL.WARN,
+    message: 'anime edit anime does not exist'
+  },
+  ADMIN002: {
+    reference: 'ADMIN002',
+    level: LOG_LEVEL.INFO,
+    message: 'admin add anime'
+  },
+  ADMIN003: {
+    reference: 'ADMIN003',
+    level: LOG_LEVEL.INFO,
+    message: 'admin edit anime'
+  },
+  ADMIN004: {
+    reference: 'ADMIN004',
+    level: LOG_LEVEL.INFO,
+    message: 'admin delete anime'
+  },
   ROOM001: {
     reference: 'ROOM001',
     level: LOG_LEVEL.WARN,

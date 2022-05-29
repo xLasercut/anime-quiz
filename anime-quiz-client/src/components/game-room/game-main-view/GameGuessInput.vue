@@ -6,8 +6,9 @@
         label="Anime"
         v-model.trim="anime"
         :items="$store.state.songList.animeList"
-        hide-details
         @keyup.enter.native="sendGuess()"
+        persistent-hint
+        :hint="`Selected Anime: ${selectedAnime}`"
       ></v-combobox>
     </v-col>
     <v-col>
@@ -16,8 +17,9 @@
         label="Title"
         v-model.trim="title"
         :items="$store.state.songList.songTitleList"
-        hide-details
         @keyup.enter.native="sendGuess()"
+        persistent-hint
+        :hint="`Selected Title: ${selectedTitle}`"
       ></v-combobox>
     </v-col>
   </v-row>
@@ -33,12 +35,21 @@ export default defineComponent({
   setup() {
     const state = reactive({
       anime: '',
-      title: ''
+      title: '',
+      selectedAnime: '',
+      selectedTitle: ''
     })
 
     socket.on(SHARED_EVENTS.GAME_START_LOAD, () => {
       state.anime = ''
       state.title = ''
+      state.selectedAnime = ''
+      state.selectedTitle = ''
+    })
+
+    socket.on(SHARED_EVENTS.UPDATE_GUESS, (guess: AqGameGuess) => {
+      state.selectedAnime = guess.anime
+      state.selectedTitle = guess.title
     })
 
     function sendGuess(): void {
@@ -51,6 +62,7 @@ export default defineComponent({
 
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.GAME_START_LOAD)
+      socket.off(SHARED_EVENTS.UPDATE_GUESS)
     })
 
     return {
