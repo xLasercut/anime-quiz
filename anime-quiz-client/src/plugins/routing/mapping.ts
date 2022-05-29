@@ -18,13 +18,16 @@ import AnimeEdit from '../../views/AnimeEdit.vue'
 import AnimeEditPanel from '../../components/anime-edit/AnimeEditPanel.vue'
 import EditAnimeDialog from '../../components/anime-edit/EditAnimeDialog.vue'
 import DeleteAnimeDialog from '../../components/anime-edit/DeleteAnimeDialog.vue'
+import SongEdit from '../../views/SongEdit.vue'
+import SongEditPanel from '../../components/song-edit/SongEditPanel.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
   [ROUTES.SONG_LIST]: SongListPanel,
   [ROUTES.ROOM_LIST]: RoomListPanel,
   [ROUTES.GAME_ROOM]: GameRoomPanel,
-  [ROUTES.ANIME_EDIT]: AnimeEditPanel
+  [ROUTES.ANIME_EDIT]: AnimeEditPanel,
+  [ROUTES.SONG_EDIT]: SongEditPanel
 }
 
 const _VIEW_MAPPING: { [key: string]: Component } = {
@@ -33,7 +36,8 @@ const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.SONG_LIST]: SongList,
   [ROUTES.ROOM_LIST]: RoomList,
   [ROUTES.GAME_ROOM]: GameRoom,
-  [ROUTES.ANIME_EDIT]: AnimeEdit
+  [ROUTES.ANIME_EDIT]: AnimeEdit,
+  [ROUTES.SONG_EDIT]: SongEdit
 }
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {

@@ -18,7 +18,7 @@ class AnimeEditHandler extends AbstractHandler {
   }
 
   public start(socket: Socket, errorHandler: Function) {
-    socket.on(SHARED_EVENTS.JOIN_ANIME_LIST_EDIT, async () => {
+    socket.on(SHARED_EVENTS.JOIN_ANIME_EDIT, async () => {
       try {
         this._validateIsAdmin(socket)
         socket.join(ROOM_IDS.ANIME_EDIT)

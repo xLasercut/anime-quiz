@@ -1,8 +1,9 @@
 <template>
   <v-main>
     <v-row justify="center">
-      <v-col v-for="card of cards" :key="card.route" v-if="showCard(card.requireAdmin)">
+      <v-col v-for="card of cards" :key="card.route" v-if="showCard(card.requireAdmin)" cols="4">
         <lobby-menu-card
+          :icon="card.icon"
           :color="card.color"
           :title="card.title"
           :description="card.description"
@@ -32,21 +33,32 @@ export default defineComponent({
           title: 'Game Room',
           description: 'Play anime music quiz',
           route: ROUTES.ROOM_LIST,
-          requireAdmin: false
+          requireAdmin: false,
+          icon: 'mdi-gamepad-variant'
         },
         {
           color: 'primary',
           title: 'Song List',
           description: 'Add/Remove songs from your song list',
           route: ROUTES.SONG_LIST,
-          requireAdmin: false
+          requireAdmin: false,
+          icon: 'mdi-playlist-music'
         },
         {
-          color: 'warning',
+          color: 'error',
           title: 'Anime Edit',
           description: 'Edit Anime List',
           route: ROUTES.ANIME_EDIT,
-          requireAdmin: true
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
+        },
+        {
+          color: 'error',
+          title: 'Song Edit',
+          description: 'Edit Song List',
+          route: ROUTES.SONG_EDIT,
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
         }
       ]
     })

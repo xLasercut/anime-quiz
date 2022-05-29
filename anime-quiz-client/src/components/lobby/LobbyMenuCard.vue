@@ -1,7 +1,8 @@
 <template>
   <v-card flat>
     <v-card-title>
-      {{ title }}
+      <v-icon :color="color" left large>{{ icon }}</v-icon>
+      <span>{{ title }}</span>
     </v-card-title>
     <v-card-text>
       {{ description }}
@@ -33,6 +34,10 @@ export default defineComponent({
       required: true
     },
     color: {
+      type: String,
+      required: true
+    },
+    icon: {
       type: String,
       required: true
     }
