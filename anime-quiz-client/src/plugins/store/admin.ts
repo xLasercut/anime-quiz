@@ -8,6 +8,16 @@ const DEFAULT_STATE: AdminStoreState = {
   animeInEdit: {
     anime_id: '',
     anime_name: []
+  },
+  songList: [],
+  songInEdit: {
+    anime_id: [],
+    anime_name: [],
+    src: '',
+    song_id: '',
+    song_title: '',
+    artist: '',
+    type: ''
   }
 }
 

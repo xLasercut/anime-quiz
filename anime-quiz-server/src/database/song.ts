@@ -110,11 +110,13 @@ class AnimeQuizSongDb extends AbstractDb {
   }
 
   public async newAnime(anime: AqAnime): Promise<void> {
+    this._validateAnimeNames(anime.anime_name)
     const animeId = `anime-${v4()}`
     await this._addAnime(animeId, anime.anime_name)
   }
 
   public async editAnime(anime: AqAnime): Promise<void> {
+    this._validateAnimeNames(anime.anime_name)
     await this._deleteAnime(anime.anime_id)
     await this._addAnime(anime.anime_id, anime.anime_name)
   }
@@ -162,6 +164,14 @@ class AnimeQuizSongDb extends AbstractDb {
     if (existSongs.length !== songIds.length) {
       this._logger.writeLog(LOG_BASE.SONG002, { songIds: songIds })
       throw new GameDataValidationError('Song does not exist')
+    }
+  }
+
+  protected _validateAnimeNames(animeNames: string[]): void {
+    for (const animeName of animeNames) {
+      if (!animeName || typeof animeName !== 'string') {
+        throw new GameDataValidationError('Invalid anime name')
+      }
     }
   }
 }

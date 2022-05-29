@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-card flat>
-      <anime-list-table></anime-list-table>
+      <anime-edit-table></anime-edit-table>
     </v-card>
   </v-main>
 </template>
@@ -10,10 +10,10 @@
 import { defineComponent } from '@vue/composition-api'
 import { socket } from '../plugins/socket'
 import { SHARED_EVENTS } from '../assets/shared/events'
-import AnimeListTable from '../components/anime-edit/AnimeListTable.vue'
+import AnimeEditTable from '../components/anime-edit/AnimeEditTable.vue'
 
 export default defineComponent({
-  components: { AnimeListTable },
+  components: { AnimeEditTable },
   setup() {
     socket.emit(SHARED_EVENTS.JOIN_ANIME_EDIT)
   }

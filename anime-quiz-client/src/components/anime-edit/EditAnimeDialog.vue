@@ -37,9 +37,19 @@ export default defineComponent({
     const state = reactive({
       valid: false,
       rules: [
-        (v: string[]) => v.length > 0 || 'Name can\'t be blank'
+        (v: string[]) => v.length > 0 || 'Name can\'t be blank',
+        (v: string[]) => validAnimeName(v) || 'Invalid anime name'
       ]
     })
+
+    function validAnimeName(animeNames: string[]): boolean {
+      for (const animeName of animeNames) {
+        if (!animeNames || typeof animeName !== 'string') {
+          return false
+        }
+      }
+      return true
+    }
 
     function updateAnimeNames(names: string[]) {
       store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, names)
