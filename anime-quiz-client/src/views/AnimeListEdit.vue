@@ -1,21 +1,21 @@
 <template>
   <v-main>
     <v-card flat>
-      <song-list-table></song-list-table>
+      <anime-list-table></anime-list-table>
     </v-card>
   </v-main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import SongListTable from '../components/song-list/SongListTable.vue'
 import { socket } from '../plugins/socket'
 import { SHARED_EVENTS } from '../assets/shared/events'
+import AnimeListTable from '../components/anime-list-edit/AnimeListTable.vue'
 
 export default defineComponent({
-  components: { SongListTable },
+  components: { AnimeListTable },
   setup() {
-    socket.emit(SHARED_EVENTS.JOIN_SONG_LIST)
+    socket.emit(SHARED_EVENTS.JOIN_ANIME_LIST_EDIT)
   }
 })
 </script>

@@ -2,19 +2,19 @@
   <v-row dense>
     <v-col>
       <v-combobox
-        @change="updateFilter()"
         dense outlined
-        v-model.trim="animeFilter"
+        :value="animeFilter"
+        @input="updateFilter('anime-filter', $event)"
         label="Anime"
-        :items="$store.state.songList.animeList"
+        :items="$store.getters.animeList"
         hide-details
         clearable
       ></v-combobox>
     </v-col>
     <v-col>
       <v-combobox
-        @change="updateFilter()"
-        v-model.trim="songTitleFilter"
+        :value="songTitleFilter"
+        @input="updateFilter('song-title-filter', $event)"
         dense outlined label="Title"
         :items="$store.state.songList.songTitleList"
         hide-details
@@ -23,8 +23,8 @@
     </v-col>
     <v-col>
       <v-select
-        @change="updateFilter()"
-        v-model="songTypeFilter"
+        :value="songTypeFilter"
+        @input="updateFilter('song-type-filter', $event)"
         :items="songTypes"
         dense outlined label="Type"
         hide-details
@@ -32,8 +32,8 @@
     </v-col>
     <v-col>
       <v-select
-        :value="value"
-        @input="$emit('input', $event)"
+        :value="selectedUser"
+        @input="updateFilter('selected-user', $event)"
         :items="$store.state.songList.userLists"
         hide-details
         outlined
@@ -49,36 +49,39 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { store } from '../../../plugins/store'
-import { MUTATIONS } from '../../../plugins/store/mutations'
 import IconBtn from '../../shared/buttons/IconBtn.vue'
-import { debounce } from '../../../assets/debounce'
 
 export default defineComponent({
   props: {
-    value: {
+    selectedUser: {
+      required: true
+    },
+    animeFilter: {
+      required: true
+    },
+    songTypeFilter: {
+      required: true
+    },
+    songTitleFilter: {
       required: true
     }
   },
   components: { IconBtn },
-  setup() {
+  setup(_props, context) {
     const state = reactive({
-      animeFilter: store.state.songList.animeFilter,
-      songTypeFilter: store.state.songList.songTypeFilter,
-      songTitleFilter: store.state.songList.songTitleFilter,
       songTypes: [
         { text: 'ALL', value: '' },
         { text: 'OP', value: 'OP' },
-        { text: 'ED', value: 'ED' }
+        { text: 'ED', value: 'ED' },
+        { text: 'INSERT', value: 'INSERT' }
       ],
       show: true
     })
 
-    const updateFilter = debounce(() => {
-      store.commit(MUTATIONS.UPDATE_SONG_LIST_ANIME_FILTER, state.animeFilter || '')
-      store.commit(MUTATIONS.UPDATE_SONG_LIST_TITLE_FILTER, state.songTitleFilter || '')
-      store.commit(MUTATIONS.UPDATE_SONG_LIST_TYPE_FILTER, state.songTypeFilter || '')
-    }, 100)
+    function updateFilter(prop: string, event: string | null): void {
+      const cleanedEvent = event || ''
+      context.emit(`update:${prop}`, cleanedEvent.trim())
+    }
 
     return {
       ...toRefs(state),

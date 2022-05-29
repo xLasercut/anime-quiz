@@ -5,7 +5,6 @@ import Login from '../../views/Login.vue'
 import LoginSettings from '../../components/login/LoginSettings.vue'
 import LoginPanel from '../../components/login/LoginPanel.vue'
 import Lobby from '../../views/Lobby.vue'
-import LobbyPanel from '../../components/lobby/LobbyPanel.vue'
 import SongListPanel from '../../components/song-list/SongListPanel.vue'
 import SongList from '../../views/SongList.vue'
 import RoomList from '../../views/RoomList.vue'
@@ -14,10 +13,11 @@ import GameRoom from '../../views/GameRoom.vue'
 import GameRoomPanel from '../../components/game-room/GameRoomPanel.vue'
 import RoomListNewRoom from '../../components/room-list/RoomListNewRoom.vue'
 import GameRoomSettings from '../../components/game-room/GameRoomSettings.vue'
+import DefaultPanel from '../../components/app/DefaultPanel.vue'
+import AnimeListEdit from '../../views/AnimeListEdit.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
-  [ROUTES.LOBBY]: LobbyPanel,
   [ROUTES.SONG_LIST]: SongListPanel,
   [ROUTES.ROOM_LIST]: RoomListPanel,
   [ROUTES.GAME_ROOM]: GameRoomPanel
@@ -28,7 +28,8 @@ const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOBBY]: Lobby,
   [ROUTES.SONG_LIST]: SongList,
   [ROUTES.ROOM_LIST]: RoomList,
-  [ROUTES.GAME_ROOM]: GameRoom
+  [ROUTES.GAME_ROOM]: GameRoom,
+  [ROUTES.ANIME_LIST_EDIT]: AnimeListEdit
 }
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {
@@ -42,7 +43,7 @@ function viewComponent(): any {
 }
 
 function panelComponent(): any {
-  return _PANEL_MAPPING[store.state.client.view]
+  return _PANEL_MAPPING[store.state.client.view] || DefaultPanel
 }
 
 function dialogComponent(): any {

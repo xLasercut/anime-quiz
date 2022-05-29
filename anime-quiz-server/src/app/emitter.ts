@@ -1,5 +1,6 @@
 import { SHARED_EVENTS } from '../shared/events'
 import {
+  AqAnime,
   AqClientData,
   AqGameChatMessage,
   AqGameGuess,
@@ -26,7 +27,7 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_LIST, songList)
   }
 
-  public updateAnimeList(animeList: string[], sid: string = null): void {
+  public updateAnimeList(animeList: AqAnime[], sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_ANIME_LIST, animeList)
   }
 
@@ -58,7 +59,7 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_PLAYERS, playerList)
   }
 
-  public updateSongListData(songList: AqSong[], animeList: string[], songTitleList: string[], userLists: AqUserSongs[], sid: string = null): void {
+  public updateSongListData(songList: AqSong[], animeList: AqAnime[], songTitleList: string[], userLists: AqUserSongs[], sid: string = null): void {
     this.updateSongList(songList, sid)
     this.updateAnimeList(animeList, sid)
     this.updateSongTitleList(songTitleList, sid)

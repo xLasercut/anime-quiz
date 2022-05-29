@@ -7,7 +7,7 @@
     hide-default-footer
     :headers="headers"
     :height="CLIENT_CONSTANTS.TABLE_HEIGHT"
-    :items="$store.getters.filteredSongList"
+    :items="filteredSongList()"
     :page="currentPage"
     :items-per-page="itemsPerPage"
     show-select
@@ -32,7 +32,12 @@
 
     <template #top>
       <v-container fluid>
-        <song-list-table-filter v-model="selectedUser"></song-list-table-filter>
+        <song-list-table-filter
+          :selected-user.sync="selectedUser"
+          :anime-filter.sync="animeFilter"
+          :song-title-filter.sync="songTitleFilter"
+          :song-type-filter.sync="songTypeFilter"
+        ></song-list-table-filter>
         <song-list-table-actions
           v-model="editMode"
           :disabled="!selectedUser && !loading"
@@ -46,20 +51,12 @@
     </template>
 
     <template #footer="{ props }">
-      <div class="v-data-footer">
-        <div class="v-data-footer__pagination">
-          <v-pagination
-            :value="props.pagination.page"
-            @input="currentPage = $event"
-            :length="props.pagination.pageCount"
-            :total-visible="10"
-          ></v-pagination>
-        </div>
-        <div class="v-data-footer__select">
-          Rows per page:
-          <v-select v-model="itemsPerPage" hide-details dense outlined :items="paginationSelectItems"></v-select>
-        </div>
-      </div>
+      <table-pagination
+        :current-page="props.pagination.page"
+        @input="currentPage = $event"
+        :length="props.pagination.pageCount"
+        :items-per-page.sync="itemsPerPage"
+      ></table-pagination>
     </template>
   </v-data-table>
 </template>
@@ -74,9 +71,10 @@ import SongListTableActions from './song-list-table/SongListTableActions.vue'
 import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
+import TablePagination from '../shared/TablePagination.vue'
 
 export default defineComponent({
-  components: { SongListTableActions, SongListTableFilter },
+  components: { TablePagination, SongListTableActions, SongListTableFilter },
   setup() {
     const state = reactive({
       headers: [
@@ -91,7 +89,10 @@ export default defineComponent({
       paginationSelectItems: [ 5, 10, 15, 20 ],
       selectedUser: '',
       editMode: SONG_LIST_EDIT_MODE.NONE,
-      loading: false
+      loading: false,
+      animeFilter: '',
+      songTypeFilter: '',
+      songTitleFilter: ''
     })
 
     const songSelected = ref<AqSong[]>([])
@@ -146,6 +147,14 @@ export default defineComponent({
       }
     }
 
+    function filteredSongList(): AqSong[] {
+      return store.state.songList.songList.filter((song) => {
+        return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
+          song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
+          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())
+      })
+    }
+
 
     return {
       ...toRefs(state),
@@ -154,7 +163,8 @@ export default defineComponent({
       isSelectDisabled,
       submitEdit,
       checkboxColor,
-      checkboxOnIcon
+      checkboxOnIcon,
+      filteredSongList
     }
   }
 })

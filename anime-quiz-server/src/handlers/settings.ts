@@ -11,13 +11,11 @@ import { NOTIFICATION_COLOR } from '../shared/constants'
 class GameSettingsHandler extends AbstractHandler {
   protected _io: Server
   protected _settings: GameSettings
-  protected _emitter: Emitter
 
   constructor(logger: Logger, settings: GameSettings, io: Server, emitter: Emitter) {
-    super(logger)
+    super(logger, emitter)
     this._settings = settings
     this._io = io
-    this._emitter = emitter
   }
 
 

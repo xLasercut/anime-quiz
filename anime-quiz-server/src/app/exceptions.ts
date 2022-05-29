@@ -19,10 +19,10 @@ class GameDataValidationDcError extends Error {
 function newSocketErrorHandler(socket: Socket, logger: Logger, emitter: Emitter) {
   function errorHandler(e: Error) {
     if (e instanceof GameDataValidationError) {
-      logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username })
+      logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username, error: e.message })
       emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
     } else if (e instanceof GameDataValidationDcError) {
-      logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username })
+      logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username, error: e.message })
       emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
       socket.disconnect()
     } else {

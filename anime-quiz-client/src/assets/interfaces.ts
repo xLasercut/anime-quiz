@@ -1,13 +1,8 @@
-import { AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces'
+import { AqAnime, AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces'
 
 interface SongListStoreState {
   songList: AqSong[],
-  currentPage: number
-  itemsPerPage: number
-  animeFilter: string
-  songTypeFilter: string
-  songTitleFilter: string
-  animeList: string[]
+  animeList: AqAnime[]
   songTitleList: string[]
   userLists: AqUserSongs[]
 }

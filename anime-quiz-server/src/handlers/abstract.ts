@@ -3,12 +3,15 @@ import { Socket } from '../types'
 import { ROOM_NAME_PREFIX } from '../constants'
 import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationDcError } from '../app/exceptions'
+import { Emitter } from '../app/emitter'
 
 class AbstractHandler {
   protected _logger: Logger
+  protected _emitter: Emitter
 
-  constructor(logger: Logger) {
+  constructor(logger: Logger, emitter: Emitter) {
     this._logger = logger
+    this._emitter = emitter
   }
 
   public start(socket: Socket, errorHandler: Function): void {
@@ -27,6 +30,13 @@ class AbstractHandler {
     }
 
     return gameRooms[0]
+  }
+
+  protected _validateIsAdmin(socket: Socket): void {
+    if (!socket.data.admin) {
+      this._logger.writeLog(LOG_BASE.AUTH003, { id: socket.id, username: socket.data.username })
+      throw new GameDataValidationDcError('Unauthorised')
+    }
   }
 }
 

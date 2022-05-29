@@ -86,6 +86,11 @@ const LOG_BASE = {
     level: LOG_LEVEL.WARN,
     message: 'unauthorised connection'
   },
+  AUTH003: {
+    reference: 'AUTH003',
+    level: LOG_LEVEL.WARN,
+    message: 'non admin user sending admin commands'
+  },
   GAME001: {
     reference: 'GAME001',
     level: LOG_LEVEL.INFO,

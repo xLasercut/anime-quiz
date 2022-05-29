@@ -1,5 +1,10 @@
 const ROOM_NAME_PREFIX = 'ANIME_QUIZ'
 
+const ROOM_IDS = {
+  SONG_LIST: 'SONG_LIST',
+  ANIME_LIST_EDIT: 'ANIME_LIST_EDIT'
+}
+
 const SANITIZE_MAP = {
   '&': '&amp;',
   '<': '&lt;',
@@ -11,5 +16,6 @@ const SANITIZE_MAP = {
 
 export {
   ROOM_NAME_PREFIX,
-  SANITIZE_MAP
+  SANITIZE_MAP,
+  ROOM_IDS
 }

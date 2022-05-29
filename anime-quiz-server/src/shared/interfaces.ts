@@ -61,6 +61,11 @@ interface AqGameState {
   currentSong: AqSong
 }
 
+interface AqAnime {
+  anime_id: string
+  anime_name: string
+}
+
 export {
   AqSong,
   AqUserSongs,
@@ -69,5 +74,6 @@ export {
   AqClientData,
   AqGamePlayer,
   AqGameGuess,
-  AqGameState
+  AqGameState,
+  AqAnime
 }

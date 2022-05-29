@@ -7,12 +7,10 @@ import { Server } from '../app/server'
 
 class RoomHandler extends AbstractHandler {
   protected _io: Server
-  protected _emitter: Emitter
 
   constructor(logger: Logger, io: Server, emitter: Emitter) {
-    super(logger)
+    super(logger, emitter)
     this._io = io
-    this._emitter = emitter
   }
 
   public start(socket: Socket, errorHandler: Function) {

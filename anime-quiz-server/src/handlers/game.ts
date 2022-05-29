@@ -18,7 +18,6 @@ import { GameStates } from '../game/state'
 
 class GameHandler extends AbstractHandler {
   protected _io: Server
-  protected _emitter: Emitter
   protected _chat: ChatManager
   protected _settings: GameSettings
   protected _states: GameStates
@@ -26,9 +25,8 @@ class GameHandler extends AbstractHandler {
   protected _songDb: AnimeQuizSongDb
 
   constructor(logger: Logger, io: Server, emitter: Emitter, userDb: AnimeQuizUserDb, songDb: AnimeQuizSongDb, settings: GameSettings, states: GameStates) {
-    super(logger)
+    super(logger, emitter)
     this._io = io
-    this._emitter = emitter
     this._chat = new ChatManager(logger)
     this._settings = settings
     this._states = states
