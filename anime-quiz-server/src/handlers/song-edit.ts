@@ -64,6 +64,21 @@ class SongEditHandler extends AbstractHandler {
         errorHandler(e)
       }
     })
+
+    socket.on(SHARED_EVENTS.ADMIN_EDIT_SONG, async (song: AqSong, callback: Function) => {
+      try {
+        this._logger.writeLog(LOG_BASE.ADMIN006, { song: song })
+        this._validateIsAdmin(socket)
+        await this._songDb.validateSongsExist([song.song_id])
+        await this._songDb.validateAnimeExist(song.anime_id)
+        await this._songDb.editSong(song)
+        await this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Edited ${song.song_title}`, socket.id)
+        await this._reloadSongListData(ROOM_IDS.SONG_EDIT)
+        callback(true)
+      } catch (e) {
+        errorHandler(e)
+      }
+    })
   }
 
   protected async _reloadSongListData(sid: string): Promise<void> {

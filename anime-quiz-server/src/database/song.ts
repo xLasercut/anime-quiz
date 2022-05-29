@@ -133,6 +133,14 @@ class AnimeQuizSongDb extends AbstractDb {
     await this._addSongAnime(songId, song.anime_id)
   }
 
+  public async editSong(song: AqSong): Promise<void> {
+    this._validateSong(song)
+    await this._deleteSong(song.song_id)
+    await this._deleteSongAnime(song.song_id)
+    await this._addSong(song.song_id, song)
+    await this._addSongAnime(song.song_id, song.anime_id)
+  }
+
   public async deleteSong(song: AqSong): Promise<void> {
     await this._deleteSong(song.song_id)
     await this._deleteSongAnime(song.song_id)
