@@ -10,7 +10,7 @@
 import { defineComponent } from '@vue/composition-api'
 import { socket } from '../plugins/socket'
 import { SHARED_EVENTS } from '../assets/shared/events'
-import AnimeListTable from '../components/anime-list-edit/AnimeListTable.vue'
+import AnimeListTable from '../components/anime-edit/AnimeListTable.vue'
 
 export default defineComponent({
   components: { AnimeListTable },

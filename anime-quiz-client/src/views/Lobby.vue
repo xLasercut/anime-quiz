@@ -43,9 +43,9 @@ export default defineComponent({
         },
         {
           color: 'warning',
-          title: 'Anime List',
+          title: 'Anime Edit',
           description: 'Edit Anime List',
-          route: ROUTES.ANIME_LIST_EDIT,
+          route: ROUTES.ANIME_EDIT,
           requireAdmin: true
         }
       ]

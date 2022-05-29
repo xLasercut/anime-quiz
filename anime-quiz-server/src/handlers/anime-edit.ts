@@ -9,7 +9,7 @@ import { AqAnime } from '../shared/interfaces'
 import { NOTIFICATION_COLOR } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
 
-class AnimeListEditHandler extends AbstractHandler {
+class AnimeEditHandler extends AbstractHandler {
   protected _songDb: AnimeQuizSongDb
 
   constructor(logger: Logger, songDb: AnimeQuizSongDb, emitter: Emitter) {
@@ -21,7 +21,7 @@ class AnimeListEditHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.JOIN_ANIME_LIST_EDIT, async () => {
       try {
         this._validateIsAdmin(socket)
-        socket.join(ROOM_IDS.ANIME_LIST_EDIT)
+        socket.join(ROOM_IDS.ANIME_EDIT)
         this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), socket.id)
       } catch (e) {
         errorHandler(e)
@@ -44,7 +44,7 @@ class AnimeListEditHandler extends AbstractHandler {
         await this._songDb.validateAnimeExist(anime.anime_id)
         await this._songDb.editAnime(anime)
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} edited`)
-        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_LIST_EDIT)
+        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -57,7 +57,7 @@ class AnimeListEditHandler extends AbstractHandler {
         this._validateIsAdmin(socket)
         await this._songDb.newAnime(anime)
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} added`)
-        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_LIST_EDIT)
+        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -71,7 +71,7 @@ class AnimeListEditHandler extends AbstractHandler {
         await this._songDb.validateAnimeExist(anime.anime_id)
         await this._songDb.deleteAnime(anime)
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} deleted`)
-        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_LIST_EDIT)
+        this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -81,5 +81,5 @@ class AnimeListEditHandler extends AbstractHandler {
 }
 
 export {
-  AnimeListEditHandler
+  AnimeEditHandler
 }

@@ -19,7 +19,7 @@ import { isGameRoom } from './helpers'
 import { Server } from './app/server'
 import { GameSettingsHandler } from './handlers/settings'
 import { GameStates } from './game/state'
-import { AnimeListEditHandler } from './handlers/anime-list-edit'
+import { AnimeEditHandler } from './handlers/anime-edit'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -38,7 +38,7 @@ const gameStates = new GameStates(logger, io)
 
 const ioErrorHandler = newIoErrorHandler(logger)
 
-const animeListEditHandler = new AnimeListEditHandler(logger, songDb, emitter)
+const animeEditHandler = new AnimeEditHandler(logger, songDb, emitter)
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
 const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)
@@ -51,7 +51,7 @@ function startHandlers(socket: Socket, errorHandler: Function): void {
     gameHandler.start(socket, errorHandler)
     gameSettingsHandler.start(socket, errorHandler)
     if (socket.data.admin) {
-      animeListEditHandler.start(socket, errorHandler)
+      animeEditHandler.start(socket, errorHandler)
     }
     emitter.updateClientData(socket.data.getClientData(), socket.id)
   }

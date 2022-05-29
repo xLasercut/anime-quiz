@@ -14,17 +14,17 @@ import GameRoomPanel from '../../components/game-room/GameRoomPanel.vue'
 import RoomListNewRoom from '../../components/room-list/RoomListNewRoom.vue'
 import GameRoomSettings from '../../components/game-room/GameRoomSettings.vue'
 import DefaultPanel from '../../components/app/DefaultPanel.vue'
-import AnimeListEdit from '../../views/AnimeListEdit.vue'
-import AnimeListEditPanel from '../../components/anime-list-edit/AnimeListEditPanel.vue'
-import EditAnimeDialog from '../../components/anime-list-edit/EditAnimeDialog.vue'
-import DeleteAnimeDialog from '../../components/anime-list-edit/DeleteAnimeDialog.vue'
+import AnimeEdit from '../../views/AnimeEdit.vue'
+import AnimeEditPanel from '../../components/anime-edit/AnimeEditPanel.vue'
+import EditAnimeDialog from '../../components/anime-edit/EditAnimeDialog.vue'
+import DeleteAnimeDialog from '../../components/anime-edit/DeleteAnimeDialog.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
   [ROUTES.SONG_LIST]: SongListPanel,
   [ROUTES.ROOM_LIST]: RoomListPanel,
   [ROUTES.GAME_ROOM]: GameRoomPanel,
-  [ROUTES.ANIME_LIST_EDIT]: AnimeListEditPanel
+  [ROUTES.ANIME_EDIT]: AnimeEditPanel
 }
 
 const _VIEW_MAPPING: { [key: string]: Component } = {
@@ -33,7 +33,7 @@ const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.SONG_LIST]: SongList,
   [ROUTES.ROOM_LIST]: RoomList,
   [ROUTES.GAME_ROOM]: GameRoom,
-  [ROUTES.ANIME_LIST_EDIT]: AnimeListEdit
+  [ROUTES.ANIME_EDIT]: AnimeEdit
 }
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {
