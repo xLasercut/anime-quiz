@@ -10,12 +10,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, inject, onUnmounted, reactive, toRefs } from '@vue/composition-api'
 import { socket } from '../../../../../plugins/socket'
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { store } from '../../../../../plugins/store'
 import { getIdFromURL } from 'vue-youtube-embed'
 import { calculateStartPosition } from '../../../../../assets/game-helper'
+import { CLIENT_EVENTS } from '../../../../../assets/events'
 
 export default defineComponent({
   setup() {
@@ -34,6 +35,15 @@ export default defineComponent({
     let player: any
 
     let timeout: number
+
+    const registerChangeVolume = inject<Function>(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_YOUTUBE_VIDEO)
+    if (registerChangeVolume) {
+      registerChangeVolume(changeVolume)
+    }
+
+    function changeVolume(volume: number): void {
+      player.setVolume(volume)
+    }
 
     function ready(event: any): void {
       player = event.target

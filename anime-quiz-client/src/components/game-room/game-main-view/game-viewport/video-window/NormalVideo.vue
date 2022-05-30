@@ -10,11 +10,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, ref, toRefs } from '@vue/composition-api'
+import { defineComponent, inject, onUnmounted, reactive, ref, toRefs } from '@vue/composition-api'
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { socket } from '../../../../../plugins/socket'
 import { calculateStartPosition } from '../../../../../assets/game-helper'
 import { store } from '../../../../../plugins/store'
+import { CLIENT_EVENTS } from '../../../../../assets/events'
 
 export default defineComponent({
   setup() {
@@ -25,6 +26,17 @@ export default defineComponent({
       startPosition: 0,
       guessTime: 0
     })
+
+    const registerChangeVolume = inject<Function>(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_NORMAL_VIDEO)
+    if (registerChangeVolume) {
+      registerChangeVolume(changeVolume)
+    }
+
+    function changeVolume(volume: number): void {
+      if (player.value) {
+        player.value.volume = volume / 100
+      }
+    }
 
     socket.on(SHARED_EVENTS.GAME_START_LOAD, (startPosition: number, guessTime: number) => {
       pause()

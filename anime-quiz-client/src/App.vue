@@ -26,11 +26,19 @@ export default defineComponent({
   setup() {
     let sendNotification: Function
     let openDialog: Function
+    let changeVolumeNormalVideo: Function
+    let changeVolumeYoutubeVideo: Function
     provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: Function): void => {
       sendNotification = _sendNotification
     })
     provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: Function): void => {
       openDialog = _openDialog
+    })
+    provide(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_NORMAL_VIDEO, (_changeVolumeNormalVideo: Function): void => {
+      changeVolumeNormalVideo = _changeVolumeNormalVideo
+    })
+    provide(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_YOUTUBE_VIDEO, (_changeVolumeYoutubeVideo: Function): void => {
+      changeVolumeYoutubeVideo = _changeVolumeYoutubeVideo
     })
 
     provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
@@ -38,6 +46,10 @@ export default defineComponent({
     })
     provide(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
       sendNotification(color, message)
+    })
+    provide(CLIENT_EVENTS.CHANGE_VOLUME, (volume: number): void => {
+      changeVolumeYoutubeVideo(volume)
+      changeVolumeNormalVideo(volume)
     })
 
     socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
