@@ -14,7 +14,6 @@ input server passwords and ngrok token
 ```dotenv
 SERVER_PASSWORD=
 ADMIN_PASSWORD=
-NGROK_TOKEN=
 ```
 
 Then run commands based on cpu architecture.

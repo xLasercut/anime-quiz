@@ -4,7 +4,7 @@
   "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
   "main": "index.js",
   "scripts": {
-
+    "build": "npm run build --workspace=client"
   },
   "workspaces": [
     "client",
