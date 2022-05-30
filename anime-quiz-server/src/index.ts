@@ -40,7 +40,7 @@ const gameStates = new GameStates(logger, io)
 const ioErrorHandler = newIoErrorHandler(logger)
 
 const animeEditHandler = new AnimeEditHandler(logger, songDb, emitter)
-const songEditHandler = new SongEditHandler(logger, emitter, songDb)
+const songEditHandler = new SongEditHandler(logger, emitter, songDb, userDb)
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
 const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)

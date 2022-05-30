@@ -8,13 +8,16 @@ import { ROOM_IDS } from '../constants'
 import { AqSong } from '../shared/interfaces'
 import { NOTIFICATION_COLOR } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
+import { AnimeQuizUserDb } from '../database/user'
 
 class SongEditHandler extends AbstractHandler {
   protected _songDb: AnimeQuizSongDb
+  protected _userDb: AnimeQuizUserDb
 
-  constructor(logger: Logger, emitter: Emitter, songDb: AnimeQuizSongDb) {
+  constructor(logger: Logger, emitter: Emitter, songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb) {
     super(logger, emitter)
     this._songDb = songDb
+    this._userDb = userDb
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -57,6 +60,7 @@ class SongEditHandler extends AbstractHandler {
         this._validateIsAdmin(socket)
         await this._songDb.validateSongsExist([song.song_id])
         await this._songDb.deleteSong(song)
+        await this._userDb.removeSongAll(song.song_id)
         await this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Deleted ${song.song_title}`, socket.id)
         await this._reloadSongListData(ROOM_IDS.SONG_EDIT)
         callback(true)

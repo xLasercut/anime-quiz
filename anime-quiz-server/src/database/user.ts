@@ -88,6 +88,11 @@ class AnimeQuizUserDb extends AbstractDb {
     }
   }
 
+  public async removeSongAll(songId: string): Promise<void> {
+    const sql = `DELETE FROM user_songs WHERE song_id = ?`
+    await this._run(sql, [ songId ])
+  }
+
   public async validateUserExist(userId: string): Promise<void> {
     const sql = `
       SELECT
