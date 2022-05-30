@@ -14,6 +14,7 @@
     <template #top>
       <v-container fluid>
         <song-edit-table-filter
+          :song-id-filter.sync="songIdFilter"
           :song-type-filter.sync="songTypeFilter"
           :anime-filter.sync="animeFilter"
           :song-title-filter.sync="songTitleFilter"
@@ -71,7 +72,8 @@ export default defineComponent({
       currentPage: 0,
       animeFilter: '',
       songTypeFilter: '',
-      songTitleFilter: ''
+      songTitleFilter: '',
+      songIdFilter: ''
     })
 
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
@@ -80,7 +82,8 @@ export default defineComponent({
       return store.state.admin.songList.filter((song) => {
         return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
           song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
-          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())
+          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
+          song.song_id.toLowerCase().includes(state.songIdFilter.toLowerCase())
       })
     }
 

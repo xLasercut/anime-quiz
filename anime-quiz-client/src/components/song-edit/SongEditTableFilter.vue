@@ -1,6 +1,16 @@
 <template>
   <v-row dense>
     <v-col>
+      <v-text-field
+        dense outlined
+        :value="songIdFilter"
+        @input="updateFilter('song-id-filter', $event)"
+        label="Song ID"
+        hide-details
+        clearable
+      ></v-text-field>
+    </v-col>
+    <v-col>
       <v-combobox
         dense outlined
         :value="animeFilter"
@@ -38,6 +48,9 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 export default defineComponent({
   props: {
+    songIdFilter: {
+      required: true
+    },
     animeFilter: {
       required: true
     },

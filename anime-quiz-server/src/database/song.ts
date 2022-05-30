@@ -28,6 +28,7 @@ class AnimeQuizSongDb extends AbstractDb {
         INNER JOIN song_animes ON animes.anime_id = song_animes.anime_id
         INNER JOIN songs ON songs.song_id = song_animes.song_id
       GROUP BY songs.song_id
+      ORDER BY animes.anime_name
     `)
 
     return songList.map((row) => {
@@ -75,6 +76,7 @@ class AnimeQuizSongDb extends AbstractDb {
       SELECT
         *
       FROM animes
+      ORDER BY anime_name
     `)
 
     return animeList.map((anime) => {
@@ -89,6 +91,7 @@ class AnimeQuizSongDb extends AbstractDb {
         json_group_array(anime_name) as anime_name
       FROM animes
       GROUP BY anime_id
+      ORDER BY animes.anime_name
     `)
 
     return animeList.map((anime) => {
@@ -104,6 +107,7 @@ class AnimeQuizSongDb extends AbstractDb {
       SELECT
         *
       FROM songs
+      ORDER BY songs.song_title
     `)
     return songList.map((song) => {
       return song.song_title
