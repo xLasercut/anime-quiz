@@ -35,7 +35,7 @@ class AnimeQuizSongDb extends AbstractDb {
       return {
         anime_name: JSON.parse(anime_name),
         song_title: song_title || '',
-        anime_id: JSON.parse(anime_id),
+        anime_id: Array.from(new Set(JSON.parse(anime_id))),
         ...rest
       }
     })
@@ -64,7 +64,7 @@ class AnimeQuizSongDb extends AbstractDb {
       return {
         anime_name: JSON.parse(anime_name),
         song_title: song_title || '',
-        anime_id: JSON.parse(anime_id),
+        anime_id: Array.from(new Set(JSON.parse(anime_id))),
         ...rest
       }
     })
@@ -135,9 +135,8 @@ class AnimeQuizSongDb extends AbstractDb {
 
   public async editSong(song: AqSong): Promise<void> {
     this._validateSong(song)
-    await this._deleteSong(song.song_id)
+    await this._editSong(song.song_id, song)
     await this._deleteSongAnime(song.song_id)
-    await this._addSong(song.song_id, song)
     await this._addSongAnime(song.song_id, song.anime_id)
   }
 
@@ -150,6 +149,19 @@ class AnimeQuizSongDb extends AbstractDb {
     this._validateString(song.song_title, 'Invalid title')
     this._validateString(song.src, 'Invalid src')
     this._validateSongType(song.type)
+  }
+
+  protected async _editSong(songId: string, song: AqSong): Promise<void> {
+    const sql = `
+      UPDATE songs
+      SET 
+        song_title = ?,
+        src = ?,
+        artist = ?,
+        type = ?
+      WHERE song_id = ?
+    `
+    await this._run(sql, [ song.song_title || null, song.src || null, song.artist || null, song.type || null, songId ])
   }
 
   protected async _deleteSong(songId: string): Promise<void> {
