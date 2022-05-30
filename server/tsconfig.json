@@ -1,17 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "ESNext",
     "experimentalDecorators": true,
     "outDir": "dist",
     "module": "CommonJS",
     "lib": [
-      "es2018"
+      "ESNext"
     ]
   },
   "include": [
     "src/**/*"
-  ],
-  "references": [
-    {"path":  "../shared/"}
   ]
 }

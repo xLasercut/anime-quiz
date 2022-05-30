@@ -1,29 +1,27 @@
 {
   "name": "anime-quiz-server",
   "version": "1.0.0",
-  "description": "anime quiz server",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "node clean.js && tsc -b",
+    "build": "rm -rf ./dist && tsc -b",
     "start": "node dist/index.js",
-    "serve": "npm run compile && npm run start"
+    "dev": "nodemon src/index.ts",
+    "init:userdb": "ts-node tools/init-user-db.ts",
+    "create:user": "ts-node tools/create-user.ts"
   },
-  "author": "xLasercut",
+  "author": "",
   "license": "MIT",
   "dependencies": {
-    "@types/express": "^4.17.7",
-    "@types/mustache": "^4.0.1",
-    "@types/q": "^1.5.4",
-    "@types/socket.io": "^2.1.8",
-    "@types/uuid": "^7.0.4",
-    "express": "^4.17.1",
-    "fs-extra": "^9.0.1",
-    "mustache": "^4.0.1",
-    "q": "^1.5.1",
-    "socket.io": "^2.3.0",
-    "typescript": "^3.9.7",
-    "uuid": "^8.2.0",
-    "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0"
+    "@types/sqlite3": "^3.1.8",
+    "@types/uuid": "^8.3.4",
+    "nodemon": "^2.0.16",
+    "socket.io": "^4.5.0",
+    "sqlite3": "^5.0.8",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4",
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.6.1"
   }
 }

@@ -28,7 +28,6 @@ server/data/amq-user/*
 
 # server logs
 server/log/
-anime-quiz-server/log/
 
 # shared module build info
 shared/tsconfig.tsbuildinfo
