@@ -4,11 +4,11 @@
   "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+
   },
   "workspaces": [
-    "anime-quiz-client",
-    "anime-quiz-server"
+    "client",
+    "server"
   ],
   "repository": {
     "type": "git",

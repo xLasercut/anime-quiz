@@ -22,15 +22,8 @@ dist-ssr
 *.sln
 *.sw?
 
-
-# server user data
-server/data/amq-user/*
-
 # server logs
 server/log/
-
-# shared module build info
-shared/tsconfig.tsbuildinfo
 
 anime-quiz-user.db
 
