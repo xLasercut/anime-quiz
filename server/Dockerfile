@@ -16,13 +16,11 @@ COPY package.json ${WRK_DIR}/package.json
 
 RUN npm install
 
-COPY data/. ${WRK_DIR}/data/
 COPY src/. ${WRK_DIR}/src/
 COPY tsconfig.json ${WRK_DIR}/tsconfig.json
-
-WORKDIR ${WRK_DIR}
-
 RUN npm run build
+
+COPY data/. ${WRK_DIR}/data/
 
 EXPOSE 3000
 
