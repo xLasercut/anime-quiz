@@ -8,27 +8,20 @@ Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-m
 - ngrok account
 
 ## Running server
-In root of project, create a file called `production.env`
+### Locally
+In server directory, create a file called `config.env`
 
-input server passwords and ngrok token
+input server passwords
 ```dotenv
 SERVER_PASSWORD=
 ADMIN_PASSWORD=
 ```
 
-Then run commands based on cpu architecture.
-
-arm:
+Then run command:
 ```bash
-make build-server-arm
-make run-server-arm-prod
+npm run dev:server
 ```
 
-x86_64:
-```bash
-make build-server-x86
-make run-server-x86-prod
-```
 
 ## Adding user song lists
 Create <filename>.json in `server/data/amq-user` with a blank list, then restart the server.

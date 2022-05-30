@@ -5,14 +5,14 @@ services:
     restart: unless-stopped
     build:
       context: './server/'
-      dockerfile: './server/Dockerfile'
-    expose:
-      - 3001
+      dockerfile: 'Dockerfile'
+    ports:
+      - 3000:3000
     volumes:
-      - ./server/data/:/home/aq_server/server/data
-      - ./server/log/:/home/aq_server/server/log
+      - ./server/data/:/home/aq_server/data
+      - ./server/log/:/home/aq_server/log
     env_file:
-      - config.env
+      - server/config.env
     logging:
       options:
         max-size: 50m

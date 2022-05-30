@@ -3,8 +3,6 @@ FROM node:lts-alpine
 LABEL maintainer="xLasercut"
 
 ARG WRK_DIR=/home/aq_server
-ARG SERVER_DIR=${WRK_DIR}/server
-ARG SHARED_DIR=${WRK_DIR}/shared
 
 RUN apk update && apk upgrade \
   && apk -q add curl \
@@ -12,22 +10,20 @@ RUN apk update && apk upgrade \
   && apk -q add bash-completion \
   && mkdir ${WRK_DIR}
 
-WORKDIR ${SERVER_DIR}
+WORKDIR ${WRK_DIR}
 
-COPY ./server/package.json ${SERVER_DIR}/package.json
-COPY ./server/package-lock.json ${SERVER_DIR}/package-lock.json
+COPY package.json ${WRK_DIR}/package.json
 
-RUN npm ci
+RUN npm install
+
+COPY data/. ${WRK_DIR}/data/
+COPY src/. ${WRK_DIR}/src/
+COPY tsconfig.json ${WRK_DIR}/tsconfig.json
 
 WORKDIR ${WRK_DIR}
 
-COPY ./server/. ${SERVER_DIR}/.
-COPY src/shared/. ${SHARED_DIR}/.
+RUN npm run build
 
-WORKDIR ${SERVER_DIR}
-
-RUN npm run compile
-
-EXPOSE 3001
+EXPOSE 3000
 
 CMD ["npm", "run", "start"]
