@@ -1,4 +1,4 @@
-FROM node:11.15.0-alpine
+FROM node:lts-alpine
 
 LABEL maintainer="xLasercut"
 
@@ -22,7 +22,7 @@ RUN npm ci
 WORKDIR ${WRK_DIR}
 
 COPY ./server/. ${SERVER_DIR}/.
-COPY ./shared/. ${SHARED_DIR}/.
+COPY src/shared/. ${SHARED_DIR}/.
 
 WORKDIR ${SERVER_DIR}
 

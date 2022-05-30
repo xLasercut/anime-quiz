@@ -1,97 +1,97 @@
-import * as socketio from 'socket.io'
-import {IBannerColor} from '../../../shared/types/game'
-import {IAmqChoices, IAmqSong, IChatBot, IEmoji} from '../../../shared/interfaces/database'
-import {IAmqGameState, IAmqPlayer, IAmqSettings} from '../../../shared/interfaces/amq'
-import {IChat, IRoomSerial} from '../../../shared/interfaces/game'
+import { SHARED_EVENTS } from '../shared/events'
+import {
+  AqAnime,
+  AqClientData,
+  AqGameChatMessage,
+  AqGameGuess,
+  AqGamePlayer,
+  AqGameSettings,
+  AqGameState,
+  AqSong,
+  AqUserSongs
+} from '../shared/interfaces'
+import { Server } from './server'
 
 class Emitter {
-  protected _io: socketio.Server
+  protected _io: Server
 
-  constructor(io: socketio.Server) {
+  constructor(io: Server) {
     this._io = io
   }
 
-  public updateAmqSongList(songList: Array<IAmqSong>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AMQ_SONG_LIST', songList)
+  public systemNotification(color: string, message: string, sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.SYSTEM_NOTIFICATION, color, message)
   }
 
-  public updateEmojiList(emojiList: Array<IEmoji>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_EMOJI_LIST', emojiList)
+  public updateSongList(songList: AqSong[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_LIST, songList)
   }
 
-  public updateChatBotList(chatBotList: Array<IChatBot>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_CHAT_BOT_LIST', chatBotList)
+  public updateAnimeList(animeList: string[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_ANIME_LIST, animeList)
   }
 
-  public updateAmqUsers(users: Array<string>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AMQ_USERS', users)
+  public adminUpdateAnimeList(animeList: AqAnime[], sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.ADMIN_UPDATE_ANIME_LIST, animeList)
   }
 
-  public updateAmqUserSongs(userSongs: Array<string>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AMQ_USER_SONGS', userSongs)
+  public adminUpdateSongList(songList: AqSong[], sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.ADMIN_UPDATE_SONG_LIST, songList)
   }
 
-  public updateAmqChoices(choices: IAmqChoices, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AMQ_CHOICES', choices)
+  public updateSongTitleList(songTitleList: string[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_SONG_TITLE_LIST, songTitleList)
   }
 
-  public updateAdmin(admin: boolean, sid: string): void {
-    this._client(sid).emit('UPDATE_ADMIN', admin)
+  public updateUserLists(userLists: AqUserSongs[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_USER_LISTS, userLists)
   }
 
-  public updateAmqRoomList(roomList: Array<IRoomSerial>, sid: string = null): void {
-    this._client(sid).emit('UPDATE_AMQ_GAME_ROOM_LIST', roomList)
+  public updateRoomList(roomList: string[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_ROOM_LIST, roomList)
   }
 
-  public updateAmqPlayerList(amqPlayerList: Array<IAmqPlayer>, sid: string): void {
-    this._client(sid).emit('UPDATE_AMQ_PLAYER_LIST', amqPlayerList)
+  public updateGameChat(msg: AqGameChatMessage, sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_CHAT, msg)
   }
 
-  public updateAmqGameState(amqGameState: IAmqGameState, sid: string): void {
-    this._client(sid).emit('UPDATE_AMQ_GAME_STATE', amqGameState)
+  public updateGameSetting(settings: AqGameSettings, sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_SETTINGS, settings)
   }
 
-  public updateAmqHost(host: boolean, sid: string): void {
-    this._client(sid).emit('UPDATE_AMQ_HOST', host)
+  public updateClientData(clientData: AqClientData, sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_CLIENT_DATA, clientData)
   }
 
-  public amqNewSong(sid: string): void {
-    this._client(sid).emit('AMQ_NEW_SONG')
+  public updateGamePlayerList(playerList: AqGamePlayer[], sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_PLAYERS, playerList)
   }
 
-  public amqStartLoad(sid: string): void {
-    this._client(sid).emit('AMQ_START_LOAD')
+  public updateGuess(guess: AqGameGuess, sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GUESS, guess)
   }
 
-  public amqStartCountdown(sid: string): void {
-    this._client(sid).emit('AMQ_START_COUNTDOWN')
+  public updateGameState(gameState: AqGameState, sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_STATE, gameState)
   }
 
-  public amqTimeUp(sid: string): void {
-    this._client(sid).emit('AMQ_TIME_UP')
+  public gameStartLoad(startPosition: number, guessTime: number, sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_START_LOAD, startPosition, guessTime)
   }
 
-  public amqShowGuess(sid: string): void {
-    this._client(sid).emit('AMQ_SHOW_GUESS')
+  public gameStartCountdown(sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_START_COUNTDOWN)
   }
 
-  public amqReset(sid: string): void {
-    this._client(sid).emit('AMQ_RESET')
+  public gameShowGuess(sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_SHOW_GUESS)
   }
 
-  public systemNotification(color: IBannerColor, message: string, sid: string = null): void {
-    this._client(sid).emit('SYSTEM_NOTIFICATION', color, message)
+  public stopClientGame(sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.STOP_CLIENT_GAME)
   }
 
-  public updateGameChat(chat: IChat, sid: string): void {
-    this._client(sid).emit('UPDATE_GAME_CHAT', chat)
-  }
-
-  public updateAmqSettings(amqSettings: IAmqSettings, sid: string): void {
-    this._client(sid).emit('UPDATE_AMQ_SETTINGS', amqSettings)
-  }
-
-  protected _client(sid: string = null): socketio.Namespace | socketio.Server {
+  protected _client(sid: string) {
     if (sid) {
       return this._io.to(sid)
     }
@@ -99,4 +99,6 @@ class Emitter {
   }
 }
 
-export {Emitter}
+export {
+  Emitter
+}

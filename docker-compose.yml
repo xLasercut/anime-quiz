@@ -1,37 +1,23 @@
 version: '3'
 services:
-  server:
+  amq_server:
+    container_name: amq_server
     restart: unless-stopped
     build:
       context: '.'
       dockerfile: './server/Dockerfile'
-    ports:
-      - 3001:3001
+    expose:
+      - 3001
     volumes:
       - ./server/data/:/home/aq_server/server/data
       - ./server/log/:/home/aq_server/server/log
+    env_file:
+      - config.env
     logging:
       options:
         max-size: 50m
+    networks:
+      shared_net:
 
-  ngrok_arm:
-    restart: unless-stopped
-    build:
-      context: '.'
-      dockerfile: 'ngrok/arm.dockerfile'
-    ports:
-      - 4040:4040
-    logging:
-      options:
-        max-size: 50m
-
-  ngrok_x86:
-    restart: unless-stopped
-    build:
-      context: '.'
-      dockerfile: 'ngrok/x86_64.dockerfile'
-    ports:
-      - 4040:4040
-    logging:
-      options:
-        max-size: 50m
+networks:
+  shared_net:

@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "composite": true,
-    "lib": [
-      "es2015"
-    ]
-  }
-}

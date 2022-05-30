@@ -1,0 +1,23 @@
+{
+  "name": "anime-quiz",
+  "version": "1.0.0",
+  "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
+  "main": "index.js",
+  "scripts": {
+
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xLasercut/anime-quiz.git"
+  },
+  "author": "xLasercut",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xLasercut/anime-quiz/issues"
+  },
+  "homepage": "https://github.com/xLasercut/anime-quiz#readme"
+}

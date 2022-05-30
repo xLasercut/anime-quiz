@@ -1,126 +1,153 @@
-import {LOG_BASE, Logger} from './app/logging'
-import * as socketio from 'socket.io'
-import * as express from 'express'
-import {ADMIN_PASSWORD, SERVER_PASSWORD, SERVER_PORT} from './config'
-import {ISocket} from './interfaces'
-import {AuthError, GameDataError, ServerDataError} from './exceptions'
-import {Emitter} from './app/emitter'
-import {AmqSongDatabase} from './database/amq-song'
-import {AmqUserSongDatabase} from './database/amq-user-song'
-import {AmqSongListHandler} from './handlers/amq-song-list'
-import {AdminHandler} from './handlers/admin'
-import {AmqHandler} from './handlers/amq'
-import {EmojiDatabase} from './database/emoji'
-import {ChatBotHandler} from './handlers/chat-bot'
-import {ChatBotDatabase} from './database/chat-bot'
-import {ChatManager} from './game/chat'
-import {EmojiHandler} from './handlers/emoji'
-import {AmqGameController} from './game/controllers/amq'
-import {GeneralGameHandler} from './handlers/room'
+import { createServer } from 'http'
+import { ServerConfig } from './app/config'
+import { Logger } from './app/logging/logger'
+import { newIoErrorHandler, newSocketErrorHandler } from './app/exceptions'
+import { SocketData } from './app/socket-data'
+import { Socket } from './types'
+import { LOG_BASE } from './app/logging/log-base'
+import { SHARED_EVENTS } from './shared/events'
+import { Emitter } from './app/emitter'
+import { authenticateUser, checkClientAuth } from './app/authentication'
+import { NOTIFICATION_COLOR } from './shared/constants'
+import { AnimeQuizSongDb } from './database/song'
+import { SongListHandler } from './handlers/song-list'
+import { RoomHandler } from './handlers/room'
+import { AnimeQuizUserDb } from './database/user'
+import { GameHandler } from './handlers/game'
+import { GameSettings } from './game/settings'
+import { isGameRoom } from './helpers'
+import { Server } from './app/server'
+import { GameSettingsHandler } from './handlers/settings'
+import { GameStates } from './game/state'
+import { AnimeEditHandler } from './handlers/anime-edit'
+import { SongEditHandler } from './handlers/song-edit'
 
-
-const logger = new Logger()
-
-const app = express()
-const server = app.listen(SERVER_PORT, () => {
-  logger.writeLog(LOG_BASE.SERVER001, {port: SERVER_PORT})
+const config = new ServerConfig()
+const httpServer = createServer()
+const io = new Server(httpServer, {
+  cors: {
+    origin: config.corsConfig
+  }
 })
 
-const io = socketio(server)
 const emitter = new Emitter(io)
+const logger = new Logger(config)
+const songDb = new AnimeQuizSongDb(config, logger)
+const userDb = new AnimeQuizUserDb(config, logger)
+const gameSettings = new GameSettings(logger)
+const gameStates = new GameStates(logger, io)
 
-const amqSongDatabase = new AmqSongDatabase()
-const amqUserSongDatabase = new AmqUserSongDatabase(amqSongDatabase)
-const emojiDatabase = new EmojiDatabase()
-const chatBotDatabase = new ChatBotDatabase()
+const ioErrorHandler = newIoErrorHandler(logger)
 
-const chatManager = new ChatManager(logger, chatBotDatabase, emojiDatabase)
-const amqGameController = new AmqGameController(io)
+const animeEditHandler = new AnimeEditHandler(logger, songDb, emitter)
+const songEditHandler = new SongEditHandler(logger, emitter, songDb, userDb)
+const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
+const roomHandler = new RoomHandler(logger, io, emitter)
+const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)
+const gameHandler = new GameHandler(logger, io, emitter, userDb, songDb, gameSettings, gameStates)
 
-const generalGameHandler = new GeneralGameHandler(logger, emitter)
-const amqSongListHandler = new AmqSongListHandler(logger, emitter, amqSongDatabase, amqUserSongDatabase)
-const emojiHandler = new EmojiHandler(logger, emitter, emojiDatabase)
-const chatBotHandler = new ChatBotHandler(logger, emitter, chatBotDatabase)
-const adminHandler = new AdminHandler(io, logger, emitter, amqSongDatabase, amqUserSongDatabase, emojiDatabase, chatBotDatabase)
-
-const amqHandler = new AmqHandler(logger, emitter, amqGameController, chatManager, amqSongDatabase, amqUserSongDatabase, emojiDatabase)
-
-
-io.on('connect', (socket: ISocket) => {
-  logger.writeLog(LOG_BASE.SERVER002, {id: socket.id})
-  socket.admin = false
-  socket.auth = false
-  socket.timer = setTimeout((): void => {
-    checkClientAuth(socket)
-  }, 2000)
-
-  socket.on('AUTHENTICATE', exceptionHandler(socket, (password: string, callback: Function): void => {
-    checkPassword(socket, password)
-    startHandlers(socket)
-    if (!socket.auth) {
-      emitter.systemNotification('error', 'Incorrect server password', socket.id)
+function startHandlers(socket: Socket, errorHandler: Function): void {
+  if (socket.data.auth) {
+    songListHandler.start(socket, errorHandler)
+    roomHandler.start(socket, errorHandler)
+    gameHandler.start(socket, errorHandler)
+    gameSettingsHandler.start(socket, errorHandler)
+    if (socket.data.admin) {
+      animeEditHandler.start(socket, errorHandler)
+      songEditHandler.start(socket, errorHandler)
     }
-    callback(socket.auth)
-  }))
+    emitter.updateClientData(socket.data.getClientData(), socket.id)
+  }
+}
 
-  socket.on('disconnect', exceptionHandler(socket, (): void => {
-    logger.writeLog(LOG_BASE.SERVER003, {id: socket.id})
-    clearTimeout(socket.timer)
-  }))
+io.on('connection', (socket: Socket) => {
+  logger.writeLog(LOG_BASE.SERVER002, { id: socket.id })
+  const errorHandler = newSocketErrorHandler(socket, logger, emitter)
+  socket.data = new SocketData(socket.id)
+  socket.data.clientAuthTimer = setTimeout((): void => {
+    checkClientAuth(logger, socket)
+  }, config.clientAuthDelay)
+
+  socket.on(SHARED_EVENTS.AUTHENTICATE, (username: string, password: string, avatar: string, callback: Function) => {
+    try {
+      authenticateUser(socket, username, password, avatar, config)
+      startHandlers(socket, errorHandler)
+      if (!socket.data.auth) {
+        emitter.systemNotification(NOTIFICATION_COLOR.ERROR, 'Incorrect server password', socket.id)
+      }
+      callback(socket.data.auth)
+    } catch (e) {
+      errorHandler(e)
+    }
+  })
+
+  socket.on('disconnect', async () => {
+    try {
+      logger.writeLog(LOG_BASE.SERVER003, { id: socket.id })
+      clearTimeout(socket.data.clientAuthTimer)
+    } catch (e) {
+      errorHandler(e)
+    }
+  })
 })
 
-function startHandlers(socket: ISocket): void {
-  if (socket.auth) {
-    generalGameHandler.start(socket, exceptionHandler)
-    amqSongListHandler.start(socket, exceptionHandler)
-    emojiHandler.start(socket, exceptionHandler)
-    chatBotHandler.start(socket, exceptionHandler)
-    amqHandler.start(socket, exceptionHandler)
-
-    if (socket.admin) {
-      emitter.updateAdmin(socket.admin, socket.id)
-      adminHandler.start(socket, exceptionHandler)
+io.of('/').adapter.on('create-room', (roomId: string) => {
+  try {
+    if (isGameRoom(roomId)) {
+      gameSettings.addRoom(roomId)
+      gameStates.addRoom(roomId)
+      emitter.updateRoomList(io.getGameRoomList())
     }
+  } catch (e) {
+    ioErrorHandler(e)
   }
-}
+})
 
-function exceptionHandler(socket: ISocket, f: Function): any {
-  return function () {
-    try {
-      return f.apply(this, arguments)
-    } catch (e) {
-      if (e instanceof ServerDataError) {
-        logger.writeLog(LOG_BASE.DATA001, {reason: e.message})
-        emitter.systemNotification('error', e.message, socket.id)
-      }
-      else if (e instanceof AuthError) {
-        logger.writeLog(LOG_BASE.AUTH003, {id: socket.id})
-        emitter.systemNotification('error', e.message, socket.id)
-        socket.disconnect()
-      }
-      else if (e instanceof GameDataError) {
-        logger.writeLog(LOG_BASE.DATA002, {reason: e.message})
-        emitter.systemNotification('error', e.message, socket.id)
-      }
-      else {
-        logger.writeLog(LOG_BASE.SERVER004, {stack: e.stack})
-      }
+io.of('/').adapter.on('delete-room', (roomId: string) => {
+  try {
+    if (isGameRoom(roomId)) {
+      gameSettings.deleteRoom(roomId)
+      gameStates.deleteRoom(roomId)
+      emitter.updateRoomList(io.getGameRoomList())
     }
+  } catch (e) {
+    ioErrorHandler(e)
   }
-}
+})
 
-function checkPassword(socket: ISocket, password: string): void {
-  if (password === SERVER_PASSWORD || password === ADMIN_PASSWORD) {
-    socket.auth = true
+io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
+  try {
+    const socket = io.sockets.sockets.get(sid)
+    logger.writeLog(LOG_BASE.SERVER005, {
+      id: sid,
+      username: socket.data.username,
+      roomId: roomId
+    })
+    if (isGameRoom(roomId)) {
+      emitter.updateGamePlayerList(io.getPlayerList(roomId), roomId)
+    }
+  } catch (e) {
+    ioErrorHandler(e)
   }
-  if (password === ADMIN_PASSWORD) {
-    socket.admin = true
-  }
-}
+})
 
-function checkClientAuth(socket: ISocket): void {
-  if (!socket.auth) {
-    logger.writeLog(LOG_BASE.AUTH002, {id: socket.id})
-    socket.disconnect()
+io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
+  try {
+    const socket = io.sockets.sockets.get(sid)
+    logger.writeLog(LOG_BASE.SERVER006, {
+      id: sid,
+      username: socket.data.username,
+      roomId: roomId
+    })
+    if (isGameRoom(roomId)) {
+      io.reassignHost(roomId)
+      emitter.updateGamePlayerList(io.getPlayerList(roomId), roomId)
+    }
+  } catch (e) {
+    ioErrorHandler(e)
   }
-}
+})
+
+httpServer.listen(config.serverPort, async () => {
+  logger.writeLog(LOG_BASE.SERVER001, { port: config.serverPort })
+})
