@@ -46,6 +46,19 @@
       </v-container>
     </template>
 
+    <template #item.anime_name="{ item }">
+      <v-tooltip top color="background darken-2">
+        <template #activator="{ on }">
+          <v-chip v-on="on" label small color="primary">{{ item.anime_name[0] }}</v-chip>
+        </template>
+        <v-list dense color="background darken-2">
+          <v-list-item v-for="(name, index) in item.anime_name" :key="`${item.song_id}_${index}`">
+            {{ name }}
+          </v-list-item>
+        </v-list>
+      </v-tooltip>
+    </template>
+
     <template #item.src="{ item }">
       <a :href="item.src" target="_blank">View</a>
     </template>
