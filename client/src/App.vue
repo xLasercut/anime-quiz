@@ -1,80 +1,76 @@
 <template>
   <v-app>
-    <system-notification></system-notification>
+    <nav-bar></nav-bar>
     <v-container fluid>
-      <nav-panel>
-        <component :is="panelComponent"></component>
-      </nav-panel>
-      <component :is="viewComponent"></component>
-      <global-dialog></global-dialog>
+      <component :is="viewComponent()"></component>
     </v-container>
+    <system-notification></system-notification>
+    <global-dialog></global-dialog>
   </v-app>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from '@vue/composition-api'
-import SystemNotification from '@/app/SystemNotification.vue'
-import NavPanel from '@/app/NavPanel.vue'
-import {PANEL_COMPONENTS, VIEW_COMPONENTS} from '@/assets/component'
-import GlobalDialog from '@/app/GlobalDialog.vue'
+import { defineComponent, onMounted, provide } from '@vue/composition-api'
+import NavBar from './components/app/NavBar.vue'
+import { CLIENT_EVENTS } from './assets/events'
+import { SHARED_EVENTS } from './assets/shared/events'
+import { NOTIFICATION_COLOR } from './assets/shared/constants'
+import { socket } from './plugins/socket'
+import { viewComponent } from './plugins/routing/mapping'
+import GlobalDialog from './components/app/GlobalDialog.vue'
+import SystemNotification from './components/app/SystemNotification.vue'
+import { LOCAL_STORAGE_CONSTANTS } from './assets/constants'
 
 export default defineComponent({
-  components: {
-    SystemNotification, NavPanel, GlobalDialog
-  },
-  setup(_props, context) {
-    const viewComponent = computed(() => {
-      return VIEW_COMPONENTS[context.root.$store.state.client.view]
+  components: { SystemNotification, GlobalDialog, NavBar },
+  setup() {
+    let sendNotification: Function
+    let openDialog: Function
+    let changeVolumeNormalVideo: Function
+    let changeVolumeYoutubeVideo: Function
+    provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: Function): void => {
+      sendNotification = _sendNotification
+    })
+    provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: Function): void => {
+      openDialog = _openDialog
+    })
+    provide(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_NORMAL_VIDEO, (_changeVolumeNormalVideo: Function): void => {
+      changeVolumeNormalVideo = _changeVolumeNormalVideo
+    })
+    provide(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_YOUTUBE_VIDEO, (_changeVolumeYoutubeVideo: Function): void => {
+      changeVolumeYoutubeVideo = _changeVolumeYoutubeVideo
     })
 
-    const panelComponent = computed(() => {
-      return PANEL_COMPONENTS[context.root.$store.state.client.view]
+    provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
+      openDialog(route, label)
+    })
+    provide(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
+      sendNotification(color, message)
+    })
+    provide(CLIENT_EVENTS.CHANGE_VOLUME, (volume: number): void => {
+      changeVolumeYoutubeVideo(volume)
+      changeVolumeNormalVideo(volume)
+    })
+
+    socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
+      sendNotification(color, message)
     })
 
     onMounted((): void => {
-      if (localStorage.dark) {
-        context.root.$vuetify.theme.dark = (localStorage.dark === 'true')
+      if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
+        sendNotification(NOTIFICATION_COLOR.ERROR, 'Server URL not set')
       }
     })
 
-    return {viewComponent, panelComponent}
+    return {
+      viewComponent
+    }
   }
 })
 </script>
 
 <style>
-.game-window {
-  height: calc(100vh - 85px);
-  overflow: auto;
-}
-
-.chat-window {
-  height: calc(100vh - 85px);
-  border-radius: 5px;
-  background-color: var(--v-background-darken1) !important;
-}
-
-.info-container {
-  max-width: 300px;
-  text-align: center;
-}
-
-.game-display-container {
-  height: 200px;
-  text-align: center;
-  padding: 10px;
-  max-width: 352px;
-}
-
 .v-application {
-  background-color: var(--v-background-base) !important;
-}
-
-.v-input__slot {
-  background-color: var(--v-background-darken1) !important;
-}
-
-.dialog-item .v-input__slot {
   background-color: var(--v-background-base) !important;
 }
 
@@ -86,8 +82,16 @@ export default defineComponent({
   background-color: var(--v-background-darken1) !important;
 }
 
+.v-data-table th {
+  background-color: var(--v-background-darken1) !important;
+}
+
 .v-data-table tr:hover {
-  background-color: var(--v-background-base) !important;
+  background-color: var(--v-background-darken2) !important;
+}
+
+.v-data-table .v-data-table__selected {
+  background-color: var(--v-background-darken2) !important;
 }
 
 .v-pagination__item {
@@ -95,7 +99,7 @@ export default defineComponent({
 }
 
 .v-pagination__item:hover {
-  background-color: var(--v-primary-base) !important;
+  background-color: var(--v-background-darken1) !important;
 }
 
 .v-pagination__navigation {
@@ -103,14 +107,6 @@ export default defineComponent({
 }
 
 .v-pagination__navigation:hover {
-  background-color: var(--v-primary-base) !important;
-}
-
-.v-list-item--link:hover {
-  background-color: var(--v-background-base) !important;
-}
-
-.v-slider__thumb-container {
-  cursor: pointer;
+  background-color: var(--v-background-darken1) !important;
 }
 </style>

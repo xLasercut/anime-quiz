@@ -1,6 +1,6 @@
-const debounce = (f: Function, delay: number): Function => {
+function debounce(f: Function, delay: number): Function {
   let inDebounce: any
-  return function (this: ThisParameterType<Function>) {
+  return function(this: ThisParameterType<Function>) {
     clearTimeout(inDebounce)
     inDebounce = setTimeout((): void => {
       f.apply(this, arguments)
@@ -8,10 +8,9 @@ const debounce = (f: Function, delay: number): Function => {
   }
 }
 
-
-const throttle = (func: Function, limit: number): Function => {
+function throttle(func: Function, limit: number): Function {
   let inThrottle = false
-  return function (this: ThisParameterType<Function>) {
+  return function(this: ThisParameterType<Function>) {
     if (!inThrottle) {
       func.apply(this, arguments)
       inThrottle = true
@@ -22,4 +21,4 @@ const throttle = (func: Function, limit: number): Function => {
   }
 }
 
-export {debounce, throttle}
+export { debounce, throttle }

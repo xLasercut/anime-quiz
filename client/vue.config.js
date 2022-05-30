@@ -1,15 +1,6 @@
-let publicPath = '/'
-
-if (process.env.NODE_ENV === 'ghpages') {
-  publicPath = '/anime-quiz/'
-}
-else if (process.env.NODE_ENV === 'production') {
-  publicPath = './'
-}
-
-module.exports = {
-  publicPath: publicPath,
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
   transpileDependencies: [
-    "vuetify"
+    'vuetify'
   ]
-}
+})
