@@ -161,7 +161,15 @@ export default defineComponent({
     }
 
     function filteredSongList(): AqSong[] {
-      return store.state.songList.songList.filter((song) => {
+      return store.state.songList.songList
+        .filter((song) => {
+          if (state.selectedUser && state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
+            return store.getters.userList(state.selectedUser).includes(song.song_id)
+          }
+
+          return true
+        })
+        .filter((song) => {
         return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
           song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())

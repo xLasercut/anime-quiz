@@ -27,6 +27,9 @@ const client: Module<ClientStoreState, RootStoreState> = {
       state.avatar = clientData.avatar
       state.admin = clientData.admin
       state.host = clientData.host
+    },
+    [MUTATIONS.RESET_CLIENT_STORE_STATE]: (state: ClientStoreState) => {
+      Object.assign(state, DEFAULT_STATE)
     }
   }
 }

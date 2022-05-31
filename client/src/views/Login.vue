@@ -92,6 +92,7 @@ export default defineComponent({
 
     onMounted(() => {
       store.commit(MUTATIONS.RESET_STORE_STATE)
+      store.commit(MUTATIONS.RESET_CLIENT_STORE_STATE)
     })
 
     return {
