@@ -30,7 +30,7 @@ export default defineComponent({
       show: false
     })
 
-    socket.on(SHARED_EVENTS.GAME_START_LOAD, () => {
+    socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
       state.show = false
     })
 
@@ -39,8 +39,8 @@ export default defineComponent({
     })
 
     onUnmounted(() => {
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
       socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
-      socket.off(SHARED_EVENTS.GAME_START_LOAD)
     })
 
     return {

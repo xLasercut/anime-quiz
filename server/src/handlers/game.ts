@@ -129,9 +129,10 @@ class GameHandler extends AbstractHandler {
   protected async _newRound(roomId: string, settings: AqGameSettings): Promise<void> {
     const startPosition = Math.random()
     const gameState = this._states.getGameState(roomId)
+    this._emitter.gameNewRound(roomId)
     this._io.newRound(roomId)
     this._emitter.updateGameState(gameState, roomId)
-    await this._states.startTimeout(3000, roomId)
+    await this._states.startTimeout(2000, roomId)
     this._emitter.gameStartLoad(startPosition, settings.guessTime, roomId)
     await this._states.waitPlayerLoaded(20000, roomId)
     this._emitter.gameStartCountdown(roomId)

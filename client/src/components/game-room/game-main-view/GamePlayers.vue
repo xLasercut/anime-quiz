@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
 import { AqGamePlayer } from '../../../assets/shared/interfaces'
 import GameAvatar from '../../shared/GameAvatar.vue'
 import { socket } from '../../../plugins/socket'
@@ -50,7 +50,7 @@ export default defineComponent({
       show: false
     })
 
-    socket.on(SHARED_EVENTS.GAME_START_LOAD, () => {
+    socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
       state.show = false
     })
 
@@ -73,6 +73,11 @@ export default defineComponent({
 
       return 'primary'
     }
+
+    onUnmounted(() => {
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
+    })
 
     return {
       ...toRefs(state),

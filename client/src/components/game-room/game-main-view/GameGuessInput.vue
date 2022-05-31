@@ -40,7 +40,7 @@ export default defineComponent({
       selectedTitle: ''
     })
 
-    socket.on(SHARED_EVENTS.GAME_START_LOAD, () => {
+    socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
       state.anime = ''
       state.title = ''
       state.selectedAnime = ''
@@ -61,7 +61,7 @@ export default defineComponent({
     }
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.GAME_START_LOAD)
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
       socket.off(SHARED_EVENTS.UPDATE_GUESS)
     })
 

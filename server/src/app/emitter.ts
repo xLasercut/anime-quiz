@@ -75,6 +75,10 @@ class Emitter {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_STATE, gameState)
   }
 
+  public gameNewRound(sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.GAME_NEW_ROUND)
+  }
+
   public gameStartLoad(startPosition: number, guessTime: number, sid: string): void {
     this._client(sid).emit(SHARED_EVENTS.GAME_START_LOAD, startPosition, guessTime)
   }
