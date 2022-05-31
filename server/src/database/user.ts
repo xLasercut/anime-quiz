@@ -130,15 +130,15 @@ class AnimeQuizUserDb extends AbstractDb {
     const params = [ userId ].concat(songIds)
     const sql = `
       SELECT 
-        song_id 
+        song_id
       FROM user_songs 
       WHERE user_id = ? AND 
-            song_id NOT IN (${this._questionString(songIds.length)})
+            song_id IN (${this._questionString(songIds.length)})
     `
 
     const notExistsSongs = await this._all(sql, params)
 
-    if (notExistsSongs.length > 0) {
+    if (notExistsSongs.length !== songIds.length) {
       this._logger.writeLog(LOG_BASE.SONG004, { songIds: notExistsSongs })
       throw new GameDataValidationError('Song does not exist in list')
     }
