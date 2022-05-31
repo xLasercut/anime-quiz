@@ -11,8 +11,8 @@
         @change="changeVolume($event)"
       ></v-slider>
     </div>
-    <nav-btn color="error" icon="mdi-stop" v-if="$store.state.game.playing" @click="stopGame()">Stop</nav-btn>
-    <nav-btn color="success" icon="mdi-play" v-else @click="startGame()">Start</nav-btn>
+    <nav-btn color="error" icon="mdi-stop" v-if="showPlayBtn()" @click="stopGame()">Stop</nav-btn>
+    <nav-btn color="success" icon="mdi-play" v-if="showStopBtn()" @click="startGame()">Start</nav-btn>
     <nav-btn color="info" icon="mdi-cog" @click="openSettings()">Settings</nav-btn>
     <nav-btn color="warning" icon="mdi-backspace-reverse-outline" @click="back()">Back</nav-btn>
   </v-toolbar-items>
@@ -54,6 +54,14 @@ export default defineComponent({
       }
     }
 
+    function showPlayBtn(): boolean {
+      return (store.state.client.host || store.state.client.admin) && !store.state.game.playing
+    }
+
+    function showStopBtn(): boolean {
+      return (store.state.client.host || store.state.client.admin) && store.state.game.playing
+    }
+
     function startGame(): void {
       socket.emit(SHARED_EVENTS.START_GAME)
     }
@@ -67,7 +75,9 @@ export default defineComponent({
       openSettings,
       startGame,
       stopGame,
-      changeVolume
+      changeVolume,
+      showPlayBtn,
+      showStopBtn
     }
   }
 })
