@@ -6,16 +6,18 @@ import { Logger } from '../app/logging/logger'
 import { Server } from '../app/server'
 import { Emitter } from '../app/emitter'
 import { AqGameSettings } from '../shared/interfaces'
-import { NOTIFICATION_COLOR } from '../shared/constants'
+import { ChatManager } from '../game/chat'
 
 class GameSettingsHandler extends AbstractHandler {
   protected _io: Server
   protected _settings: GameSettings
+  protected _chat: ChatManager
 
-  constructor(logger: Logger, settings: GameSettings, io: Server, emitter: Emitter) {
+  constructor(logger: Logger, settings: GameSettings, io: Server, emitter: Emitter, chatManager: ChatManager) {
     super(logger, emitter)
     this._settings = settings
     this._io = io
+    this._chat = chatManager
   }
 
 
@@ -34,7 +36,8 @@ class GameSettingsHandler extends AbstractHandler {
         const roomId = this._getSocketGameRoom(socket)
         this._settings.editSettings(roomId, settings)
         this._emitter.updateGameSetting(this._settings.getGameSettings(roomId))
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Settings updated', socket.id)
+        const chatMsg = this._chat.generateSysMsg('Settings updated')
+        this._emitter.updateGameChat(chatMsg, roomId)
         callback(true)
       } catch (e) {
         errorHandler(e)

@@ -1,5 +1,5 @@
 import { AbstractHandler } from './abstract'
-import { AnimeQuizSongDb } from '../database/song'
+import { AnimeQuizMainDb } from '../database/main'
 import { Logger } from '../app/logging/logger'
 import { Emitter } from '../app/emitter'
 import { Socket } from '../types'
@@ -11,12 +11,12 @@ import { LOG_BASE } from '../app/logging/log-base'
 import { AnimeQuizUserDb } from '../database/user'
 
 class SongEditHandler extends AbstractHandler {
-  protected _songDb: AnimeQuizSongDb
+  protected _mainDb: AnimeQuizMainDb
   protected _userDb: AnimeQuizUserDb
 
-  constructor(logger: Logger, emitter: Emitter, songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb) {
+  constructor(logger: Logger, emitter: Emitter, mainDb: AnimeQuizMainDb, userDb: AnimeQuizUserDb) {
     super(logger, emitter)
-    this._songDb = songDb
+    this._mainDb = mainDb
     this._userDb = userDb
   }
 
@@ -44,8 +44,8 @@ class SongEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN005, { song: song })
         this._validateIsAdmin(socket)
-        await this._songDb.validateAnimeExist(song.anime_id)
-        await this._songDb.newSong(song)
+        await this._mainDb.validateAnimeExist(song.anime_id)
+        await this._mainDb.newSong(song)
         await this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${song.song_title}`, socket.id)
         await this._reloadSongListData(ROOM_IDS.SONG_EDIT)
         callback(true)
@@ -58,8 +58,8 @@ class SongEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN007, { song: song })
         this._validateIsAdmin(socket)
-        await this._songDb.validateSongsExist([song.song_id])
-        await this._songDb.deleteSong(song)
+        await this._mainDb.validateSongsExist([song.song_id])
+        await this._mainDb.deleteSong(song)
         await this._userDb.removeSongAll(song.song_id)
         await this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Deleted ${song.song_title}`, socket.id)
         await this._reloadSongListData(ROOM_IDS.SONG_EDIT)
@@ -73,9 +73,9 @@ class SongEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN006, { song: song })
         this._validateIsAdmin(socket)
-        await this._songDb.validateSongsExist([song.song_id])
-        await this._songDb.validateAnimeExist(song.anime_id)
-        await this._songDb.editSong(song)
+        await this._mainDb.validateSongsExist([song.song_id])
+        await this._mainDb.validateAnimeExist(song.anime_id)
+        await this._mainDb.editSong(song)
         await this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Edited ${song.song_title}`, socket.id)
         await this._reloadSongListData(ROOM_IDS.SONG_EDIT)
         callback(true)
@@ -86,10 +86,10 @@ class SongEditHandler extends AbstractHandler {
   }
 
   protected async _reloadSongListData(sid: string): Promise<void> {
-    this._emitter.adminUpdateSongList(await this._songDb.getAllSongList(), sid)
-    this._emitter.adminUpdateAnimeList(await this._songDb.getAnimeListAdmin(), sid)
-    this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), sid)
-    this._emitter.updateAnimeList(await this._songDb.getAnimeList(), sid)
+    this._emitter.adminUpdateSongList(await this._mainDb.getAllSongList(), sid)
+    this._emitter.adminUpdateAnimeList(await this._mainDb.getAnimeListAdmin(), sid)
+    this._emitter.updateSongTitleList(await this._mainDb.getSongTitleList(), sid)
+    this._emitter.updateAnimeList(await this._mainDb.getAnimeList(), sid)
   }
 }
 

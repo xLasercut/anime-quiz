@@ -23,6 +23,8 @@ import SongEditPanel from '../../components/song-edit/SongEditPanel.vue'
 import EditSongDialog from '../../components/song-edit/EditSongDialog.vue'
 import DeleteSongDialog from '../../components/song-edit/DeleteSongDialog.vue'
 import AdminDialog from '../../components/app/AdminDialog.vue'
+import EmojiEditPanel from '../../components/emoji-edit/EmojiEditPanel.vue'
+import EmojiEdit from '../../views/EmojiEdit.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -30,7 +32,8 @@ const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.ROOM_LIST]: RoomListPanel,
   [ROUTES.GAME_ROOM]: GameRoomPanel,
   [ROUTES.ANIME_EDIT]: AnimeEditPanel,
-  [ROUTES.SONG_EDIT]: SongEditPanel
+  [ROUTES.SONG_EDIT]: SongEditPanel,
+  [ROUTES.EMOJI_EDIT]: EmojiEditPanel
 }
 
 const _VIEW_MAPPING: { [key: string]: Component } = {
@@ -40,7 +43,8 @@ const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.ROOM_LIST]: RoomList,
   [ROUTES.GAME_ROOM]: GameRoom,
   [ROUTES.ANIME_EDIT]: AnimeEdit,
-  [ROUTES.SONG_EDIT]: SongEdit
+  [ROUTES.SONG_EDIT]: SongEdit,
+  [ROUTES.EMOJI_EDIT]: EmojiEdit
 }
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {

@@ -9,7 +9,7 @@ import { SHARED_EVENTS } from './shared/events'
 import { Emitter } from './app/emitter'
 import { authenticateUser, checkClientAuth } from './app/authentication'
 import { NOTIFICATION_COLOR } from './shared/constants'
-import { AnimeQuizSongDb } from './database/song'
+import { AnimeQuizMainDb } from './database/main'
 import { SongListHandler } from './handlers/song-list'
 import { RoomHandler } from './handlers/room'
 import { AnimeQuizUserDb } from './database/user'
@@ -22,6 +22,8 @@ import { GameStates } from './game/state'
 import { AnimeEditHandler } from './handlers/anime-edit'
 import { SongEditHandler } from './handlers/song-edit'
 import { AdminHandler } from './handlers/admin'
+import { ChatManager } from './game/chat'
+import { EmojiEditHandler } from './handlers/emoji-edit'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -33,20 +35,31 @@ const io = new Server(httpServer, {
 
 const emitter = new Emitter(io)
 const logger = new Logger(config)
-const songDb = new AnimeQuizSongDb(config, logger)
+const mainDb = new AnimeQuizMainDb(config, logger)
 const userDb = new AnimeQuizUserDb(config, logger)
 const gameSettings = new GameSettings(logger)
 const gameStates = new GameStates(logger, io)
+const chatManager = new ChatManager(logger)
 
 const ioErrorHandler = newIoErrorHandler(logger)
 
-const animeEditHandler = new AnimeEditHandler(logger, songDb, emitter)
-const songEditHandler = new SongEditHandler(logger, emitter, songDb, userDb)
-const adminHandler = new AdminHandler(logger, emitter, songDb)
-const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
+const animeEditHandler = new AnimeEditHandler(logger, mainDb, emitter)
+const songEditHandler = new SongEditHandler(logger, emitter, mainDb, userDb)
+const adminHandler = new AdminHandler(logger, emitter, mainDb)
+const emojiEditHandler = new EmojiEditHandler(logger, emitter, mainDb)
+const songListHandler = new SongListHandler(logger, emitter, mainDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
-const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)
-const gameHandler = new GameHandler(logger, io, emitter, userDb, songDb, gameSettings, gameStates)
+const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter, chatManager)
+const gameHandler = new GameHandler(
+  logger,
+  io,
+  emitter,
+  userDb,
+  mainDb,
+  gameSettings,
+  gameStates,
+  chatManager
+)
 
 function startHandlers(socket: Socket, errorHandler: Function): void {
   if (socket.data.auth) {
@@ -58,6 +71,7 @@ function startHandlers(socket: Socket, errorHandler: Function): void {
       animeEditHandler.start(socket, errorHandler)
       songEditHandler.start(socket, errorHandler)
       adminHandler.start(socket, errorHandler)
+      emojiEditHandler.start(socket, errorHandler)
     }
     emitter.updateClientData(socket.data.getClientData(), socket.id)
   }
@@ -128,6 +142,8 @@ io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
     })
     if (isGameRoom(roomId)) {
       emitter.updateGamePlayerList(io.getPlayerList(roomId), roomId)
+      const chatMsg = chatManager.generateSysMsg(`${socket.data.username} joined the room`)
+      emitter.updateGameChat(chatMsg, roomId)
     }
   } catch (e) {
     ioErrorHandler(e)
@@ -145,6 +161,8 @@ io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
     if (isGameRoom(roomId)) {
       io.reassignHost(roomId)
       emitter.updateGamePlayerList(io.getPlayerList(roomId), roomId)
+      const chatMsg = chatManager.generateSysMsg(`${socket.data.username} left the room`)
+      emitter.updateGameChat(chatMsg, roomId)
     }
   } catch (e) {
     ioErrorHandler(e)

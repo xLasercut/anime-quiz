@@ -66,6 +66,12 @@ interface AqAnime {
   anime_name: string[]
 }
 
+interface AqEmoji {
+  command: string
+  src: string
+  type: string
+}
+
 export {
   AqSong,
   AqUserSongs,
@@ -75,5 +81,6 @@ export {
   AqGamePlayer,
   AqGameGuess,
   AqGameState,
-  AqAnime
+  AqAnime,
+  AqEmoji
 }

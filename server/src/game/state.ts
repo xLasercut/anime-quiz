@@ -98,12 +98,12 @@ class GameStates {
     this._clearCountdown(roomId)
     let time = 0
     return new Promise((resolve) => {
-      time += tick
       this._states[roomId].countdown = setInterval(() => {
         if (time >= duration || this._io.isLoaded(roomId)) {
           this._clearCountdown(roomId)
           resolve()
         }
+        time += tick
       }, tick)
     })
   }

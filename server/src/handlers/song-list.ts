@@ -1,4 +1,4 @@
-import { AnimeQuizSongDb } from '../database/song'
+import { AnimeQuizMainDb } from '../database/main'
 import { Logger } from '../app/logging/logger'
 import { AbstractHandler } from './abstract'
 import { SHARED_EVENTS } from '../shared/events'
@@ -9,12 +9,12 @@ import { ROOM_IDS } from '../constants'
 import { Socket } from '../types'
 
 class SongListHandler extends AbstractHandler {
-  protected _songDb: AnimeQuizSongDb
+  protected _mainDb: AnimeQuizMainDb
   protected _userDb: AnimeQuizUserDb
 
-  constructor(logger: Logger, emitter: Emitter, songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb) {
+  constructor(logger: Logger, emitter: Emitter, mainDb: AnimeQuizMainDb, userDb: AnimeQuizUserDb) {
     super(logger, emitter)
-    this._songDb = songDb
+    this._mainDb = mainDb
     this._userDb = userDb
   }
 
@@ -40,7 +40,7 @@ class SongListHandler extends AbstractHandler {
       try {
         await this._userDb.validateLessThanFiftySongs(songIds)
         await this._userDb.validateUserExist(userId)
-        await this._songDb.validateSongsExist(songIds)
+        await this._mainDb.validateSongsExist(songIds)
         if (editMode === SONG_LIST_EDIT_MODE.ADD) {
           await this._userDb.validateSongsNotExistsInUserList(userId, songIds)
           await this._userDb.addSongs(userId, songIds)
@@ -61,9 +61,9 @@ class SongListHandler extends AbstractHandler {
   }
 
   protected async _reloadSongListData(sid: string): Promise<void> {
-    this._emitter.updateSongList(await this._songDb.getAllSongList(), sid)
-    this._emitter.updateAnimeList(await this._songDb.getAnimeList(), sid)
-    this._emitter.updateSongTitleList(await this._songDb.getSongTitleList(), sid)
+    this._emitter.updateSongList(await this._mainDb.getAllSongList(), sid)
+    this._emitter.updateAnimeList(await this._mainDb.getAnimeList(), sid)
+    this._emitter.updateSongTitleList(await this._mainDb.getSongTitleList(), sid)
     this._emitter.updateUserLists(await this._userDb.getUserLists(), sid)
   }
 }

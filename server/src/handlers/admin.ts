@@ -1,6 +1,6 @@
 import { AbstractHandler } from './abstract'
 import { Socket } from '../types'
-import { AnimeQuizSongDb } from '../database/song'
+import { AnimeQuizMainDb } from '../database/main'
 import { Logger } from '../app/logging/logger'
 import { Emitter } from '../app/emitter'
 import { SHARED_EVENTS } from '../shared/events'
@@ -8,11 +8,11 @@ import { NOTIFICATION_COLOR } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
 
 class AdminHandler extends AbstractHandler {
-  protected _songDb: AnimeQuizSongDb
+  protected _mainDb: AnimeQuizMainDb
 
-  constructor(logger: Logger, emitter: Emitter, songDb: AnimeQuizSongDb) {
+  constructor(logger: Logger, emitter: Emitter, mainDb: AnimeQuizMainDb) {
     super(logger, emitter)
-    this._songDb = songDb
+    this._mainDb = mainDb
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -20,7 +20,7 @@ class AdminHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN008)
         this._validateIsAdmin(socket)
-        await this._songDb.reloadDb()
+        await this._mainDb.reloadDb()
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database reloaded')
       } catch (e) {
         errorHandler(e)

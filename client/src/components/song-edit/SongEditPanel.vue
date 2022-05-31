@@ -11,7 +11,6 @@ import { MUTATIONS } from '../../plugins/store/mutations'
 import { ROUTES } from '../../plugins/routing/routes'
 import NavBtn from '../shared/buttons/NavBtn.vue'
 
-
 export default defineComponent({
   components: { NavBtn },
   setup() {

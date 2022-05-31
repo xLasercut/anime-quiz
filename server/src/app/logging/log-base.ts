@@ -140,6 +140,11 @@ const LOG_BASE = {
     reference: 'GAME001',
     level: LOG_LEVEL.INFO,
     message: 'new game'
+  },
+  GAME002: {
+    reference: 'GAME002',
+    level: LOG_LEVEL.INFO,
+    message: 'new round'
   }
 }
 

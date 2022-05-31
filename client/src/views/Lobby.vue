@@ -59,6 +59,14 @@ export default defineComponent({
           route: ROUTES.SONG_EDIT,
           requireAdmin: true,
           icon: 'mdi-database-edit'
+        },
+        {
+          color: 'error',
+          title: 'Emoji Edit',
+          description: 'Edit Emoji List',
+          route: ROUTES.EMOJI_EDIT,
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
         }
       ]
     })
