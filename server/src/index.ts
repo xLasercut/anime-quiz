@@ -21,6 +21,7 @@ import { GameSettingsHandler } from './handlers/settings'
 import { GameStates } from './game/state'
 import { AnimeEditHandler } from './handlers/anime-edit'
 import { SongEditHandler } from './handlers/song-edit'
+import { AdminHandler } from './handlers/admin'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -41,6 +42,7 @@ const ioErrorHandler = newIoErrorHandler(logger)
 
 const animeEditHandler = new AnimeEditHandler(logger, songDb, emitter)
 const songEditHandler = new SongEditHandler(logger, emitter, songDb, userDb)
+const adminHandler = new AdminHandler(logger, emitter, songDb)
 const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
 const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter)
@@ -55,6 +57,7 @@ function startHandlers(socket: Socket, errorHandler: Function): void {
     if (socket.data.admin) {
       animeEditHandler.start(socket, errorHandler)
       songEditHandler.start(socket, errorHandler)
+      adminHandler.start(socket, errorHandler)
     }
     emitter.updateClientData(socket.data.getClientData(), socket.id)
   }

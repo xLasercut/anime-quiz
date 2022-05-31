@@ -1,13 +1,27 @@
-import { Database } from 'sqlite3'
+import { Database, OPEN_READWRITE } from 'sqlite3'
 import { Logger } from '../app/logging/logger'
 
 class AbstractDb {
+  protected _filepath: string
   protected _db: Database
   protected _logger: Logger
 
-  constructor(db: Database, logger: Logger) {
-    this._db = db
+  constructor(filepath: string, logger: Logger) {
+    this._filepath = filepath
+    this._db = new Database(this._filepath, OPEN_READWRITE)
     this._logger = logger
+  }
+
+  public async reloadDb(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this._db.close((err) => {
+        if (err) {
+          reject(err)
+        }
+        this._db = new Database(this._filepath, OPEN_READWRITE)
+        resolve()
+      })
+    })
   }
 
   protected _questionString(size: number): string {

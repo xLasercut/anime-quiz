@@ -9,7 +9,7 @@ import { Logger } from '../app/logging/logger'
 
 class AnimeQuizUserDb extends AbstractDb {
   constructor(config: ServerConfig, logger: Logger) {
-    super(new Database(config.userDbPath, OPEN_READWRITE), logger)
+    super(config.userDbPath, logger)
   }
 
   public async getUserLists(): Promise<AqUserSongs[]> {

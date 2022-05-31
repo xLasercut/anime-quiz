@@ -11,7 +11,7 @@ import { VALID_SONG_TYPES } from '../shared/constants'
 
 class AnimeQuizSongDb extends AbstractDb {
   constructor(config: ServerConfig, logger: Logger) {
-    super(new Database(config.songDbPath, OPEN_READWRITE), logger)
+    super(config.songDbPath, logger)
   }
 
   public async getAllSongList(): Promise<AqSong[]> {

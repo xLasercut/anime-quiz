@@ -91,6 +91,11 @@ const LOG_BASE = {
     level: LOG_LEVEL.INFO,
     message: 'admin delete song'
   },
+  ADMIN008: {
+    reference: 'ADMIN008',
+    level: LOG_LEVEL.INFO,
+    message: 'admin reload song db'
+  },
   ROOM001: {
     reference: 'ROOM001',
     level: LOG_LEVEL.WARN,
