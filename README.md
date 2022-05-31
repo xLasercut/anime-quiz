@@ -5,10 +5,14 @@ Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-m
 - docker
 - node js
 - docker-compose
-- ngrok account
 
 ## Running server
 ### Locally
+create new user db by running
+```bash
+npm run init:userdb
+```
+
 In server directory, create a file called `config.env`
 
 input server passwords
@@ -22,18 +26,35 @@ Then run command:
 npm run dev:server
 ```
 
+### Docker
+create new user db by running
+```bash
+npm run init:userdb
+```
+
+In server directory, create a file called `config.env`
+
+input server passwords
+```dotenv
+SERVER_PASSWORD=
+ADMIN_PASSWORD=
+```
+
+Then run command:
+```bash
+docker compose build
+docker compose up
+```
 
 ## Adding user song lists
-Create <filename>.json in `server/data/amq-user` with a blank list, then restart the server.
-
-e.g. user1.json
-```json
-[]
+Run command to create new user
+```bash
+npm run create:user
 ````
 You can then add songs to the list by going to song list editor via the client
 
 ## Running client
 In root of project
 ```bash
-make run-client
+npm run dev:client
 ```

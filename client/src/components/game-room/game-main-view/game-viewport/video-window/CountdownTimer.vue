@@ -32,6 +32,10 @@ export default defineComponent({
       countdown: 0
     })
 
+    socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
+      state.show = false
+    })
+
     socket.on(SHARED_EVENTS.GAME_START_LOAD, (_startPosition: number, guessTime: number) => {
       state.show = false
       state.guessTime = guessTime
@@ -80,6 +84,7 @@ export default defineComponent({
       socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN)
       socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
       socket.off(SHARED_EVENTS.STOP_CLIENT_GAME)
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
     })
 
     return {

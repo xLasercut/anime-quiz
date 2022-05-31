@@ -67,11 +67,15 @@ export default defineComponent({
       socket.emit(SHARED_EVENTS.GAME_SONG_LOADED)
     }
 
+    socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
+      state.show = false
+    })
+
     socket.on(SHARED_EVENTS.GAME_START_LOAD, (startPosition: number, guessTime: number) => {
+      player.pauseVideo()
       state.show = false
       state.guessTime = guessTime
       state.startPosition = startPosition
-      player.pauseVideo()
       if (store.getters.isYoutubeVideo) {
         load()
       }
@@ -99,6 +103,7 @@ export default defineComponent({
       socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN)
       socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
       socket.off(SHARED_EVENTS.STOP_CLIENT_GAME)
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
     })
 
     function videoSrc(): string {
