@@ -11,8 +11,8 @@
         @change="changeVolume($event)"
       ></v-slider>
     </div>
-    <nav-btn color="error" icon="mdi-stop" v-if="showPlayBtn()" @click="stopGame()">Stop</nav-btn>
-    <nav-btn color="success" icon="mdi-play" v-if="showStopBtn()" @click="startGame()">Start</nav-btn>
+    <nav-btn color="error" icon="mdi-stop" v-if="showStopBtn()" @click="stopGame()">Stop</nav-btn>
+    <nav-btn color="success" icon="mdi-play" v-if="showPlayBtn()" @click="startGame()">Start</nav-btn>
     <nav-btn color="info" icon="mdi-cog" @click="openSettings()">Settings</nav-btn>
     <nav-btn color="warning" icon="mdi-backspace-reverse-outline" @click="back()">Back</nav-btn>
   </v-toolbar-items>
