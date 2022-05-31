@@ -38,6 +38,7 @@ class SongListHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.EDIT_USER_LIST, async (songIds: string[], userId: string, editMode: string, callback: Function) => {
       try {
+        await this._userDb.validateLessThanFiftySongs(songIds)
         await this._userDb.validateUserExist(userId)
         await this._songDb.validateSongsExist(songIds)
         if (editMode === SONG_LIST_EDIT_MODE.ADD) {

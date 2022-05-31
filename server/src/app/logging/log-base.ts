@@ -56,6 +56,11 @@ const LOG_BASE = {
     level: LOG_LEVEL.WARN,
     message: 'song edit song not exists in user list'
   },
+  SONG005: {
+    reference: 'SONG005',
+    level: LOG_LEVEL.WARN,
+    message: 'song edit song list too long'
+  },
   ADMIN001: {
     reference: 'ADMIN001',
     level: LOG_LEVEL.WARN,

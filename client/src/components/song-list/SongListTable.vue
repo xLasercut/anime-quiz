@@ -24,7 +24,7 @@
         @input="select"
         class="v-data-table__checkbox"
         :ripple="false"
-        v-show="isSelectDisabled(item)"
+        v-show="isSelectDisabled(item, isSelected)"
         :color="checkboxColor(isSelected)"
         :on-icon="checkboxOnIcon()"
       ></v-simple-checkbox>
@@ -114,7 +114,15 @@ export default defineComponent({
       songSelected.value = []
     })
 
-    function isSelectDisabled(song: AqSong): boolean {
+    watch(() => state.selectedUser, () => {
+      songSelected.value = []
+    })
+
+    function isSelectDisabled(song: AqSong, isSelected: boolean): boolean {
+      if (songSelected.value.length >= 50 && !isSelected) {
+        return false
+      }
+
       if (!state.selectedUser || state.editMode === SONG_LIST_EDIT_MODE.NONE) {
         return false
       }

@@ -108,6 +108,13 @@ class AnimeQuizUserDb extends AbstractDb {
     }
   }
 
+  public validateLessThanFiftySongs(songIds: string[]) {
+    if (songIds.length > 50) {
+      this._logger.writeLog(LOG_BASE.SONG005, { songIds: songIds.length })
+      throw new GameDataValidationError('Song list too long')
+    }
+  }
+
   public async validateSongsNotExistsInUserList(userId: string, songIds: string[]): Promise<void> {
     const params = [ userId ].concat(songIds)
     const sql = `
