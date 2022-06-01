@@ -79,6 +79,7 @@ class AnimeQuizMainDb extends AbstractDb {
       SELECT
         *
       FROM emojis
+      ORDER BY command
     `
     return await this._all(sql)
   }
