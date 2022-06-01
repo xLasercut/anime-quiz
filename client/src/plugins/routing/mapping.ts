@@ -25,6 +25,8 @@ import DeleteSongDialog from '../../components/song-edit/DeleteSongDialog.vue'
 import AdminDialog from '../../components/app/AdminDialog.vue'
 import EmojiEditPanel from '../../components/emoji-edit/EmojiEditPanel.vue'
 import EmojiEdit from '../../views/EmojiEdit.vue'
+import EditEmojiDialog from '../../components/emoji-edit/EditEmojiDialog.vue'
+import DeleteEmojiDialog from '../../components/emoji-edit/DeleteEmojiDialog.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -57,7 +59,10 @@ const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.EDIT_SONG_DIALOG]: EditSongDialog,
   [DIALOG_ROUTES.NEW_SONG_DIALOG]: EditSongDialog,
   [DIALOG_ROUTES.DELETE_SONG_DIALOG]: DeleteSongDialog,
-  [DIALOG_ROUTES.ADMIN]: AdminDialog
+  [DIALOG_ROUTES.ADMIN]: AdminDialog,
+  [DIALOG_ROUTES.EDIT_EMOJI_DIALOG]: EditEmojiDialog,
+  [DIALOG_ROUTES.NEW_EMOJI_DIALOG]: EditEmojiDialog,
+  [DIALOG_ROUTES.DELETE_EMOJI_DIALOG]: DeleteEmojiDialog
 }
 
 function viewComponent(): any {

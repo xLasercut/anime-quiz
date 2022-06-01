@@ -37,6 +37,7 @@ const AVATARS = {
 }
 
 const VALID_SONG_TYPES = [ 'OP', 'ED', 'INSERT' ]
+const VALID_EMOJI_TYPES = [ 'img', 'dec' ]
 
 export {
   NOTIFICATION_COLOR,
@@ -45,5 +46,6 @@ export {
   GAME_MODE,
   AVATARS,
   USERNAME_FORMAT,
-  VALID_SONG_TYPES
+  VALID_SONG_TYPES,
+  VALID_EMOJI_TYPES
 }

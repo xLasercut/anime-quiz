@@ -1,5 +1,5 @@
 import { ServerConfig } from '../app/config'
-import { AqAnime, AqSong } from '../shared/interfaces'
+import { AqAnime, AqEmoji, AqSong } from '../shared/interfaces'
 import { AqAnimeRaw, AqSongRaw } from '../interfaces'
 import { AbstractDb } from './abstract'
 import { Logger } from '../app/logging/logger'
@@ -11,6 +11,76 @@ import { VALID_SONG_TYPES } from '../shared/constants'
 class AnimeQuizMainDb extends AbstractDb {
   constructor(config: ServerConfig, logger: Logger) {
     super(config.mainDbPath, logger)
+  }
+
+  public async deleteEmoji(emoji: AqEmoji): Promise<void> {
+    const sql = `DELETE FROM emojis WHERE emoji_id = ?`
+    await this._run(sql, [ emoji.emoji_id ])
+  }
+
+  public async newEmoji(emoji: AqEmoji): Promise<void> {
+    const emojiId = `emoji-${v4()}`
+    const sql = `INSERT INTO emojis (emoji_id, command, src, type) VALUES (?,?,?,?)`
+    await this._run(sql, [
+      emojiId,
+      this._sanitizeString(emoji.command).toLowerCase(),
+      this._sanitizeString(emoji.src),
+      this._sanitizeString(emoji.type)
+    ])
+  }
+
+  public async editEmoji(emoji: AqEmoji): Promise<void> {
+    const sql = `
+      UPDATE emojis
+      SET 
+        command = ?,
+        src = ?,
+        type = ?
+      WHERE emoji_id = ?
+    `
+    await this._run(sql, [
+      this._sanitizeString(emoji.command).toLowerCase(),
+      this._sanitizeString(emoji.src),
+      this._sanitizeString(emoji.type),
+      emoji.emoji_id
+    ])
+  }
+
+  public async validateEmojiCommandNotExist(emojiCommand: string): Promise<void> {
+    const sql = `
+      SELECT
+        *
+      FROM emojis
+      WHERE emojis.command = ?
+    `
+    const emojis = await this._all(sql, [ this._sanitizeString(emojiCommand).toLowerCase() ])
+    if (emojis.length > 0) {
+      this._logger.writeLog(LOG_BASE.EMOJI_DATA_VALIDATION_FAILURE, { emojiCommand: emojiCommand })
+      throw new GameDataValidationError('Emoji command already exists')
+    }
+  }
+
+  public async validateEmojiExist(emojiId: string): Promise<void> {
+    const sql = `
+      SELECT
+        *
+      FROM emojis
+      WHERE emojis.emoji_id = ?
+    `
+    const emojis = await this._all(sql, [ emojiId ])
+    if (emojis.length <= 0) {
+      this._logger.writeLog(LOG_BASE.EMOJI_DATA_VALIDATION_FAILURE, { emojiId: emojiId })
+      throw new GameDataValidationError('Emoji does not exist')
+    }
+  }
+
+  public async getEmojiList(): Promise<AqEmoji[]> {
+    const sql = `
+      SELECT
+        *
+      FROM emojis
+    `
+    return await this._all(sql)
   }
 
   public async getAllSongList(): Promise<AqSong[]> {
@@ -164,7 +234,13 @@ class AnimeQuizMainDb extends AbstractDb {
         type = ?
       WHERE song_id = ?
     `
-    await this._run(sql, [ song.song_title || null, song.src || null, song.artist || null, song.type || null, songId ])
+    await this._run(sql, [
+      this._sanitizeString(song.song_title),
+      this._sanitizeString(song.src),
+      this._sanitizeString(song.artist),
+      this._sanitizeString(song.type),
+      songId
+    ])
   }
 
   protected async _deleteSong(songId: string): Promise<void> {
@@ -184,7 +260,13 @@ class AnimeQuizMainDb extends AbstractDb {
       VALUES 
         (?,?,?,?,?)
     `
-    await this._run(sql, [ songId, song.song_title, song.src, song.artist, song.type ])
+    await this._run(sql, [
+      songId,
+      this._sanitizeString(song.song_title),
+      this._sanitizeString(song.src),
+      this._sanitizeString(song.artist),
+      this._sanitizeString(song.type)
+    ])
   }
 
   protected async _addSongAnime(songId: string, animeIds: string[]): Promise<void> {
@@ -192,6 +274,13 @@ class AnimeQuizMainDb extends AbstractDb {
     for (const animeId of animeIds) {
       await this._run(sql, [ songId, animeId ])
     }
+  }
+
+  protected _sanitizeString(val: string): string | null {
+    if (!val) {
+      return null
+    }
+    return val.trim()
   }
 
   protected _validateString(val: string, msg: string): void {
@@ -216,7 +305,7 @@ class AnimeQuizMainDb extends AbstractDb {
 
     const existAnimes = await this._all(sql, animeIds)
     if (existAnimes.length < animeIds.length) {
-      this._logger.writeLog(LOG_BASE.ADMIN001, { animeIds: animeIds })
+      this._logger.writeLog(LOG_BASE.SONG_DATA_VALIDATION_FAILURE, { animeIds: animeIds })
       throw new GameDataValidationError('Anime does not exist')
     }
   }
@@ -229,7 +318,7 @@ class AnimeQuizMainDb extends AbstractDb {
   protected async _addAnime(animeId: string, animeNames: string[]): Promise<void> {
     const sql = `INSERT INTO animes (anime_id, anime_name) VALUES (?,?)`
     for (const animeName of animeNames) {
-      await this._run(sql, [ animeId, animeName ])
+      await this._run(sql, [ animeId, this._sanitizeString(animeName) ])
     }
   }
 
@@ -243,7 +332,7 @@ class AnimeQuizMainDb extends AbstractDb {
     const existSongs = await this._all(sql, songIds)
 
     if (existSongs.length !== songIds.length) {
-      this._logger.writeLog(LOG_BASE.SONG002, { songIds: songIds })
+      this._logger.writeLog(LOG_BASE.SONG_DATA_VALIDATION_FAILURE, { songIds: songIds })
       throw new GameDataValidationError('Song does not exist')
     }
   }

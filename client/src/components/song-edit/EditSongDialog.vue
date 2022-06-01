@@ -107,27 +107,20 @@ export default defineComponent({
       return VALID_SONG_TYPES.includes(type)
     }
 
-    function cleanUpVal(val: string): string {
-      if (!val) {
-        return ''
-      }
-      return val.trim()
-    }
-
     function updateTitle(title: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TITLE, cleanUpVal(title))
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TITLE, title)
     }
 
     function updateArtist(artist: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ARTIST, cleanUpVal(artist))
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ARTIST, artist)
     }
 
     function updateSource(source: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_SRC, cleanUpVal(source))
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_SRC, source)
     }
 
     function updateType(type: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, cleanUpVal(type))
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, type)
     }
 
     function updateAnimeIds(animeIds: string[]) {

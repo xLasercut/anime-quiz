@@ -52,40 +52,40 @@ class GameSettings {
 
   protected _validateNumber(val: number, min: number, max: number, msg: string): void {
     if (!val || typeof val !== 'number') {
-      this._logger.writeLog(LOG_BASE.SETTINGS001, { value: val })
+      this._logger.writeLog(LOG_BASE.GAME_SETTING_VALIDATION_FAILURE, { value: val })
       throw new GameDataValidationError(msg)
     }
 
     if (val < min || val > max) {
-      this._logger.writeLog(LOG_BASE.SETTINGS001, { value: val })
+      this._logger.writeLog(LOG_BASE.GAME_SETTING_VALIDATION_FAILURE, { value: val })
       throw new GameDataValidationError(msg)
     }
   }
 
   protected _validateGameMode(val: string, msg: string): void {
     if (!Object.values(GAME_MODE).includes(val)) {
-      this._logger.writeLog(LOG_BASE.SETTINGS001, { value: val })
+      this._logger.writeLog(LOG_BASE.GAME_SETTING_VALIDATION_FAILURE, { value: val })
       throw new GameDataValidationError(msg)
     }
   }
 
   protected _validateBoolean(val: boolean, msg: string): void {
     if (![ true, false ].includes(val)) {
-      this._logger.writeLog(LOG_BASE.SETTINGS001, { value: val })
+      this._logger.writeLog(LOG_BASE.GAME_SETTING_VALIDATION_FAILURE, { value: val })
       throw new GameDataValidationError(msg)
     }
   }
 
   protected _validateRoomExists(roomId: string): void {
     if (!(roomId in this._settings)) {
-      this._logger.writeLog(LOG_BASE.ROOM001, { roomName: roomId })
+      this._logger.writeLog(LOG_BASE.ROOM_DATA_VALIDATION_FAILURE, { roomName: roomId })
       throw new GameDataValidationError('Room does not exist')
     }
   }
 
   protected _validateUsers(users: string[], msg: string): void {
     if (!Array.isArray(users)) {
-      this._logger.writeLog(LOG_BASE.ROOM001, { value: users })
+      this._logger.writeLog(LOG_BASE.ROOM_DATA_VALIDATION_FAILURE, { value: users })
       throw new GameDataValidationError(msg)
     }
   }

@@ -103,14 +103,14 @@ class AnimeQuizUserDb extends AbstractDb {
     const users = await this._all(sql, [ userId ])
 
     if (users.length !== 1) {
-      this._logger.writeLog(LOG_BASE.SONG001, { userId: userId })
+      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { userId: userId })
       throw new GameDataValidationError('User does not exist')
     }
   }
 
   public validateLessThanFiftySongs(songIds: string[]) {
     if (songIds.length > 50) {
-      this._logger.writeLog(LOG_BASE.SONG005, { songIds: songIds.length })
+      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { songIds: songIds.length })
       throw new GameDataValidationError('Song list too long')
     }
   }
@@ -128,7 +128,7 @@ class AnimeQuizUserDb extends AbstractDb {
     const existSongs = await this._all(sql, params)
 
     if (existSongs.length > 0) {
-      this._logger.writeLog(LOG_BASE.SONG003, { songIds: existSongs })
+      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { songIds: songIds })
       throw new GameDataValidationError('Song already exists in list')
     }
   }
@@ -146,7 +146,7 @@ class AnimeQuizUserDb extends AbstractDb {
     const notExistsSongs = await this._all(sql, params)
 
     if (notExistsSongs.length !== songIds.length) {
-      this._logger.writeLog(LOG_BASE.SONG004, { songIds: notExistsSongs })
+      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { songIds: songIds })
       throw new GameDataValidationError('Song does not exist in list')
     }
   }

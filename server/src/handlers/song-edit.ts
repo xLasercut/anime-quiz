@@ -42,7 +42,7 @@ class SongEditHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.ADMIN_NEW_SONG, async (song: AqSong, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN005, { song: song })
+        this._logger.writeLog(LOG_BASE.ADMIN_SONG_EDIT, { song: song, type: 'add' })
         this._validateIsAdmin(socket)
         await this._mainDb.validateAnimeExist(song.anime_id)
         await this._mainDb.newSong(song)
@@ -56,7 +56,7 @@ class SongEditHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.ADMIN_DELETE_SONG, async (song: AqSong, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN007, { song: song })
+        this._logger.writeLog(LOG_BASE.ADMIN_SONG_EDIT, { song: song, type: 'delete' })
         this._validateIsAdmin(socket)
         await this._mainDb.validateSongsExist([song.song_id])
         await this._mainDb.deleteSong(song)
@@ -71,7 +71,7 @@ class SongEditHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.ADMIN_EDIT_SONG, async (song: AqSong, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN006, { song: song })
+        this._logger.writeLog(LOG_BASE.ADMIN_SONG_EDIT, { song: song, type: 'edit' })
         this._validateIsAdmin(socket)
         await this._mainDb.validateSongsExist([song.song_id])
         await this._mainDb.validateAnimeExist(song.anime_id)

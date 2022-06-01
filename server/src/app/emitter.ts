@@ -1,7 +1,7 @@
 import { SHARED_EVENTS } from '../shared/events'
 import {
   AqAnime,
-  AqClientData,
+  AqClientData, AqEmoji,
   AqGameChatMessage,
   AqGameGuess,
   AqGamePlayer,
@@ -37,6 +37,10 @@ class Emitter {
 
   public adminUpdateSongList(songList: AqSong[], sid: string): void {
     this._client(sid).emit(SHARED_EVENTS.ADMIN_UPDATE_SONG_LIST, songList)
+  }
+
+  public adminUpdateEmojiList(emojiList: AqEmoji[], sid: string): void {
+    this._client(sid).emit(SHARED_EVENTS.ADMIN_UPDATE_EMOJI_LIST, emojiList)
   }
 
   public updateSongTitleList(songTitleList: string[], sid: string = null): void {

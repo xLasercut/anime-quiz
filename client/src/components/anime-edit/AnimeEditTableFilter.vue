@@ -24,6 +24,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
+import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
   props: {
@@ -35,10 +36,8 @@ export default defineComponent({
     }
   },
   setup(_props, context) {
-    function updateFilter(prop: string, event: string | null): void {
-      const cleanedEvent = event || ''
-      context.emit(`update:${prop}`, cleanedEvent.trim())
-    }
+
+    const { updateFilter } = newTableHelpers(context)
 
     return {
       updateFilter

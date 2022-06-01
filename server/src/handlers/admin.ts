@@ -16,9 +16,9 @@ class AdminHandler extends AbstractHandler {
   }
 
   public start(socket: Socket, errorHandler: Function) {
-    socket.on(SHARED_EVENTS.ADMIN_RELOAD_SONG_DB, async () => {
+    socket.on(SHARED_EVENTS.ADMIN_RELOAD_MAIN_DB, async () => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN008)
+        this._logger.writeLog(LOG_BASE.ADMIN_RELOAD_DB, { db: 'main' })
         this._validateIsAdmin(socket)
         await this._mainDb.reloadDb()
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database reloaded')

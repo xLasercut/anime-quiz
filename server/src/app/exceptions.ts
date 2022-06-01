@@ -19,14 +19,14 @@ class GameDataValidationDcError extends Error {
 function newSocketErrorHandler(socket: Socket, logger: Logger, emitter: Emitter) {
   function errorHandler(e: Error) {
     if (e instanceof GameDataValidationError) {
-      logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username, error: e.message })
+      logger.writeLog(LOG_BASE.GAME_DATA_VALIDATION_FAILURE, { id: socket.id, username: socket.data.username, error: e.message })
       emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
     } else if (e instanceof GameDataValidationDcError) {
-      logger.writeLog(LOG_BASE.DATA001, { id: socket.id, username: socket.data.username, error: e.message })
+      logger.writeLog(LOG_BASE.GAME_DATA_VALIDATION_FAILURE, { id: socket.id, username: socket.data.username, error: e.message })
       emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
       socket.disconnect()
     } else {
-      logger.writeLog(LOG_BASE.SERVER004, { stack: e.stack })
+      logger.writeLog(LOG_BASE.UNHANDLED_ERROR, { stack: e.stack })
     }
   }
 
@@ -36,7 +36,7 @@ function newSocketErrorHandler(socket: Socket, logger: Logger, emitter: Emitter)
 
 function newIoErrorHandler(logger: Logger) {
   function errorHandler(e: Error) {
-    logger.writeLog(LOG_BASE.SERVER004, { stack: e.stack })
+    logger.writeLog(LOG_BASE.UNHANDLED_ERROR, { stack: e.stack })
   }
 
   return errorHandler

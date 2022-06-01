@@ -45,6 +45,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
   props: {
@@ -71,10 +72,7 @@ export default defineComponent({
       ]
     })
 
-    function updateFilter(prop: string, event: string | null): void {
-      const cleanedEvent = event || ''
-      context.emit(`update:${prop}`, cleanedEvent.trim())
-    }
+    const { updateFilter } = newTableHelpers(context)
 
     return {
       ...toRefs(state),

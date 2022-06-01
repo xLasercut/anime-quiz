@@ -1,7 +1,7 @@
 import { AdminStoreState, RootStoreState } from '../../assets/interfaces'
 import { Module } from 'vuex'
 import { MUTATIONS } from './mutations'
-import { AqAnime, AqSong } from '../../assets/shared/interfaces'
+import { AqAnime, AqEmoji, AqSong } from '../../assets/shared/interfaces'
 
 const DEFAULT_STATE: AdminStoreState = {
   animeList: [],
@@ -18,6 +18,13 @@ const DEFAULT_STATE: AdminStoreState = {
     song_title: '',
     artist: '',
     type: ''
+  },
+  emojiList: [],
+  emojiInEdit: {
+    emoji_id: '',
+    command: '',
+    src: '',
+    type: ''
   }
 }
 
@@ -32,6 +39,9 @@ const admin: Module<AdminStoreState, RootStoreState> = {
     },
     [MUTATIONS.SOCKET_ADMIN_UPDATE_SONG_LIST]: (state: AdminStoreState, songList: AqSong[]) => {
       state.songList = songList
+    },
+    [MUTATIONS.SOCKET_ADMIN_UPDATE_EMOJI_LIST]: (state: AdminStoreState, emojiList: AqEmoji[]) => {
+      state.emojiList = emojiList
     },
     [MUTATIONS.ADMIN_UPDATE_ANIME_ID]: (state: AdminStoreState, animeId: string) => {
       state.animeInEdit.anime_id = animeId
@@ -59,6 +69,18 @@ const admin: Module<AdminStoreState, RootStoreState> = {
     },
     [MUTATIONS.ADMIN_UPDATE_SONG_TYPE]: (state: AdminStoreState, type: string) => {
       state.songInEdit.type = type
+    },
+    [MUTATIONS.ADMIN_UPDATE_EMOJI_SRC]: (state: AdminStoreState, src: string) => {
+      state.emojiInEdit.src = src
+    },
+    [MUTATIONS.ADMIN_UPDATE_EMOJI_COMMAND]: (state: AdminStoreState, command: string) => {
+      state.emojiInEdit.command = command
+    },
+    [MUTATIONS.ADMIN_UPDATE_EMOJI_TYPE]: (state: AdminStoreState, type: string) => {
+      state.emojiInEdit.type = type
+    },
+    [MUTATIONS.ADMIN_UPDATE_EMOJI_ID]: (state: AdminStoreState, id: string) => {
+      state.emojiInEdit.emoji_id = id
     }
   },
   getters: {}

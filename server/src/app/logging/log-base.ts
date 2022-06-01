@@ -5,146 +5,129 @@ const LOG_LEVEL = {
   DEBUG: 'DEBUG'
 }
 
+const LOG_REFERENCES = {
+  SERVER001: 'SERVER001',
+  SERVER002: 'SERVER002',
+  SERVER003: 'SERVER003',
+  SERVER004: 'SERVER004',
+  SERVER005: 'SERVER005',
+  SERVER006: 'SERVER006',
+  SERVER007: 'SERVER007',
+  SERVER008: 'SERVER008',
+  SERVER009: 'SERVER009',
+  SERVER010: 'SERVER010',
+  SERVER011: 'SERVER011',
+  SERVER012: 'SERVER012',
+  SERVER013: 'SERVER013',
+  SERVER014: 'SERVER014',
+  SERVER015: 'SERVER015',
+  SERVER016: 'SERVER016',
+  SERVER017: 'SERVER017',
+  SERVER018: 'SERVER018',
+  SERVER019: 'SERVER019',
+  SERVER020: 'SERVER020'
+}
+
 const LOG_BASE = {
-  SERVER001: {
-    reference: 'SERVER001',
+  SERVER_RUNNING: {
+    reference: LOG_REFERENCES.SERVER001,
     level: LOG_LEVEL.INFO,
     message: 'server running'
   },
-  SERVER002: {
-    reference: 'SERVER002',
+  NEW_CONNECTION: {
+    reference: LOG_REFERENCES.SERVER002,
     level: LOG_LEVEL.INFO,
     message: 'new connection'
   },
-  SERVER003: {
-    reference: 'SERVER003',
+  CLIENT_DISCONNECTED: {
+    reference: LOG_REFERENCES.SERVER003,
     level: LOG_LEVEL.INFO,
     message: 'client disconnected'
   },
-  SERVER004: {
-    reference: 'SERVER004',
+  UNHANDLED_ERROR: {
+    reference: LOG_REFERENCES.SERVER004,
     level: LOG_LEVEL.ERROR,
     message: 'unhandled error'
   },
-  SERVER005: {
-    reference: 'SERVER005',
+  JOINED_ROOM: {
+    reference: LOG_REFERENCES.SERVER005,
     level: LOG_LEVEL.INFO,
     message: 'joined room'
   },
-  SERVER006: {
-    reference: 'SERVER006',
+  LEAVE_ROOM: {
     level: LOG_LEVEL.INFO,
+    reference: LOG_REFERENCES.SERVER006,
     message: 'left room'
   },
-  SONG001: {
-    reference: 'SONG001',
+  SONG_DATA_VALIDATION_FAILURE: {
+    reference: LOG_REFERENCES.SERVER007,
     level: LOG_LEVEL.WARN,
-    message: 'song edit user does not exist'
+    message: 'song data validation failure'
   },
-  SONG002: {
-    reference: 'SONG002',
+  USER_DATA_VALIDATION_FAILURE: {
+    reference: LOG_REFERENCES.SERVER008,
     level: LOG_LEVEL.WARN,
-    message: 'song edit song does not exist'
+    message: 'user data validation failure'
   },
-  SONG003: {
-    reference: 'SONG003',
+  ROOM_DATA_VALIDATION_FAILURE: {
+    reference: LOG_REFERENCES.SERVER009,
     level: LOG_LEVEL.WARN,
-    message: 'song edit song already exists in user list'
+    message: 'room data validation failure'
   },
-  SONG004: {
-    reference: 'SONG004',
+  GAME_SETTING_VALIDATION_FAILURE: {
+    reference: LOG_REFERENCES.SERVER010,
     level: LOG_LEVEL.WARN,
-    message: 'song edit song not exists in user list'
+    message: 'invalid game settings'
   },
-  SONG005: {
-    reference: 'SONG005',
-    level: LOG_LEVEL.WARN,
-    message: 'song edit song list too long'
-  },
-  ADMIN001: {
-    reference: 'ADMIN001',
-    level: LOG_LEVEL.WARN,
-    message: 'anime edit anime does not exist'
-  },
-  ADMIN002: {
-    reference: 'ADMIN002',
-    level: LOG_LEVEL.INFO,
-    message: 'admin add anime'
-  },
-  ADMIN003: {
-    reference: 'ADMIN003',
-    level: LOG_LEVEL.INFO,
-    message: 'admin edit anime'
-  },
-  ADMIN004: {
-    reference: 'ADMIN004',
-    level: LOG_LEVEL.INFO,
-    message: 'admin delete anime'
-  },
-  ADMIN005: {
-    reference: 'ADMIN005',
-    level: LOG_LEVEL.INFO,
-    message: 'admin add song'
-  },
-  ADMIN006: {
-    reference: 'ADMIN006',
-    level: LOG_LEVEL.INFO,
-    message: 'admin edit song'
-  },
-  ADMIN007: {
-    reference: 'ADMIN007',
-    level: LOG_LEVEL.INFO,
-    message: 'admin delete song'
-  },
-  ADMIN008: {
-    reference: 'ADMIN008',
-    level: LOG_LEVEL.INFO,
-    message: 'admin reload song db'
-  },
-  ROOM001: {
-    reference: 'ROOM001',
-    level: LOG_LEVEL.WARN,
-    message: 'room name does not exist'
-  },
-  ROOM002: {
-    reference: 'ROOM002',
-    level: LOG_LEVEL.WARN,
-    message: 'invalid room name'
-  },
-  ROOM003: {
-    reference: 'ROOM003',
-    level: LOG_LEVEL.WARN,
-    message: 'user not in game room/in multiple rooms'
-  },
-  SETTINGS001: {
-    reference: 'SETTINGS001',
-    level: LOG_LEVEL.WARN,
-    message: 'invalid settings'
-  },
-  DATA001: {
-    reference: 'DATA001',
+  GAME_DATA_VALIDATION_FAILURE: {
+    reference: LOG_REFERENCES.SERVER011,
     level: LOG_LEVEL.WARN,
     message: 'game data validation error'
   },
-  AUTH002: {
-    reference: 'AUTH002',
+  UNAUTHORISED_CLIENT: {
+    reference: LOG_REFERENCES.SERVER012,
     level: LOG_LEVEL.WARN,
     message: 'unauthorised connection'
   },
-  AUTH003: {
-    reference: 'AUTH003',
+  UNAUTHORISED_ADMIN: {
+    reference: LOG_REFERENCES.SERVER013,
     level: LOG_LEVEL.WARN,
     message: 'non admin user sending admin commands'
   },
-  GAME001: {
-    reference: 'GAME001',
+  NEW_GAME: {
+    reference: LOG_REFERENCES.SERVER014,
     level: LOG_LEVEL.INFO,
     message: 'new game'
   },
-  GAME002: {
-    reference: 'GAME002',
+  NEW_GAME_ROUND: {
+    reference: LOG_REFERENCES.SERVER015,
     level: LOG_LEVEL.INFO,
     message: 'new round'
+  },
+  ADMIN_ANIME_EDIT: {
+    reference: LOG_REFERENCES.SERVER016,
+    level: LOG_LEVEL.INFO,
+    message: 'admin anime edit'
+  },
+  ADMIN_SONG_EDIT: {
+    reference: LOG_REFERENCES.SERVER017,
+    level: LOG_LEVEL.INFO,
+    message: 'admin song edit'
+  },
+  ADMIN_RELOAD_DB: {
+    reference: LOG_REFERENCES.SERVER018,
+    level: LOG_LEVEL.INFO,
+    message: 'admin reload db'
+  },
+  EMOJI_DATA_VALIDATION_FAILURE: {
+    reference: LOG_REFERENCES.SERVER019,
+    level: LOG_LEVEL.WARN,
+    message: 'emoji data validation failure'
+  },
+  ADMIN_EMOJI_EDIT: {
+    reference: LOG_REFERENCES.SERVER020,
+    level: LOG_LEVEL.INFO,
+    message: 'admin emoji edit'
   }
 }
 

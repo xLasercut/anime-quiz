@@ -36,7 +36,7 @@ function authenticateUser(socket: Socket, username: string, password: string, av
 
 function checkClientAuth(logger: Logger, socket: Socket): void {
   if (!socket.data.auth) {
-    logger.writeLog(LOG_BASE.AUTH002, { id: socket.id })
+    logger.writeLog(LOG_BASE.UNAUTHORISED_CLIENT, { id: socket.id })
     socket.disconnect()
   }
 }

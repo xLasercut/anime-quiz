@@ -78,7 +78,7 @@ function startHandlers(socket: Socket, errorHandler: Function): void {
 }
 
 io.on('connection', (socket: Socket) => {
-  logger.writeLog(LOG_BASE.SERVER002, { id: socket.id })
+  logger.writeLog(LOG_BASE.NEW_CONNECTION, { id: socket.id })
   const errorHandler = newSocketErrorHandler(socket, logger, emitter)
   socket.data = new SocketData(socket.id)
   socket.data.clientAuthTimer = setTimeout((): void => {
@@ -100,7 +100,7 @@ io.on('connection', (socket: Socket) => {
 
   socket.on('disconnect', async () => {
     try {
-      logger.writeLog(LOG_BASE.SERVER003, { id: socket.id })
+      logger.writeLog(LOG_BASE.CLIENT_DISCONNECTED, { id: socket.id })
       clearTimeout(socket.data.clientAuthTimer)
     } catch (e) {
       errorHandler(e)
@@ -135,7 +135,7 @@ io.of('/').adapter.on('delete-room', (roomId: string) => {
 io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
   try {
     const socket = io.sockets.sockets.get(sid)
-    logger.writeLog(LOG_BASE.SERVER005, {
+    logger.writeLog(LOG_BASE.JOINED_ROOM, {
       id: sid,
       username: socket.data.username,
       roomId: roomId
@@ -153,7 +153,7 @@ io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
 io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
   try {
     const socket = io.sockets.sockets.get(sid)
-    logger.writeLog(LOG_BASE.SERVER006, {
+    logger.writeLog(LOG_BASE.LEAVE_ROOM, {
       id: sid,
       username: socket.data.username,
       roomId: roomId
@@ -170,5 +170,5 @@ io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
 })
 
 httpServer.listen(config.serverPort, async () => {
-  logger.writeLog(LOG_BASE.SERVER001, { port: config.serverPort })
+  logger.writeLog(LOG_BASE.SERVER_RUNNING, { port: config.serverPort })
 })

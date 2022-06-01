@@ -106,7 +106,7 @@ class GameHandler extends AbstractHandler {
         this._emitter.updateGameState(gameState, roomId)
         this._io.resetScore(roomId)
         this._emitter.updateGamePlayerList(this._io.getPlayerList(roomId), roomId)
-        this._logger.writeLog(LOG_BASE.GAME001, {
+        this._logger.writeLog(LOG_BASE.NEW_GAME, {
           roomId: roomId,
           settings: settings,
           state: gameState
@@ -138,7 +138,7 @@ class GameHandler extends AbstractHandler {
   protected async _newRound(roomId: string, settings: AqGameSettings): Promise<void> {
     const startPosition = Math.random()
     const gameState = this._states.getGameState(roomId)
-    this._logger.writeLog(LOG_BASE.GAME002, { state: gameState })
+    this._logger.writeLog(LOG_BASE.NEW_GAME_ROUND, { state: gameState, roomId: roomId })
     this._emitter.gameNewRound(roomId)
     this._io.newRound(roomId)
     this._emitter.updateGameState(gameState, roomId)
@@ -259,14 +259,14 @@ class GameHandler extends AbstractHandler {
 
   protected _validateNewRoomName(roomName: string): void {
     if (!ROOM_NAME_FORMAT.test(roomName)) {
-      this._logger.writeLog(LOG_BASE.ROOM002, { roomName: roomName })
+      this._logger.writeLog(LOG_BASE.ROOM_DATA_VALIDATION_FAILURE, { roomName: roomName })
       throw new GameDataValidationError('Invalid room name')
     }
   }
 
   protected _validateExistingRoomName(roomId: string): void {
     if (!this._io.isGameRoomExists(roomId)) {
-      this._logger.writeLog(LOG_BASE.ROOM001, { roomName: roomId })
+      this._logger.writeLog(LOG_BASE.ROOM_DATA_VALIDATION_FAILURE, { roomName: roomId })
       throw new GameDataValidationError('Room does not exist')
     }
   }

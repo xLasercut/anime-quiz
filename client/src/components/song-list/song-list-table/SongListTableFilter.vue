@@ -50,6 +50,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { SONG_TYPES } from '../../../assets/constants'
+import { newTableHelpers } from '../../../assets/table-helper'
 
 export default defineComponent({
   props: {
@@ -73,10 +74,7 @@ export default defineComponent({
       ].concat(SONG_TYPES)
     })
 
-    function updateFilter(prop: string, event: string | null): void {
-      const cleanedEvent = event || ''
-      context.emit(`update:${prop}`, cleanedEvent.trim())
-    }
+    const { updateFilter } = newTableHelpers(context)
 
     return {
       ...toRefs(state),

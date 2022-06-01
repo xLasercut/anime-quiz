@@ -1,4 +1,4 @@
-import { AqAnime, AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces'
+import { AqAnime, AqEmoji, AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces'
 
 interface SongListStoreState {
   songList: AqSong[],
@@ -12,6 +12,8 @@ interface AdminStoreState {
   animeInEdit: AqAnime
   songList: AqSong[]
   songInEdit: AqSong
+  emojiList: AqEmoji[]
+  emojiInEdit: AqEmoji
 }
 
 interface RootStoreState {
@@ -36,6 +38,7 @@ interface GameStoreState {
   currentSongCount: number
   maxSongCount: number
   playing: boolean
+  emojiList: AqEmoji[]
 }
 
 export {

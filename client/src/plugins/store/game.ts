@@ -1,7 +1,7 @@
 import { GameStoreState, RootStoreState } from '../../assets/interfaces'
 import { Module } from 'vuex'
 import { MUTATIONS } from './mutations'
-import { AqGamePlayer, AqGameState } from '../../assets/shared/interfaces'
+import { AqEmoji, AqGamePlayer, AqGameState } from '../../assets/shared/interfaces'
 
 const DEFAULT_STATE: GameStoreState = {
   players: [],
@@ -16,7 +16,8 @@ const DEFAULT_STATE: GameStoreState = {
   },
   currentSongCount: 0,
   maxSongCount: 0,
-  playing: false
+  playing: false,
+  emojiList: []
 }
 
 const game: Module<GameStoreState, RootStoreState> = {
@@ -30,6 +31,9 @@ const game: Module<GameStoreState, RootStoreState> = {
       state.playing = gameState.playing
       state.maxSongCount = gameState.maxSongCount
       state.currentSongCount = gameState.currentSongCount
+    },
+    [MUTATIONS.SOCKET_UPDATE_EMOJI_LIST]: (state: GameStoreState, emojiList: AqEmoji[]) => {
+      state.emojiList = emojiList
     },
     [MUTATIONS.RESET_STORE_STATE]: (state: GameStoreState) => {
       Object.assign(state, DEFAULT_STATE)

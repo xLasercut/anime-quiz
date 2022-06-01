@@ -26,7 +26,7 @@ export default defineComponent({
   components: { IconBtn, DialogSelect, DialogSlider, DialogActions },
   setup() {
     function reloadSongDb(): void {
-      socket.emit(SHARED_EVENTS.ADMIN_RELOAD_SONG_DB)
+      socket.emit(SHARED_EVENTS.ADMIN_RELOAD_MAIN_DB)
     }
 
     return {

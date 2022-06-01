@@ -17,8 +17,14 @@ const SONG_TYPES = [
   { text: 'INSERT', value: 'INSERT' }
 ]
 
+const EMOJI_TYPES = [
+  { text: 'IMG', value: 'img' },
+  { text: 'DEC', value: 'dec' }
+]
+
 export {
   CLIENT_CONSTANTS,
   LOCAL_STORAGE_CONSTANTS,
-  SONG_TYPES
+  SONG_TYPES,
+  EMOJI_TYPES
 }

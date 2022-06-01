@@ -67,6 +67,7 @@ interface AqAnime {
 }
 
 interface AqEmoji {
+  emoji_id: string
   command: string
   src: string
   type: string

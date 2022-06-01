@@ -39,7 +39,7 @@ class AnimeEditHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.ADMIN_EDIT_ANIME, async (anime: AqAnime, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN003, { anime: anime })
+        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: anime, type: 'edit' })
         this._validateIsAdmin(socket)
         await this._mainDb.validateAnimeExist([anime.anime_id])
         await this._mainDb.editAnime(anime)
@@ -53,7 +53,7 @@ class AnimeEditHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.ADMIN_NEW_ANIME, async (anime: AqAnime, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN002, { anime: anime })
+        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: anime, type: 'add' })
         this._validateIsAdmin(socket)
         await this._mainDb.newAnime(anime)
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} added`, socket.id)
@@ -66,7 +66,7 @@ class AnimeEditHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.ADMIN_DELETE_ANIME, async (anime: AqAnime, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN004, { anime: anime })
+        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: anime, type: 'delete' })
         this._validateIsAdmin(socket)
         await this._mainDb.validateAnimeExist([anime.anime_id])
         await this._mainDb.deleteAnime(anime)
