@@ -45,13 +45,13 @@ class SongListHandler extends AbstractHandler {
           await this._userDb.validateSongsNotExistsInUserList(userId, songIds)
           await this._userDb.addSongs(userId, songIds)
           this._emitter.updateUserLists(await this._userDb.getUserLists(), ROOM_IDS.SONG_LIST)
-          this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${songIds.length} songs to list`)
+          this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${songIds.length} songs to list`, socket.id)
         }
         else if (editMode === SONG_LIST_EDIT_MODE.REMOVE) {
           await this._userDb.validateSongsExistsInUserList(userId, songIds)
           await this._userDb.removeSongs(userId, songIds)
           this._emitter.updateUserLists(await this._userDb.getUserLists(), ROOM_IDS.SONG_LIST)
-          this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Removed ${songIds.length} songs from list`)
+          this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Removed ${songIds.length} songs from list`, socket.id)
         }
         callback(true)
       } catch (e) {
