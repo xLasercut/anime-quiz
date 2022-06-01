@@ -7,7 +7,7 @@
       <div :class="nameClass" v-if="!message.repeat">
         <b>{{ message.username }}</b>
       </div>
-      <div class="chat-text" v-html="message.text"></div>
+      <div class="chat-text" v-html="chatMessage()"></div>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@
 import { computed, defineComponent, PropType } from '@vue/composition-api'
 import GameAvatar from '../../shared/GameAvatar.vue'
 import { AqGameChatMessage } from '../../../assets/shared/interfaces'
+import { store } from '../../../plugins/store'
 
 export default defineComponent({
   components: { GameAvatar },
@@ -42,7 +43,27 @@ export default defineComponent({
       return classes.join(' ')
     })
 
-    return { nameClass, messageRowClass }
+    function chatMessage(): string {
+      let output = props.message.text
+      for (const emoji of store.state.game.emojiList) {
+        const command = new RegExp(`:${emoji.command}:`, 'gi')
+        const type = emoji.type
+        const src = emoji.src
+
+        if (type === 'img') {
+          output = output.replace(command, `<img src="${src}" class="emoji" />`)
+        } else if (type === 'dec') {
+          output = output.replace(command, src)
+        }
+      }
+      return output
+    }
+
+    return {
+      nameClass,
+      messageRowClass,
+      chatMessage
+    }
   }
 })
 </script>

@@ -51,6 +51,7 @@ class GameHandler extends AbstractHandler {
         this._emitter.updateAnimeList(await this._mainDb.getAnimeList(), socket.id)
         this._emitter.updateSongTitleList(await this._mainDb.getSongTitleList(), socket.id)
         this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
+        this._emitter.updateEmojiList(await this._mainDb.getEmojiList(), socket.id)
         socket.data.host = true
         this._emitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomId)
@@ -66,6 +67,7 @@ class GameHandler extends AbstractHandler {
         this._emitter.updateAnimeList(await this._mainDb.getAnimeList(), socket.id)
         this._emitter.updateSongTitleList(await this._mainDb.getSongTitleList(), socket.id)
         this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
+        this._emitter.updateEmojiList(await this._mainDb.getEmojiList(), socket.id)
         socket.data.host = false
         this._emitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomName)

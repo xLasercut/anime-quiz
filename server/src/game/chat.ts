@@ -12,25 +12,12 @@ class ChatManager {
   }
 
   public generateUserMsg(socket: Socket, msg: string): AqGameChatMessage {
-    return this._generateChatMsg(socket.data.username, socket.data.avatar, socket.data.admin, socket.id, msg)
+    return this._generateChatMsg(socket.data.username, socket.data.admin, socket.data.avatar, socket.id, msg)
   }
 
   public generateSysMsg(msg: string): AqGameChatMessage {
     return this._generateChatMsg('Eva Unit-01', false, AVATARS.EVA_UNIT_1,'system_message', msg)
   }
-
-  // public generateBotMsg(msg: string): AqGameChatMessage {
-  //   let chatBot = this._chatBotDatabase.getChatBot(msg)
-  //   if (chatBot) {
-  //     return this._generateChatMsg(
-  //       chatBot.userId,
-  //       chatBot.user,
-  //       false,
-  //       chatBot.avatar,
-  //       `:notes: ${chatBot.text} :notes:`
-  //     )
-  //   }
-  // }
 
   protected _generateChatMsg(username, admin, avatar, sid, msg: string): AqGameChatMessage {
     return {

@@ -19,6 +19,10 @@ class Emitter {
     this._io = io
   }
 
+  public updateEmojiList(emojiList: AqEmoji[], sid: string = null): void {
+    this._client(sid).emit(SHARED_EVENTS.UPDATE_EMOJI_LIST, emojiList)
+  }
+
   public systemNotification(color: string, message: string, sid: string = null): void {
     this._client(sid).emit(SHARED_EVENTS.SYSTEM_NOTIFICATION, color, message)
   }
