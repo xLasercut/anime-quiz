@@ -5,8 +5,8 @@
         <v-tooltip
           top v-model="show"
           :color="player.scoreColor"
-          min-width="150"
-          max-width="150"
+          min-width="100"
+          max-width="100"
         >
           <template #activator="{on}">
             <v-badge tile overlap dot :color="badgeColor(player)">

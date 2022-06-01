@@ -89,8 +89,9 @@ class GameHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.EDIT_GUESS, (guess: AqGameGuess) => {
       try {
         const roomId = this._getSocketGameRoom(socket)
-        socket.data.gameGuess = guess
-        socket.data.pendingScore = this._states.calculateScore(guess, roomId)
+        const _guess = this._sanitiseGuess(guess)
+        socket.data.gameGuess = _guess
+        socket.data.pendingScore = this._states.calculateScore(_guess, roomId)
         this._emitter.updateGuess(socket.data.gameGuess, socket.id)
       } catch (e) {
         errorHandler(e)
@@ -135,6 +136,13 @@ class GameHandler extends AbstractHandler {
         errorHandler(e)
       }
     })
+  }
+
+  protected _sanitiseGuess(guess: AqGameGuess): AqGameGuess {
+    return {
+      anime: (guess.anime || '').trim(),
+      title: (guess.title || '').trim()
+    }
   }
 
   protected async _newRound(roomId: string, settings: AqGameSettings): Promise<void> {
