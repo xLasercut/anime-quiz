@@ -66,12 +66,12 @@ class GameStates {
   public calculateScore(guess: AqGameGuess, roomId: string): number {
     const currentSong = this._getCurrentSong(roomId)
     let score = 0
-    if (guess.title.toLowerCase() === currentSong.song_title.toLowerCase()) {
+    if (guess.title.toLowerCase() === currentSong.song_title.toLowerCase().trim()) {
       score += 1
     }
 
     for (const anime of currentSong.anime_name) {
-      if (anime.toLowerCase() === guess.anime.toLowerCase()) {
+      if (anime.toLowerCase() === guess.anime.toLowerCase().trim()) {
         score += 1
         break
       }
