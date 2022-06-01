@@ -42,6 +42,19 @@ const game: Module<GameStoreState, RootStoreState> = {
   getters: {
     isYoutubeVideo: (state: GameStoreState): boolean => {
       return state.currentSong.src.includes('youtube')
+    },
+    emojiList: (state: GameStoreState): AqEmoji[] => {
+      return [...state.emojiList].sort((a, b) => {
+        const commandA = a.command
+        const commandB = b.command
+
+        if (commandA === commandB) {
+          return 0
+        } else if (commandA > commandB) {
+          return 1
+        }
+        return -1
+      })
     }
   }
 }

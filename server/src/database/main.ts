@@ -79,7 +79,6 @@ class AnimeQuizMainDb extends AbstractDb {
       SELECT
         *
       FROM emojis
-      ORDER BY command
     `
     return await this._all(sql)
   }
@@ -98,7 +97,6 @@ class AnimeQuizMainDb extends AbstractDb {
         INNER JOIN song_animes ON animes.anime_id = song_animes.anime_id
         INNER JOIN songs ON songs.song_id = song_animes.song_id
       GROUP BY songs.song_id
-      ORDER BY animes.anime_name
     `)
 
     return songList.map((row) => {
@@ -143,10 +141,9 @@ class AnimeQuizMainDb extends AbstractDb {
 
   public async getAnimeList(): Promise<string[]> {
     const animeList: AqAnimeRaw[] = await this._all(`
-      SELECT
-        *
+      SELECT DISTINCT
+        anime_name
       FROM animes
-      ORDER BY anime_name
     `)
 
     return animeList.map((anime) => {
@@ -161,7 +158,6 @@ class AnimeQuizMainDb extends AbstractDb {
         json_group_array(anime_name) as anime_name
       FROM animes
       GROUP BY anime_id
-      ORDER BY animes.anime_name
     `)
 
     return animeList.map((anime) => {
@@ -174,10 +170,9 @@ class AnimeQuizMainDb extends AbstractDb {
 
   public async getSongTitleList(): Promise<string[]> {
     const songList: AqSongRaw[] = await this._all(`
-      SELECT
-        *
+      SELECT DISTINCT
+        song_title
       FROM songs
-      ORDER BY songs.song_title
     `)
     return songList.map((song) => {
       return song.song_title

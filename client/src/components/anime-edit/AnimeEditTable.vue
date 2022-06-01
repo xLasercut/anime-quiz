@@ -71,7 +71,7 @@ export default defineComponent({
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
 
     function filteredAnimeList(): AqAnime[] {
-      return store.state.admin.animeList.filter((anime) => {
+      return store.getters.adminAnimeList.filter((anime: AqAnime) => {
         return anime.anime_name.join(',').toLowerCase().includes(state.animeNameFilter.toLowerCase()) &&
           anime.anime_id.toLowerCase().includes(state.animeIdFilter.toLowerCase())
       })

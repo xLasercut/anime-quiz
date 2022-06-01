@@ -67,7 +67,7 @@ export default defineComponent({
         const match = val.match(EMOJI_CHAT_FORMAT)
         if (match) {
           const command = match[0]
-          state.choices = store.state.game.emojiList.filter((emoji) => {
+          state.choices = store.getters.emojiList.filter((emoji: AqEmoji) => {
             return `:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase())
           })
           const currentLength = state.choices.length

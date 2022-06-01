@@ -83,7 +83,47 @@ const admin: Module<AdminStoreState, RootStoreState> = {
       state.emojiInEdit.emoji_id = id
     }
   },
-  getters: {}
+  getters: {
+    adminSongList: (state: AdminStoreState): AqSong[] => {
+      return [...state.songList].sort((a, b) => {
+        const animeA = a.anime_name[0]
+        const animeB = b.anime_name[0]
+
+        if (animeA === animeB) {
+          return 0
+        } else if (animeA > animeB) {
+          return 1
+        }
+        return -1
+      })
+    },
+    adminEmojiList: (state: AdminStoreState): AqEmoji[] => {
+      return [...state.emojiList].sort((a, b) => {
+        const commandA = a.command
+        const commandB = b.command
+
+        if (commandA === commandB) {
+          return 0
+        } else if (commandA > commandB) {
+          return 1
+        }
+        return -1
+      })
+    },
+    adminAnimeList: (state: AdminStoreState): AqAnime[] => {
+      return [...state.animeList].sort((a, b) => {
+        const nameA = a.anime_name
+        const nameB = b.anime_name
+
+        if (nameA === nameB) {
+          return 0
+        } else if (nameA > nameB) {
+          return 1
+        }
+        return -1
+      })
+    }
+  }
 }
 
 export {

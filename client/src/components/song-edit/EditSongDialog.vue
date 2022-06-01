@@ -16,7 +16,7 @@
           label="Anime ID"
           :rules="animeIdRules"
           @input="updateAnimeIds($event)"
-          :items="$store.state.admin.animeList"
+          :items="$store.getters.adminAnimeList"
           :value="$store.state.admin.songInEdit.anime_id"
           item-value="anime_id"
           item-text="anime_name"

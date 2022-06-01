@@ -6,7 +6,7 @@
         :value="animeFilter"
         @input="updateFilter('anime-filter', $event)"
         label="Anime"
-        :items="$store.state.songList.animeList"
+        :items="$store.getters.animeList"
         hide-details
         clearable
       ></v-combobox>
@@ -16,7 +16,7 @@
         :value="songTitleFilter"
         @input="updateFilter('song-title-filter', $event)"
         dense outlined label="Title"
-        :items="$store.state.songList.songTitleList"
+        :items="$store.getters.songTitleList"
         hide-details
         clearable
       ></v-combobox>

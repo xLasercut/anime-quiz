@@ -45,7 +45,7 @@ export default defineComponent({
 
     function chatMessage(): string {
       let output = props.message.text
-      for (const emoji of store.state.game.emojiList) {
+      for (const emoji of store.getters.emojiList) {
         const command = new RegExp(`:${emoji.command}:`, 'gi')
         const type = emoji.type
         const src = emoji.src

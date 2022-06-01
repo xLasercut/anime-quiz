@@ -41,6 +41,25 @@ const songList: Module<SongListStoreState, RootStoreState> = {
         return filteredList[0].song_id
       }
       return []
+    },
+    songList: (state: SongListStoreState): AqSong[] => {
+      return [...state.songList].sort((a, b) => {
+        const animeA = a.anime_name[0]
+        const animeB = b.anime_name[0]
+
+        if (animeA === animeB) {
+          return 0
+        } else if (animeA > animeB) {
+          return 1
+        }
+        return -1
+      })
+    },
+    animeList: (state: SongListStoreState): string[] => {
+      return [...state.animeList].sort()
+    },
+    songTitleList: (state: SongListStoreState): string[] => {
+      return [...state.songTitleList].sort()
     }
   }
 }

@@ -5,7 +5,7 @@
         filled
         label="Anime"
         v-model.trim="anime"
-        :items="$store.state.songList.animeList"
+        :items="$store.getters.animeList"
         @keyup.enter.native="sendGuess()"
         @change="sendGuess()"
         persistent-hint
@@ -18,7 +18,7 @@
         filled
         label="Title"
         v-model.trim="title"
-        :items="$store.state.songList.songTitleList"
+        :items="$store.getters.songTitleList"
         @keyup.enter.native="sendGuess()"
         @change="sendGuess()"
         persistent-hint

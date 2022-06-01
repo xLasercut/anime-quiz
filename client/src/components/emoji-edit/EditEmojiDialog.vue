@@ -71,7 +71,7 @@ export default defineComponent({
     })
 
     function validateDupeCommand(command: string): boolean {
-      for (const emoji of store.state.admin.emojiList) {
+      for (const emoji of store.getters.adminEmojiList) {
         if (!command || command.toLowerCase().trim() === emoji.command.toLowerCase()) {
           return false
         }
