@@ -1,25 +1,29 @@
 <template>
   <v-row justify="center">
-    <v-col>
+    <v-col cols="12" sm="6">
       <v-combobox
         filled
         label="Anime"
         v-model.trim="anime"
         :items="$store.state.songList.animeList"
         @keyup.enter.native="sendGuess()"
+        @change="sendGuess()"
         persistent-hint
         :hint="`Selected Anime: ${selectedAnime}`"
+        :disabled="disabled"
       ></v-combobox>
     </v-col>
-    <v-col>
+    <v-col cols="12" sm="6">
       <v-combobox
         filled
         label="Title"
         v-model.trim="title"
         :items="$store.state.songList.songTitleList"
         @keyup.enter.native="sendGuess()"
+        @change="sendGuess()"
         persistent-hint
         :hint="`Selected Title: ${selectedTitle}`"
+        :disabled="disabled"
       ></v-combobox>
     </v-col>
   </v-row>
@@ -37,7 +41,8 @@ export default defineComponent({
       anime: '',
       title: '',
       selectedAnime: '',
-      selectedTitle: ''
+      selectedTitle: '',
+      disabled: true
     })
 
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
@@ -45,11 +50,16 @@ export default defineComponent({
       state.title = ''
       state.selectedAnime = ''
       state.selectedTitle = ''
+      state.disabled = false
     })
 
     socket.on(SHARED_EVENTS.UPDATE_GUESS, (guess: AqGameGuess) => {
       state.selectedAnime = guess.anime
       state.selectedTitle = guess.title
+    })
+
+    socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
+      state.disabled = true
     })
 
     function sendGuess(): void {
@@ -63,6 +73,7 @@ export default defineComponent({
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
       socket.off(SHARED_EVENTS.UPDATE_GUESS)
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
     })
 
     return {

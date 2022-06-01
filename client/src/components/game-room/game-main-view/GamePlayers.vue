@@ -1,31 +1,33 @@
 <template>
   <v-row justify="center">
     <v-col v-for="player in $store.state.game.players" cols="auto" :key="player.sid">
-      <v-row no-gutters justify="center">
-        <v-tooltip
-          top v-model="show"
-          :color="player.scoreColor"
-          min-width="100"
-          max-width="100"
-        >
-          <template #activator="{on}">
-            <v-badge tile overlap dot :color="badgeColor(player)">
-              <game-avatar :avatar="player.avatar" :size="100"></game-avatar>
-            </v-badge>
-          </template>
-          {{ player.guess.anime || '...' }} - {{ player.guess.title || '...' }}
-        </v-tooltip>
-      </v-row>
-      <v-row no-gutters justify="center">
-        <v-sheet class="player-name">
-          {{ player.username }}
-        </v-sheet>
-      </v-row>
-      <v-row no-gutters justify="center">
-        <v-sheet class="player-score">
-          {{ player.score }}
-        </v-sheet>
-      </v-row>
+      <div :style="playerContainerStyle()">
+        <v-row no-gutters justify="center">
+          <v-tooltip
+            top v-model="show"
+            :color="player.scoreColor"
+            min-width="150"
+            max-width="150"
+          >
+            <template #activator="{on}">
+              <v-badge tile overlap dot :color="badgeColor(player)">
+                <game-avatar :avatar="player.avatar" :size="100"></game-avatar>
+              </v-badge>
+            </template>
+            {{ player.guess.anime || '...' }} - {{ player.guess.title || '...' }}
+          </v-tooltip>
+        </v-row>
+        <v-row no-gutters justify="center">
+          <v-sheet class="player-name">
+            {{ player.username }}
+          </v-sheet>
+        </v-row>
+        <v-row no-gutters justify="center">
+          <v-sheet class="player-score">
+            {{ player.score }}
+          </v-sheet>
+        </v-row>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -74,6 +76,13 @@ export default defineComponent({
       return 'primary'
     }
 
+    function playerContainerStyle() {
+      return {
+        width: '150px'
+      }
+    }
+
+
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
       socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
@@ -81,7 +90,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      badgeColor
+      badgeColor,
+      playerContainerStyle
     }
   }
 })

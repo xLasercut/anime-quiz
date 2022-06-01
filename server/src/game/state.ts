@@ -82,7 +82,15 @@ class GameStates {
 
   protected _getCurrentSong(roomId: string): AqSong {
     const state = this._states[roomId]
-    return state.gameList[state.currentSongCount]
+    return state.gameList[state.currentSongCount] || {
+      anime_name: [],
+      anime_id: [],
+      song_id: '',
+      type: '',
+      artist: '',
+      song_title: '',
+      src: ''
+    }
   }
 
   protected _clearCountdown(roomId: string): void {
