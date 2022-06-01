@@ -73,6 +73,11 @@ class Server extends SocketIoServer {
       this.sockets.sockets.get(sid).data.updateScore()
     }
   }
+
+  public kickPlayer(sid: string): void {
+    const socket: Socket = this.sockets.sockets.get(sid)
+    socket.disconnect()
+  }
 }
 
 export {

@@ -45,7 +45,7 @@ const ioErrorHandler = newIoErrorHandler(logger)
 
 const animeEditHandler = new AnimeEditHandler(logger, mainDb, emitter)
 const songEditHandler = new SongEditHandler(logger, emitter, mainDb, userDb)
-const adminHandler = new AdminHandler(logger, emitter, mainDb)
+const adminHandler = new AdminHandler(logger, emitter, io, mainDb)
 const emojiEditHandler = new EmojiEditHandler(logger, emitter, mainDb)
 const songListHandler = new SongListHandler(logger, emitter, mainDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
