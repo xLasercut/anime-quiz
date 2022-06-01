@@ -100,10 +100,11 @@ class AnimeQuizMainDb extends AbstractDb {
     `)
 
     return songList.map((row) => {
-      const { anime_name, song_title, anime_id, ...rest } = row
+      const { anime_name, song_title, anime_id, artist, ...rest } = row
       return {
         anime_name: JSON.parse(anime_name),
         song_title: song_title || '',
+        artist: artist || '',
         anime_id: Array.from(new Set(JSON.parse(anime_id))),
         ...rest
       }

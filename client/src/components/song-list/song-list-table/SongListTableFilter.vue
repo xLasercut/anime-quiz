@@ -22,6 +22,15 @@
       ></v-combobox>
     </v-col>
     <v-col>
+      <v-text-field
+        :value="songArtistFilter"
+        @input="updateFilter('song-artist-filter', $event)"
+        dense outlined label="Artist"
+        hide-details
+        clearable
+      ></v-text-field>
+    </v-col>
+    <v-col>
       <v-select
         :value="songTypeFilter"
         @input="updateFilter('song-type-filter', $event)"
@@ -64,6 +73,9 @@ export default defineComponent({
       required: true
     },
     songTitleFilter: {
+      required: true
+    },
+    songArtistFilter: {
       required: true
     }
   },

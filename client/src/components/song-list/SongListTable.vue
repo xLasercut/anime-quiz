@@ -37,6 +37,7 @@
           :anime-filter.sync="animeFilter"
           :song-title-filter.sync="songTitleFilter"
           :song-type-filter.sync="songTypeFilter"
+          :song-artist-filter.sync="songArtistFilter"
         ></song-list-table-filter>
         <song-list-table-actions
           v-model="editMode"
@@ -105,7 +106,8 @@ export default defineComponent({
       loading: false,
       animeFilter: '',
       songTypeFilter: '',
-      songTitleFilter: ''
+      songTitleFilter: '',
+      songArtistFilter: ''
     })
 
     const songSelected = ref<AqSong[]>([])
@@ -180,7 +182,8 @@ export default defineComponent({
         .filter((song: AqSong) => {
         return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
           song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
-          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())
+          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
+          song.artist.toLowerCase().includes(state.songArtistFilter.toLowerCase())
         })
     }
 
