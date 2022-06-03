@@ -173,5 +173,10 @@ io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
 })
 
 httpServer.listen(config.serverPort, async () => {
-  logger.writeLog(LOG_BASE.SERVER_RUNNING, { port: config.serverPort })
+  try {
+    logger.writeLog(LOG_BASE.SERVER_RUNNING, { port: config.serverPort })
+    await userDb.startBackTask()
+  } catch (e) {
+    throw e
+  }
 })

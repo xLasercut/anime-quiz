@@ -14,9 +14,12 @@
   "license": "MIT",
   "dependencies": {
     "@types/better-sqlite3": "^7.5.0",
+    "@types/node-cron": "^3.0.1",
     "@types/uuid": "^8.3.4",
     "better-sqlite3": "^7.5.3",
     "env-cmd": "^10.1.0",
+    "moment": "^2.29.3",
+    "node-cron": "^3.0.0",
     "nodemon": "^2.0.16",
     "socket.io": "^4.5.0",
     "ts-node": "^10.7.0",

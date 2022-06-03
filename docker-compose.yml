@@ -11,6 +11,7 @@ services:
     volumes:
       - ./server/data/:/home/aq_server/data
       - ./server/log/:/home/aq_server/log
+      - ./server/data-backup/:/home/aq_server/data-backup
     env_file:
       - server/config.env
     logging:

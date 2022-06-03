@@ -26,10 +26,22 @@ const LOG_REFERENCES = {
   SERVER018: 'SERVER018',
   SERVER019: 'SERVER019',
   SERVER020: 'SERVER020',
-  SERVER021: 'SERVER021'
+  SERVER021: 'SERVER021',
+  SERVER022: 'SERVER022',
+  SERVER023: 'SERVER023'
 }
 
 const LOG_BASE = {
+  USER_DATA_BACKUP_FAILED: {
+    reference: LOG_REFERENCES.SERVER023,
+    level: LOG_LEVEL.WARN,
+    message: 'user data backup failed'
+  },
+  USER_DATA_BACKUP: {
+    reference: LOG_REFERENCES.SERVER022,
+    level: LOG_LEVEL.INFO,
+    message: 'user data backup'
+  },
   ADMIN_KICK_PLAYER: {
     reference: LOG_REFERENCES.SERVER021,
     level: LOG_LEVEL.INFO,
