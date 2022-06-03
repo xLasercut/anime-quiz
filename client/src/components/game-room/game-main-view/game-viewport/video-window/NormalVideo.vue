@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onUnmounted, reactive, ref, toRefs } from '@vue/composition-api'
+import { defineComponent, inject, onMounted, onUnmounted, reactive, ref, toRefs } from '@vue/composition-api'
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { socket } from '../../../../../plugins/socket'
-import { calculateStartPosition } from '../../../../../assets/game-helper'
+import { calculateStartPosition, getDefaultVolume } from '../../../../../assets/game-helper'
 import { store } from '../../../../../plugins/store'
 import { CLIENT_EVENTS } from '../../../../../assets/events'
 
@@ -106,6 +106,10 @@ export default defineComponent({
 
       return ''
     }
+
+    onMounted(() => {
+      changeVolume(getDefaultVolume())
+    })
 
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.GAME_START_LOAD)

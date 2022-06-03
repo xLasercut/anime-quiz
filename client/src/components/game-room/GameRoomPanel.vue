@@ -7,7 +7,7 @@
         dense
         :min="0"
         :max="100"
-        :value="50"
+        :value="volume"
         @change="changeVolume($event)"
       ></v-slider>
     </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from '@vue/composition-api'
+import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
 import NavBtn from '../shared/buttons/NavBtn.vue'
 import { store } from '../../plugins/store'
 import { MUTATIONS } from '../../plugins/store/mutations'
@@ -27,15 +27,22 @@ import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import { CLIENT_EVENTS } from '../../assets/events'
+import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
+import { getDefaultVolume } from '../../assets/game-helper'
 
 export default defineComponent({
   components: { NavBtn },
   setup() {
+    const state = reactive({
+      volume: getDefaultVolume()
+    })
+
     const _changeVolume = inject<Function>(CLIENT_EVENTS.CHANGE_VOLUME)
 
     function changeVolume(volume: number): void {
       if (_changeVolume) {
         _changeVolume(volume)
+        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = volume
       }
     }
 
@@ -77,7 +84,8 @@ export default defineComponent({
       stopGame,
       changeVolume,
       showPlayBtn,
-      showStopBtn
+      showStopBtn,
+      ...toRefs(state)
     }
   }
 })

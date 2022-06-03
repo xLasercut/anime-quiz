@@ -10,9 +10,7 @@
       </v-row>
       <v-row no-gutters justify="center">
         <v-col cols="12" sm="8" md="6" lg="5">
-          <v-sheet class="answer-container">
-            {{ show ? $store.state.game.currentSong.anime_name[0] : '?' }}
-          </v-sheet>
+          <component :is="component()"></component>
         </v-col>
       </v-row>
     </v-col>
@@ -23,6 +21,8 @@
 import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
 import { SHARED_EVENTS } from '../../../assets/shared/events'
 import { socket } from '../../../plugins/socket'
+import MainAnswerAnswerDisplay from './game-main-answer-display/MainAnswerAnswerDisplay.vue'
+import MainAnswerQuestionDisplay from './game-main-answer-display/MainAnswerQuestionDisplay.vue'
 
 export default defineComponent({
   setup() {
@@ -43,8 +43,16 @@ export default defineComponent({
       socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
     })
 
+    function component() {
+      if (state.show) {
+        return MainAnswerAnswerDisplay
+      }
+      return MainAnswerQuestionDisplay
+    }
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      component
     }
   }
 })
@@ -54,12 +62,5 @@ export default defineComponent({
 .count-container {
   border-radius: 20px 20px 0 0;
   text-align: center;
-}
-
-.answer-container {
-  font-size: 16pt;
-  text-align: center;
-  border-radius: 5px;
-  padding: 5px;
 }
 </style>

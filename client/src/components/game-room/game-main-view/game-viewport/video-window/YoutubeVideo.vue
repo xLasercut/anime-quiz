@@ -15,7 +15,7 @@ import { socket } from '../../../../../plugins/socket'
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { store } from '../../../../../plugins/store'
 import { getIdFromURL } from 'vue-youtube-embed'
-import { calculateStartPosition } from '../../../../../assets/game-helper'
+import { calculateStartPosition, getDefaultVolume } from '../../../../../assets/game-helper'
 import { CLIENT_EVENTS } from '../../../../../assets/events'
 
 export default defineComponent({
@@ -47,6 +47,7 @@ export default defineComponent({
 
     function ready(event: any): void {
       player = event.target
+      changeVolume(getDefaultVolume())
     }
 
     function load(): void {
