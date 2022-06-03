@@ -203,15 +203,14 @@ class GameHandler extends AbstractHandler {
       const userSongs = this._songDb.getSelectedUserSongs(userList.song_id)
       for (const song of userSongs) {
         if (!songIds.has(song.song_id)) {
-          if (settings.duplicate) {
+          if (!settings.duplicate) {
             if (!this._isDupeAnime(animeIds, song)) {
               songList.push(song)
               songIds.add(song.song_id)
               animeIds = animeIds.concat(song.anime_id)
               songCount += 1
             }
-          }
-          else {
+          } else {
             songList.push(song)
             songIds.add(song.song_id)
             songCount += 1
