@@ -23,7 +23,7 @@
           :value="$store.state.admin.emojiInEdit.type"
           disabled
         ></dialog-select>
-        <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -43,31 +43,31 @@ import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import { socket } from '../../plugins/socket'
 import { VALID_EMOJI_TYPES } from '../../assets/shared/constants'
+import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
   components: { DialogMultiAutocomplete, DialogSelect, DialogMultiCombobox, DialogTextField, DialogActions },
   setup(_props, context) {
     const state = reactive({
       valid: false,
-      emojiTypes: EMOJI_TYPES,
-      disabled: false
+      emojiTypes: EMOJI_TYPES
     })
+
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
 
     function submitEdit(): void {
       if (state.valid) {
-        state.disabled = true
+        editActionDisabled.value = true
         socket.emit(SHARED_EVENTS.ADMIN_DELETE_EMOJI, store.state.admin.emojiInEdit, (proceed: boolean) => {
-          if (proceed) {
-            state.disabled = false
-            context.emit('dialog:close')
-          }
+          editActionComplete(proceed)
         })
       }
     }
 
     return {
       ...toRefs(state),
-      submitEdit
+      submitEdit,
+      editActionDisabled
     }
   }
 })

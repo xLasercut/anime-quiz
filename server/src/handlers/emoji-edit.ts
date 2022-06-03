@@ -41,6 +41,7 @@ class EmojiEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_EMOJI_EDIT, { emoji: emoji, type: 'add' })
         this._validateIsAdmin(socket)
+        this._emojiDb.validateIsDbLocked()
         this._emojiDb.validateEmojiCommandNotExist(emoji.command)
         this._emojiDb.newEmoji(emoji)
         this._emitter.adminUpdateEmojiList(this._emojiDb.getEmojiList(), ROOM_IDS.EMOJI_EDIT)
@@ -48,6 +49,7 @@ class EmojiEditHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
 
@@ -55,6 +57,7 @@ class EmojiEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_EMOJI_EDIT, { emoji: emoji, type: 'edit' })
         this._validateIsAdmin(socket)
+        this._emojiDb.validateIsDbLocked()
         this._emojiDb.validateEmojiExist(emoji.emoji_id)
         this._emojiDb.validateEmojiCommandNotExist(emoji.command)
         this._emojiDb.editEmoji(emoji)
@@ -63,6 +66,7 @@ class EmojiEditHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
 
@@ -70,6 +74,7 @@ class EmojiEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_EMOJI_EDIT, { emoji: emoji, type: 'delete' })
         this._validateIsAdmin(socket)
+        this._emojiDb.validateIsDbLocked()
         this._emojiDb.validateEmojiExist(emoji.emoji_id)
         this._emojiDb.deleteEmoji(emoji)
         this._emitter.adminUpdateEmojiList(this._emojiDb.getEmojiList(), ROOM_IDS.EMOJI_EDIT)
@@ -77,6 +82,7 @@ class EmojiEditHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
   }

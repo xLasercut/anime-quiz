@@ -38,6 +38,8 @@ class SongListHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.EDIT_USER_LIST, (songIds: string[], userId: string, editMode: string, callback: Function) => {
       try {
+        this._songDb.validateIsDbLocked()
+        this._userDb.validateIsDbLocked()
         this._userDb.validateLessThanFiftySongs(songIds)
         this._userDb.validateUserExist(userId)
         this._songDb.validateSongsExist(songIds)
@@ -56,6 +58,7 @@ class SongListHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
   }

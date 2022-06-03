@@ -40,6 +40,12 @@
       <v-col cols="auto">
         <icon-btn @click="reloadDb()" color="warning" icon="mdi-reload">Reload DB</icon-btn>
       </v-col>
+      <v-col cols="auto">
+        <icon-btn icon="mdi-lock" color="error" @click="lockDb()">Lock DB</icon-btn>
+      </v-col>
+      <v-col cols="auto">
+        <icon-btn icon="mdi-lock-open" color="success" @click="unlockDb()">Unlock DB</icon-btn>
+      </v-col>
     </v-row>
   </v-card-text>
 </template>
@@ -73,10 +79,20 @@ export default defineComponent({
       }
     }
 
+    function lockDb(): void {
+      socket.emit(SHARED_EVENTS.ADMIN_LOCK_DB)
+    }
+
+    function unlockDb(): void {
+      socket.emit(SHARED_EVENTS.ADMIN_UNLOCK_DB)
+    }
+
     return {
       reloadDb,
       ...toRefs(state),
-      kickPlayer
+      kickPlayer,
+      lockDb,
+      unlockDb
     }
   }
 })

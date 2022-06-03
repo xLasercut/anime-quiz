@@ -12,9 +12,9 @@
           :rules="rules"
           @input="updateAnimeNames($event)"
           :value="$store.state.admin.animeInEdit.anime_name"
-          :disabled="disabled"
+          :disabled="editActionDisabled"
         ></dialog-multi-combobox>
-        <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -30,6 +30,7 @@ import { MUTATIONS } from '../../plugins/store/mutations'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
+import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
   components: { DialogMultiCombobox, DialogTextField, DialogActions },
@@ -39,8 +40,7 @@ export default defineComponent({
       rules: [
         (v: string[]) => v.length > 0 || 'Name can\'t be blank',
         (v: string[]) => validAnimeName(v) || 'Invalid anime name'
-      ],
-      disabled: false
+      ]
     })
 
     function validAnimeName(animeNames: string[]): boolean {
@@ -56,23 +56,19 @@ export default defineComponent({
       store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, names)
     }
 
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
+
     function submitEdit(): void {
       if (state.valid) {
-        state.disabled = true
+        editActionDisabled.value = true
         if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_ANIME_DIALOG) {
           socket.emit(SHARED_EVENTS.ADMIN_EDIT_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
-            if (proceed) {
-              state.disabled = false
-              context.emit('dialog:close')
-            }
+            editActionComplete(proceed)
           })
         }
         else if (store.state.client.dialogView === DIALOG_ROUTES.NEW_ANIME_DIALOG) {
           socket.emit(SHARED_EVENTS.ADMIN_NEW_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
-            if (proceed) {
-              state.disabled = false
-              context.emit('dialog:close')
-            }
+            editActionComplete(proceed)
           })
         }
       }
@@ -81,7 +77,8 @@ export default defineComponent({
     return {
       ...toRefs(state),
       submitEdit,
-      updateAnimeNames
+      updateAnimeNames,
+      editActionDisabled
     }
   }
 })

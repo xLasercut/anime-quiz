@@ -53,6 +53,7 @@ import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import { AqGameSettings } from '../../assets/shared/interfaces'
 import { store } from '../../plugins/store'
+import { newTableHelpers } from '../../assets/table-helper'
 
 interface GameModeItem {
   text: string
@@ -95,8 +96,11 @@ export default defineComponent({
       ]
     })
 
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
+
     function setSettings() {
       if (state.valid) {
+        editActionDisabled.value = true
         const settings: AqGameSettings = {
           songCount: state.songCount,
           guessTime: state.guessTime,
@@ -105,9 +109,7 @@ export default defineComponent({
           users: state.users
         }
         socket.emit(SHARED_EVENTS.EDIT_GAME_SETTINGS, settings, (proceed: boolean) => {
-          if (proceed) {
-            context.emit('dialog:close')
-          }
+          editActionComplete(proceed)
         })
       }
     }
@@ -125,7 +127,7 @@ export default defineComponent({
     })
 
     function disabled(): boolean {
-      if (store.state.game.playing) {
+      if (store.state.game.playing || editActionDisabled.value) {
         return true
       }
       return !store.state.client.admin && !store.state.client.host

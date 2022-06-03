@@ -41,11 +41,11 @@ export default defineComponent({
         state.disabled = true
         socket.emit(SHARED_EVENTS.NEW_GAME_ROOM, state.roomName, (proceed: boolean) => {
           if (proceed) {
-            state.disabled = false
             state.roomName = ''
             context.emit('dialog:close')
             store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.GAME_ROOM)
           }
+          state.disabled = false
         })
       }
     }

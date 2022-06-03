@@ -16,6 +16,12 @@ class GameDataValidationDcError extends Error {
   }
 }
 
+class DatabaseLockedError extends Error {
+  constructor(message: string) {
+    super(message)
+  }
+}
+
 function newSocketErrorHandler(socket: Socket, logger: Logger, emitter: Emitter) {
   function errorHandler(e: Error) {
     if (e instanceof GameDataValidationError) {
@@ -25,6 +31,8 @@ function newSocketErrorHandler(socket: Socket, logger: Logger, emitter: Emitter)
       logger.writeLog(LOG_BASE.GAME_DATA_VALIDATION_FAILURE, { id: socket.id, username: socket.data.username, error: e.message })
       emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
       socket.disconnect()
+    } else if (e instanceof DatabaseLockedError) {
+      emitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
     } else {
       logger.writeLog(LOG_BASE.UNHANDLED_ERROR, { stack: e.stack })
     }
@@ -46,5 +54,6 @@ export {
   newSocketErrorHandler,
   newIoErrorHandler,
   GameDataValidationError,
-  GameDataValidationDcError
+  GameDataValidationDcError,
+  DatabaseLockedError
 }

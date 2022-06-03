@@ -20,27 +20,27 @@
           :value="$store.state.admin.songInEdit.anime_id"
           item-value="anime_id"
           item-text="anime_name"
-          :disabled="disabled"
+          :disabled="editActionDisabled"
         ></dialog-multi-autocomplete>
         <dialog-text-field
           label="Title"
           :value="$store.state.admin.songInEdit.song_title"
           @input="updateTitle($event)"
           :rules="titleRules"
-          :disabled="disabled"
+          :disabled="editActionDisabled"
         ></dialog-text-field>
         <dialog-text-field
           label="Artist"
           :value="$store.state.admin.songInEdit.artist"
           @input="updateArtist($event)"
-          :disabled="disabled"
+          :disabled="editActionDisabled"
         ></dialog-text-field>
         <dialog-text-field
           label="Source"
           :value="$store.state.admin.songInEdit.src"
           @input="updateSource($event)"
           :rules="sourceRules"
-          :disabled="disabled"
+          :disabled="editActionDisabled"
         ></dialog-text-field>
         <dialog-select
           label="Type"
@@ -48,9 +48,9 @@
           :value="$store.state.admin.songInEdit.type"
           @input="updateType($event)"
           :rules="typeRules"
-          :disabled="disabled"
+          :disabled="editActionDisabled"
         ></dialog-select>
-        <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -70,6 +70,7 @@ import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import { socket } from '../../plugins/socket'
 import { VALID_SONG_TYPES } from '../../assets/shared/constants'
+import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
   components: { DialogMultiAutocomplete, DialogSelect, DialogMultiCombobox, DialogTextField, DialogActions },
@@ -90,8 +91,7 @@ export default defineComponent({
       typeRules: [
         (v: string) => !!v || 'Type required',
         (v: string) => validType(v) || 'Invalid type'
-      ],
-      disabled: false
+      ]
     })
 
     function validAnimeIds(animeIds: string[]): boolean {
@@ -127,23 +127,19 @@ export default defineComponent({
       store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_ID, animeIds)
     }
 
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
+
     function submitEdit(): void {
       if (state.valid) {
-        state.disabled = true
+        editActionDisabled.value = true
         if (store.state.client.dialogView === DIALOG_ROUTES.NEW_SONG_DIALOG) {
           socket.emit(SHARED_EVENTS.ADMIN_NEW_SONG, store.state.admin.songInEdit, (proceed: boolean) => {
-            if (proceed) {
-              state.disabled = false
-              context.emit('dialog:close')
-            }
+            editActionComplete(proceed)
           })
         }
         else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_SONG_DIALOG) {
           socket.emit(SHARED_EVENTS.ADMIN_EDIT_SONG, store.state.admin.songInEdit, (proceed: boolean) => {
-            if (proceed) {
-              state.disabled = false
-              context.emit('dialog:close')
-            }
+            editActionComplete(proceed)
           })
         }
       }
@@ -156,7 +152,8 @@ export default defineComponent({
       updateTitle,
       updateArtist,
       updateSource,
-      updateType
+      updateType,
+      editActionDisabled
     }
   }
 })

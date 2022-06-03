@@ -63,6 +63,7 @@ class GameHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
 

@@ -12,7 +12,7 @@
           :value="$store.state.admin.animeInEdit.anime_name"
           disabled
         ></dialog-multi-combobox>
-        <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -26,30 +26,30 @@ import DialogTextField from '../shared/dialog/DialogTextField.vue'
 import { store } from '../../plugins/store'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
+import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
   components: { DialogMultiCombobox, DialogTextField, DialogActions },
   setup(_props, context) {
     const state = reactive({
-      valid: false,
-      disabled: false
+      valid: false
     })
+
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
 
     function submitEdit(): void {
       if (state.valid) {
-        state.disabled = true
+        editActionDisabled.value = true
         socket.emit(SHARED_EVENTS.ADMIN_DELETE_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
-          if (proceed) {
-            state.disabled = false
-            context.emit('dialog:close')
-          }
+          editActionComplete(proceed)
         })
       }
     }
 
     return {
       ...toRefs(state),
-      submitEdit
+      submitEdit,
+      editActionDisabled
     }
   }
 })

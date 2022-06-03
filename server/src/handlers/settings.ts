@@ -46,6 +46,7 @@ class GameSettingsHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
   }

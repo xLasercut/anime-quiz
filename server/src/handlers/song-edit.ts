@@ -44,6 +44,7 @@ class SongEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_SONG_EDIT, { song: song, type: 'add' })
         this._validateIsAdmin(socket)
+        this._songDb.validateIsDbLocked()
         this._songDb.validateAnimeExist(song.anime_id)
         this._songDb.newSong(song)
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${song.song_title}`, socket.id)
@@ -51,6 +52,7 @@ class SongEditHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
 
@@ -58,6 +60,8 @@ class SongEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_SONG_EDIT, { song: song, type: 'delete' })
         this._validateIsAdmin(socket)
+        this._songDb.validateIsDbLocked()
+        this._userDb.validateIsDbLocked()
         this._songDb.validateSongsExist([ song.song_id ])
         this._songDb.deleteSong(song)
         this._userDb.removeSongAll(song.song_id)
@@ -66,6 +70,7 @@ class SongEditHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
 
@@ -73,6 +78,7 @@ class SongEditHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_SONG_EDIT, { song: song, type: 'edit' })
         this._validateIsAdmin(socket)
+        this._songDb.validateIsDbLocked()
         this._songDb.validateSongsExist([ song.song_id ])
         this._songDb.validateAnimeExist(song.anime_id)
         this._songDb.editSong(song)
@@ -81,6 +87,7 @@ class SongEditHandler extends AbstractHandler {
         callback(true)
       } catch (e) {
         errorHandler(e)
+        callback(false)
       }
     })
   }

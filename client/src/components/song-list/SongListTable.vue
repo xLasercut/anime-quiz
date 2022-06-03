@@ -163,8 +163,10 @@ export default defineComponent({
         const songIds = songSelected.value.map((song) => {
           return song.song_id
         })
-        socket.emit(SHARED_EVENTS.EDIT_USER_LIST, songIds, state.selectedUser, state.editMode, () => {
-          songSelected.value = []
+        socket.emit(SHARED_EVENTS.EDIT_USER_LIST, songIds, state.selectedUser, state.editMode, (proceed: boolean) => {
+          if (proceed) {
+            songSelected.value = []
+          }
           state.loading = false
         })
       }
