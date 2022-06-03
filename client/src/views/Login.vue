@@ -31,6 +31,10 @@
           </v-row>
         </v-form>
       </v-card-text>
+
+      <v-card-actions>
+        Client Version: 1.0.0
+      </v-card-actions>
     </v-card>
   </v-main>
 </template>
