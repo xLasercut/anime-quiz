@@ -1,5 +1,5 @@
 import { ServerConfig } from '../src/app/config'
-import { Database } from 'sqlite3'
+import * as Database from 'better-sqlite3'
 import * as readline from 'readline'
 import { v4 } from 'uuid'
 
@@ -13,12 +13,8 @@ const rl = readline.createInterface({
 
 rl.question('Enter username: ', (username) => {
   console.log(`Creating new user ${username}`)
-  db.run(`INSERT INTO users (user_id,username) VALUES (?,?)`, [ `user-${v4()}`, username ], (err) => {
-    if (err) {
-      throw err
-    }
-    rl.close()
-  })
+  db.prepare(`INSERT INTO users (user_id,username) VALUES (?,?)`).run([ `user-${v4()}`, username ])
+  rl.close()
 })
 
 rl.on('close', () => {

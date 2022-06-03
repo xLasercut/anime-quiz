@@ -9,7 +9,6 @@ import { SHARED_EVENTS } from './shared/events'
 import { Emitter } from './app/emitter'
 import { authenticateUser, checkClientAuth } from './app/authentication'
 import { NOTIFICATION_COLOR } from './shared/constants'
-import { AnimeQuizMainDb } from './database/main'
 import { SongListHandler } from './handlers/song-list'
 import { RoomHandler } from './handlers/room'
 import { AnimeQuizUserDb } from './database/user'
@@ -24,6 +23,8 @@ import { SongEditHandler } from './handlers/song-edit'
 import { AdminHandler } from './handlers/admin'
 import { ChatManager } from './game/chat'
 import { EmojiEditHandler } from './handlers/emoji-edit'
+import { AnimeQuizEmojiDb } from './database/emoji'
+import { AnimeQuizSongDb } from './database/song'
 
 const config = new ServerConfig()
 const httpServer = createServer()
@@ -35,19 +36,20 @@ const io = new Server(httpServer, {
 
 const emitter = new Emitter(io)
 const logger = new Logger(config)
-const mainDb = new AnimeQuizMainDb(config, logger)
 const userDb = new AnimeQuizUserDb(config, logger)
+const emojiDb = new AnimeQuizEmojiDb(config, logger)
+const songDb = new AnimeQuizSongDb(config, logger)
 const gameSettings = new GameSettings(logger)
 const gameStates = new GameStates(logger, io)
 const chatManager = new ChatManager(logger)
 
 const ioErrorHandler = newIoErrorHandler(logger)
 
-const animeEditHandler = new AnimeEditHandler(logger, mainDb, emitter)
-const songEditHandler = new SongEditHandler(logger, emitter, mainDb, userDb)
-const adminHandler = new AdminHandler(logger, emitter, io, mainDb)
-const emojiEditHandler = new EmojiEditHandler(logger, emitter, mainDb)
-const songListHandler = new SongListHandler(logger, emitter, mainDb, userDb)
+const animeEditHandler = new AnimeEditHandler(logger, emitter, songDb)
+const songEditHandler = new SongEditHandler(logger, emitter, songDb, userDb)
+const adminHandler = new AdminHandler(logger, emitter, io, songDb, emojiDb)
+const emojiEditHandler = new EmojiEditHandler(logger, emitter, emojiDb)
+const songListHandler = new SongListHandler(logger, emitter, songDb, userDb)
 const roomHandler = new RoomHandler(logger, io, emitter)
 const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, io, emitter, chatManager)
 const gameHandler = new GameHandler(
@@ -55,7 +57,8 @@ const gameHandler = new GameHandler(
   io,
   emitter,
   userDb,
-  mainDb,
+  songDb,
+  emojiDb,
   gameSettings,
   gameStates,
   chatManager

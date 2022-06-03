@@ -1,17 +1,17 @@
 import { ServerConfig } from '../src/app/config'
-import { Database } from 'sqlite3'
+import * as Database from 'better-sqlite3'
 
 const config = new ServerConfig()
 const db = new Database(config.userDbPath)
 
-db.run(`
+db.prepare(`
 CREATE TABLE user_songs
 (
     user_id text not null,
     song_id text not null
-)`)
+)`).run()
 
-db.run(`
+db.prepare(`
 CREATE TABLE users
 (
     user_id  text not null
@@ -19,6 +19,6 @@ CREATE TABLE users
             primary key,
     username text
 )
-`)
+`).run()
 
 db.close()

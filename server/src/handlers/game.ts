@@ -12,9 +12,11 @@ import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationError } from '../app/exceptions'
 import { GameSettings } from '../game/settings'
 import { AnimeQuizUserDb } from '../database/user'
-import { AnimeQuizMainDb } from '../database/main'
 import { AqGameGuess, AqGameSettings, AqSong } from '../shared/interfaces'
 import { GameStates } from '../game/state'
+import { AnimeQuizEmojiDb } from '../database/emoji'
+import { AnimeQuizSongDb } from '../database/song'
+import { shuffleSongList } from '../helpers'
 
 class GameHandler extends AbstractHandler {
   protected _io: Server
@@ -22,14 +24,16 @@ class GameHandler extends AbstractHandler {
   protected _settings: GameSettings
   protected _states: GameStates
   protected _userDb: AnimeQuizUserDb
-  protected _mainDb: AnimeQuizMainDb
+  protected _songDb: AnimeQuizSongDb
+  protected _emojiDb: AnimeQuizEmojiDb
 
   constructor(
     logger: Logger,
     io: Server,
     emitter: Emitter,
     userDb: AnimeQuizUserDb,
-    mainDb: AnimeQuizMainDb,
+    sonDb: AnimeQuizSongDb,
+    emojiDb: AnimeQuizEmojiDb,
     settings: GameSettings,
     states: GameStates,
     chatManager: ChatManager
@@ -40,18 +44,19 @@ class GameHandler extends AbstractHandler {
     this._settings = settings
     this._states = states
     this._userDb = userDb
-    this._mainDb = mainDb
+    this._songDb = sonDb
+    this._emojiDb = emojiDb
   }
 
   public start(socket: Socket, errorHandler: Function) {
-    socket.on(SHARED_EVENTS.NEW_GAME_ROOM, async (roomName: string, callback: Function) => {
+    socket.on(SHARED_EVENTS.NEW_GAME_ROOM, (roomName: string, callback: Function) => {
       try {
         this._validateNewRoomName(roomName)
         const roomId = `${ROOM_NAME_PREFIX}|${roomName}|${v4()}`
-        this._emitter.updateAnimeList(await this._mainDb.getAnimeList(), socket.id)
-        this._emitter.updateSongTitleList(await this._mainDb.getSongTitleList(), socket.id)
-        this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
-        this._emitter.updateEmojiList(await this._mainDb.getEmojiList(), socket.id)
+        this._emitter.updateAnimeList(this._songDb.getAnimeList(), socket.id)
+        this._emitter.updateSongTitleList(this._songDb.getSongTitleList(), socket.id)
+        this._emitter.updateUserLists(this._userDb.getUserLists(), socket.id)
+        this._emitter.updateEmojiList(this._emojiDb.getEmojiList(), socket.id)
         socket.data.host = true
         this._emitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomId)
@@ -61,13 +66,13 @@ class GameHandler extends AbstractHandler {
       }
     })
 
-    socket.on(SHARED_EVENTS.JOIN_GAME_ROOM, async (roomName: string, callback: Function) => {
+    socket.on(SHARED_EVENTS.JOIN_GAME_ROOM, (roomName: string, callback: Function) => {
       try {
         this._validateExistingRoomName(roomName)
-        this._emitter.updateAnimeList(await this._mainDb.getAnimeList(), socket.id)
-        this._emitter.updateSongTitleList(await this._mainDb.getSongTitleList(), socket.id)
-        this._emitter.updateUserLists(await this._userDb.getUserLists(), socket.id)
-        this._emitter.updateEmojiList(await this._mainDb.getEmojiList(), socket.id)
+        this._emitter.updateAnimeList(this._songDb.getAnimeList(), socket.id)
+        this._emitter.updateSongTitleList(this._songDb.getSongTitleList(), socket.id)
+        this._emitter.updateUserLists(this._userDb.getUserLists(), socket.id)
+        this._emitter.updateEmojiList(this._emojiDb.getEmojiList(), socket.id)
         socket.data.host = false
         this._emitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomName)
@@ -102,7 +107,7 @@ class GameHandler extends AbstractHandler {
       try {
         const roomId = this._getSocketGameRoom(socket)
         const settings = this._settings.getGameSettings(roomId)
-        const gameList = this._shuffleSongList(await this._generateGameList(settings))
+        const gameList = shuffleSongList(this._generateGameList(settings))
         this._validateGameSongList(gameList)
         this._states.startGame(roomId, gameList)
         const gameState = this._states.getGameState(roomId)
@@ -176,15 +181,15 @@ class GameHandler extends AbstractHandler {
     this._emitter.stopClientGame(roomId)
   }
 
-  protected async _generateGameList(settings: AqGameSettings): Promise<AqSong[]> {
+  protected _generateGameList(settings: AqGameSettings): AqSong[] {
     if (settings.gameMode === GAME_MODE.BALANCED) {
-      return await this._generateBalancedGameList(settings)
+      return this._generateBalancedGameList(settings)
     }
-    return await this._generateNormalGameList(settings)
+    return this._generateNormalGameList(settings)
   }
 
-  protected async _generateBalancedGameList(settings: AqGameSettings): Promise<AqSong[]> {
-    const userLists = await this._userDb.getSelectedUserLists(settings.users)
+  protected _generateBalancedGameList(settings: AqGameSettings): AqSong[] {
+    const userLists = this._userDb.getSelectedUserLists(settings.users)
     if (userLists.length <= 0) {
       return []
     }
@@ -194,7 +199,7 @@ class GameHandler extends AbstractHandler {
     const songsPerUser = Math.floor(settings.songCount / userLists.length)
     for (const userList of userLists) {
       let songCount = 0
-      const userSongs = await this._mainDb.getSelectedUserSongs(userList.song_id)
+      const userSongs = this._songDb.getSelectedUserSongs(userList.song_id)
       for (const song of userSongs) {
         if (!songIds.has(song.song_id)) {
           if (settings.duplicate) {
@@ -220,21 +225,9 @@ class GameHandler extends AbstractHandler {
     return songList
   }
 
-  protected _shuffleSongList(songList: AqSong[]): AqSong[] {
-    const shuffledList = songList
-    let currentIndex = shuffledList.length, randomIndex
-    while (currentIndex != 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex)
-      currentIndex--;
-      [ shuffledList[currentIndex], shuffledList[randomIndex] ] = [
-        shuffledList[randomIndex], shuffledList[currentIndex] ]
-    }
-    return shuffledList
-  }
-
-  protected async _generateNormalGameList(settings: AqGameSettings): Promise<AqSong[]> {
-    const userSongIds = await this._userDb.getSelectedUserSongIds(settings.users)
-    const userSongs = await this._mainDb.getSelectedUserSongs(userSongIds)
+  protected _generateNormalGameList(settings: AqGameSettings): AqSong[] {
+    const userSongIds = this._userDb.getSelectedUserSongIds(settings.users)
+    const userSongs = this._songDb.getSelectedUserSongs(userSongIds)
     if (settings.duplicate) {
       return userSongs.slice(0, settings.songCount)
     }

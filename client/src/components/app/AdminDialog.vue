@@ -38,7 +38,7 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="auto">
-        <icon-btn @click="reloadSongDb()" color="warning" icon="mdi-reload">Reload Song DB</icon-btn>
+        <icon-btn @click="reloadDb()" color="warning" icon="mdi-reload">Reload DB</icon-btn>
       </v-col>
     </v-row>
   </v-card-text>
@@ -63,8 +63,8 @@ export default defineComponent({
       playerToKick: null
     })
 
-    function reloadSongDb(): void {
-      socket.emit(SHARED_EVENTS.ADMIN_RELOAD_MAIN_DB)
+    function reloadDb(): void {
+      socket.emit(SHARED_EVENTS.ADMIN_RELOAD_DB)
     }
 
     function kickPlayer(): void {
@@ -74,7 +74,7 @@ export default defineComponent({
     }
 
     return {
-      reloadSongDb,
+      reloadDb,
       ...toRefs(state),
       kickPlayer
     }

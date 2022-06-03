@@ -80,10 +80,10 @@ const LOG_BASE = {
     level: LOG_LEVEL.WARN,
     message: 'room data validation failure'
   },
-  GAME_SETTING_VALIDATION_FAILURE: {
+  EDIT_GAME_SETTINGS: {
     reference: LOG_REFERENCES.SERVER010,
-    level: LOG_LEVEL.WARN,
-    message: 'invalid game settings'
+    level: LOG_LEVEL.INFO,
+    message: 'edit game settings'
   },
   GAME_DATA_VALIDATION_FAILURE: {
     reference: LOG_REFERENCES.SERVER011,
