@@ -33,7 +33,7 @@
       </v-card-text>
 
       <v-card-actions>
-        Client Version: 1.0.0
+        Client Version: 1.1.0
       </v-card-actions>
     </v-card>
   </v-main>
