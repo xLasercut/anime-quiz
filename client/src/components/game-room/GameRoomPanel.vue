@@ -56,7 +56,6 @@ export default defineComponent({
     function openSettings(): void {
       if (openDialog) {
         store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, true)
-        socket.emit(SHARED_EVENTS.RELOAD_SONG_LIST_DATA)
         socket.emit(SHARED_EVENTS.GET_GAME_SETTINGS)
         openDialog(DIALOG_ROUTES.GAME_ROOM_SETTINGS, 'Settings')
       }
