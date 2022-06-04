@@ -33,7 +33,7 @@
       </v-card-text>
 
       <v-card-actions>
-        Client Version: 1.1.0
+        Client Version: {{ clientVersion }}
       </v-card-actions>
     </v-card>
   </v-main>
@@ -76,7 +76,8 @@ export default defineComponent({
         (v: string): boolean | string => !!v || 'Avatar required'
       ],
       disabled: false,
-      showPassword: false
+      showPassword: false,
+      clientVersion: process.env.VUE_APP_VERSION
     })
 
     function login() {

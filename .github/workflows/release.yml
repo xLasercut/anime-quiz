@@ -23,7 +23,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: export VUE_APP_VERSION=$(git rev-parse --short "$GITHUB_SHA") && npm run build
 
       - name: Publish Client
         uses: JamesIves/github-pages-deploy-action@4.1.5
