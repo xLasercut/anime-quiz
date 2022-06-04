@@ -39,6 +39,7 @@ interface GameStoreState {
   maxSongCount: number
   playing: boolean
   emojiList: AqEmoji[]
+  disableSettings: boolean
 }
 
 export {

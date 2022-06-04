@@ -17,6 +17,9 @@ import { GameStates } from '../game/state'
 import { AnimeQuizEmojiDb } from '../database/emoji'
 import { AnimeQuizSongDb } from '../database/song'
 import { shuffleSongList } from '../helpers'
+import { NormalGameListGenerator } from '../game/generator/normal'
+import { BalancedGameListGenerator } from '../game/generator/balanced'
+import { BalancedPlusGameListGenerator } from '../game/generator/balanced-plus'
 
 class GameHandler extends AbstractHandler {
   protected _io: Server
@@ -185,73 +188,25 @@ class GameHandler extends AbstractHandler {
   protected _generateGameList(settings: AqGameSettings): AqSong[] {
     if (settings.gameMode === GAME_MODE.BALANCED) {
       return this._generateBalancedGameList(settings)
+    } else if (settings.gameMode === GAME_MODE.BALANCED_PLUS) {
+      return this._generateBalancedPlusGameList(settings)
     }
     return this._generateNormalGameList(settings)
   }
 
-  protected _generateBalancedGameList(settings: AqGameSettings): AqSong[] {
-    const userLists = this._userDb.getSelectedUserLists(settings.users)
-    if (userLists.length <= 0) {
-      return []
-    }
-    const songIds = new Set()
-    let animeIds = []
-    const songList = []
-    const songsPerUser = Math.floor(settings.songCount / userLists.length)
-    for (const userList of userLists) {
-      let songCount = 0
-      const userSongs = this._songDb.getSelectedUserSongs(userList.song_id)
-      for (const song of userSongs) {
-        if (!songIds.has(song.song_id)) {
-          if (!settings.duplicate) {
-            if (!this._isDupeAnime(animeIds, song)) {
-              songList.push(song)
-              songIds.add(song.song_id)
-              animeIds = animeIds.concat(song.anime_id)
-              songCount += 1
-            }
-          } else {
-            songList.push(song)
-            songIds.add(song.song_id)
-            songCount += 1
-          }
-        }
+  protected _generateBalancedPlusGameList(settings: AqGameSettings): AqSong[] {
+    const generator = new BalancedPlusGameListGenerator(this._songDb, this._userDb, settings)
+    return generator.generate()
+  }
 
-        if (songCount >= songsPerUser) {
-          break
-        }
-      }
-    }
-    return songList
+  protected _generateBalancedGameList(settings: AqGameSettings): AqSong[] {
+    const generator = new BalancedGameListGenerator(this._songDb, this._userDb, settings)
+    return generator.generate()
   }
 
   protected _generateNormalGameList(settings: AqGameSettings): AqSong[] {
-    const userSongIds = this._userDb.getSelectedUserSongIds(settings.users)
-    const userSongs = this._songDb.getSelectedUserSongs(userSongIds)
-    if (settings.duplicate) {
-      return userSongs.slice(0, settings.songCount)
-    }
-    let animeIds = []
-    const dedupedSongList = []
-    for (const song of userSongs) {
-      if (!this._isDupeAnime(animeIds, song)) {
-        dedupedSongList.push(song)
-        animeIds = animeIds.concat(song.anime_id)
-        if (dedupedSongList.length >= settings.songCount) {
-          return dedupedSongList
-        }
-      }
-    }
-    return dedupedSongList
-  }
-
-  protected _isDupeAnime(animeIds: string[], song: AqSong): boolean {
-    for (const animeId of song.anime_id) {
-      if (animeIds.includes(animeId)) {
-        return true
-      }
-    }
-    return false
+    const generator = new NormalGameListGenerator(this._songDb, this._userDb, settings)
+    return generator.generate()
   }
 
   protected _validateGameSongList(songList: AqSong[]): void {

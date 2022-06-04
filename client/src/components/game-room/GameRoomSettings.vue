@@ -54,6 +54,7 @@ import { SHARED_EVENTS } from '../../assets/shared/events'
 import { AqGameSettings } from '../../assets/shared/interfaces'
 import { store } from '../../plugins/store'
 import { newTableHelpers } from '../../assets/table-helper'
+import { MUTATIONS } from '../../plugins/store/mutations'
 
 interface GameModeItem {
   text: string
@@ -88,7 +89,8 @@ export default defineComponent({
       users: [],
       gameModes: [
         { text: 'Normal', value: GAME_MODE.NORMAL },
-        { text: 'Balanced', value: GAME_MODE.BALANCED }
+        { text: 'Balanced', value: GAME_MODE.BALANCED },
+        { text: 'Balanced Plus', value: GAME_MODE.BALANCED_PLUS }
       ],
       toggleItems: [
         { text: 'Yes', value: true },
@@ -96,11 +98,9 @@ export default defineComponent({
       ]
     })
 
-    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
-
     function setSettings() {
       if (state.valid) {
-        editActionDisabled.value = true
+        store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, true)
         const settings: AqGameSettings = {
           songCount: state.songCount,
           guessTime: state.guessTime,
@@ -109,7 +109,10 @@ export default defineComponent({
           users: state.users
         }
         socket.emit(SHARED_EVENTS.EDIT_GAME_SETTINGS, settings, (proceed: boolean) => {
-          editActionComplete(proceed)
+          if (proceed) {
+            context.emit('dialog:close')
+          }
+          store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, false)
         })
       }
     }
@@ -120,6 +123,7 @@ export default defineComponent({
       state.gameMode = settings.gameMode
       state.duplicate = settings.duplicate
       state.users = settings.users
+      store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, false)
     })
 
     onUnmounted(() => {
@@ -127,7 +131,7 @@ export default defineComponent({
     })
 
     function disabled(): boolean {
-      if (store.state.game.playing || editActionDisabled.value) {
+      if (store.state.game.playing || store.state.game.disableSettings) {
         return true
       }
       return !store.state.client.admin && !store.state.client.host

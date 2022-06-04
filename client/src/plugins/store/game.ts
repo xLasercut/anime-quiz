@@ -17,7 +17,8 @@ const DEFAULT_STATE: GameStoreState = {
   currentSongCount: 0,
   maxSongCount: 0,
   playing: false,
-  emojiList: []
+  emojiList: [],
+  disableSettings: false
 }
 
 const game: Module<GameStoreState, RootStoreState> = {
@@ -37,6 +38,9 @@ const game: Module<GameStoreState, RootStoreState> = {
     },
     [MUTATIONS.RESET_STORE_STATE]: (state: GameStoreState) => {
       Object.assign(state, DEFAULT_STATE)
+    },
+    [MUTATIONS.EDIT_DISABLE_GAME_SETTINGS]: (state: GameStoreState, disabled: boolean) => {
+      state.disableSettings = disabled
     }
   },
   getters: {
