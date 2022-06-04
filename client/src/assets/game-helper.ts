@@ -14,10 +14,19 @@ function getDefaultVolume(): number {
   } catch {
     return 50
   }
+}
 
+function shouldDisplayResult(queryText: string, itemText: string): boolean {
+  for (const word of queryText.split(' ')) {
+    if (!itemText.toLowerCase().includes(word.toLowerCase())) {
+      return false
+    }
+  }
+  return true
 }
 
 export {
   calculateStartPosition,
-  getDefaultVolume
+  getDefaultVolume,
+  shouldDisplayResult
 }

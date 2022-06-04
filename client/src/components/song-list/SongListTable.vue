@@ -86,6 +86,7 @@ import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import TablePagination from '../shared/TablePagination.vue'
+import { shouldDisplayResult } from '../../assets/game-helper'
 
 export default defineComponent({
   components: { TablePagination, SongListTableActions, SongListTableFilter },
@@ -182,10 +183,10 @@ export default defineComponent({
           return true
         })
         .filter((song: AqSong) => {
-        return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
-          song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
+        return shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
+          shouldDisplayResult(state.songTitleFilter, song.song_title) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
-          song.artist.toLowerCase().includes(state.songArtistFilter.toLowerCase())
+          shouldDisplayResult(state.songArtistFilter, song.artist)
         })
     }
 

@@ -67,6 +67,7 @@ import { CLIENT_EVENTS } from '../../assets/events'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import SongEditTableFilter from './SongEditTableFilter.vue'
 import SongEditTableActions from './SongEditTableActions.vue'
+import { shouldDisplayResult } from '../../assets/game-helper'
 
 export default defineComponent({
   components: { SongEditTableActions, SongEditTableFilter, TablePagination },
@@ -93,8 +94,8 @@ export default defineComponent({
 
     function filteredSongList(): AqSong[] {
       return store.getters.adminSongList.filter((song: AqSong) => {
-        return song.anime_name.join(',').toLowerCase().includes(state.animeFilter.toLowerCase()) &&
-          song.song_title.toLowerCase().includes(state.songTitleFilter.toLowerCase()) &&
+        return shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
+          shouldDisplayResult(state.songTitleFilter, song.song_title) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
           song.song_id.toLowerCase().includes(state.songIdFilter.toLowerCase())
       })

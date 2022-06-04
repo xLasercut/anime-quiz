@@ -11,7 +11,7 @@
       ></v-text-field>
     </v-col>
     <v-col>
-      <v-combobox
+      <filtered-combobox
         dense outlined
         :value="animeFilter"
         @input="updateFilter('anime-filter', $event)"
@@ -19,17 +19,17 @@
         :items="$store.getters.animeList"
         hide-details
         clearable
-      ></v-combobox>
+      ></filtered-combobox>
     </v-col>
     <v-col>
-      <v-combobox
+      <filtered-combobox
         :value="songTitleFilter"
         @input="updateFilter('song-title-filter', $event)"
         dense outlined label="Title"
         :items="$store.getters.songTitleList"
         hide-details
         clearable
-      ></v-combobox>
+      ></filtered-combobox>
     </v-col>
     <v-col>
       <v-select
@@ -46,8 +46,10 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { newTableHelpers } from '../../assets/table-helper'
+import FilteredCombobox from '../shared/comboboxes/FilteredCombobox.vue'
 
 export default defineComponent({
+  components: { FilteredCombobox },
   props: {
     songIdFilter: {
       required: true

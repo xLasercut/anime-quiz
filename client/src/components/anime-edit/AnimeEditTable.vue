@@ -52,6 +52,7 @@ import AnimeEditTableActions from './AnimeEditTableActions.vue'
 import { MUTATIONS } from '../../plugins/store/mutations'
 import { CLIENT_EVENTS } from '../../assets/events'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
+import { shouldDisplayResult } from '../../assets/game-helper'
 
 export default defineComponent({
   components: { AnimeEditTableActions, TablePagination, AnimeEditTableFilter },
@@ -72,7 +73,7 @@ export default defineComponent({
 
     function filteredAnimeList(): AqAnime[] {
       return store.getters.adminAnimeList.filter((anime: AqAnime) => {
-        return anime.anime_name.join(',').toLowerCase().includes(state.animeNameFilter.toLowerCase()) &&
+        return shouldDisplayResult(state.animeNameFilter, anime.anime_name.join(',')) &&
           anime.anime_id.toLowerCase().includes(state.animeIdFilter.toLowerCase())
       })
     }

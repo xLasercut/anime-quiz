@@ -1,20 +1,20 @@
 <template>
   <v-row justify="center">
     <v-col cols="12" sm="6">
-      <v-combobox
+      <filtered-combobox
         filled
         label="Anime"
         v-model.trim="anime"
         :items="$store.getters.animeList"
-        @keyup.enter.native="sendGuess()"
+        @key:enter="sendGuess()"
         @change="sendGuess()"
         persistent-hint
         :hint="`Selected Anime: ${selectedAnime}`"
         :disabled="disabled"
-      ></v-combobox>
+      ></filtered-combobox>
     </v-col>
     <v-col cols="12" sm="6">
-      <v-combobox
+      <filtered-combobox
         filled
         label="Title"
         v-model.trim="title"
@@ -24,7 +24,7 @@
         persistent-hint
         :hint="`Selected Title: ${selectedTitle}`"
         :disabled="disabled"
-      ></v-combobox>
+      ></filtered-combobox>
     </v-col>
   </v-row>
 </template>
@@ -34,8 +34,10 @@ import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition
 import { socket } from '../../../plugins/socket'
 import { SHARED_EVENTS } from '../../../assets/shared/events'
 import { AqGameGuess } from '../../../assets/shared/interfaces'
+import FilteredCombobox from '../../shared/comboboxes/FilteredCombobox.vue'
 
 export default defineComponent({
+  components: { FilteredCombobox },
   setup() {
     const state = reactive({
       anime: '',
