@@ -31,6 +31,7 @@ interface AqGameStateRaw {
   songOverride: AqSong | null
   countdown: NodeJS.Timer
   timeout: NodeJS.Timeout
+  currentSong: AqSong
 }
 
 interface AqAnimeRaw {

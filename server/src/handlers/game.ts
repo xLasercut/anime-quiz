@@ -120,6 +120,7 @@ class GameHandler extends AbstractHandler {
         const gameList = shuffleSongList(this._generateGameList(settings))
         this._validateGameSongList(gameList)
         this._states.startGame(roomId, gameList)
+        this._emitter.gameNewRound(roomId)
         const gameState = this._states.getGameState(roomId)
         this._emitter.updateGameState(gameState, roomId)
         this._io.resetScore(roomId)
@@ -169,7 +170,7 @@ class GameHandler extends AbstractHandler {
     this._emitter.updateGameState(gameState, roomId)
     await this._states.startTimeout(2000, roomId)
     this._emitter.gameStartLoad(startPosition, settings.guessTime, roomId)
-    this._states.nextSong(roomId)
+    this._states.clearSongOverride(roomId)
     await this._states.waitPlayerLoaded(10000, roomId)
     this._emitter.gameStartCountdown(roomId)
     await this._states.startTimeout(settings.guessTime * 1000, roomId)
@@ -177,6 +178,7 @@ class GameHandler extends AbstractHandler {
     this._emitter.updateGamePlayerList(this._io.getPlayerList(roomId), roomId)
     this._emitter.gameShowGuess(roomId)
     if (!this._states.isLastSong(roomId)) {
+      this._states.nextSong(roomId)
       await this._states.startTimeout(10000, roomId)
       await this._newRound(roomId, settings)
     }

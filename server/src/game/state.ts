@@ -26,12 +26,25 @@ class GameStates {
       gameList: [],
       songOverride: null,
       countdown: null,
-      timeout: null
+      timeout: null,
+      currentSong: {
+        anime_name: [],
+        anime_id: [],
+        song_id: '',
+        type: '',
+        artist: '',
+        song_title: '',
+        src: ''
+      }
     }
   }
 
   public nextSong(roomId: string): void {
     this._states[roomId].currentSongCount += 1
+    this._states[roomId].currentSong = this._getCurrentSong(roomId)
+  }
+
+  public clearSongOverride(roomId: string): void {
     this._states[roomId].songOverride = null
   }
 
@@ -51,6 +64,7 @@ class GameStates {
     this._states[roomId].playing = true
     this._states[roomId].currentSongCount = 0
     this._states[roomId].songOverride = null
+    this._states[roomId].currentSong = this._getCurrentSong(roomId)
   }
 
   public stopGame(roomId: string): void {
@@ -64,13 +78,13 @@ class GameStates {
     return {
       currentSongCount: state.currentSongCount + 1,
       maxSongCount: state.gameList.length,
-      currentSong: this._getCurrentSong(roomId),
+      currentSong: state.currentSong,
       playing: state.playing
     }
   }
 
   public calculateScore(guess: AqGameGuess, roomId: string): number {
-    const currentSong = this._getCurrentSong(roomId)
+    const currentSong = this._states[roomId].currentSong
     let score = 0
     if (guess.title.toLowerCase() === currentSong.song_title.toLowerCase().trim()) {
       score += 1
