@@ -6,6 +6,7 @@
     :video-id="videoSrc()"
     v-show="show"
     :player-vars="playerVars"
+    host="https://www.youtube-nocookie.com"
   ></youtube>
 </template>
 
