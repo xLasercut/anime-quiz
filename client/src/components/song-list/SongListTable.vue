@@ -48,16 +48,7 @@
     </template>
 
     <template #item.anime_name="{ item }">
-      <v-tooltip top color="background darken-2">
-        <template #activator="{ on }">
-          <v-chip v-on="on" label small color="primary">{{ item.anime_name[0] }}</v-chip>
-        </template>
-        <v-list dense color="background darken-2">
-          <v-list-item v-for="(name, index) in item.anime_name" :key="`${item.song_id}_${index}`">
-            {{ name }}
-          </v-list-item>
-        </v-list>
-      </v-tooltip>
+      <aq-anime-name :song="item"></aq-anime-name>
     </template>
 
     <template #item.src="{ item }">
@@ -87,9 +78,10 @@ import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import TablePagination from '../shared/TablePagination.vue'
 import { shouldDisplayResult } from '../../assets/game-helper'
+import AqAnimeName from '../shared/AqAnimeName.vue'
 
 export default defineComponent({
-  components: { TablePagination, SongListTableActions, SongListTableFilter },
+  components: { AqAnimeName, TablePagination, SongListTableActions, SongListTableFilter },
   setup() {
     const state = reactive({
       headers: [

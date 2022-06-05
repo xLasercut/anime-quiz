@@ -14,6 +14,10 @@ class GameStates {
     this._states = {}
   }
 
+  public songOverride(song: AqSong, roomId: string): void {
+    this._states[roomId].songOverride = song
+  }
+
   public addRoom(roomId: string): void {
     this._states[roomId] = {
       playing: false,
@@ -28,6 +32,7 @@ class GameStates {
 
   public nextSong(roomId: string): void {
     this._states[roomId].currentSongCount += 1
+    this._states[roomId].songOverride = null
   }
 
   public isLastSong(roomId: string): boolean {
@@ -45,6 +50,7 @@ class GameStates {
     this._states[roomId].gameList = gameList
     this._states[roomId].playing = true
     this._states[roomId].currentSongCount = 0
+    this._states[roomId].songOverride = null
   }
 
   public stopGame(roomId: string): void {
@@ -82,6 +88,9 @@ class GameStates {
 
   protected _getCurrentSong(roomId: string): AqSong {
     const state = this._states[roomId]
+    if (state.songOverride) {
+      return state.songOverride
+    }
     return state.gameList[state.currentSongCount] || {
       anime_name: [],
       anime_id: [],

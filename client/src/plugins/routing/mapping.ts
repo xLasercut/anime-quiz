@@ -27,6 +27,7 @@ import EmojiEditPanel from '../../components/emoji-edit/EmojiEditPanel.vue'
 import EmojiEdit from '../../views/EmojiEdit.vue'
 import EditEmojiDialog from '../../components/emoji-edit/EditEmojiDialog.vue'
 import DeleteEmojiDialog from '../../components/emoji-edit/DeleteEmojiDialog.vue'
+import GameRoomSongPicker from '../../components/game-room/GameRoomSongPicker.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -62,7 +63,8 @@ const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.ADMIN]: AdminDialog,
   [DIALOG_ROUTES.EDIT_EMOJI_DIALOG]: EditEmojiDialog,
   [DIALOG_ROUTES.NEW_EMOJI_DIALOG]: EditEmojiDialog,
-  [DIALOG_ROUTES.DELETE_EMOJI_DIALOG]: DeleteEmojiDialog
+  [DIALOG_ROUTES.DELETE_EMOJI_DIALOG]: DeleteEmojiDialog,
+  [DIALOG_ROUTES.GAME_ROOM_SONG_PICKER]: GameRoomSongPicker
 }
 
 function viewComponent(): any {

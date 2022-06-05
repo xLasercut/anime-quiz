@@ -35,16 +35,22 @@ export default defineComponent({
     currentPage: {
       required: true,
       type: Number
+    },
+    width: {
+      type: String,
+      default: (): string => {
+        return '550px'
+      }
     }
   },
-  setup() {
+  setup(props) {
     const state = reactive({
       paginationSelectItems: [ 5, 10, 15, 20 ]
     })
 
     function footerStyle() {
       return {
-        'width': '550px'
+        'width': props.width
       }
     }
 

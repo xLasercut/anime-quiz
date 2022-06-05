@@ -9,19 +9,30 @@ import { Server } from '../app/server'
 import { AnimeQuizEmojiDb } from '../database/emoji'
 import { AnimeQuizSongDb } from '../database/song'
 import { AnimeQuizUserDb } from '../database/user'
+import { GameStates } from '../game/state'
 
 class AdminHandler extends AbstractHandler {
   protected _emojiDb: AnimeQuizEmojiDb
   protected _songDb: AnimeQuizSongDb
   protected _userDb: AnimeQuizUserDb
   protected _io: Server
+  protected _states: GameStates
 
-  constructor(logger: Logger, emitter: Emitter, io: Server, songDb: AnimeQuizSongDb, emojiDb: AnimeQuizEmojiDb, userDb: AnimeQuizUserDb) {
+  constructor(
+    logger: Logger,
+    emitter: Emitter,
+    io: Server,
+    songDb: AnimeQuizSongDb,
+    emojiDb: AnimeQuizEmojiDb,
+    userDb: AnimeQuizUserDb,
+    states: GameStates
+  ) {
     super(logger, emitter)
     this._songDb = songDb
     this._io = io
     this._emojiDb = emojiDb
     this._userDb = userDb
+    this._states = states
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -71,6 +82,21 @@ class AdminHandler extends AbstractHandler {
         this._songDb.unlockDb()
         this._emojiDb.unlockDb()
         this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database unlocked', socket.id)
+      } catch (e) {
+        errorHandler(e)
+      }
+    })
+
+    socket.on(SHARED_EVENTS.ADMIN_GAME_SONG_OVERRIDE, (songId: string) => {
+      try {
+        this._logger.writeLog(LOG_BASE.ADMIN_GAME_SONG_OVERRIDE, { songId: songId })
+        this._validateIsAdmin(socket)
+        const roomId = this._getSocketGameRoom(socket)
+        const songs = this._songDb.getSelectedUserSongs([ songId ])
+        if (songs.length === 1) {
+          this._states.songOverride(songs[0], roomId)
+          this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Song selected', socket.id)
+        }
       } catch (e) {
         errorHandler(e)
       }

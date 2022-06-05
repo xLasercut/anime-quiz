@@ -56,6 +56,9 @@ class GameHandler extends AbstractHandler {
       try {
         this._validateNewRoomName(roomName)
         const roomId = `${ROOM_NAME_PREFIX}|${roomName}|${v4()}`
+        if (socket.data.admin) {
+          this._emitter.updateSongList(this._songDb.getSongList(), socket.id)
+        }
         this._emitter.updateAnimeList(this._songDb.getAnimeList(), socket.id)
         this._emitter.updateSongTitleList(this._songDb.getSongTitleList(), socket.id)
         this._emitter.updateUserLists(this._userDb.getUserLists(), socket.id)
@@ -73,6 +76,9 @@ class GameHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.JOIN_GAME_ROOM, (roomName: string, callback: Function) => {
       try {
         this._validateExistingRoomName(roomName)
+        if (socket.data.admin) {
+          this._emitter.updateSongList(this._songDb.getSongList(), socket.id)
+        }
         this._emitter.updateAnimeList(this._songDb.getAnimeList(), socket.id)
         this._emitter.updateSongTitleList(this._songDb.getSongTitleList(), socket.id)
         this._emitter.updateUserLists(this._userDb.getUserLists(), socket.id)
@@ -163,6 +169,7 @@ class GameHandler extends AbstractHandler {
     this._emitter.updateGameState(gameState, roomId)
     await this._states.startTimeout(2000, roomId)
     this._emitter.gameStartLoad(startPosition, settings.guessTime, roomId)
+    this._states.nextSong(roomId)
     await this._states.waitPlayerLoaded(10000, roomId)
     this._emitter.gameStartCountdown(roomId)
     await this._states.startTimeout(settings.guessTime * 1000, roomId)
@@ -171,7 +178,6 @@ class GameHandler extends AbstractHandler {
     this._emitter.gameShowGuess(roomId)
     if (!this._states.isLastSong(roomId)) {
       await this._states.startTimeout(10000, roomId)
-      this._states.nextSong(roomId)
       await this._newRound(roomId, settings)
     }
     else {

@@ -22,7 +22,9 @@
     </template>
 
     <template #item.anime_name="{item}">
-      <v-chip small v-for="(name, index) in item.anime_name" color="primary" :key="`${item.anime_id}_${index}`">{{ name }}</v-chip>
+      <v-chip small v-for="(name, index) in item.anime_name" color="primary" :key="`${item.anime_id}_${index}`">
+        {{ name }}
+      </v-chip>
     </template>
 
     <template #item.action="{item}">

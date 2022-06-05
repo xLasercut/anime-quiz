@@ -24,16 +24,7 @@
     </template>
 
     <template #item.anime_name="{ item }">
-      <v-tooltip top color="background darken-2">
-        <template #activator="{ on }">
-          <v-chip v-on="on" label small color="primary">{{ item.anime_name[0] }}</v-chip>
-        </template>
-        <v-list dense color="background darken-2">
-          <v-list-item v-for="(name, index) in item.anime_name" :key="`${item.song_id}_${index}`">
-            {{ name }}
-          </v-list-item>
-        </v-list>
-      </v-tooltip>
+      <aq-anime-name :song="item"></aq-anime-name>
     </template>
 
     <template #item.src="{ item }">
@@ -68,9 +59,10 @@ import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import SongEditTableFilter from './SongEditTableFilter.vue'
 import SongEditTableActions from './SongEditTableActions.vue'
 import { shouldDisplayResult } from '../../assets/game-helper'
+import AqAnimeName from '../shared/AqAnimeName.vue'
 
 export default defineComponent({
-  components: { SongEditTableActions, SongEditTableFilter, TablePagination },
+  components: { AqAnimeName, SongEditTableActions, SongEditTableFilter, TablePagination },
   setup() {
     const state = reactive({
       headers: [

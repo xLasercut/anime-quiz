@@ -1,5 +1,6 @@
 <template>
   <v-toolbar-items>
+    <nav-btn color="primary" icon="mdi-playlist-music" v-if="$store.state.client.admin" @click="openSongPicker()">Song</nav-btn>
     <div class="volume-slider-container">
       <v-slider
         prepend-icon="mdi-volume-medium"
@@ -77,6 +78,12 @@ export default defineComponent({
       socket.emit(SHARED_EVENTS.STOP_GAME)
     }
 
+    function openSongPicker(): void {
+      if (openDialog) {
+        openDialog(DIALOG_ROUTES.GAME_ROOM_SONG_PICKER, 'Song Picker')
+      }
+    }
+
     return {
       back,
       openSettings,
@@ -85,7 +92,8 @@ export default defineComponent({
       changeVolume,
       showPlayBtn,
       showStopBtn,
-      ...toRefs(state)
+      ...toRefs(state),
+      openSongPicker
     }
   }
 })
