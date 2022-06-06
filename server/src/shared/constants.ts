@@ -16,7 +16,8 @@ const USERNAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
 const GAME_MODE = {
   NORMAL: 'normal',
   BALANCED: 'balanced',
-  BALANCED_PLUS: 'balanced_plus'
+  BALANCED_PLUS: 'balanced_plus',
+  SHIRITORI: 'shiritori'
 }
 
 const AVATARS = {

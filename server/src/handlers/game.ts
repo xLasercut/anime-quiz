@@ -16,10 +16,10 @@ import { AqGameGuess, AqGameSettings, AqSong } from '../shared/interfaces'
 import { GameStates } from '../game/state'
 import { AnimeQuizEmojiDb } from '../database/emoji'
 import { AnimeQuizSongDb } from '../database/song'
-import { shuffleSongList } from '../helpers'
 import { NormalGameListGenerator } from '../game/generator/normal'
-import { BalancedGameListGenerator } from '../game/generator/balanced'
 import { BalancedPlusGameListGenerator } from '../game/generator/balanced-plus'
+import { ShiritoriGameListGenerator } from '../game/generator/shiritori'
+import { GameListGeneratorFactory } from '../game/generator/factory'
 
 class GameHandler extends AbstractHandler {
   protected _io: Server
@@ -29,6 +29,7 @@ class GameHandler extends AbstractHandler {
   protected _userDb: AnimeQuizUserDb
   protected _songDb: AnimeQuizSongDb
   protected _emojiDb: AnimeQuizEmojiDb
+  protected _gameModeGenerators
 
   constructor(
     logger: Logger,
@@ -49,6 +50,17 @@ class GameHandler extends AbstractHandler {
     this._userDb = userDb
     this._songDb = sonDb
     this._emojiDb = emojiDb
+    this._gameModeGenerators = {
+      [GAME_MODE.NORMAL]: {
+        generator: NormalGameListGenerator,
+        shuffle: true
+      },
+      [GAME_MODE.BALANCED_PLUS]: {
+        generator: BalancedPlusGameListGenerator,
+        shuffle: true
+      },
+      [GAME_MODE.SHIRITORI]: ShiritoriGameListGenerator
+    }
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -117,7 +129,7 @@ class GameHandler extends AbstractHandler {
       try {
         const roomId = this._getSocketGameRoom(socket)
         const settings = this._settings.getGameSettings(roomId)
-        const gameList = shuffleSongList(this._generateGameList(settings))
+        const gameList = this._generateGameList(settings)
         this._validateGameSongList(gameList)
         this._states.startGame(roomId, gameList)
         this._emitter.gameNewRound(roomId)
@@ -194,26 +206,8 @@ class GameHandler extends AbstractHandler {
   }
 
   protected _generateGameList(settings: AqGameSettings): AqSong[] {
-    if (settings.gameMode === GAME_MODE.BALANCED) {
-      return this._generateBalancedGameList(settings)
-    } else if (settings.gameMode === GAME_MODE.BALANCED_PLUS) {
-      return this._generateBalancedPlusGameList(settings)
-    }
-    return this._generateNormalGameList(settings)
-  }
-
-  protected _generateBalancedPlusGameList(settings: AqGameSettings): AqSong[] {
-    const generator = new BalancedPlusGameListGenerator(this._songDb, this._userDb, settings)
-    return generator.generate()
-  }
-
-  protected _generateBalancedGameList(settings: AqGameSettings): AqSong[] {
-    const generator = new BalancedGameListGenerator(this._songDb, this._userDb, settings)
-    return generator.generate()
-  }
-
-  protected _generateNormalGameList(settings: AqGameSettings): AqSong[] {
-    const generator = new NormalGameListGenerator(this._songDb, this._userDb, settings)
+    const generatorFactory = new GameListGeneratorFactory(this._songDb, this._userDb, settings)
+    const generator = generatorFactory.getGenerator()
     return generator.generate()
   }
 

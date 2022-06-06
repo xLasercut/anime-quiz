@@ -8,22 +8,20 @@ class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
   protected _normalSongCount: number
 
   constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings) {
-    super(songDb, userDb, settings)
+    super(songDb, userDb, settings, true)
   }
 
-  public generate(): AqSong[] {
-    if (this._users.length <= 0) {
-      return []
-    }
+  protected _initGeneratorVars() {
     this._normalSongCount = Math.floor(this._songCount / 2)
     this._songsPerUser = Math.floor(this._normalSongCount / this._users.length)
-    if (this._duplicate) {
-      return this._generateDupeList()
-    }
-    return this._generateNonDupeList()
   }
 
-  protected _generateNonDupeNormalList(): AqSong[] {
+  protected _generateList(): AqSong[] {
+    return this._generateNormalList()
+      .concat(this._generateBalancedList())
+  }
+
+  protected _generateNormalList(): AqSong[] {
     const userSongIds = this._userDb.getSelectedUserSongIds(this._users)
     const userSongs = this._songDb.getSelectedUserSongs(userSongIds)
     const songList = []
@@ -33,14 +31,14 @@ class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
         this._addDupeAnimeIds(song)
         this._addDupeSongId(song)
         if (songList.length >= this._normalSongCount) {
-          break
+          return songList
         }
       }
     }
     return songList
   }
 
-  protected _generateNonDupeBalancedList(): AqSong[] {
+  protected _generateBalancedList(): AqSong[] {
     const userLists = this._userDb.getSelectedUserLists(this._users)
     const songList = []
     for (const userList of userLists) {
@@ -60,47 +58,6 @@ class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
       }
     }
     return songList
-  }
-
-  protected _generateDupeNormalList(): AqSong[] {
-    const userSongIds = this._userDb.getSelectedUserSongIds(this._users)
-    const userSongs = this._songDb.getSelectedUserSongs(userSongIds)
-    const songList = userSongs.slice(0, this._normalSongCount)
-    for (const song of songList) {
-      this._addDupeSongId(song)
-    }
-    return songList
-  }
-
-  protected _generateDupeBalancedList(): AqSong[] {
-    const userLists = this._userDb.getSelectedUserLists(this._users)
-    const songList = []
-    for (const userList of userLists) {
-      let songCount = 0
-      const userSongs = this._songDb.getSelectedUserSongs(userList.song_id)
-      for (const song of userSongs) {
-        if (!this._isDupeSong(song)) {
-          songList.push(song)
-          this._addDupeSongId(song)
-          songCount += 1
-        }
-
-        if (songCount >= this._songsPerUser) {
-          break
-        }
-      }
-    }
-    return songList
-  }
-
-  protected _generateDupeList(): AqSong[] {
-    return this._generateDupeNormalList()
-      .concat(this._generateDupeBalancedList())
-  }
-
-  protected _generateNonDupeList(): AqSong[] {
-    return this._generateNonDupeNormalList()
-      .concat(this._generateNonDupeBalancedList())
   }
 }
 

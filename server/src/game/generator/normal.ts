@@ -1,24 +1,15 @@
 import { AbstractGameListGenerator } from './abstract'
-import { AqSong } from '../../shared/interfaces'
+import { AqGameSettings, AqSong } from '../../shared/interfaces'
+import { AnimeQuizSongDb } from '../../database/song'
+import { AnimeQuizUserDb } from '../../database/user'
 
 class NormalGameListGenerator extends AbstractGameListGenerator {
-  public generate(): AqSong[] {
-    if (this._users.length <= 0) {
-      return []
-    }
-    if (this._duplicate) {
-      return this._generateDupeList()
-    }
-    return this._generateNonDupeList()
+
+  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings) {
+    super(songDb, userDb, settings, true)
   }
 
-  protected _generateDupeList(): AqSong[] {
-    const userSongIds = this._userDb.getSelectedUserSongIds(this._users)
-    const userSongs = this._songDb.getSelectedUserSongs(userSongIds)
-    return userSongs.slice(0, this._songCount)
-  }
-
-  protected _generateNonDupeList(): AqSong[] {
+  protected _generateList(): AqSong[] {
     const userSongIds = this._userDb.getSelectedUserSongIds(this._users)
     const userSongs = this._songDb.getSelectedUserSongs(userSongIds)
     const songList = []
@@ -27,7 +18,7 @@ class NormalGameListGenerator extends AbstractGameListGenerator {
         songList.push(song)
         this._addDupeAnimeIds(song)
         if (songList.length >= this._songCount) {
-          break
+          return songList
         }
       }
     }

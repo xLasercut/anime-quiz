@@ -90,7 +90,8 @@ export default defineComponent({
       gameModes: [
         { text: 'Normal', value: GAME_MODE.NORMAL },
         { text: 'Balanced', value: GAME_MODE.BALANCED },
-        { text: 'Balanced Plus', value: GAME_MODE.BALANCED_PLUS }
+        { text: 'Balanced Plus', value: GAME_MODE.BALANCED_PLUS },
+        { text: 'Shiritori', value: GAME_MODE.SHIRITORI }
       ],
       toggleItems: [
         { text: 'Yes', value: true },
