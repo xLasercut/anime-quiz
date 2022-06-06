@@ -39,16 +39,10 @@ interface AqAnimeRaw {
   anime_name: string
 }
 
-interface AqShiritoriModeNextSong {
-  nextSong: AqSong | null
-  animeName: string
-}
-
 export {
   LogTemplate,
   AqSongRaw,
   AqUserSongsRaw,
   AqGameStateRaw,
-  AqAnimeRaw,
-  AqShiritoriModeNextSong
+  AqAnimeRaw
 }

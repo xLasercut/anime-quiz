@@ -2,7 +2,6 @@ import { AbstractGameListGenerator } from './abstract'
 import { AqGameSettings, AqSong } from '../../shared/interfaces'
 import { AnimeQuizSongDb } from '../../database/song'
 import { AnimeQuizUserDb } from '../../database/user'
-import { AqShiritoriModeNextSong } from '../../interfaces'
 
 class ShiritoriGameListGenerator extends AbstractGameListGenerator {
   protected _firstLetterPattern: RegExp
@@ -20,57 +19,48 @@ class ShiritoriGameListGenerator extends AbstractGameListGenerator {
     }
     const songList: AqSong[] = []
     let lastLetter = ''
-    while (songList.length < this._songCount && this._dupeSongIds.size < userSongs.length) {
-      const { nextSong, animeName } = this._findNextSong(userSongs, lastLetter)
+    let unmatchCount = 0
+    while (songList.length < this._songCount && unmatchCount < 2) {
+      const nextSong = this._findNextSong(userSongs, lastLetter)
       if (nextSong) {
         songList.push(nextSong)
         this._addDupeSongId(nextSong)
         this._addDupeAnimeIds(nextSong)
-        lastLetter = this._getLastLetter(animeName)
+        lastLetter = this._getLastLetter(nextSong.song_title)
+        unmatchCount = 0
       } else {
         lastLetter = ''
+        unmatchCount += 1
       }
     }
     return songList
   }
 
-  protected _findNextSong(userSongs: AqSong[], lastLetter: string): AqShiritoriModeNextSong {
+  protected _findNextSong(userSongs: AqSong[], lastLetter: string): AqSong {
     if (lastLetter) {
       return this._findNextSongFromLastLetter(userSongs, lastLetter)
     }
     return this._findNextSongStandard(userSongs)
   }
 
-  protected _findNextSongFromLastLetter(userSongs: AqSong[], lastLetter: string): AqShiritoriModeNextSong {
+  protected _findNextSongFromLastLetter(userSongs: AqSong[], lastLetter: string): AqSong {
     for (const song of userSongs) {
       for (const animeName of song.anime_name) {
         if (!this._isDupeSong(song) && this._getFirstLetter(animeName) === lastLetter && !this._isDupeAnime(song)) {
-          return {
-            nextSong: song,
-            animeName: animeName
-          }
+          return song
         }
       }
     }
-    return {
-      nextSong: null,
-      animeName: ''
-    }
+    return null
   }
 
-  protected _findNextSongStandard(userSongs: AqSong[]): AqShiritoriModeNextSong {
+  protected _findNextSongStandard(userSongs: AqSong[]): AqSong {
     for (const song of userSongs) {
       if (!this._isDupeSong(song) && !this._isDupeAnime(song)) {
-        return {
-          nextSong: song,
-          animeName: song.anime_name[0]
-        }
+        return song
       }
     }
-    return {
-      nextSong: null,
-      animeName: ''
-    }
+    return null
   }
 
   protected _getLastLetter(name: string): string {
