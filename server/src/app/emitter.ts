@@ -105,9 +105,9 @@ class Emitter {
 
   protected _client(sid: string) {
     if (sid) {
-      return this._io.to(sid)
+      return this._io.to(sid).compress(true)
     }
-    return this._io
+    return this._io.compress(true)
   }
 }
 
