@@ -22,13 +22,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Server JSON Data
+      - name: Build Song JSON Data
         run: npm run build:jsondb
 
-      - name: Publish Server JSON Data
+      - name: Publish Song JSON Data
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
-          branch: server-json-data
+          branch: song-json-data
           folder: server/dist
 
       - name: Build Client
