@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf ./dist && tsc -b",
+    "build:jsondb": "rm -rf ./dist && mkdir -p ./dist && ts-node tools/create-json-db.ts",
     "start": "node dist/index.js",
     "dev": "env-cmd -f ./config.env nodemon src/index.ts",
     "init:userdb": "ts-node tools/init-user-db.ts",

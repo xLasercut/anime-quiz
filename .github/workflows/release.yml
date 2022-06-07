@@ -25,6 +25,12 @@ jobs:
       - name: Build
         run: export VUE_APP_VERSION=$(git rev-parse --short "$GITHUB_SHA") && npm run build
 
+      - name: Publish Server JSON Data
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: server-json-data
+          folder: server/dist
+
       - name: Publish Client
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
