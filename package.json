@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run build --workspace=client",
-    "build:jsondb": "npm run build:jsondb --workspace=server",
     "dev:server": "npm run dev --workspace=server",
     "dev:client": "npm run dev --workspace=client",
     "init:userdb": "npm run init:userdb --workspace=server",
