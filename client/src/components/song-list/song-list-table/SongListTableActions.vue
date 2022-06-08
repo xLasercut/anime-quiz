@@ -55,7 +55,10 @@ export default defineComponent({
 
     function reload(): void {
       store.commit(MUTATIONS.SOCKET_UPDATE_SONG_LIST, [])
-      socket.emit(SHARED_EVENTS.RELOAD_SONG_LIST_DATA)
+      socket.emit(SHARED_EVENTS.GET_SONG_LIST)
+      socket.emit(SHARED_EVENTS.GET_ANIME_LIST)
+      socket.emit(SHARED_EVENTS.GET_SONG_TITLE_LIST)
+      socket.emit(SHARED_EVENTS.GET_USER_LISTS)
     }
 
     return {

@@ -2,65 +2,55 @@ import { AbstractHandler } from './abstract'
 import { Socket } from '../types'
 import { SHARED_EVENTS } from '../shared/events'
 import { Logger } from '../app/logging/logger'
-import { Emitter } from '../app/emitter'
 import { ROOM_NAME_PREFIX } from '../constants'
 import { v4 } from 'uuid'
-import { ChatManager } from '../game/chat'
 import { Server } from '../app/server'
-import { GAME_MODE, ROOM_NAME_FORMAT } from '../shared/constants'
+import { ROOM_NAME_FORMAT } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationError } from '../app/exceptions'
 import { GameSettings } from '../game/settings'
-import { AnimeQuizUserDb } from '../database/user'
 import { AqGameGuess, AqGameSettings, AqSong } from '../shared/interfaces'
 import { GameStates } from '../game/state'
-import { AnimeQuizEmojiDb } from '../database/emoji'
-import { AnimeQuizSongDb } from '../database/song'
-import { NormalGameListGenerator } from '../game/generator/normal'
-import { BalancedPlusGameListGenerator } from '../game/generator/balanced-plus'
-import { ShiritoriGameListGenerator } from '../game/generator/shiritori'
 import { GameListGeneratorFactory } from '../game/generator/factory'
+import { EmojiDbEmitter } from '../emitters/emoji'
+import { GameEmitter } from '../emitters/game'
+import { UserDbEmitter } from '../emitters/user'
+import { SongDbEmitter } from '../emitters/song'
+import { SystemEmitter } from '../emitters/system'
 
 class GameHandler extends AbstractHandler {
   protected _io: Server
-  protected _chat: ChatManager
   protected _settings: GameSettings
   protected _states: GameStates
-  protected _userDb: AnimeQuizUserDb
-  protected _songDb: AnimeQuizSongDb
-  protected _emojiDb: AnimeQuizEmojiDb
-  protected _gameModeGenerators
+  protected _userDbEmitter: UserDbEmitter
+  protected _songDbEmitter: SongDbEmitter
+  protected _emojiDbEmitter: EmojiDbEmitter
+  protected _gameEmitter: GameEmitter
+  protected _systemEmitter: SystemEmitter
+  protected _gameListGeneratorFactory: GameListGeneratorFactory
 
   constructor(
     logger: Logger,
     io: Server,
-    emitter: Emitter,
-    userDb: AnimeQuizUserDb,
-    sonDb: AnimeQuizSongDb,
-    emojiDb: AnimeQuizEmojiDb,
     settings: GameSettings,
     states: GameStates,
-    chatManager: ChatManager
+    userDbEmitter: UserDbEmitter,
+    songDbEmitter: SongDbEmitter,
+    emojiDbEmitter: EmojiDbEmitter,
+    gameEmitter: GameEmitter,
+    systemEmitter: SystemEmitter,
+    gameListGeneratorFactory: GameListGeneratorFactory
   ) {
-    super(logger, emitter)
+    super(logger)
     this._io = io
-    this._chat = chatManager
     this._settings = settings
     this._states = states
-    this._userDb = userDb
-    this._songDb = sonDb
-    this._emojiDb = emojiDb
-    this._gameModeGenerators = {
-      [GAME_MODE.NORMAL]: {
-        generator: NormalGameListGenerator,
-        shuffle: true
-      },
-      [GAME_MODE.BALANCED_PLUS]: {
-        generator: BalancedPlusGameListGenerator,
-        shuffle: true
-      },
-      [GAME_MODE.SHIRITORI]: ShiritoriGameListGenerator
-    }
+    this._userDbEmitter = userDbEmitter
+    this._songDbEmitter = songDbEmitter
+    this._emojiDbEmitter = emojiDbEmitter
+    this._gameEmitter = gameEmitter
+    this._systemEmitter = systemEmitter
+    this._gameListGeneratorFactory = gameListGeneratorFactory
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -69,14 +59,14 @@ class GameHandler extends AbstractHandler {
         this._validateNewRoomName(roomName)
         const roomId = `${ROOM_NAME_PREFIX}|${roomName}|${v4()}`
         if (socket.data.admin) {
-          this._emitter.updateSongList(this._songDb.getSongList(), socket.id)
+          this._songDbEmitter.updateSongList(socket.id)
         }
-        this._emitter.updateAnimeList(this._songDb.getAnimeList(), socket.id)
-        this._emitter.updateSongTitleList(this._songDb.getSongTitleList(), socket.id)
-        this._emitter.updateUserLists(this._userDb.getUserLists(), socket.id)
-        this._emitter.updateEmojiList(this._emojiDb.getEmojiList(), socket.id)
+        this._songDbEmitter.updateAnimeList(socket.id)
+        this._songDbEmitter.updateSongTitleList(socket.id)
+        this._userDbEmitter.updateUserLists(socket.id)
+        this._emojiDbEmitter.updateEmojiList(socket.id)
         socket.data.host = true
-        this._emitter.updateClientData(socket.data.getClientData(), socket.id)
+        this._systemEmitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomId)
         callback(true)
       } catch (e) {
@@ -89,14 +79,14 @@ class GameHandler extends AbstractHandler {
       try {
         this._validateExistingRoomName(roomName)
         if (socket.data.admin) {
-          this._emitter.updateSongList(this._songDb.getSongList(), socket.id)
+          this._songDbEmitter.updateSongList(socket.id)
         }
-        this._emitter.updateAnimeList(this._songDb.getAnimeList(), socket.id)
-        this._emitter.updateSongTitleList(this._songDb.getSongTitleList(), socket.id)
-        this._emitter.updateUserLists(this._userDb.getUserLists(), socket.id)
-        this._emitter.updateEmojiList(this._emojiDb.getEmojiList(), socket.id)
+        this._songDbEmitter.updateAnimeList(socket.id)
+        this._songDbEmitter.updateSongTitleList(socket.id)
+        this._userDbEmitter.updateUserLists(socket.id)
+        this._emojiDbEmitter.updateEmojiList(socket.id)
         socket.data.host = false
-        this._emitter.updateClientData(socket.data.getClientData(), socket.id)
+        this._systemEmitter.updateClientData(socket.data.getClientData(), socket.id)
         socket.join(roomName)
         callback(true)
       } catch (e) {
@@ -107,7 +97,7 @@ class GameHandler extends AbstractHandler {
     socket.on(SHARED_EVENTS.GAME_CHAT, (message: string) => {
       try {
         const roomId = this._getSocketGameRoom(socket)
-        this._emitter.updateGameChat(this._chat.generateUserMsg(socket, message), roomId)
+        this._gameEmitter.updateGameChat(socket, message, roomId)
       } catch (e) {
         errorHandler(e)
       }
@@ -119,7 +109,7 @@ class GameHandler extends AbstractHandler {
         const _guess = this._sanitiseGuess(guess)
         socket.data.gameGuess = _guess
         socket.data.pendingScore = this._states.calculateScore(_guess, roomId)
-        this._emitter.updateGuess(socket.data.gameGuess, socket.id)
+        this._gameEmitter.updateGuess(socket.data.gameGuess, socket.id)
       } catch (e) {
         errorHandler(e)
       }
@@ -132,11 +122,11 @@ class GameHandler extends AbstractHandler {
         const gameList = this._generateGameList(settings)
         this._validateGameSongList(gameList)
         this._states.startGame(roomId, gameList)
-        this._emitter.gameNewRound(roomId)
+        this._gameEmitter.gameNewRound(roomId)
         const gameState = this._states.getGameState(roomId)
-        this._emitter.updateGameState(gameState, roomId)
+        this._gameEmitter.updateGameState(roomId, roomId)
         this._io.resetScore(roomId)
-        this._emitter.updateGamePlayerList(this._io.getPlayerList(roomId), roomId)
+        this._gameEmitter.updateGamePlayerList(roomId, roomId)
         this._logger.writeLog(LOG_BASE.NEW_GAME, {
           roomId: roomId,
           settings: settings,
@@ -177,18 +167,18 @@ class GameHandler extends AbstractHandler {
     const startPosition = Math.random()
     const gameState = this._states.getGameState(roomId)
     this._logger.writeLog(LOG_BASE.NEW_GAME_ROUND, { state: gameState, roomId: roomId })
-    this._emitter.gameNewRound(roomId)
+    this._gameEmitter.gameNewRound(roomId)
     this._io.newRound(roomId)
-    this._emitter.updateGameState(gameState, roomId)
+    this._gameEmitter.updateGameState(roomId, roomId)
     await this._states.startTimeout(2000, roomId)
-    this._emitter.gameStartLoad(startPosition, settings.guessTime, roomId)
+    this._gameEmitter.gameStartLoad(startPosition, settings.guessTime, roomId)
     this._states.clearSongOverride(roomId)
     await this._states.waitPlayerLoaded(10000, roomId)
-    this._emitter.gameStartCountdown(roomId)
+    this._gameEmitter.gameStartCountdown(roomId)
     await this._states.startTimeout(settings.guessTime * 1000, roomId)
     this._io.updateScore(roomId)
-    this._emitter.updateGamePlayerList(this._io.getPlayerList(roomId), roomId)
-    this._emitter.gameShowGuess(roomId)
+    this._gameEmitter.updateGamePlayerList(roomId, roomId)
+    this._gameEmitter.gameShowGuess(roomId)
     if (!this._states.isLastSong(roomId)) {
       this._states.nextSong(roomId)
       await this._states.startTimeout(10000, roomId)
@@ -201,13 +191,12 @@ class GameHandler extends AbstractHandler {
 
   protected _stopGame(roomId: string): void {
     this._states.stopGame(roomId)
-    this._emitter.updateGameState(this._states.getGameState(roomId), roomId)
-    this._emitter.stopClientGame(roomId)
+    this._gameEmitter.updateGameState(roomId, roomId)
+    this._gameEmitter.stopClientGame(roomId)
   }
 
   protected _generateGameList(settings: AqGameSettings): AqSong[] {
-    const generatorFactory = new GameListGeneratorFactory(this._songDb, this._userDb, settings)
-    const generator = generatorFactory.getGenerator()
+    const generator = this._gameListGeneratorFactory.getGenerator(settings)
     return generator.generate()
   }
 

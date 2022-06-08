@@ -1,15 +1,12 @@
 import { AdminStoreState, RootStoreState } from '../../assets/interfaces'
 import { Module } from 'vuex'
 import { MUTATIONS } from './mutations'
-import { AqAnime, AqEmoji, AqSong } from '../../assets/shared/interfaces'
 
 const DEFAULT_STATE: AdminStoreState = {
-  animeList: [],
   animeInEdit: {
     anime_id: '',
     anime_name: []
   },
-  songList: [],
   songInEdit: {
     anime_id: [],
     anime_name: [],
@@ -19,7 +16,6 @@ const DEFAULT_STATE: AdminStoreState = {
     artist: '',
     type: ''
   },
-  emojiList: [],
   emojiInEdit: {
     emoji_id: '',
     command: '',
@@ -33,15 +29,6 @@ const admin: Module<AdminStoreState, RootStoreState> = {
   mutations: {
     [MUTATIONS.RESET_STORE_STATE]: (state: AdminStoreState) => {
       Object.assign(state, DEFAULT_STATE)
-    },
-    [MUTATIONS.SOCKET_ADMIN_UPDATE_ANIME_LIST]: (state: AdminStoreState, animeList: AqAnime[]) => {
-      state.animeList = animeList
-    },
-    [MUTATIONS.SOCKET_ADMIN_UPDATE_SONG_LIST]: (state: AdminStoreState, songList: AqSong[]) => {
-      state.songList = songList
-    },
-    [MUTATIONS.SOCKET_ADMIN_UPDATE_EMOJI_LIST]: (state: AdminStoreState, emojiList: AqEmoji[]) => {
-      state.emojiList = emojiList
     },
     [MUTATIONS.ADMIN_UPDATE_ANIME_ID]: (state: AdminStoreState, animeId: string) => {
       state.animeInEdit.anime_id = animeId
@@ -81,47 +68,6 @@ const admin: Module<AdminStoreState, RootStoreState> = {
     },
     [MUTATIONS.ADMIN_UPDATE_EMOJI_ID]: (state: AdminStoreState, id: string) => {
       state.emojiInEdit.emoji_id = id
-    }
-  },
-  getters: {
-    adminSongList: (state: AdminStoreState): AqSong[] => {
-      return [...state.songList].sort((a, b) => {
-        const animeA = a.anime_name[0]
-        const animeB = b.anime_name[0]
-
-        if (animeA === animeB) {
-          return 0
-        } else if (animeA > animeB) {
-          return 1
-        }
-        return -1
-      })
-    },
-    adminEmojiList: (state: AdminStoreState): AqEmoji[] => {
-      return [...state.emojiList].sort((a, b) => {
-        const commandA = a.command
-        const commandB = b.command
-
-        if (commandA === commandB) {
-          return 0
-        } else if (commandA > commandB) {
-          return 1
-        }
-        return -1
-      })
-    },
-    adminAnimeList: (state: AdminStoreState): AqAnime[] => {
-      return [...state.animeList].sort((a, b) => {
-        const nameA = a.anime_name
-        const nameB = b.anime_name
-
-        if (nameA === nameB) {
-          return 0
-        } else if (nameA > nameB) {
-          return 1
-        }
-        return -1
-      })
     }
   }
 }

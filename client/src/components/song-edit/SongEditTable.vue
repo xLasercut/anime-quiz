@@ -85,7 +85,7 @@ export default defineComponent({
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
 
     function filteredSongList(): AqSong[] {
-      return store.getters.adminSongList.filter((song: AqSong) => {
+      return store.getters.songList.filter((song: AqSong) => {
         return shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
           shouldDisplayResult(state.songTitleFilter, song.song_title) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&

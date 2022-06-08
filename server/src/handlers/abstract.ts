@@ -3,15 +3,12 @@ import { Socket } from '../types'
 import { ROOM_NAME_PREFIX } from '../constants'
 import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationDcError } from '../app/exceptions'
-import { Emitter } from '../app/emitter'
 
 class AbstractHandler {
   protected _logger: Logger
-  protected _emitter: Emitter
 
-  constructor(logger: Logger, emitter: Emitter) {
+  constructor(logger: Logger) {
     this._logger = logger
-    this._emitter = emitter
   }
 
   public start(socket: Socket, errorHandler: Function): void {

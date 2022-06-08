@@ -1,6 +1,5 @@
 import { AbstractHandler } from './abstract'
 import { Logger } from '../app/logging/logger'
-import { Emitter } from '../app/emitter'
 import { Socket } from '../types'
 import { SHARED_EVENTS } from '../shared/events'
 import { ROOM_IDS } from '../constants'
@@ -9,15 +8,21 @@ import { NOTIFICATION_COLOR } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
 import { AnimeQuizUserDb } from '../database/user'
 import { AnimeQuizSongDb } from '../database/song'
+import { SongDbEmitter } from '../emitters/song'
+import { SystemEmitter } from '../emitters/system'
 
 class SongEditHandler extends AbstractHandler {
   protected _songDb: AnimeQuizSongDb
   protected _userDb: AnimeQuizUserDb
+  protected _songDbEmitter: SongDbEmitter
+  protected _systemEmitter: SystemEmitter
 
-  constructor(logger: Logger, emitter: Emitter, songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb) {
-    super(logger, emitter)
+  constructor(logger: Logger, songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, songDbEmitter: SongDbEmitter, systemEmitter: SystemEmitter) {
+    super(logger)
     this._songDb = songDb
     this._userDb = userDb
+    this._songDbEmitter = songDbEmitter
+    this._systemEmitter = systemEmitter
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -25,16 +30,9 @@ class SongEditHandler extends AbstractHandler {
       try {
         this._validateIsAdmin(socket)
         socket.join(ROOM_IDS.SONG_EDIT)
-        this._reloadSongListData(socket.id)
-      } catch (e) {
-        errorHandler(e)
-      }
-    })
-
-    socket.on(SHARED_EVENTS.ADMIN_RELOAD_SONG_LIST_DATA, () => {
-      try {
-        this._validateIsAdmin(socket)
-        this._reloadSongListData(socket.id)
+        this._songDbEmitter.updateSongList(socket.id)
+        this._songDbEmitter.updateSongTitleList(socket.id)
+        this._songDbEmitter.updateAnimeList(socket.id)
       } catch (e) {
         errorHandler(e)
       }
@@ -47,8 +45,8 @@ class SongEditHandler extends AbstractHandler {
         this._songDb.validateIsDbLocked()
         this._songDb.validateAnimeExist(song.anime_id)
         this._songDb.newSong(song)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${song.song_title}`, socket.id)
-        this._reloadSongListData(ROOM_IDS.SONG_EDIT)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${song.song_title}`, socket.id)
+        this._songDbEmitter.updateSongList(ROOM_IDS.SONG_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -65,8 +63,8 @@ class SongEditHandler extends AbstractHandler {
         this._songDb.validateSongsExist([ song.song_id ])
         this._songDb.deleteSong(song)
         this._userDb.removeSongAll(song.song_id)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Deleted ${song.song_title}`, socket.id)
-        this._reloadSongListData(ROOM_IDS.SONG_EDIT)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Deleted ${song.song_title}`, socket.id)
+        this._songDbEmitter.updateSongList(ROOM_IDS.SONG_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -82,21 +80,14 @@ class SongEditHandler extends AbstractHandler {
         this._songDb.validateSongsExist([ song.song_id ])
         this._songDb.validateAnimeExist(song.anime_id)
         this._songDb.editSong(song)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Edited ${song.song_title}`, socket.id)
-        this._reloadSongListData(ROOM_IDS.SONG_EDIT)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Edited ${song.song_title}`, socket.id)
+        this._songDbEmitter.updateSongList(ROOM_IDS.SONG_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
         callback(false)
       }
     })
-  }
-
-  protected _reloadSongListData(sid: string): void {
-    this._emitter.adminUpdateSongList(this._songDb.getSongList(), sid)
-    this._emitter.adminUpdateAnimeList(this._songDb.getAdminAnimeList(), sid)
-    this._emitter.updateSongTitleList(this._songDb.getSongTitleList(), sid)
-    this._emitter.updateAnimeList(this._songDb.getAnimeList(), sid)
   }
 }
 

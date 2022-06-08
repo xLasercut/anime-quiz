@@ -3,18 +3,23 @@ import { Logger } from '../app/logging/logger'
 import { Socket } from '../types'
 import { SHARED_EVENTS } from '../shared/events'
 import { ROOM_IDS } from '../constants'
-import { Emitter } from '../app/emitter'
 import { AqAnime } from '../shared/interfaces'
 import { NOTIFICATION_COLOR } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
 import { AnimeQuizSongDb } from '../database/song'
+import { SongDbEmitter } from '../emitters/song'
+import { SystemEmitter } from '../emitters/system'
 
 class AnimeEditHandler extends AbstractHandler {
   protected _songDb: AnimeQuizSongDb
+  protected _songDbEmitter: SongDbEmitter
+  protected _systemEmitter: SystemEmitter
 
-  constructor(logger: Logger, emitter: Emitter, songDb: AnimeQuizSongDb) {
-    super(logger, emitter)
+  constructor(logger: Logger, systemEmitter: SystemEmitter, songDb: AnimeQuizSongDb, songDbEmitter: SongDbEmitter) {
+    super(logger)
     this._songDb = songDb
+    this._songDbEmitter = songDbEmitter
+    this._systemEmitter = systemEmitter
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -22,16 +27,7 @@ class AnimeEditHandler extends AbstractHandler {
       try {
         this._validateIsAdmin(socket)
         socket.join(ROOM_IDS.ANIME_EDIT)
-        this._emitter.adminUpdateAnimeList(this._songDb.getAdminAnimeList(), socket.id)
-      } catch (e) {
-        errorHandler(e)
-      }
-    })
-
-    socket.on(SHARED_EVENTS.ADMIN_GET_ANIME_LIST, () => {
-      try {
-        this._validateIsAdmin(socket)
-        this._emitter.adminUpdateAnimeList(this._songDb.getAdminAnimeList(), socket.id)
+        this._songDbEmitter.updateAnimeList(socket.id)
       } catch (e) {
         errorHandler(e)
       }
@@ -44,8 +40,8 @@ class AnimeEditHandler extends AbstractHandler {
         this._songDb.validateIsDbLocked()
         this._songDb.validateAnimeExist([ anime.anime_id ])
         this._songDb.editAnime(anime)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} edited`, socket.id)
-        this._emitter.adminUpdateAnimeList(this._songDb.getAdminAnimeList(), ROOM_IDS.ANIME_EDIT)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} edited`, socket.id)
+        this._songDbEmitter.updateAnimeList(ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -59,8 +55,8 @@ class AnimeEditHandler extends AbstractHandler {
         this._validateIsAdmin(socket)
         this._songDb.validateIsDbLocked()
         this._songDb.newAnime(anime)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} added`, socket.id)
-        this._emitter.adminUpdateAnimeList(this._songDb.getAdminAnimeList(), ROOM_IDS.ANIME_EDIT)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} added`, socket.id)
+        this._songDbEmitter.updateAnimeList(ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -75,8 +71,8 @@ class AnimeEditHandler extends AbstractHandler {
         this._songDb.validateIsDbLocked()
         this._songDb.validateAnimeExist([ anime.anime_id ])
         this._songDb.deleteAnime(anime)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} deleted`, socket.id)
-        this._emitter.adminUpdateAnimeList(this._songDb.getAdminAnimeList(), ROOM_IDS.ANIME_EDIT)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `${anime.anime_name.join(',')} deleted`, socket.id)
+        this._songDbEmitter.updateAnimeList(ROOM_IDS.ANIME_EDIT)
         callback(true)
       } catch (e) {
         errorHandler(e)

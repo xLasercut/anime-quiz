@@ -1,7 +1,6 @@
 import { AbstractHandler } from './abstract'
 import { Socket } from '../types'
 import { Logger } from '../app/logging/logger'
-import { Emitter } from '../app/emitter'
 import { SHARED_EVENTS } from '../shared/events'
 import { NOTIFICATION_COLOR } from '../shared/constants'
 import { LOG_BASE } from '../app/logging/log-base'
@@ -10,6 +9,7 @@ import { AnimeQuizEmojiDb } from '../database/emoji'
 import { AnimeQuizSongDb } from '../database/song'
 import { AnimeQuizUserDb } from '../database/user'
 import { GameStates } from '../game/state'
+import { SystemEmitter } from '../emitters/system'
 
 class AdminHandler extends AbstractHandler {
   protected _emojiDb: AnimeQuizEmojiDb
@@ -17,22 +17,24 @@ class AdminHandler extends AbstractHandler {
   protected _userDb: AnimeQuizUserDb
   protected _io: Server
   protected _states: GameStates
+  protected _systemEmitter: SystemEmitter
 
   constructor(
     logger: Logger,
-    emitter: Emitter,
+    systemEmitter: SystemEmitter,
     io: Server,
     songDb: AnimeQuizSongDb,
     emojiDb: AnimeQuizEmojiDb,
     userDb: AnimeQuizUserDb,
     states: GameStates
   ) {
-    super(logger, emitter)
+    super(logger)
     this._songDb = songDb
     this._io = io
     this._emojiDb = emojiDb
     this._userDb = userDb
     this._states = states
+    this._systemEmitter = systemEmitter
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -44,7 +46,7 @@ class AdminHandler extends AbstractHandler {
         this._songDb.reloadCache()
         this._emojiDb.reloadDb()
         this._emojiDb.reloadCache()
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database reloaded')
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database reloaded')
       } catch (e) {
         errorHandler(e)
       }
@@ -54,7 +56,7 @@ class AdminHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_KICK_PLAYER, { kickedPlayerId: playerId })
         this._validateIsAdmin(socket)
-        this._emitter.systemNotification(NOTIFICATION_COLOR.ERROR, 'You have been kicked', playerId)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, 'You have been kicked', playerId)
         this._io.kickPlayer(playerId)
       } catch (e) {
         errorHandler(e)
@@ -68,7 +70,7 @@ class AdminHandler extends AbstractHandler {
         this._userDb.lockDb()
         this._songDb.lockDb()
         this._emojiDb.lockDb()
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database locked', socket.id)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database locked', socket.id)
       } catch (e) {
         errorHandler(e)
       }
@@ -81,7 +83,7 @@ class AdminHandler extends AbstractHandler {
         this._userDb.unlockDb()
         this._songDb.unlockDb()
         this._emojiDb.unlockDb()
-        this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database unlocked', socket.id)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database unlocked', socket.id)
       } catch (e) {
         errorHandler(e)
       }
@@ -95,7 +97,7 @@ class AdminHandler extends AbstractHandler {
         const songs = this._songDb.getSelectedUserSongs([ songId ])
         if (songs.length === 1) {
           this._states.songOverride(songs[0], roomId)
-          this._emitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Song selected', socket.id)
+          this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Song selected', socket.id)
         }
       } catch (e) {
         errorHandler(e)

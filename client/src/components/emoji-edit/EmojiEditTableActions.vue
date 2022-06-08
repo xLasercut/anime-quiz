@@ -29,8 +29,8 @@ export default defineComponent({
   components: { IconBtn },
   setup() {
     function reload(): void {
-      store.commit(MUTATIONS.SOCKET_ADMIN_UPDATE_EMOJI_LIST, [])
-      socket.emit(SHARED_EVENTS.ADMIN_GET_EMOJI_LIST)
+      store.commit(MUTATIONS.SOCKET_UPDATE_EMOJI_LIST, [])
+      socket.emit(SHARED_EVENTS.GET_EMOJI_LIST)
     }
 
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)

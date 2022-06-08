@@ -10,8 +10,7 @@ import { SongValidator } from '../validator/song'
 import { shuffleSongList } from '../helpers'
 
 class AnimeQuizSongDb extends AbstractDb {
-  protected _adminAnimeListCache: AqAnime[]
-  protected _animeListCache: string[]
+  protected _animeListCache: AqAnime[]
   protected _songTitleListCache: string[]
   protected _songListCache: AqSong[]
   protected _validator: SongValidator
@@ -23,21 +22,16 @@ class AnimeQuizSongDb extends AbstractDb {
   }
 
   public reloadCache(): void {
-    this._adminAnimeListCache = this._getAdminAnimeList()
     this._songTitleListCache = this._getSongTitleList()
     this._animeListCache = this._getAnimeList()
     this._songListCache = this._getSongList()
-  }
-
-  public getAdminAnimeList(): AqAnime[] {
-    return this._adminAnimeListCache
   }
 
   public getSongTitleList(): string[] {
     return this._songTitleListCache
   }
 
-  public getAnimeList(): string[] {
+  public getAnimeList(): AqAnime[] {
     return this._animeListCache
   }
 
@@ -196,7 +190,19 @@ class AnimeQuizSongDb extends AbstractDb {
     }
   }
 
-  protected _getAdminAnimeList(): AqAnime[] {
+  protected _getSongTitleList(): string[] {
+    const sql = `
+      SELECT DISTINCT
+        song_title
+      FROM songs
+    `
+    const songList: AqSongRaw[] = this._db.prepare(sql).all()
+    return songList.map((song) => {
+      return song.song_title
+    })
+  }
+
+  protected _getAnimeList(): AqAnime[] {
     const sql = `
       SELECT
         anime_id,
@@ -211,31 +217,6 @@ class AnimeQuizSongDb extends AbstractDb {
         anime_id: anime.anime_id,
         anime_name: JSON.parse(anime.anime_name)
       }
-    })
-  }
-
-  protected _getSongTitleList(): string[] {
-    const sql = `
-      SELECT DISTINCT
-        song_title
-      FROM songs
-    `
-    const songList: AqSongRaw[] = this._db.prepare(sql).all()
-    return songList.map((song) => {
-      return song.song_title
-    })
-  }
-
-  protected _getAnimeList(): string[] {
-    const sql = `
-      SELECT DISTINCT
-        anime_name
-      FROM animes
-    `
-    const animeList: AqAnimeRaw[] = this._db.prepare(sql).all()
-
-    return animeList.map((anime) => {
-      return anime.anime_name
     })
   }
 

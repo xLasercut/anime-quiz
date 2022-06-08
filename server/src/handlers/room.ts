@@ -2,15 +2,14 @@ import { AbstractHandler } from './abstract'
 import { Logger } from '../app/logging/logger'
 import { Socket } from '../types'
 import { SHARED_EVENTS } from '../shared/events'
-import { Emitter } from '../app/emitter'
-import { Server } from '../app/server'
+import { RoomEmitter } from '../emitters/room'
 
 class RoomHandler extends AbstractHandler {
-  protected _io: Server
+  protected _roomEmitter: RoomEmitter
 
-  constructor(logger: Logger, io: Server, emitter: Emitter) {
-    super(logger, emitter)
-    this._io = io
+  constructor(logger: Logger, roomEmitter: RoomEmitter) {
+    super(logger)
+    this._roomEmitter = roomEmitter
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -28,7 +27,7 @@ class RoomHandler extends AbstractHandler {
 
     socket.on(SHARED_EVENTS.GET_ROOM_LIST, () => {
       try {
-        this._emitter.updateRoomList(this._io.getGameRoomList(), socket.id)
+        this._roomEmitter.updateRoomList(socket.id)
       } catch (e) {
         errorHandler(e)
       }

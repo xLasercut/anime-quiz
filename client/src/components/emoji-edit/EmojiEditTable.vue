@@ -76,7 +76,7 @@ export default defineComponent({
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
 
     function filteredEmojiList(): AqEmoji[] {
-      return store.getters.adminEmojiList.filter((emoji: AqEmoji) => {
+      return store.getters.emojiList.filter((emoji: AqEmoji) => {
         return emoji.command.toLowerCase().includes(state.emojiCommandFilter.toLowerCase()) &&
           emoji.src.toLowerCase().includes(state.emojiSourceFilter.toLowerCase()) &&
           emoji.type.toLowerCase().includes(state.emojiTypeFilter.toLowerCase())

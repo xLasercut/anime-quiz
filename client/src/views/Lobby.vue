@@ -67,6 +67,14 @@ export default defineComponent({
           route: ROUTES.EMOJI_EDIT,
           requireAdmin: true,
           icon: 'mdi-database-edit'
+        },
+        {
+          color: 'error',
+          title: 'User Edit',
+          description: 'Edit User List',
+          route: ROUTES.USER_EDIT,
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
         }
       ]
     })

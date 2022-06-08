@@ -18,19 +18,17 @@ const _GENERATOR_MAP = {
 class GameListGeneratorFactory {
   protected _songDb: AnimeQuizSongDb
   protected _userDb: AnimeQuizUserDb
-  protected _settings: AqGameSettings
 
-  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings) {
+  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb) {
     this._songDb = songDb
     this._userDb = userDb
-    this._settings = settings
   }
 
-  public getGenerator() {
-    if (this._settings.gameMode in _GENERATOR_MAP) {
-      return new _GENERATOR_MAP[this._settings.gameMode](this._songDb, this._userDb, this._settings)
+  public getGenerator(settings: AqGameSettings) {
+    if (settings.gameMode in _GENERATOR_MAP) {
+      return new _GENERATOR_MAP[settings.gameMode](this._songDb, this._userDb, settings)
     }
-    return new NormalGameListGenerator(this._songDb, this._userDb, this._settings)
+    return new NormalGameListGenerator(this._songDb, this._userDb, settings)
   }
 }
 

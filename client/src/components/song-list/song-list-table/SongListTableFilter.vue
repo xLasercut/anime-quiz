@@ -43,7 +43,7 @@
       <v-select
         :value="selectedUser"
         @input="updateFilter('selected-user', $event)"
-        :items="$store.state.songList.userLists"
+        :items="$store.state.data.userLists"
         hide-details
         outlined
         dense
