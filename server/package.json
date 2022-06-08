@@ -7,8 +7,7 @@
     "build": "rm -rf ./dist && tsc -b",
     "start": "node dist/index.js",
     "dev": "env-cmd -f ./config.env nodemon src/index.ts",
-    "init:userdb": "ts-node tools/init-user-db.ts",
-    "create:user": "ts-node tools/create-user.ts"
+    "init:userdb": "ts-node tools/init-user-db.ts"
   },
   "author": "",
   "license": "MIT",

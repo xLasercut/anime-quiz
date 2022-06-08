@@ -47,10 +47,8 @@ docker compose up
 ```
 
 ## Adding user song lists
-Run command to create new user
-```bash
-npm run create:user
-````
+Add new user lists by logging in to the client with admin credentials
+
 You can then add songs to the list by going to song list editor via the client
 
 ## Running client

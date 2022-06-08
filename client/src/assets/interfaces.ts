@@ -12,6 +12,7 @@ interface AdminStoreState {
   animeInEdit: AqAnime
   songInEdit: AqSong
   emojiInEdit: AqEmoji
+  userInEdit: AqUserSongs
 }
 
 interface RootStoreState {

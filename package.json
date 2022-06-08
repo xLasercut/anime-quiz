@@ -7,8 +7,7 @@
     "build": "npm run build --workspace=client",
     "dev:server": "npm run dev --workspace=server",
     "dev:client": "npm run dev --workspace=client",
-    "init:userdb": "npm run init:userdb --workspace=server",
-    "create:user": "npm run create:user --workspace=server"
+    "init:userdb": "npm run init:userdb --workspace=server"
   },
   "workspaces": [
     "client",

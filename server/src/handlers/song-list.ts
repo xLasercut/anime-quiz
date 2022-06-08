@@ -2,7 +2,7 @@ import { Logger } from '../app/logging/logger'
 import { AbstractHandler } from './abstract'
 import { SHARED_EVENTS } from '../shared/events'
 import { AnimeQuizUserDb } from '../database/user'
-import { NOTIFICATION_COLOR, SONG_LIST_EDIT_MODE } from '../shared/constants'
+import { NOTIFICATION_COLOR } from '../shared/constants'
 import { ROOM_IDS } from '../constants'
 import { Socket } from '../types'
 import { AnimeQuizSongDb } from '../database/song'
@@ -39,25 +39,35 @@ class SongListHandler extends AbstractHandler {
       }
     })
 
-    socket.on(SHARED_EVENTS.EDIT_USER_LIST, (songIds: string[], userId: string, editMode: string, callback: Function) => {
+    socket.on(SHARED_EVENTS.ADD_USER_SONGS, (songIds: string[], userId: string, callback: Function) => {
       try {
         this._songDb.validateIsDbLocked()
         this._userDb.validateIsDbLocked()
         this._userDb.validateLessThanFiftySongs(songIds)
         this._userDb.validateUserExist(userId)
         this._songDb.validateSongsExist(songIds)
-        if (editMode === SONG_LIST_EDIT_MODE.ADD) {
-          this._userDb.validateSongsNotExistsInUserList(userId, songIds)
-          this._userDb.addSongs(userId, songIds)
-          this._userDbEmitter.updateUserLists(ROOM_IDS.SONG_LIST)
-          this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${songIds.length} songs to list`, socket.id)
-        }
-        else if (editMode === SONG_LIST_EDIT_MODE.REMOVE) {
-          this._userDb.validateSongsExistsInUserList(userId, songIds)
-          this._userDb.removeSongs(userId, songIds)
-          this._userDbEmitter.updateUserLists(ROOM_IDS.SONG_LIST)
-          this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Removed ${songIds.length} songs from list`, socket.id)
-        }
+        this._userDb.validateSongsNotExistsInUserList(userId, songIds)
+        this._userDb.addSongs(userId, songIds)
+        this._userDbEmitter.updateUserLists(ROOM_IDS.SONG_LIST)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${songIds.length} songs to list`, socket.id)
+        callback(true)
+      } catch (e) {
+        errorHandler(e)
+        callback(false)
+      }
+    })
+
+    socket.on(SHARED_EVENTS.DELETE_USER_SONGS, (songIds: string[], userId: string, callback: Function) => {
+      try {
+        this._songDb.validateIsDbLocked()
+        this._userDb.validateIsDbLocked()
+        this._userDb.validateLessThanFiftySongs(songIds)
+        this._userDb.validateUserExist(userId)
+        this._songDb.validateSongsExist(songIds)
+        this._userDb.validateSongsExistsInUserList(userId, songIds)
+        this._userDb.removeSongs(userId, songIds)
+        this._userDbEmitter.updateUserLists(ROOM_IDS.SONG_LIST)
+        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Removed ${songIds.length} songs from list`, socket.id)
         callback(true)
       } catch (e) {
         errorHandler(e)

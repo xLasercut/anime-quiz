@@ -152,16 +152,26 @@ export default defineComponent({
 
     function submitEdit(): void {
       if (songSelected.value.length > 0) {
-        state.loading = true
         const songIds = songSelected.value.map((song) => {
           return song.song_id
         })
-        socket.emit(SHARED_EVENTS.EDIT_USER_LIST, songIds, state.selectedUser, state.editMode, (proceed: boolean) => {
-          if (proceed) {
-            songSelected.value = []
-          }
-          state.loading = false
-        })
+        if (state.editMode === SONG_LIST_EDIT_MODE.ADD) {
+          state.loading = true
+          socket.emit(SHARED_EVENTS.ADD_USER_SONGS, songIds, state.selectedUser, (proceed: boolean) => {
+            if (proceed) {
+              songSelected.value = []
+            }
+            state.loading = false
+          })
+        } else if (state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
+          state.loading = true
+          socket.emit(SHARED_EVENTS.DELETE_USER_SONGS, songIds, state.selectedUser, (proceed: boolean) => {
+            if (proceed) {
+              songSelected.value = []
+            }
+            state.loading = false
+          })
+        }
       }
     }
 

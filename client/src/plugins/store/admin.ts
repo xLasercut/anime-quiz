@@ -21,6 +21,11 @@ const DEFAULT_STATE: AdminStoreState = {
     command: '',
     src: '',
     type: ''
+  },
+  userInEdit: {
+    user_id: '',
+    username: '',
+    song_id: []
   }
 }
 
@@ -68,6 +73,12 @@ const admin: Module<AdminStoreState, RootStoreState> = {
     },
     [MUTATIONS.ADMIN_UPDATE_EMOJI_ID]: (state: AdminStoreState, id: string) => {
       state.emojiInEdit.emoji_id = id
+    },
+    [MUTATIONS.ADMIN_UPDATE_USER_NAME]: (state: AdminStoreState, username: string) => {
+      state.userInEdit.username = username
+    },
+    [MUTATIONS.ADMIN_UPDATE_USER_ID]: (state: AdminStoreState, userId: string) => {
+      state.userInEdit.user_id = userId
     }
   }
 }

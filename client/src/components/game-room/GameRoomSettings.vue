@@ -30,7 +30,7 @@
         ></dialog-select>
         <dialog-select
           label="User Lists"
-          :items="$store.state.data.userLists"
+          :items="$store.getters.userLists"
           item-text="username"
           item-value="user_id"
           multiple

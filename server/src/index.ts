@@ -63,7 +63,7 @@ const animeEditHandler = new AnimeEditHandler(logger, systemEmitter, songDb, son
 const songEditHandler = new SongEditHandler(logger, songDb, userDb, songDbEmitter, systemEmitter)
 const adminHandler = new AdminHandler(logger, systemEmitter, io, songDb, emojiDb, userDb, gameStates)
 const emojiEditHandler = new EmojiEditHandler(logger, emojiDb, emojiDbEmitter, systemEmitter)
-const userEditHandler = new UserEditHandler(logger, userDb)
+const userEditHandler = new UserEditHandler(logger, userDb, userDbEmitter, systemEmitter)
 
 
 const songListHandler = new SongListHandler(logger, songDb, userDb, songDbEmitter, userDbEmitter, systemEmitter)

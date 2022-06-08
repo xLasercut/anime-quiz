@@ -30,6 +30,8 @@ import DeleteEmojiDialog from '../../components/emoji-edit/DeleteEmojiDialog.vue
 import GameRoomSongPicker from '../../components/game-room/GameRoomSongPicker.vue'
 import UserEditPanel from '../../components/user-edit/UserEditPanel.vue'
 import UserEdit from '../../views/UserEdit.vue'
+import EditUserDialog from '../../components/user-edit/EditUserDialog.vue'
+import DeleteUserDialog from '../../components/user-edit/DeleteUserDialog.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -68,7 +70,10 @@ const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.EDIT_EMOJI_DIALOG]: EditEmojiDialog,
   [DIALOG_ROUTES.NEW_EMOJI_DIALOG]: EditEmojiDialog,
   [DIALOG_ROUTES.DELETE_EMOJI_DIALOG]: DeleteEmojiDialog,
-  [DIALOG_ROUTES.GAME_ROOM_SONG_PICKER]: GameRoomSongPicker
+  [DIALOG_ROUTES.GAME_ROOM_SONG_PICKER]: GameRoomSongPicker,
+  [DIALOG_ROUTES.EDIT_USER_DIALOG]: EditUserDialog,
+  [DIALOG_ROUTES.NEW_USER_DIALOG]: EditUserDialog,
+  [DIALOG_ROUTES.DELETE_USER_DIALOG]: DeleteUserDialog
 }
 
 function viewComponent(): any {

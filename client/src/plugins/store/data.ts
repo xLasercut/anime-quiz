@@ -99,6 +99,20 @@ const data: Module<DataStoreState, RootStoreState> = {
         }
         return -1
       })
+    },
+    userLists: (state: DataStoreState): AqUserSongs[] => {
+      return [ ...state.userLists ].sort((a, b) => {
+        const nameA = a.username
+        const nameB = b.username
+
+        if (nameA === nameB) {
+          return 0
+        }
+        else if (nameA > nameB) {
+          return 1
+        }
+        return -1
+      })
     }
   }
 }

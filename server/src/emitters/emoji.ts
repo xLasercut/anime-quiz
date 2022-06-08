@@ -1,5 +1,4 @@
 import { AbstractEmitter } from './abstract'
-import { AqEmoji } from '../shared/interfaces'
 import { SHARED_EVENTS } from '../shared/events'
 import { Server } from '../app/server'
 import { AnimeQuizEmojiDb } from '../database/emoji'

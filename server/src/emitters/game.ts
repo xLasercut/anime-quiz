@@ -5,7 +5,7 @@ import { GameSettings } from '../game/settings'
 import { ChatManager } from '../game/chat'
 import { Logger } from '../app/logging/logger'
 import { Socket } from '../types'
-import { AqClientData, AqGameGuess, AqGamePlayer, AqGameState } from '../shared/interfaces'
+import { AqGameGuess } from '../shared/interfaces'
 import { GameStates } from '../game/state'
 
 class GameEmitter extends AbstractEmitter {

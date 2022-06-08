@@ -9,6 +9,7 @@ import * as cron from 'node-cron'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as moment from 'moment'
+import { v4 } from 'uuid'
 
 class AnimeQuizUserDb extends AbstractDb {
   protected _userListsCache: AqUserSongs[]
@@ -25,6 +26,38 @@ class AnimeQuizUserDb extends AbstractDb {
 
   public reloadCache(): void {
     this._userListsCache = this._getUserLists()
+  }
+
+  public newUser(user: AqUserSongs): void {
+    const userId = `user-${v4()}`
+    const sql = `INSERT INTO users (user_id, username) VALUES (?,?)`
+    this._db.prepare(sql).run([
+      userId,
+      this._sanitizeString(user.username)
+    ])
+    this.reloadCache()
+  }
+
+  public editUser(user: AqUserSongs): void {
+    const sql = `
+      UPDATE users
+      SET 
+        username = ?
+      WHERE user_id = ?
+    `
+    this._db.prepare(sql).run([
+      this._sanitizeString(user.username),
+      user.user_id
+    ])
+    this.reloadCache()
+  }
+
+  public deleteUser(user: AqUserSongs): void {
+    const sql = `DELETE FROM users WHERE user_id = ?`
+    this._db.prepare(sql).run([ user.user_id ])
+    const sqlUserSongs = `DELETE FROM user_songs WHERE user_id = ?`
+    this._db.prepare(sqlUserSongs).run([ user.user_id ])
+    this.reloadCache()
   }
 
   public async startBackTask(): Promise<void> {
@@ -100,7 +133,7 @@ class AnimeQuizUserDb extends AbstractDb {
     const insert = this._db.prepare(sql)
     const insertMany = this._db.transaction((_songIds: string[]) => {
       for (const songId of _songIds) {
-        insert.run([userId, songId])
+        insert.run([ userId, songId ])
       }
     })
     insertMany(songIds)
@@ -137,6 +170,20 @@ class AnimeQuizUserDb extends AbstractDb {
     if (users.length !== 1) {
       this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { userId: userId })
       throw new GameDataValidationError('User does not exist')
+    }
+  }
+
+  public validateUsernameNotExist(username: string): void {
+    const sql = `
+      SELECT
+        *
+      FROM users
+      WHERE username = ?
+    `
+    const users = this._db.prepare(sql).all([ username ])
+    if (users.length > 0) {
+      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { username: username })
+      throw new GameDataValidationError('Username already exists')
     }
   }
 
