@@ -17,7 +17,6 @@
           :anime-id-filter.sync="animeIdFilter"
           :anime-name-filter.sync="animeNameFilter"
         ></anime-edit-table-filter>
-        <anime-edit-table-actions></anime-edit-table-actions>
       </v-container>
     </template>
 
@@ -50,14 +49,13 @@ import { CLIENT_CONSTANTS } from '../../assets/constants'
 import AnimeEditTableFilter from './AnimeEditTableFilter.vue'
 import { AqAnime } from '../../assets/shared/interfaces'
 import { store } from '../../plugins/store'
-import AnimeEditTableActions from './AnimeEditTableActions.vue'
 import { MUTATIONS } from '../../plugins/store/mutations'
 import { CLIENT_EVENTS } from '../../assets/events'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import { shouldDisplayResult } from '../../assets/game-helper'
 
 export default defineComponent({
-  components: { AnimeEditTableActions, TablePagination, AnimeEditTableFilter },
+  components: { TablePagination, AnimeEditTableFilter },
   setup() {
     const state = reactive({
       headers: [

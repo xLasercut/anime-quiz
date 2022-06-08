@@ -46,6 +46,21 @@ const data: Module<DataStoreState, RootStoreState> = {
       }
       return []
     },
+    userPlaylist: (state: DataStoreState): Function => (userId: string): AqSong[] => {
+      if (!userId) {
+        return []
+      }
+      const filteredList = state.userLists.filter((userList) => {
+        return userList.user_id === userId
+      })
+      if (filteredList.length > 0) {
+        const userSongIds = filteredList[0].song_id
+        return state.songList.filter((song) => {
+          return userSongIds.includes(song.song_id)
+        })
+      }
+      return []
+    },
     songList: (state: DataStoreState): AqSong[] => {
       return [ ...state.songList ].sort((a, b) => {
         const animeA = a.anime_name[0]

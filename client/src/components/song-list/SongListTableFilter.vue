@@ -58,9 +58,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { SONG_TYPES } from '../../../assets/constants'
-import { newTableHelpers } from '../../../assets/table-helper'
-import FilteredCombobox from '../../shared/comboboxes/FilteredCombobox.vue'
+import FilteredCombobox from '../shared/comboboxes/FilteredCombobox.vue'
+import { SONG_TYPES } from '../../assets/constants'
+import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
   components: { FilteredCombobox },

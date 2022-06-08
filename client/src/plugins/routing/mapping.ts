@@ -32,6 +32,8 @@ import UserEditPanel from '../../components/user-edit/UserEditPanel.vue'
 import UserEdit from '../../views/UserEdit.vue'
 import EditUserDialog from '../../components/user-edit/EditUserDialog.vue'
 import DeleteUserDialog from '../../components/user-edit/DeleteUserDialog.vue'
+import MusicPlayer from '../../views/MusicPlayer.vue'
+import MusicPlayerPanel from '../../components/music-player/MusicPlayerPanel.vue'
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -41,7 +43,8 @@ const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.ANIME_EDIT]: AnimeEditPanel,
   [ROUTES.SONG_EDIT]: SongEditPanel,
   [ROUTES.EMOJI_EDIT]: EmojiEditPanel,
-  [ROUTES.USER_EDIT]: UserEditPanel
+  [ROUTES.USER_EDIT]: UserEditPanel,
+  [ROUTES.MUSIC_PLAYER]: MusicPlayerPanel
 }
 
 const _VIEW_MAPPING: { [key: string]: Component } = {
@@ -53,7 +56,8 @@ const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.ANIME_EDIT]: AnimeEdit,
   [ROUTES.SONG_EDIT]: SongEdit,
   [ROUTES.EMOJI_EDIT]: EmojiEdit,
-  [ROUTES.USER_EDIT]: UserEdit
+  [ROUTES.USER_EDIT]: UserEdit,
+  [ROUTES.MUSIC_PLAYER]: MusicPlayer
 }
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {

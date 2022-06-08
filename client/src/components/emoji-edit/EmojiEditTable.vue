@@ -18,7 +18,6 @@
           :emoji-source-filter.sync="emojiSourceFilter"
           :emoji-type-filter.sync="emojiTypeFilter"
         ></emoji-edit-table-filter>
-        <emoji-edit-table-actions></emoji-edit-table-actions>
       </v-container>
     </template>
 
@@ -53,10 +52,9 @@ import { CLIENT_EVENTS } from '../../assets/events'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import EmojiEditTableFilter from './EmojiEditTableFilter.vue'
 import EmojiPreview from './EmojiPreview.vue'
-import EmojiEditTableActions from './EmojiEditTableActions.vue'
 
 export default defineComponent({
-  components: { EmojiEditTableActions, EmojiPreview, EmojiEditTableFilter, TablePagination },
+  components: { EmojiPreview, EmojiEditTableFilter, TablePagination },
   setup() {
     const state = reactive({
       headers: [

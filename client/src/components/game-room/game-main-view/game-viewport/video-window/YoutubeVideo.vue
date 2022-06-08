@@ -13,13 +13,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onUnmounted, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, onUnmounted, reactive, toRefs, watch } from '@vue/composition-api'
 import { socket } from '../../../../../plugins/socket'
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { store } from '../../../../../plugins/store'
 import { getIdFromURL } from 'vue-youtube-embed'
-import { calculateStartPosition, getDefaultVolume } from '../../../../../assets/game-helper'
-import { CLIENT_EVENTS } from '../../../../../assets/events'
+import { calculateStartPosition, isYoutubeVideo } from '../../../../../assets/game-helper'
 
 export default defineComponent({
   setup() {
@@ -39,10 +38,9 @@ export default defineComponent({
 
     let timeout: number
 
-    const registerChangeVolume = inject<Function>(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_YOUTUBE_VIDEO)
-    if (registerChangeVolume) {
-      registerChangeVolume(changeVolume)
-    }
+    watch(() => store.state.client.volume, (val: number) => {
+      changeVolume(val)
+    })
 
     function changeVolume(volume: number): void {
       player.setVolume(volume)
@@ -50,7 +48,7 @@ export default defineComponent({
 
     function ready(event: any): void {
       player = event.target
-      changeVolume(getDefaultVolume())
+      changeVolume(store.state.client.volume)
     }
 
     function load(): void {
@@ -71,6 +69,10 @@ export default defineComponent({
       socket.emit(SHARED_EVENTS.GAME_SONG_LOADED)
     }
 
+    function _isYoutubeVideo(): boolean {
+      return isYoutubeVideo(store.state.game.currentSong.src)
+    }
+
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
       state.show = false
     })
@@ -80,20 +82,20 @@ export default defineComponent({
       state.show = false
       state.guessTime = guessTime
       state.startPosition = startPosition
-      if (store.getters.isYoutubeVideo) {
+      if (_isYoutubeVideo()) {
         load()
       }
     })
 
     socket.on(SHARED_EVENTS.GAME_START_COUNTDOWN, () => {
-      if (store.getters.isYoutubeVideo) {
+      if (_isYoutubeVideo()) {
         player.unMute()
         player.playVideo()
       }
     })
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
-      if (store.getters.isYoutubeVideo) {
+      if (_isYoutubeVideo()) {
         state.show = true
       }
     })
@@ -111,7 +113,7 @@ export default defineComponent({
     })
 
     function videoSrc(): string {
-      if (store.getters.isYoutubeVideo) {
+      if (_isYoutubeVideo()) {
         return getIdFromURL(store.state.game.currentSong.src)
       }
       return ''

@@ -29,6 +29,7 @@ interface ClientStoreState {
   avatar: string
   admin: boolean
   host: boolean
+  volume: number
 }
 
 interface GameStoreState {

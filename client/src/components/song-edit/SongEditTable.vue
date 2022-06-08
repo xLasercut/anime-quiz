@@ -19,7 +19,6 @@
           :anime-filter.sync="animeFilter"
           :song-title-filter.sync="songTitleFilter"
         ></song-edit-table-filter>
-        <song-edit-table-actions></song-edit-table-actions>
       </v-container>
     </template>
 
@@ -57,12 +56,11 @@ import { MUTATIONS } from '../../plugins/store/mutations'
 import { CLIENT_EVENTS } from '../../assets/events'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
 import SongEditTableFilter from './SongEditTableFilter.vue'
-import SongEditTableActions from './SongEditTableActions.vue'
 import { shouldDisplayResult } from '../../assets/game-helper'
 import AqAnimeName from '../shared/AqAnimeName.vue'
 
 export default defineComponent({
-  components: { AqAnimeName, SongEditTableActions, SongEditTableFilter, TablePagination },
+  components: { AqAnimeName, SongEditTableFilter, TablePagination },
   setup() {
     const state = reactive({
       headers: [

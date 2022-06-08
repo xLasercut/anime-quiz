@@ -6,7 +6,7 @@
     disable-filtering
     hide-default-footer
     :headers="headers"
-    :height="CLIENT_CONSTANTS.TABLE_HEIGHT"
+    :height="CLIENT_CONSTANTS.SONG_LIST_TABLE_HEIGHT"
     :items="filteredSongList()"
     :page="currentPage"
     :items-per-page="itemsPerPage"
@@ -69,10 +69,10 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-api'
 import { CLIENT_CONSTANTS } from '../../assets/constants'
-import SongListTableFilter from './song-list-table/SongListTableFilter.vue'
+import SongListTableFilter from './SongListTableFilter.vue'
 import { store } from '../../plugins/store'
 import { AqSong } from '../../assets/shared/interfaces'
-import SongListTableActions from './song-list-table/SongListTableActions.vue'
+import SongListTableActions from './SongListTableActions.vue'
 import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'

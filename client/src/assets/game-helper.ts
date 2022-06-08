@@ -16,6 +16,10 @@ function getDefaultVolume(): number {
   }
 }
 
+function isYoutubeVideo(src: string): boolean {
+  return src.includes('youtube')
+}
+
 function shouldDisplayResult(queryText: string, itemText: string): boolean {
   for (const word of queryText.split(' ')) {
     if (!itemText.toLowerCase().includes(word.toLowerCase())) {
@@ -27,6 +31,7 @@ function shouldDisplayResult(queryText: string, itemText: string): boolean {
 
 export {
   calculateStartPosition,
+  shouldDisplayResult,
   getDefaultVolume,
-  shouldDisplayResult
+  isYoutubeVideo
 }

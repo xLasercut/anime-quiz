@@ -1,6 +1,7 @@
 <template>
   <v-toolbar-items>
-    <nav-btn color="primary" icon="mdi-playlist-music" v-if="$store.state.client.admin" @click="openSongPicker()">Song</nav-btn>
+    <nav-btn color="primary" icon="mdi-playlist-music" v-if="$store.state.client.admin" @click="openSongPicker()">Song
+    </nav-btn>
     <div class="volume-slider-container">
       <v-slider
         prepend-icon="mdi-volume-medium"
@@ -8,7 +9,7 @@
         dense
         :min="0"
         :max="100"
-        :value="volume"
+        :value="$store.state.client.volume"
         @change="changeVolume($event)"
       ></v-slider>
     </div>
@@ -20,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, inject } from '@vue/composition-api'
 import NavBtn from '../shared/buttons/NavBtn.vue'
 import { store } from '../../plugins/store'
 import { MUTATIONS } from '../../plugins/store/mutations'
@@ -29,22 +30,13 @@ import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import { CLIENT_EVENTS } from '../../assets/events'
 import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
-import { getDefaultVolume } from '../../assets/game-helper'
 
 export default defineComponent({
   components: { NavBtn },
   setup() {
-    const state = reactive({
-      volume: getDefaultVolume()
-    })
-
-    const _changeVolume = inject<Function>(CLIENT_EVENTS.CHANGE_VOLUME)
-
     function changeVolume(volume: number): void {
-      if (_changeVolume) {
-        _changeVolume(volume)
-        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = volume
-      }
+      store.commit(MUTATIONS.UPDATE_VOLUME, volume)
+      localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = volume
     }
 
     function back(): void {
@@ -92,7 +84,6 @@ export default defineComponent({
       changeVolume,
       showPlayBtn,
       showStopBtn,
-      ...toRefs(state),
       openSongPicker
     }
   }

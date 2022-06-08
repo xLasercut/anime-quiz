@@ -59,7 +59,6 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import DialogActions from '../shared/dialog/DialogActions.vue'
-import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue'
 import DialogTextField from '../shared/dialog/DialogTextField.vue'
 import { store } from '../../plugins/store'
 import { MUTATIONS } from '../../plugins/store/mutations'
@@ -73,7 +72,7 @@ import { VALID_SONG_TYPES } from '../../assets/shared/constants'
 import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
-  components: { DialogMultiAutocomplete, DialogSelect, DialogMultiCombobox, DialogTextField, DialogActions },
+  components: { DialogMultiAutocomplete, DialogSelect, DialogTextField, DialogActions },
   setup(_props, context) {
     const state = reactive({
       valid: false,

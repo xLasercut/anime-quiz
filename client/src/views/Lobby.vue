@@ -37,6 +37,14 @@ export default defineComponent({
           icon: 'mdi-gamepad-variant'
         },
         {
+          color: 'info',
+          title: 'Music Player',
+          description: 'Play music based on song list',
+          route: ROUTES.MUSIC_PLAYER,
+          requireAdmin: false,
+          icon: 'mdi-music-clef-treble'
+        },
+        {
           color: 'primary',
           title: 'Song List',
           description: 'Add/Remove songs from your song list',

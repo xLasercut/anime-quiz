@@ -10,12 +10,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, onUnmounted, reactive, ref, toRefs } from '@vue/composition-api'
+import { defineComponent, onMounted, onUnmounted, reactive, ref, toRefs, watch } from '@vue/composition-api'
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { socket } from '../../../../../plugins/socket'
-import { calculateStartPosition, getDefaultVolume } from '../../../../../assets/game-helper'
+import { calculateStartPosition, isYoutubeVideo } from '../../../../../assets/game-helper'
 import { store } from '../../../../../plugins/store'
-import { CLIENT_EVENTS } from '../../../../../assets/events'
 
 export default defineComponent({
   setup() {
@@ -27,15 +26,18 @@ export default defineComponent({
       guessTime: 0
     })
 
-    const registerChangeVolume = inject<Function>(CLIENT_EVENTS.REGISTER_CHANGE_VOLUME_NORMAL_VIDEO)
-    if (registerChangeVolume) {
-      registerChangeVolume(changeVolume)
-    }
+    watch(() => store.state.client.volume, (val: number) => {
+      changeVolume(val)
+    })
 
     function changeVolume(volume: number): void {
       if (player.value) {
         player.value.volume = volume / 100
       }
+    }
+
+    function _isNormalVideo(): boolean {
+      return !isYoutubeVideo(store.state.game.currentSong.src)
     }
 
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
@@ -47,19 +49,19 @@ export default defineComponent({
       state.show = false
       state.guessTime = guessTime
       state.startPosition = startPosition
-      if (!store.getters.isYoutubeVideo) {
+      if (_isNormalVideo()) {
         load()
       }
     })
 
     socket.on(SHARED_EVENTS.GAME_START_COUNTDOWN, () => {
-      if (!store.getters.isYoutubeVideo) {
+      if (_isNormalVideo()) {
         play()
       }
     })
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
-      if (!store.getters.isYoutubeVideo) {
+      if (_isNormalVideo()) {
         state.show = true
       }
     })
@@ -87,20 +89,20 @@ export default defineComponent({
     }
 
     function metaDataLoaded(): void {
-      if (player.value && !store.getters.isYoutubeVideo) {
+      if (player.value && _isNormalVideo()) {
         player.value.currentTime = calculateStartPosition(state.startPosition, state.guessTime, player.value.duration)
       }
     }
 
     function fullLoaded(): void {
-      if (!store.getters.isYoutubeVideo) {
+      if (_isNormalVideo()) {
         console.log('Song Loaded')
         socket.emit(SHARED_EVENTS.GAME_SONG_LOADED)
       }
     }
 
     function videoSrc(): string {
-      if (!store.getters.isYoutubeVideo) {
+      if (_isNormalVideo()) {
         return store.state.game.currentSong.src
       }
 
@@ -108,7 +110,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      changeVolume(getDefaultVolume())
+      changeVolume(store.state.client.volume)
     })
 
     onUnmounted(() => {

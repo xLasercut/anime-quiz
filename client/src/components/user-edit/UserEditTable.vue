@@ -17,7 +17,6 @@
           :user-id-filter.sync="userIdFilter"
           :username-filter.sync="usernameFilter"
         ></user-edit-table-filter>
-        <user-edit-table-actions></user-edit-table-actions>
       </v-container>
     </template>
 
@@ -46,11 +45,10 @@ import { store } from '../../plugins/store'
 import { MUTATIONS } from '../../plugins/store/mutations'
 import { CLIENT_EVENTS } from '../../assets/events'
 import { DIALOG_ROUTES } from '../../plugins/routing/routes'
-import UserEditTableActions from './UserEditTableActions.vue'
 import UserEditTableFilter from './UserEditTableFilter.vue'
 
 export default defineComponent({
-  components: { UserEditTableActions, TablePagination, UserEditTableFilter },
+  components: { TablePagination, UserEditTableFilter },
   setup() {
     const state = reactive({
       headers: [
