@@ -51,6 +51,15 @@ Add new user lists by logging in to the client with admin credentials
 
 You can then add songs to the list by going to song list editor via the client
 
+## User db backup
+By default, user db will be backed up every day at 2am UTC, to `server/data-backup` folder
+
+To change the schedule, and total number of backups add the following to `config.env`
+```dotenv
+DB_BACKUP_SCHEDULE=<cron expression>
+DB_BACKUP_COUNT=<any number>
+```
+
 ## Running client
 In root of project
 ```bash
