@@ -1,13 +1,15 @@
 <template>
-  <youtube
-    @ready="ready($event)"
-    player-width="100%"
-    player-height="180px"
-    :video-id="videoSrc()"
-    v-show="show"
-    :player-vars="playerVars"
-    host="https://www.youtube-nocookie.com"
-  ></youtube>
+  <v-row no-gutters justify="center" v-show="show">
+    <youtube
+      @ready="ready($event)"
+      player-width="100%"
+      player-height="180px"
+      :video-id="videoSrc()"
+      :player-vars="playerVars"
+      host="https://www.youtube-nocookie.com"
+      class="youtube-video"
+    ></youtube>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -126,7 +128,7 @@ export default defineComponent({
 
 <style scoped>
 .youtube-video {
-  max-width: 100%;
+  max-width: 320px;
   max-height: 180px;
 }
 </style>
