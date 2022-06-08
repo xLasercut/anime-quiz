@@ -5,13 +5,15 @@
         <v-row justify="center" no-gutters>
           <music-player-youtube
             ref="youtube"
-            @load="setMaxDuration($event)"
+            @playing="startCheckProgress()"
+            @paused="stopCheckProgress()"
             @ended="ended()"
             :src="youtubeVideoSrc()"
           ></music-player-youtube>
           <music-player-normal
             ref="normal"
-            @load="setMaxDuration($event)"
+            @playing="startCheckProgress()"
+            @paused="stopCheckProgress()"
             @ended="ended()"
             :src="videoSrc()"
           ></music-player-normal>
@@ -27,7 +29,6 @@
         @previous="previous()"
         @seek="seek($event)"
         :playing="playing"
-        :disabled="playlist.length === 0"
       ></music-player-controls>
       <v-divider></v-divider>
       <v-card-text>
@@ -121,6 +122,8 @@ export default defineComponent({
     function startCheckProgress(): void {
       console.log('start progress check')
       clearInterval(progressCheck)
+      state.playing = true
+      state.maxTime = getPlayer().value.getMaxTime()
       progressCheck = setInterval(() => {
         state.currentTime = getPlayer().value.getCurrentTime()
       }, 1000)
@@ -128,19 +131,16 @@ export default defineComponent({
 
     function stopCheckProgress(): void {
       console.log('stop progress check')
+      state.playing = false
       clearInterval(progressCheck)
     }
 
     function play(): void {
-      state.playing = true
       getPlayer().value.play()
-      startCheckProgress()
     }
 
     function pause(): void {
-      state.playing = false
       getPlayer().value.pause()
-      stopCheckProgress()
     }
 
     function next(): void {
@@ -187,7 +187,9 @@ export default defineComponent({
       youtubeVideoSrc,
       updatePlaylist,
       next,
-      previous
+      previous,
+      startCheckProgress,
+      stopCheckProgress
     }
   }
 })

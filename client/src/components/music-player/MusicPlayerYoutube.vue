@@ -5,6 +5,8 @@
     player-height="180px"
     :video-id="src"
     @ended="$emit('ended')"
+    @playing="$emit('playing')"
+    @paused="$emit('paused')"
     :player-vars="playerVars"
     host="https://www.youtube-nocookie.com"
     v-show="src"
@@ -28,15 +30,19 @@ export default defineComponent({
         controls: 0,
         disablekb: 1,
         fs: 0,
-        modestbranding: 1
+        modestbranding: 1,
+        autoplay: 1
       }
     })
 
     let player: any
-    let timeout: any
 
     watch(() => store.state.client.volume, (volume: number) => {
       changeVolume(volume)
+    })
+
+    watch(() => props.src, () => {
+      context.emit('load', player.getDuration())
     })
 
     function changeVolume(volume: number): void {
@@ -50,20 +56,10 @@ export default defineComponent({
 
     function play(): void {
       player.playVideo()
-      timeout = setInterval(() => {
-        if (player.getDuration() !== 0) {
-          onLoaded()
-        }
-      }, 500)
     }
 
     function pause(): void {
       player.pauseVideo()
-    }
-
-    function onLoaded(): void {
-      clearInterval(timeout)
-      context.emit('load', player.getDuration())
     }
 
     function getCurrentTime(): number {
@@ -74,13 +70,18 @@ export default defineComponent({
       player.seekTo(duration, true)
     }
 
+    function getMaxTime(): number {
+      return player.getDuration()
+    }
+
     return {
       ready,
       ...toRefs(state),
       getCurrentTime,
       play,
       pause,
-      seek
+      seek,
+      getMaxTime
     }
   }
 })

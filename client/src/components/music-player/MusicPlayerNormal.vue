@@ -5,8 +5,10 @@
     height="180px"
     width="320px"
     ref="player"
-    @loadedmetadata="onLoaded()"
+    @playing="$emit('playing')"
+    @pause="$emit('paused')"
     :hidden="!src"
+    autoplay
   ></video>
 </template>
 
@@ -21,7 +23,7 @@ export default defineComponent({
       type: String
     }
   },
-  setup(_props, context) {
+  setup() {
     const player = ref<HTMLVideoElement>()
 
     watch(() => store.state.client.volume, (val: number) => {
@@ -50,10 +52,11 @@ export default defineComponent({
       }
     }
 
-    function onLoaded(): void {
+    function getMaxTime(): number {
       if (player.value) {
-        context.emit('load', player.value.duration)
+        return player.value.duration
       }
+      return 0
     }
 
     function getCurrentTime(): number {
@@ -73,7 +76,7 @@ export default defineComponent({
       player,
       play,
       pause,
-      onLoaded,
+      getMaxTime,
       getCurrentTime,
       seek
     }
