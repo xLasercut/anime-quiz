@@ -16,12 +16,14 @@ class AnimeQuizUserDb extends AbstractDb {
   protected _dbBackupTask: cron.ScheduledTask
   protected _dataBackupDir: string
   protected _dataBackupSchedule: string
+  protected _dataBackupCount: number
 
   constructor(config: ServerConfig, logger: Logger) {
     super(logger, config.userDbPath)
     this.reloadCache()
     this._dataBackupDir = config.dataBackupDir
     this._dataBackupSchedule = config.dbBackupSchedule
+    this._dataBackupCount = config.dbBackupCount
   }
 
   public reloadCache(): void {
@@ -81,7 +83,7 @@ class AnimeQuizUserDb extends AbstractDb {
     this._logger.writeLog(LOG_BASE.USER_DATA_BACKUP, { action: 'create backup', filename: filename })
     await this._db.backup(path.join(this._dataBackupDir, filename))
     const files = fs.readdirSync(this._dataBackupDir)
-    if (files.length > 5) {
+    if (files.length > this._dataBackupCount) {
       this._logger.writeLog(LOG_BASE.USER_DATA_BACKUP, { action: 'delete old file', filename: files[0] })
       fs.unlinkSync(path.join(this._dataBackupDir, files[0]))
     }

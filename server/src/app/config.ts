@@ -13,6 +13,7 @@ class ServerConfig {
   public clientAuthDelay: number
   public userDbPath: string
   public dbBackupSchedule: string
+  public dbBackupCount: number
 
   constructor() {
     this.rootDir = path.join(__dirname, '..', '..')
@@ -27,6 +28,7 @@ class ServerConfig {
     this.corsConfig = process.env.CORS_CONFIG || '*'
     this.clientAuthDelay = 2000
     this.dbBackupSchedule = process.env.DB_BACKUP_SCHEDULE || '0 2 * * *'
+    this.dbBackupCount = parseInt(process.env.DB_BACKUP_COUNT || '5')
   }
 }
 
