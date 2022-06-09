@@ -1,5 +1,5 @@
 <template>
-  <v-col>
+  <v-col cols="12" sm="8">
     <v-row>
       <v-col>
         <v-slider

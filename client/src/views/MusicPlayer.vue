@@ -30,20 +30,12 @@
         </v-row>
       </v-card-text>
       <v-divider></v-divider>
-      <v-card-text>
-        <v-select
-          hide-details
-          outlined
-          dense
-          label="User"
-          item-text="username"
-          item-value="user_id"
-          :items="$store.getters.userLists"
-          clearable
-          v-model="selectedUser"
-          @change="updatePlaylist()"
-        ></v-select>
-      </v-card-text>
+      <music-player-playlist
+        :selected-user.sync="selectedUser"
+        @update:playlist="updatePlaylist()"
+        @change:song="changeSong($event)"
+        :playlist="playlist"
+      ></music-player-playlist>
     </v-card>
   </v-main>
 </template>
@@ -59,6 +51,8 @@ import { socket } from '../plugins/socket'
 import { SHARED_EVENTS } from '../assets/shared/events'
 import { store } from '../plugins/store'
 import { AqSong } from '../assets/shared/interfaces'
+import MusicPlayerPlaylist from '../components/music-player/MusicPlayerPlaylist.vue'
+import { shuffleSongList } from '../assets/shared/helpers'
 
 interface State {
   currentTime: number
@@ -67,10 +61,11 @@ interface State {
   selectedUser: string
   playlist: AqSong[]
   currentSongCount: number
+  currentSong: AqSong
 }
 
 export default defineComponent({
-  components: { MusicPlayerNormal, MusicPlayerYoutube, MusicPlayerControls },
+  components: { MusicPlayerPlaylist, MusicPlayerNormal, MusicPlayerYoutube, MusicPlayerControls },
   setup() {
     const state = reactive<State>({
       currentTime: 0,
@@ -78,7 +73,16 @@ export default defineComponent({
       playing: false,
       selectedUser: '',
       playlist: [],
-      currentSongCount: 0
+      currentSongCount: 0,
+      currentSong: {
+        src: '',
+        artist: '',
+        anime_id: [],
+        anime_name: [],
+        song_id: '',
+        song_title: '',
+        type: ''
+      }
     })
 
     const youtube = ref()
@@ -86,11 +90,8 @@ export default defineComponent({
 
     let progressCheck: any
 
-    function src(): string {
-      if (state.playlist[state.currentSongCount]) {
-        return state.playlist[state.currentSongCount].src
-      }
-      return ''
+    function _changeSong(): void {
+      state.currentSong = state.playlist[state.currentSongCount]
     }
 
     function ended(): void {
@@ -98,22 +99,22 @@ export default defineComponent({
     }
 
     function getPlayer() {
-      if (isYoutubeVideo(src())) {
+      if (isYoutubeVideo(state.currentSong.src)) {
         return youtube
       }
       return normal
     }
 
     function videoSrc(): string {
-      if (!isYoutubeVideo(src())) {
-        return src()
+      if (!isYoutubeVideo(state.currentSong.src)) {
+        return state.currentSong.src
       }
       return ''
     }
 
     function youtubeVideoSrc(): string {
-      if (isYoutubeVideo(src())) {
-        return getIdFromURL(src())
+      if (isYoutubeVideo(state.currentSong.src)) {
+        return getIdFromURL(state.currentSong.src)
       }
       return ''
     }
@@ -125,7 +126,7 @@ export default defineComponent({
       state.maxTime = getPlayer().value.getMaxTime()
       progressCheck = setInterval(() => {
         state.currentTime = getPlayer().value.getCurrentTime()
-      }, 1000)
+      }, 500)
     }
 
     function stopCheckProgress(): void {
@@ -135,6 +136,7 @@ export default defineComponent({
     }
 
     function play(): void {
+      _changeSong()
       getPlayer().value.play()
     }
 
@@ -147,6 +149,7 @@ export default defineComponent({
       if (state.currentSongCount >= state.playlist.length) {
         state.currentSongCount = 0
       }
+      _changeSong()
     }
 
     function previous(): void {
@@ -154,6 +157,7 @@ export default defineComponent({
       if (state.currentSongCount < 0) {
         state.currentSongCount = state.playlist.length - 1
       }
+      _changeSong()
     }
 
     function seek(duration: number): void {
@@ -161,8 +165,13 @@ export default defineComponent({
     }
 
     function updatePlaylist(): void {
-      state.playlist = store.getters.userPlaylist(state.selectedUser)
+      state.playlist = shuffleSongList(store.getters.userPlaylist(state.selectedUser))
       state.currentSongCount = 0
+    }
+
+    function changeSong(index: number): void {
+      state.currentSongCount = index
+      _changeSong()
     }
 
     socket.emit(SHARED_EVENTS.GET_SONG_LIST)
@@ -182,7 +191,8 @@ export default defineComponent({
       next,
       previous,
       startCheckProgress,
-      stopCheckProgress
+      stopCheckProgress,
+      changeSong
     }
   }
 })

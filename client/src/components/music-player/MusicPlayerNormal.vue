@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="auto">
+  <v-col cols="auto" v-show="src">
     <video
       :src="src"
       @ended="$emit('ended')"
@@ -9,7 +9,6 @@
       @playing="$emit('playing')"
       @pause="$emit('paused')"
       autoplay
-      :hidden="!src"
     ></video>
   </v-col>
 </template>

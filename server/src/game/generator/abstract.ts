@@ -1,7 +1,7 @@
 import { AnimeQuizSongDb } from '../../database/song'
 import { AnimeQuizUserDb } from '../../database/user'
 import { AqGameSettings, AqSong } from '../../shared/interfaces'
-import { shuffleSongList } from '../../helpers'
+import { shuffleSongList } from '../../shared/helpers'
 
 class AbstractGameListGenerator {
   protected _songDb: AnimeQuizSongDb

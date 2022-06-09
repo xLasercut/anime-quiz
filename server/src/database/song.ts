@@ -7,7 +7,7 @@ import { LOG_BASE } from '../app/logging/log-base'
 import { GameDataValidationError } from '../app/exceptions'
 import { v4 } from 'uuid'
 import { SongValidator } from '../validator/song'
-import { shuffleSongList } from '../helpers'
+import { shuffleSongList } from '../shared/helpers'
 
 class AnimeQuizSongDb extends AbstractDb {
   protected _animeListCache: AqAnime[]
