@@ -1,16 +1,17 @@
 <template>
-  <youtube
-    @ready="ready($event)"
-    player-width="320px"
-    player-height="180px"
-    :video-id="src"
-    @ended="$emit('ended')"
-    @playing="$emit('playing')"
-    @paused="$emit('paused')"
-    :player-vars="playerVars"
-    host="https://www.youtube-nocookie.com"
-    v-show="src"
-  ></youtube>
+  <v-col cols="auto" v-show="src">
+    <youtube
+      @ready="ready($event)"
+      player-width="320px"
+      player-height="180px"
+      :video-id="src"
+      @ended="$emit('ended')"
+      @playing="$emit('playing')"
+      @paused="$emit('paused')"
+      :player-vars="playerVars"
+      host="https://www.youtube-nocookie.com"
+    ></youtube>
+  </v-col>
 </template>
 
 <script lang="ts">

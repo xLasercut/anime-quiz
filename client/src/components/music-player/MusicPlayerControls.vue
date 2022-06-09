@@ -1,5 +1,5 @@
 <template>
-  <v-card-text>
+  <v-col>
     <v-row>
       <v-col>
         <v-slider
@@ -37,7 +37,7 @@
         <fab-btn icon="mdi-skip-next" :disabled="disabled" color="primary" @click="$emit('next')"></fab-btn>
       </v-col>
     </v-row>
-  </v-card-text>
+  </v-col>
 </template>
 
 <script lang="ts">

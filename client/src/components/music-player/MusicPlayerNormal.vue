@@ -1,15 +1,17 @@
 <template>
-  <video
-    :src="src"
-    @ended="$emit('ended')"
-    height="180px"
-    width="320px"
-    ref="player"
-    @playing="$emit('playing')"
-    @pause="$emit('paused')"
-    :hidden="!src"
-    autoplay
-  ></video>
+  <v-col cols="auto">
+    <video
+      :src="src"
+      @ended="$emit('ended')"
+      height="180px"
+      width="320px"
+      ref="player"
+      @playing="$emit('playing')"
+      @pause="$emit('paused')"
+      autoplay
+      :hidden="!src"
+    ></video>
+  </v-col>
 </template>
 
 <script lang="ts">

@@ -2,7 +2,7 @@
   <v-main>
     <v-card flat>
       <v-card-text>
-        <v-row justify="center" no-gutters>
+        <v-row justify="center">
           <music-player-youtube
             ref="youtube"
             @playing="startCheckProgress()"
@@ -17,19 +17,18 @@
             @ended="ended()"
             :src="videoSrc()"
           ></music-player-normal>
+          <music-player-controls
+            :current-time="currentTime"
+            :max-time="maxTime"
+            @play="play()"
+            @pause="pause()"
+            @next="next()"
+            @previous="previous()"
+            @seek="seek($event)"
+            :playing="playing"
+          ></music-player-controls>
         </v-row>
       </v-card-text>
-      <v-divider></v-divider>
-      <music-player-controls
-        :current-time="currentTime"
-        :max-time="maxTime"
-        @play="play()"
-        @pause="pause()"
-        @next="next()"
-        @previous="previous()"
-        @seek="seek($event)"
-        :playing="playing"
-      ></music-player-controls>
       <v-divider></v-divider>
       <v-card-text>
         <v-select
@@ -161,11 +160,6 @@ export default defineComponent({
       getPlayer().value.seek(duration)
     }
 
-    function setMaxDuration(duration: number): void {
-      state.maxTime = duration
-      play()
-    }
-
     function updatePlaylist(): void {
       state.playlist = store.getters.userPlaylist(state.selectedUser)
       state.currentSongCount = 0
@@ -181,7 +175,6 @@ export default defineComponent({
       youtube,
       normal,
       play,
-      setMaxDuration,
       pause,
       seek,
       youtubeVideoSrc,
