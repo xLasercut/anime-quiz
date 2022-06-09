@@ -1,4 +1,3 @@
-import { GameSettings } from './game/settings'
 import { AqSong } from './shared/interfaces'
 
 interface LogTemplate {
