@@ -38,11 +38,6 @@ const game: Module<GameStoreState, RootStoreState> = {
     [MUTATIONS.EDIT_DISABLE_GAME_SETTINGS]: (state: GameStoreState, disabled: boolean) => {
       state.disableSettings = disabled
     }
-  },
-  getters: {
-    isYoutubeVideo: (state: GameStoreState): boolean => {
-      return state.currentSong.src.includes('youtube')
-    }
   }
 }
 

@@ -92,7 +92,9 @@ export default defineComponent({
     let progressCheck: any
 
     function _changeSong(): void {
-      state.currentSong = state.playlist[state.currentSongCount]
+      if (state.playlist.length > 0) {
+        state.currentSong = state.playlist[state.currentSongCount]
+      }
     }
 
     function ended(): void {
