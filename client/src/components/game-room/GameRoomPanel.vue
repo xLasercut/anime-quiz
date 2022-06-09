@@ -2,17 +2,7 @@
   <v-toolbar-items>
     <nav-btn color="primary" icon="mdi-playlist-music" v-if="$store.state.client.admin" @click="openSongPicker()">Song
     </nav-btn>
-    <div class="volume-slider-container">
-      <v-slider
-        prepend-icon="mdi-volume-medium"
-        hide-details
-        dense
-        :min="0"
-        :max="100"
-        :value="$store.state.client.volume"
-        @change="changeVolume($event)"
-      ></v-slider>
-    </div>
+    <panel-volume-control></panel-volume-control>
     <nav-btn color="error" icon="mdi-stop" v-if="showStopBtn()" @click="stopGame()">Stop</nav-btn>
     <nav-btn color="success" icon="mdi-play" v-if="showPlayBtn()" @click="startGame()">Start</nav-btn>
     <nav-btn color="info" icon="mdi-cog" @click="openSettings()">Settings</nav-btn>
@@ -29,16 +19,11 @@ import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes'
 import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from '../../assets/shared/events'
 import { CLIENT_EVENTS } from '../../assets/events'
-import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
+import PanelVolumeControl from '../shared/PanelVolumeControl.vue'
 
 export default defineComponent({
-  components: { NavBtn },
+  components: { PanelVolumeControl, NavBtn },
   setup() {
-    function changeVolume(volume: number): void {
-      store.commit(MUTATIONS.UPDATE_VOLUME, volume)
-      localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = volume
-    }
-
     function back(): void {
       socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
       store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.ROOM_LIST)
@@ -81,7 +66,6 @@ export default defineComponent({
       openSettings,
       startGame,
       stopGame,
-      changeVolume,
       showPlayBtn,
       showStopBtn,
       openSongPicker

@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-row justify="center">
-      <v-col v-for="card of cards" :key="card.route" v-if="showCard(card.requireAdmin)" cols="4">
+      <v-col v-for="card of cards" :key="card.route" v-if="showCard(card.requireAdmin)" cols="6" md="4">
         <lobby-menu-card
           :icon="card.icon"
           :color="card.color"
