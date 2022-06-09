@@ -2,6 +2,11 @@
   <v-col cols="12" sm="8">
     <v-row>
       <v-col>
+        <div></div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <v-slider
           :min="0"
           :max="maxTime"
@@ -97,5 +102,9 @@ export default defineComponent({
 .music-control-time {
   line-height: 30px;
   font-size: 11pt;
+}
+.volume-slider-container {
+  width: 150px;
+  padding-top: 5px;
 }
 </style>

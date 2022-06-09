@@ -10,6 +10,9 @@
       :items="playlist"
       :items-per-page="itemsPerPage"
       :page="currentPage"
+      :single-select="true"
+      :value="[ currentSong ]"
+      item-key="song_id"
     >
       <template #top>
         <v-select
@@ -32,7 +35,7 @@
       </template>
 
       <template #item.action="{ item }">
-        <v-icon color="success" @click="playSong(item)">mdi-play</v-icon>
+        <v-icon :disabled="item.song_id === currentSong.song_id" color="success" @click="playSong(item)">mdi-play-box</v-icon>
       </template>
 
       <template #footer="{ props }">
@@ -48,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, PropType, reactive, toRefs, watch } from '@vue/composition-api'
 import TablePagination from '../shared/TablePagination.vue'
 import AqAnimeName from '../shared/AqAnimeName.vue'
 import { newTableHelpers } from '../../assets/table-helper'
@@ -63,6 +66,10 @@ export default defineComponent({
     playlist: {
       required: true,
       type: Array as PropType<AqSong[]>
+    },
+    currentSong: {
+      required: true,
+      type: Object as PropType<AqSong>
     }
   },
   components: { TablePagination, AqAnimeName },
@@ -76,7 +83,12 @@ export default defineComponent({
         { text: 'Action', value: 'action' }
       ],
       itemsPerPage: 10,
-      currentPage: 0,
+      currentPage: 0
+    })
+
+    watch(() => props.currentSong, (song) => {
+      const songIndex = props.playlist.indexOf(song)
+      state.currentPage = Math.floor(songIndex / state.itemsPerPage) + 1
     })
 
     function playSong(song: AqSong): void {

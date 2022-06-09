@@ -35,6 +35,7 @@
         @update:playlist="updatePlaylist()"
         @change:song="changeSong($event)"
         :playlist="playlist"
+        :current-song="currentSong"
       ></music-player-playlist>
     </v-card>
   </v-main>
