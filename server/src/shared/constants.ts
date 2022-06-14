@@ -38,8 +38,8 @@ const AVATARS = {
   YUGI: 'Yugi'
 }
 
-const VALID_SONG_TYPES = [ 'OP', 'ED', 'INSERT' ]
-const VALID_EMOJI_TYPES = [ 'img', 'dec' ]
+const VALID_SONG_TYPES = ['OP', 'ED', 'INSERT']
+const VALID_EMOJI_TYPES = ['img', 'dec']
 
 export {
   NOTIFICATION_COLOR,

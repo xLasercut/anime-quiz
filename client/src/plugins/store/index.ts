@@ -16,4 +16,4 @@ const store = new Vuex.Store({
   }
 })
 
-export {store}
+export { store }

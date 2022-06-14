@@ -37,7 +37,10 @@
           v-model="users"
           :disabled="disabled()"
         ></dialog-select>
-        <dialog-actions :disabled="disabled()" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="disabled()"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>

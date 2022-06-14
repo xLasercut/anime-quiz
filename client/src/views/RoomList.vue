@@ -10,7 +10,9 @@
           <v-card-actions>
             <v-row justify="end">
               <v-col cols="auto">
-                <icon-btn color="success" icon="mdi-login" large @click="joinRoom(room)">Join</icon-btn>
+                <icon-btn color="success" icon="mdi-login" large @click="joinRoom(room)">
+                  Join
+                </icon-btn>
               </v-col>
             </v-row>
           </v-card-actions>

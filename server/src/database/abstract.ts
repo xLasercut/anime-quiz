@@ -1,5 +1,5 @@
-import { Database as SqlDatabase } from 'better-sqlite3'
 import * as Database from 'better-sqlite3'
+import { Database as SqlDatabase } from 'better-sqlite3'
 import { Logger } from '../app/logging/logger'
 import { DatabaseLockedError } from '../app/exceptions'
 
@@ -49,6 +49,4 @@ class AbstractDb {
   }
 }
 
-export {
-  AbstractDb
-}
+export { AbstractDb }

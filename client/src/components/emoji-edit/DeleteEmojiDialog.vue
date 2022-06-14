@@ -23,7 +23,10 @@
           :value="$store.state.admin.emojiInEdit.type"
           disabled
         ></dialog-select>
-        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="editActionDisabled"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -46,7 +49,13 @@ import { VALID_EMOJI_TYPES } from '../../assets/shared/constants'
 import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
-  components: { DialogMultiAutocomplete, DialogSelect, DialogMultiCombobox, DialogTextField, DialogActions },
+  components: {
+    DialogMultiAutocomplete,
+    DialogSelect,
+    DialogMultiCombobox,
+    DialogTextField,
+    DialogActions
+  },
   setup(_props, context) {
     const state = reactive({
       valid: false,
@@ -58,9 +67,13 @@ export default defineComponent({
     function submitEdit(): void {
       if (state.valid) {
         editActionDisabled.value = true
-        socket.emit(SHARED_EVENTS.ADMIN_DELETE_EMOJI, store.state.admin.emojiInEdit, (proceed: boolean) => {
-          editActionComplete(proceed)
-        })
+        socket.emit(
+          SHARED_EVENTS.ADMIN_DELETE_EMOJI,
+          store.state.admin.emojiInEdit,
+          (proceed: boolean) => {
+            editActionComplete(proceed)
+          }
+        )
       }
     }
 

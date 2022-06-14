@@ -12,11 +12,17 @@ class ChatManager {
   }
 
   public generateUserMsg(socket: Socket, msg: string): AqGameChatMessage {
-    return this._generateChatMsg(socket.data.username, socket.data.admin, socket.data.avatar, socket.id, msg)
+    return this._generateChatMsg(
+      socket.data.username,
+      socket.data.admin,
+      socket.data.avatar,
+      socket.id,
+      msg
+    )
   }
 
   public generateSysMsg(msg: string): AqGameChatMessage {
-    return this._generateChatMsg('Eva Unit-01', false, AVATARS.EVA_UNIT_1,'system_message', msg)
+    return this._generateChatMsg('Eva Unit-01', false, AVATARS.EVA_UNIT_1, 'system_message', msg)
   }
 
   protected _generateChatMsg(username, admin, avatar, sid, msg: string): AqGameChatMessage {
@@ -39,6 +45,4 @@ class ChatManager {
   }
 }
 
-export {
-  ChatManager
-}
+export { ChatManager }

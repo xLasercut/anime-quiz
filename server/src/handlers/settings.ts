@@ -17,7 +17,6 @@ class GameSettingsHandler extends AbstractHandler {
     this._gameEmitter = gameEmitter
   }
 
-
   public start(socket: Socket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.GET_GAME_SETTINGS, () => {
       try {
@@ -47,6 +46,4 @@ class GameSettingsHandler extends AbstractHandler {
   }
 }
 
-export {
-  GameSettingsHandler
-}
+export { GameSettingsHandler }

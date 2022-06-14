@@ -2,7 +2,8 @@
   <v-row dense>
     <v-col>
       <v-text-field
-        dense outlined
+        dense
+        outlined
         :value="songIdFilter"
         @input="updateFilter('song-id-filter', $event)"
         label="Song ID"
@@ -12,7 +13,8 @@
     </v-col>
     <v-col>
       <filtered-combobox
-        dense outlined
+        dense
+        outlined
         :value="animeFilter"
         @input="updateFilter('anime-filter', $event)"
         label="Anime"
@@ -25,7 +27,9 @@
       <filtered-combobox
         :value="songTitleFilter"
         @input="updateFilter('song-title-filter', $event)"
-        dense outlined label="Title"
+        dense
+        outlined
+        label="Title"
         :items="$store.getters.songTitleList"
         hide-details
         clearable
@@ -36,7 +40,9 @@
         :value="songTypeFilter"
         @input="updateFilter('song-type-filter', $event)"
         :items="songTypes"
-        dense outlined label="Type"
+        dense
+        outlined
+        label="Type"
         hide-details
       ></v-select>
     </v-col>

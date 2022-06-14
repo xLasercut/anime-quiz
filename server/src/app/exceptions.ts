@@ -31,8 +31,7 @@ function newSocketErrorHandler(socket: Socket, logger: Logger, systemEmitter: Sy
         error: e.message
       })
       systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
-    }
-    else if (e instanceof GameDataValidationDcError) {
+    } else if (e instanceof GameDataValidationDcError) {
       logger.writeLog(LOG_BASE.GAME_DATA_VALIDATION_FAILURE, {
         id: socket.id,
         username: socket.data.username,
@@ -40,18 +39,15 @@ function newSocketErrorHandler(socket: Socket, logger: Logger, systemEmitter: Sy
       })
       systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
       socket.disconnect()
-    }
-    else if (e instanceof DatabaseLockedError) {
+    } else if (e instanceof DatabaseLockedError) {
       systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id)
-    }
-    else {
+    } else {
       logger.writeLog(LOG_BASE.UNHANDLED_ERROR, { stack: e.stack })
     }
   }
 
   return errorHandler
 }
-
 
 function newIoErrorHandler(logger: Logger) {
   function errorHandler(e: Error) {

@@ -14,7 +14,10 @@
           :rules="usernameRules"
           :disabled="editActionDisabled"
         ></dialog-text-field>
-        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="editActionDisabled"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -40,7 +43,8 @@ export default defineComponent({
       usernameRules: [
         (v: string) => !!v || 'Username required',
         (v: string) => validateDupeUsername(v) || 'Username already exists',
-        (v: string) => USERNAME_FORMAT.test(v) || 'Username can only contain: 0-9, A-Z, a-z and space'
+        (v: string) =>
+          USERNAME_FORMAT.test(v) || 'Username can only contain: 0-9, A-Z, a-z and space'
       ]
     })
 
@@ -53,7 +57,6 @@ export default defineComponent({
       return true
     }
 
-
     function updateUsername(command: string): void {
       store.commit(MUTATIONS.ADMIN_UPDATE_USER_NAME, command)
     }
@@ -64,14 +67,21 @@ export default defineComponent({
       if (state.valid) {
         editActionDisabled.value = true
         if (store.state.client.dialogView === DIALOG_ROUTES.NEW_USER_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_NEW_USER, store.state.admin.userInEdit, (proceed: boolean) => {
-            editActionComplete(proceed)
-          })
-        }
-        else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_USER_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_EDIT_USER, store.state.admin.userInEdit, (proceed: boolean) => {
-            editActionComplete(proceed)
-          })
+          socket.emit(
+            SHARED_EVENTS.ADMIN_NEW_USER,
+            store.state.admin.userInEdit,
+            (proceed: boolean) => {
+              editActionComplete(proceed)
+            }
+          )
+        } else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_USER_DIALOG) {
+          socket.emit(
+            SHARED_EVENTS.ADMIN_EDIT_USER,
+            store.state.admin.userInEdit,
+            (proceed: boolean) => {
+              editActionComplete(proceed)
+            }
+          )
         }
       }
     }

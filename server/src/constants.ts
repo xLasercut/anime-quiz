@@ -14,11 +14,7 @@ const SANITIZE_MAP = {
   '>': '&gt;',
   '"': '&quot;',
   '\\/': '&sol;',
-  '\'': '&apos;'
+  "'": '&apos;'
 }
 
-export {
-  ROOM_NAME_PREFIX,
-  SANITIZE_MAP,
-  ROOM_IDS
-}
+export { ROOM_NAME_PREFIX, SANITIZE_MAP, ROOM_IDS }

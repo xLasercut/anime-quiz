@@ -2,7 +2,13 @@
   <v-card-text>
     <v-form v-model="valid" @submit.prevent="newRoom()">
       <v-container fluid>
-        <dialog-text-field :disabled="disabled" counter="20" label="Room Name" v-model.trim="roomName" :rules="rules"></dialog-text-field>
+        <dialog-text-field
+          :disabled="disabled"
+          counter="20"
+          label="Room Name"
+          v-model.trim="roomName"
+          :rules="rules"
+        ></dialog-text-field>
         <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
       </v-container>
     </v-form>
@@ -20,7 +26,6 @@ import { ROUTES } from '../../plugins/routing/routes'
 import { MUTATIONS } from '../../plugins/store/mutations'
 import { ROOM_NAME_FORMAT } from '../../assets/shared/constants'
 
-
 export default defineComponent({
   components: { DialogTextField, DialogActions },
   setup(_props, context) {
@@ -30,7 +35,8 @@ export default defineComponent({
         (v: string): boolean | string => !!v || 'Room name required',
         (v: string): boolean | string =>
           ROOM_NAME_FORMAT.test(v) || 'Room name can only contain: 0-9, A-Z, a-z and space',
-        (v: string): boolean | string => (v && v.length <= 20) || 'Room name must be under 20 characters'
+        (v: string): boolean | string =>
+          (v && v.length <= 20) || 'Room name must be under 20 characters'
       ],
       valid: false,
       disabled: false

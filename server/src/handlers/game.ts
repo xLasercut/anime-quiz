@@ -183,8 +183,7 @@ class GameHandler extends AbstractHandler {
       this._states.nextSong(roomId)
       await this._states.startTimeout(10000, roomId)
       await this._newRound(roomId, settings)
-    }
-    else {
+    } else {
       this._stopGame(roomId)
     }
   }
@@ -221,6 +220,4 @@ class GameHandler extends AbstractHandler {
   }
 }
 
-export {
-  GameHandler
-}
+export { GameHandler }

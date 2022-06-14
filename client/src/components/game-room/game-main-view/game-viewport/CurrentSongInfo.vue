@@ -30,7 +30,6 @@
         </v-list-item-group>
       </v-list>
     </v-card>
-
   </v-col>
 </template>
 

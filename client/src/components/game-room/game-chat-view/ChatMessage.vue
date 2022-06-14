@@ -28,7 +28,7 @@ export default defineComponent({
   },
   setup(props, _context) {
     const nameClass = computed(() => {
-      const classes = [ 'chat-username' ]
+      const classes = ['chat-username']
       if (props.message.admin) {
         classes.push('admin')
       }
@@ -36,7 +36,7 @@ export default defineComponent({
     })
 
     const messageRowClass = computed(() => {
-      const classes = [ 'message-row' ]
+      const classes = ['message-row']
       if (props.message.repeat) {
         classes.push('repeat-message-row')
       }
@@ -67,7 +67,6 @@ export default defineComponent({
   }
 })
 </script>
-
 
 <style scoped>
 .message-row {

@@ -2,7 +2,8 @@
   <v-row dense>
     <v-col>
       <v-text-field
-        dense outlined
+        dense
+        outlined
         :value="emojiCommandFilter"
         @input="updateFilter('emoji-command-filter', $event)"
         label="Command"
@@ -12,7 +13,8 @@
     </v-col>
     <v-col>
       <v-text-field
-        dense outlined
+        dense
+        outlined
         :value="emojiSourceFilter"
         @input="updateFilter('emoji-source-filter', $event)"
         label="Source"
@@ -25,7 +27,9 @@
         :value="emojiTypeFilter"
         @input="updateFilter('emoji-type-filter', $event)"
         :items="emojiTypes"
-        dense outlined label="Type"
+        dense
+        outlined
+        label="Type"
         hide-details
       ></v-select>
     </v-col>
@@ -51,9 +55,7 @@ export default defineComponent({
   },
   setup(_props, context) {
     const state = reactive({
-      emojiTypes: [
-        { text: 'ALL', value: '' }
-      ].concat(EMOJI_TYPES)
+      emojiTypes: [{ text: 'ALL', value: '' }].concat(EMOJI_TYPES)
     })
 
     const { updateFilter } = newTableHelpers(context)

@@ -87,6 +87,4 @@ class SocketData {
   }
 }
 
-export {
-  SocketData
-}
+export { SocketData }

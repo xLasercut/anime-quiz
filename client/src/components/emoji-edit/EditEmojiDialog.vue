@@ -29,7 +29,10 @@
           :rules="typeRules"
           :disabled="editActionDisabled"
         ></dialog-select>
-        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="editActionDisabled"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -59,9 +62,7 @@ export default defineComponent({
         (v: string) => !!v || 'Command required',
         (v: string) => validateDupeCommand(v) || 'Command already exists'
       ],
-      sourceRules: [
-        (v: string) => !!v || 'Source required'
-      ],
+      sourceRules: [(v: string) => !!v || 'Source required'],
       typeRules: [
         (v: string) => !!v || 'Type required',
         (v: string) => validType(v) || 'Invalid type'
@@ -99,14 +100,21 @@ export default defineComponent({
       if (state.valid) {
         editActionDisabled.value = true
         if (store.state.client.dialogView === DIALOG_ROUTES.NEW_EMOJI_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_NEW_EMOJI, store.state.admin.emojiInEdit, (proceed: boolean) => {
-            editActionComplete(proceed)
-          })
-        }
-        else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_EMOJI_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_EDIT_EMOJI, store.state.admin.emojiInEdit, (proceed: boolean) => {
-            editActionComplete(proceed)
-          })
+          socket.emit(
+            SHARED_EVENTS.ADMIN_NEW_EMOJI,
+            store.state.admin.emojiInEdit,
+            (proceed: boolean) => {
+              editActionComplete(proceed)
+            }
+          )
+        } else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_EMOJI_DIALOG) {
+          socket.emit(
+            SHARED_EVENTS.ADMIN_EDIT_EMOJI,
+            store.state.admin.emojiInEdit,
+            (proceed: boolean) => {
+              editActionComplete(proceed)
+            }
+          )
         }
       }
     }

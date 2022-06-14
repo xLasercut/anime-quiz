@@ -2,7 +2,8 @@
   <v-row dense>
     <v-col>
       <v-text-field
-        dense outlined
+        dense
+        outlined
         :value="animeIdFilter"
         @input="updateFilter('anime-id-filter', $event)"
         label="Anime ID"
@@ -14,7 +15,9 @@
       <v-text-field
         :value="animeNameFilter"
         @input="updateFilter('anime-name-filter', $event)"
-        dense outlined label="Name"
+        dense
+        outlined
+        label="Name"
         hide-details
         clearable
       ></v-text-field>
@@ -36,7 +39,6 @@ export default defineComponent({
     }
   },
   setup(_props, context) {
-
     const { updateFilter } = newTableHelpers(context)
 
     return {

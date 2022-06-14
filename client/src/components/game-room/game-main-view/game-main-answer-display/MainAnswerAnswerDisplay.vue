@@ -11,7 +11,6 @@
       </v-list-item>
     </v-list>
   </v-tooltip>
-
 </template>
 
 <script lang="ts">

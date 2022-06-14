@@ -1,6 +1,10 @@
 import { LOCAL_STORAGE_CONSTANTS } from './constants'
 
-function calculateStartPosition(startPosition: number, guessTime: number, duration: number): number {
+function calculateStartPosition(
+  startPosition: number,
+  guessTime: number,
+  duration: number
+): number {
   const maxStart = Math.floor(duration - guessTime)
   if (maxStart > 0) {
     return Math.floor(startPosition * maxStart)
@@ -29,9 +33,4 @@ function shouldDisplayResult(queryText: string, itemText: string): boolean {
   return true
 }
 
-export {
-  calculateStartPosition,
-  shouldDisplayResult,
-  getDefaultVolume,
-  isYoutubeVideo
-}
+export { calculateStartPosition, shouldDisplayResult, getDefaultVolume, isYoutubeVideo }

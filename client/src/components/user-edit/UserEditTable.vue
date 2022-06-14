@@ -20,7 +20,7 @@
       </v-container>
     </template>
 
-    <template #item.action="{item}">
+    <template #item.action="{ item }">
       <v-icon color="warning" @click="editUser(item)">mdi-pencil</v-icon>
       <v-icon color="error" @click="deleteUser(item)">mdi-delete</v-icon>
     </template>
@@ -66,8 +66,10 @@ export default defineComponent({
 
     function filteredUserLists(): AqUserSongs[] {
       return store.getters.userLists.filter((userSong: AqUserSongs) => {
-        return userSong.user_id.toLowerCase().includes(state.userIdFilter.toLowerCase()) &&
+        return (
+          userSong.user_id.toLowerCase().includes(state.userIdFilter.toLowerCase()) &&
           userSong.username.toLowerCase().includes(state.usernameFilter.toLowerCase())
+        )
       })
     }
 

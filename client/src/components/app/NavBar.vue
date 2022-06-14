@@ -2,12 +2,16 @@
   <v-app-bar app flat height="40" min-height="40">
     <v-toolbar-items>
       <nav-btn icon="mdi-theme-light-dark" @click="changeTheme()">Theme</nav-btn>
-      <nav-btn icon="mdi-shield" v-if="$store.state.client.admin" @click="adminDialog()">Admin</nav-btn>
+      <nav-btn icon="mdi-shield" v-if="$store.state.client.admin" @click="adminDialog()">
+        Admin
+      </nav-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <component :is="panelComponent()"></component>
     <v-toolbar-items>
-      <nav-btn icon="mdi-logout" @click="logOut()" color="error" v-if="showLogout()">Logout</nav-btn>
+      <nav-btn icon="mdi-logout" @click="logOut()" color="error" v-if="showLogout()">
+        Logout
+      </nav-btn>
     </v-toolbar-items>
   </v-app-bar>
 </template>

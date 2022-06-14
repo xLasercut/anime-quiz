@@ -26,7 +26,4 @@ function getAvatarUrl(avatar: string): string {
   return AVATAR_MAP[avatar] || 'https://i.imgur.com/dFFwfIx.jpg'
 }
 
-export {
-  getAvatarSelect,
-  getAvatarUrl
-}
+export { getAvatarSelect, getAvatarUrl }

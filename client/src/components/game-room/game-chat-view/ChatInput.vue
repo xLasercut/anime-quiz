@@ -1,11 +1,15 @@
 <template>
   <v-card-actions>
     <v-menu top offset-y :transition="false" v-model="show" max-height="304px">
-      <template #activator="{on}">
+      <template #activator="{ on }">
         <v-textarea
-          no-resize filled clearable hide-details
+          no-resize
+          filled
+          clearable
+          hide-details
           v-model="message"
-          label="Message" append-icon="mdi-send"
+          label="Message"
+          append-icon="mdi-send"
           class="dialog-item"
           rows="3"
           @click:append="sendMsg()"
@@ -62,30 +66,32 @@ export default defineComponent({
       }
     }
 
-    watch(() => state.message, (val: string) => {
-      if (val) {
-        const match = val.match(EMOJI_CHAT_FORMAT)
-        if (match) {
-          const command = match[0]
-          state.choices = store.getters.emojiList.filter((emoji: AqEmoji) => {
-            return `:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase())
-          })
-          const currentLength = state.choices.length
-          if (currentLength > 0) {
-            if (currentLength !== state.choicesOldLength) {
-              state.choicesOldLength = currentLength
+    watch(
+      () => state.message,
+      (val: string) => {
+        if (val) {
+          const match = val.match(EMOJI_CHAT_FORMAT)
+          if (match) {
+            const command = match[0]
+            state.choices = store.getters.emojiList.filter((emoji: AqEmoji) => {
+              return `:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase())
+            })
+            const currentLength = state.choices.length
+            if (currentLength > 0) {
+              if (currentLength !== state.choicesOldLength) {
+                state.choicesOldLength = currentLength
+                state.show = false
+              }
+              setTimeout(() => {
+                state.show = true
+              }, 1)
+            } else {
               state.show = false
             }
-            setTimeout(() => {
-              state.show = true
-            }, 1)
-          }
-          else {
-            state.show = false
           }
         }
       }
-    })
+    )
 
     function addEmoji(command: string): void {
       state.message = state.message.replace(EMOJI_CHAT_FORMAT, `:${command}:`)

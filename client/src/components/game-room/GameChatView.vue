@@ -17,7 +17,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onUnmounted, reactive, toRefs, watch } from '@vue/composition-api'
+import {
+  defineComponent,
+  nextTick,
+  onUnmounted,
+  reactive,
+  toRefs,
+  watch
+} from '@vue/composition-api'
 import { CLIENT_CONSTANTS } from '../../assets/constants'
 import ChatInput from './game-chat-view/ChatInput.vue'
 import { SHARED_EVENTS } from '../../assets/shared/events'
@@ -36,14 +43,17 @@ export default defineComponent({
       messages: []
     })
 
-    watch(() => state.messages, () => {
-      nextTick(() => {
-        const element = document.querySelector('.chat-message-container')
-        if (element) {
-          element.scrollTop = element.scrollHeight - element.clientHeight
-        }
-      })
-    })
+    watch(
+      () => state.messages,
+      () => {
+        nextTick(() => {
+          const element = document.querySelector('.chat-message-container')
+          if (element) {
+            element.scrollTop = element.scrollHeight - element.clientHeight
+          }
+        })
+      }
+    )
 
     socket.on(SHARED_EVENTS.UPDATE_GAME_CHAT, (message: AqGameChatMessage) => {
       if (state.messages.length > 100) {

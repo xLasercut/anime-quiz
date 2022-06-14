@@ -11,7 +11,7 @@
       :items-per-page="itemsPerPage"
       :page="currentPage"
       :single-select="true"
-      :value="[ currentSong ]"
+      :value="[currentSong]"
       item-key="song_id"
     >
       <template #top>
@@ -35,7 +35,12 @@
       </template>
 
       <template #item.action="{ item }">
-        <v-icon :disabled="item.song_id === currentSong.song_id" color="success" @click="playSong(item)">mdi-play-box</v-icon>
+        <v-icon
+          :disabled="item.song_id === currentSong.song_id"
+          color="success"
+          @click="playSong(item)"
+          >mdi-play-box</v-icon
+        >
       </template>
 
       <template #footer="{ props }">
@@ -86,10 +91,13 @@ export default defineComponent({
       currentPage: 0
     })
 
-    watch(() => props.currentSong, (song) => {
-      const songIndex = props.playlist.indexOf(song)
-      state.currentPage = Math.floor(songIndex / state.itemsPerPage) + 1
-    })
+    watch(
+      () => props.currentSong,
+      (song) => {
+        const songIndex = props.playlist.indexOf(song)
+        state.currentPage = Math.floor(songIndex / state.itemsPerPage) + 1
+      }
+    )
 
     function playSong(song: AqSong): void {
       context.emit('change:song', props.playlist.indexOf(song))

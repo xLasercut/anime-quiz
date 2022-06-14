@@ -63,7 +63,7 @@ export default defineComponent({
     })
 
     function percentage(): number {
-      return 100 * (1 - (state.time / state.guessTime))
+      return 100 * (1 - state.time / state.guessTime)
     }
 
     function color(): string {

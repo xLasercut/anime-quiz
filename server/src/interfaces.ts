@@ -38,10 +38,4 @@ interface AqAnimeRaw {
   anime_name: string
 }
 
-export {
-  LogTemplate,
-  AqSongRaw,
-  AqUserSongsRaw,
-  AqGameStateRaw,
-  AqAnimeRaw
-}
+export { LogTemplate, AqSongRaw, AqUserSongsRaw, AqGameStateRaw, AqAnimeRaw }

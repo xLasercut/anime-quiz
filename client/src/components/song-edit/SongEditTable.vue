@@ -30,7 +30,7 @@
       <a :href="item.src" target="_blank">View</a>
     </template>
 
-    <template #item.action="{item}">
+    <template #item.action="{ item }">
       <v-icon color="warning" @click="editSong(item)">mdi-pencil</v-icon>
       <v-icon color="error" @click="deleteSong(item)">mdi-delete</v-icon>
     </template>
@@ -84,10 +84,12 @@ export default defineComponent({
 
     function filteredSongList(): AqSong[] {
       return store.getters.songList.filter((song: AqSong) => {
-        return shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
+        return (
+          shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
           shouldDisplayResult(state.songTitleFilter, song.song_title) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
           song.song_id.toLowerCase().includes(state.songIdFilter.toLowerCase())
+        )
       })
     }
 

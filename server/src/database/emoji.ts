@@ -25,19 +25,21 @@ class AnimeQuizEmojiDb extends AbstractDb {
 
   public deleteEmoji(emoji: AqEmoji): void {
     const sql = `DELETE FROM emojis WHERE emoji_id = ?`
-    this._db.prepare(sql).run([ emoji.emoji_id ])
+    this._db.prepare(sql).run([emoji.emoji_id])
     this.reloadCache()
   }
 
   public newEmoji(emoji: AqEmoji): void {
     const emojiId = `emoji-${v4()}`
     const sql = `INSERT INTO emojis (emoji_id, command, src, type) VALUES (?,?,?,?)`
-    this._db.prepare(sql).run([
-      emojiId,
-      this._sanitizeString(emoji.command).toLowerCase(),
-      this._sanitizeString(emoji.src),
-      this._sanitizeString(emoji.type)
-    ])
+    this._db
+      .prepare(sql)
+      .run([
+        emojiId,
+        this._sanitizeString(emoji.command).toLowerCase(),
+        this._sanitizeString(emoji.src),
+        this._sanitizeString(emoji.type)
+      ])
     this.reloadCache()
   }
 
@@ -50,12 +52,14 @@ class AnimeQuizEmojiDb extends AbstractDb {
         type = ?
       WHERE emoji_id = ?
     `
-    this._db.prepare(sql).run([
-      this._sanitizeString(emoji.command).toLowerCase(),
-      this._sanitizeString(emoji.src),
-      this._sanitizeString(emoji.type),
-      emoji.emoji_id
-    ])
+    this._db
+      .prepare(sql)
+      .run([
+        this._sanitizeString(emoji.command).toLowerCase(),
+        this._sanitizeString(emoji.src),
+        this._sanitizeString(emoji.type),
+        emoji.emoji_id
+      ])
     this.reloadCache()
   }
 
@@ -70,7 +74,7 @@ class AnimeQuizEmojiDb extends AbstractDb {
       FROM emojis
       WHERE emojis.command = ?
     `
-    const emojis = this._db.prepare(sql).all([ this._sanitizeString(emojiCommand).toLowerCase() ])
+    const emojis = this._db.prepare(sql).all([this._sanitizeString(emojiCommand).toLowerCase()])
     if (emojis.length > 0) {
       this._logger.writeLog(LOG_BASE.EMOJI_DATA_VALIDATION_FAILURE, { emojiCommand: emojiCommand })
       throw new GameDataValidationError('Emoji command already exists')
@@ -84,7 +88,7 @@ class AnimeQuizEmojiDb extends AbstractDb {
       FROM emojis
       WHERE emojis.emoji_id = ?
     `
-    const emojis = this._db.prepare(sql).all([ emojiId ])
+    const emojis = this._db.prepare(sql).all([emojiId])
     if (emojis.length <= 0) {
       this._logger.writeLog(LOG_BASE.EMOJI_DATA_VALIDATION_FAILURE, { emojiId: emojiId })
       throw new GameDataValidationError('Emoji does not exist')
@@ -92,6 +96,4 @@ class AnimeQuizEmojiDb extends AbstractDb {
   }
 }
 
-export {
-  AnimeQuizEmojiDb
-}
+export { AnimeQuizEmojiDb }

@@ -7,6 +7,4 @@ class RoomEmitter extends AbstractEmitter {
   }
 }
 
-export {
-  RoomEmitter
-}
+export { RoomEmitter }

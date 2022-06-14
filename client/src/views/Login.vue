@@ -11,7 +11,12 @@
 
       <v-card-text>
         <v-form v-model="valid" @submit.prevent="login()">
-          <login-input label="Display Name" v-model.trim="username" :rules="usernameRules" counter="20"></login-input>
+          <login-input
+            label="Display Name"
+            v-model.trim="username"
+            :rules="usernameRules"
+            counter="20"
+          ></login-input>
           <login-input
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             label="Server Password"
@@ -20,21 +25,18 @@
             :rules="passwordRules"
             @click:append="showPassword = !showPassword"
           ></login-input>
-          <login-avatar-select
-            v-model="avatar"
-            :rules="avatarRules"
-          ></login-avatar-select>
+          <login-avatar-select v-model="avatar" :rules="avatarRules"></login-avatar-select>
           <v-row justify="center">
             <v-col cols="auto">
-              <icon-btn color="success" type="submit" large icon="mdi-login" :disabled="disabled">Login</icon-btn>
+              <icon-btn color="success" type="submit" large icon="mdi-login" :disabled="disabled">
+                Login
+              </icon-btn>
             </v-col>
           </v-row>
         </v-form>
       </v-card-text>
 
-      <v-card-actions>
-        Client Version: {{ clientVersion }}
-      </v-card-actions>
+      <v-card-actions> Client Version: {{ clientVersion }} </v-card-actions>
     </v-card>
   </v-main>
 </template>
@@ -66,15 +68,15 @@ export default defineComponent({
         (v: string): boolean | string => !!v || 'Display name required',
         (v: string): boolean | string =>
           USERNAME_FORMAT.test(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
-        (v: string): boolean | string => (v && v.length <= 20) || 'Display name must be under 20 characters'
+        (v: string): boolean | string =>
+          (v && v.length <= 20) || 'Display name must be under 20 characters'
       ],
       passwordRules: [
         (v: string): boolean | string => !!v || 'Server password required',
-        (v: string): boolean | string => SERVER_PASSWORD_FORMAT.test(v) || 'Valid characters A-Z, a-z, 0-9'
+        (v: string): boolean | string =>
+          SERVER_PASSWORD_FORMAT.test(v) || 'Valid characters A-Z, a-z, 0-9'
       ],
-      avatarRules: [
-        (v: string): boolean | string => !!v || 'Avatar required'
-      ],
+      avatarRules: [(v: string): boolean | string => !!v || 'Avatar required'],
       disabled: false,
       showPassword: false,
       clientVersion: process.env.VUE_APP_VERSION
@@ -86,12 +88,18 @@ export default defineComponent({
         localStorage[LOCAL_STORAGE_CONSTANTS.AQ_USERNAME] = state.username
         localStorage[LOCAL_STORAGE_CONSTANTS.AQ_AVATAR] = state.avatar
         socket.connect()
-        socket.emit(SHARED_EVENTS.AUTHENTICATE, state.username, state.password, state.avatar, (auth: boolean): void => {
-          state.disabled = false
-          if (auth) {
-            store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
+        socket.emit(
+          SHARED_EVENTS.AUTHENTICATE,
+          state.username,
+          state.password,
+          state.avatar,
+          (auth: boolean): void => {
+            state.disabled = false
+            if (auth) {
+              store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
+            }
           }
-        })
+        )
       }
     }
 

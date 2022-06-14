@@ -32,6 +32,4 @@ const MUTATIONS = {
   UPDATE_VOLUME: 'UPDATE_VOLUME'
 }
 
-export {
-  MUTATIONS
-}
+export { MUTATIONS }

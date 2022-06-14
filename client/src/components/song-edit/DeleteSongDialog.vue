@@ -40,7 +40,10 @@
           :value="$store.state.admin.songInEdit.type"
           disabled
         ></dialog-select>
-        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="editActionDisabled"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -60,7 +63,13 @@ import { socket } from '../../plugins/socket'
 import { newTableHelpers } from '../../assets/table-helper'
 
 export default defineComponent({
-  components: { DialogMultiAutocomplete, DialogSelect, DialogMultiCombobox, DialogTextField, DialogActions },
+  components: {
+    DialogMultiAutocomplete,
+    DialogSelect,
+    DialogMultiCombobox,
+    DialogTextField,
+    DialogActions
+  },
   setup(_props, context) {
     const state = reactive({
       valid: false,
@@ -72,9 +81,13 @@ export default defineComponent({
     function submitEdit(): void {
       if (state.valid) {
         editActionDisabled.value = true
-        socket.emit(SHARED_EVENTS.ADMIN_DELETE_SONG, store.state.admin.songInEdit, (proceed: boolean) => {
-          editActionComplete(proceed)
-        })
+        socket.emit(
+          SHARED_EVENTS.ADMIN_DELETE_SONG,
+          store.state.admin.songInEdit,
+          (proceed: boolean) => {
+            editActionComplete(proceed)
+          }
+        )
       }
     }
 

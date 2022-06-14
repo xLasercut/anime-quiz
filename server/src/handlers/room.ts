@@ -35,6 +35,4 @@ class RoomHandler extends AbstractHandler {
   }
 }
 
-export {
-  RoomHandler
-}
+export { RoomHandler }

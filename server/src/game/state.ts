@@ -50,7 +50,7 @@ class GameStates {
 
   public isLastSong(roomId: string): boolean {
     const state = this._states[roomId]
-    return state.currentSongCount >= (state.gameList.length - 1)
+    return state.currentSongCount >= state.gameList.length - 1
   }
 
   public deleteRoom(roomId: string): void {
@@ -105,15 +105,17 @@ class GameStates {
     if (state.songOverride) {
       return state.songOverride
     }
-    return state.gameList[state.currentSongCount] || {
-      anime_name: [],
-      anime_id: [],
-      song_id: '',
-      type: '',
-      artist: '',
-      song_title: '',
-      src: ''
-    }
+    return (
+      state.gameList[state.currentSongCount] || {
+        anime_name: [],
+        anime_id: [],
+        song_id: '',
+        type: '',
+        artist: '',
+        song_title: '',
+        src: ''
+      }
+    )
   }
 
   protected _clearCountdown(roomId: string): void {
@@ -150,6 +152,4 @@ class GameStates {
   }
 }
 
-export {
-  GameStates
-}
+export { GameStates }

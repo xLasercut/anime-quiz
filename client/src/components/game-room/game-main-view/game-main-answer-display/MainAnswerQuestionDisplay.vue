@@ -1,7 +1,5 @@
 <template>
-  <v-sheet class="answer-container">
-    ?
-  </v-sheet>
+  <v-sheet class="answer-container"> ? </v-sheet>
 </template>
 
 <script lang="ts">

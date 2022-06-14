@@ -25,6 +25,4 @@ class SettingsValidator extends AbstractValidator {
   }
 }
 
-export {
-  SettingsValidator
-}
+export { SettingsValidator }

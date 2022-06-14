@@ -38,13 +38,19 @@ export default defineComponent({
 
     let player: any
 
-    watch(() => store.state.client.volume, (volume: number) => {
-      changeVolume(volume)
-    })
+    watch(
+      () => store.state.client.volume,
+      (volume: number) => {
+        changeVolume(volume)
+      }
+    )
 
-    watch(() => props.src, () => {
-      context.emit('load', player.getDuration())
-    })
+    watch(
+      () => props.src,
+      () => {
+        context.emit('load', player.getDuration())
+      }
+    )
 
     function changeVolume(volume: number): void {
       player.setVolume(volume)

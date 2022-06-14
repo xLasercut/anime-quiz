@@ -4,7 +4,4 @@ import { SocketData } from './app/socket-data'
 
 type Socket = SocketIoSocket<DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData>
 
-export {
-  Socket
-}
-
+export { Socket }

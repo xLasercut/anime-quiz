@@ -37,6 +37,4 @@ class BalancedGameListGenerator extends AbstractGameListGenerator {
   }
 }
 
-export {
-  BalancedGameListGenerator
-}
+export { BalancedGameListGenerator }

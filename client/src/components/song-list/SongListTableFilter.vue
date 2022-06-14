@@ -2,7 +2,8 @@
   <v-row dense>
     <v-col>
       <filtered-combobox
-        dense outlined
+        dense
+        outlined
         :value="animeFilter"
         @input="updateFilter('anime-filter', $event)"
         label="Anime"
@@ -15,7 +16,9 @@
       <filtered-combobox
         :value="songTitleFilter"
         @input="updateFilter('song-title-filter', $event)"
-        dense outlined label="Title"
+        dense
+        outlined
+        label="Title"
         :items="$store.getters.songTitleList"
         hide-details
         clearable
@@ -25,7 +28,9 @@
       <v-text-field
         :value="songArtistFilter"
         @input="updateFilter('song-artist-filter', $event)"
-        dense outlined label="Artist"
+        dense
+        outlined
+        label="Artist"
         hide-details
         clearable
       ></v-text-field>
@@ -35,7 +40,9 @@
         :value="songTypeFilter"
         @input="updateFilter('song-type-filter', $event)"
         :items="songTypes"
-        dense outlined label="Type"
+        dense
+        outlined
+        label="Type"
         hide-details
       ></v-select>
     </v-col>
@@ -83,9 +90,7 @@ export default defineComponent({
   },
   setup(_props, context) {
     const state = reactive({
-      songTypes: [
-        { text: 'ALL', value: '' }
-      ].concat(SONG_TYPES)
+      songTypes: [{ text: 'ALL', value: '' }].concat(SONG_TYPES)
     })
 
     const { updateFilter } = newTableHelpers(context)

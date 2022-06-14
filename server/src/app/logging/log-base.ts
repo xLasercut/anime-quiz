@@ -167,7 +167,4 @@ const LOG_BASE = {
   }
 }
 
-export {
-  LOG_BASE,
-  LOG_LEVEL
-}
+export { LOG_BASE, LOG_LEVEL }

@@ -16,6 +16,4 @@ class UserDbEmitter extends AbstractEmitter {
   }
 }
 
-export {
-  UserDbEmitter
-}
+export { UserDbEmitter }

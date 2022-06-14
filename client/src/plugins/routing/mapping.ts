@@ -92,8 +92,4 @@ function dialogComponent(): any {
   return _DIALOG_MAPPING[store.state.client.dialogView]
 }
 
-export {
-  viewComponent,
-  panelComponent,
-  dialogComponent
-}
+export { viewComponent, panelComponent, dialogComponent }

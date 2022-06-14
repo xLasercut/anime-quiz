@@ -13,7 +13,12 @@ class AbstractGameListGenerator {
   protected _dupeAnimeIds: Set<string>
   protected _shuffle: boolean
 
-  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings, shuffle: boolean) {
+  constructor(
+    songDb: AnimeQuizSongDb,
+    userDb: AnimeQuizUserDb,
+    settings: AqGameSettings,
+    shuffle: boolean
+  ) {
     this._songDb = songDb
     this._userDb = userDb
     this._duplicate = settings.duplicate
@@ -51,8 +56,7 @@ class AbstractGameListGenerator {
     return this._dupeSongIds.has(song.song_id)
   }
 
-  protected _initGeneratorVars(): void {
-  }
+  protected _initGeneratorVars(): void {}
 
   protected _generateList(): AqSong[] {
     return []
@@ -70,6 +74,4 @@ class AbstractGameListGenerator {
   }
 }
 
-export {
-  AbstractGameListGenerator
-}
+export { AbstractGameListGenerator }

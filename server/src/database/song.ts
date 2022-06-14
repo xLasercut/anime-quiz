@@ -112,7 +112,7 @@ class AnimeQuizSongDb extends AbstractDb {
 
   protected _deleteAnime(animeId: string): void {
     const sql = `DELETE FROM animes WHERE anime_id = ?`
-    this._db.prepare(sql).run([ animeId ])
+    this._db.prepare(sql).run([animeId])
   }
 
   protected _addAnime(animeId: string, animeNames: string[]): void {
@@ -120,7 +120,7 @@ class AnimeQuizSongDb extends AbstractDb {
     const insert = this._db.prepare(sql)
     const insertAll = this._db.transaction((_animeNames: string[]) => {
       for (const animeName of _animeNames) {
-        insert.run([ animeId, this._sanitizeString(animeName) ])
+        insert.run([animeId, this._sanitizeString(animeName)])
       }
     })
     insertAll(animeNames)
@@ -136,23 +136,25 @@ class AnimeQuizSongDb extends AbstractDb {
         type = ?
       WHERE song_id = ?
     `
-    this._db.prepare(sql).run([
-      this._sanitizeString(song.song_title),
-      this._sanitizeString(song.src),
-      this._sanitizeString(song.artist),
-      this._sanitizeString(song.type),
-      songId
-    ])
+    this._db
+      .prepare(sql)
+      .run([
+        this._sanitizeString(song.song_title),
+        this._sanitizeString(song.src),
+        this._sanitizeString(song.artist),
+        this._sanitizeString(song.type),
+        songId
+      ])
   }
 
   protected _deleteSong(songId: string): void {
     const sql = `DELETE FROM songs WHERE song_id = ?`
-    this._db.prepare(sql).run([ songId ])
+    this._db.prepare(sql).run([songId])
   }
 
   protected _deleteSongAnime(songId: string): void {
     const sql = `DELETE FROM song_animes WHERE song_id = ?`
-    this._db.prepare(sql).run([ songId ])
+    this._db.prepare(sql).run([songId])
   }
 
   protected _addSong(songId: string, song: AqSong): void {
@@ -162,13 +164,15 @@ class AnimeQuizSongDb extends AbstractDb {
       VALUES 
         (?,?,?,?,?)
     `
-    this._db.prepare(sql).run([
-      songId,
-      this._sanitizeString(song.song_title),
-      this._sanitizeString(song.src),
-      this._sanitizeString(song.artist),
-      this._sanitizeString(song.type)
-    ])
+    this._db
+      .prepare(sql)
+      .run([
+        songId,
+        this._sanitizeString(song.song_title),
+        this._sanitizeString(song.src),
+        this._sanitizeString(song.artist),
+        this._sanitizeString(song.type)
+      ])
   }
 
   protected _addSongAnime(songId: string, animeIds: string[]): void {
@@ -176,7 +180,7 @@ class AnimeQuizSongDb extends AbstractDb {
     const insert = this._db.prepare(sql)
     const insertMany = this._db.transaction((_animeIds: string[]) => {
       for (const animeId of _animeIds) {
-        insert.run([ songId, animeId ])
+        insert.run([songId, animeId])
       }
     })
     insertMany(animeIds)
@@ -258,6 +262,4 @@ class AnimeQuizSongDb extends AbstractDb {
   }
 }
 
-export {
-  AnimeQuizSongDb
-}
+export { AnimeQuizSongDb }

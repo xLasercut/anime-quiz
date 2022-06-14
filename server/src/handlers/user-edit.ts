@@ -15,7 +15,12 @@ class UserEditHandler extends AbstractHandler {
   protected _userDbEmitter: UserDbEmitter
   protected _systemEmitter: SystemEmitter
 
-  constructor(logger: Logger, userDb: AnimeQuizUserDb, userDbEmitter: UserDbEmitter, systemEmitter: SystemEmitter) {
+  constructor(
+    logger: Logger,
+    userDb: AnimeQuizUserDb,
+    userDbEmitter: UserDbEmitter,
+    systemEmitter: SystemEmitter
+  ) {
     super(logger)
     this._userDb = userDb
     this._userDbEmitter = userDbEmitter
@@ -41,7 +46,11 @@ class UserEditHandler extends AbstractHandler {
         this._userDb.validateUsernameNotExist(user.username)
         this._userDb.newUser(user)
         this._userDbEmitter.updateUserLists(ROOM_IDS.USER_EDIT)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${user.username} user`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Added ${user.username} user`,
+          socket.id
+        )
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -58,7 +67,11 @@ class UserEditHandler extends AbstractHandler {
         this._userDb.validateUsernameNotExist(user.username)
         this._userDb.editUser(user)
         this._userDbEmitter.updateUserLists(ROOM_IDS.USER_EDIT)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Edited ${user.username} user`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Edited ${user.username} user`,
+          socket.id
+        )
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -74,7 +87,11 @@ class UserEditHandler extends AbstractHandler {
         this._userDb.validateUserExist(user.user_id)
         this._userDb.deleteUser(user)
         this._userDbEmitter.updateUserLists(ROOM_IDS.USER_EDIT)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Deleted ${user.username} user`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Deleted ${user.username} user`,
+          socket.id
+        )
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -84,6 +101,4 @@ class UserEditHandler extends AbstractHandler {
   }
 }
 
-export {
-  UserEditHandler
-}
+export { UserEditHandler }

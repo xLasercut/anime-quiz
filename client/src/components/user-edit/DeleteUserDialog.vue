@@ -12,7 +12,10 @@
           :value="$store.state.admin.userInEdit.username"
           disabled
         ></dialog-text-field>
-        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="editActionDisabled"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -39,9 +42,13 @@ export default defineComponent({
     function submitEdit(): void {
       if (state.valid) {
         editActionDisabled.value = true
-        socket.emit(SHARED_EVENTS.ADMIN_DELETE_USER, store.state.admin.userInEdit, (proceed: boolean) => {
-          editActionComplete(proceed)
-        })
+        socket.emit(
+          SHARED_EVENTS.ADMIN_DELETE_USER,
+          store.state.admin.userInEdit,
+          (proceed: boolean) => {
+            editActionComplete(proceed)
+          }
+        )
       }
     }
 

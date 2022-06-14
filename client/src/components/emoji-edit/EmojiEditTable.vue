@@ -25,7 +25,7 @@
       <emoji-preview :emoji="item"></emoji-preview>
     </template>
 
-    <template #item.action="{item}">
+    <template #item.action="{ item }">
       <v-icon color="warning" @click="editEmoji(item)">mdi-pencil</v-icon>
       <v-icon color="error" @click="deleteEmoji(item)">mdi-delete</v-icon>
     </template>
@@ -75,9 +75,11 @@ export default defineComponent({
 
     function filteredEmojiList(): AqEmoji[] {
       return store.getters.emojiList.filter((emoji: AqEmoji) => {
-        return emoji.command.toLowerCase().includes(state.emojiCommandFilter.toLowerCase()) &&
+        return (
+          emoji.command.toLowerCase().includes(state.emojiCommandFilter.toLowerCase()) &&
           emoji.src.toLowerCase().includes(state.emojiSourceFilter.toLowerCase()) &&
           emoji.type.toLowerCase().includes(state.emojiTypeFilter.toLowerCase())
+        )
       })
     }
 

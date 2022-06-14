@@ -27,9 +27,12 @@ export default defineComponent({
   setup() {
     const player = ref<HTMLVideoElement>()
 
-    watch(() => store.state.client.volume, (val: number) => {
-      changeVolume(val)
-    })
+    watch(
+      () => store.state.client.volume,
+      (val: number) => {
+        changeVolume(val)
+      }
+    )
 
     function changeVolume(volume: number): void {
       if (player.value) {

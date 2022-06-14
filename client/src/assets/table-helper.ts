@@ -22,6 +22,4 @@ function newTableHelpers(context: SetupContext) {
   }
 }
 
-export {
-  newTableHelpers
-}
+export { newTableHelpers }

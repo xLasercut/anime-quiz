@@ -15,8 +15,7 @@
     :single-select="false"
     item-key="song_id"
   >
-    <template #header.data-table-select>
-    </template>
+    <template #header.data-table-select> </template>
 
     <template #item.data-table-select="{ select, isSelected, item }">
       <v-simple-checkbox
@@ -93,7 +92,7 @@ export default defineComponent({
       ],
       currentPage: 1,
       itemsPerPage: 10,
-      paginationSelectItems: [ 5, 10, 15, 20 ],
+      paginationSelectItems: [5, 10, 15, 20],
       selectedUser: '',
       editMode: SONG_LIST_EDIT_MODE.NONE,
       loading: false,
@@ -105,13 +104,19 @@ export default defineComponent({
 
     const songSelected = ref<AqSong[]>([])
 
-    watch(() => state.editMode, () => {
-      songSelected.value = []
-    })
+    watch(
+      () => state.editMode,
+      () => {
+        songSelected.value = []
+      }
+    )
 
-    watch(() => state.selectedUser, () => {
-      songSelected.value = []
-    })
+    watch(
+      () => state.selectedUser,
+      () => {
+        songSelected.value = []
+      }
+    )
 
     function isSelectDisabled(song: AqSong, isSelected: boolean): boolean {
       if (songSelected.value.length >= 50 && !isSelected) {
@@ -122,13 +127,17 @@ export default defineComponent({
         return false
       }
 
-      if (state.editMode === SONG_LIST_EDIT_MODE.ADD &&
-        !store.getters.userList(state.selectedUser).includes(song.song_id)) {
+      if (
+        state.editMode === SONG_LIST_EDIT_MODE.ADD &&
+        !store.getters.userList(state.selectedUser).includes(song.song_id)
+      ) {
         return true
       }
 
-      return !!(state.editMode === SONG_LIST_EDIT_MODE.REMOVE &&
-        store.getters.userList(state.selectedUser).includes(song.song_id))
+      return !!(
+        state.editMode === SONG_LIST_EDIT_MODE.REMOVE &&
+        store.getters.userList(state.selectedUser).includes(song.song_id)
+      )
     }
 
     function checkboxColor(isSelected: boolean): string {
@@ -157,20 +166,30 @@ export default defineComponent({
         })
         if (state.editMode === SONG_LIST_EDIT_MODE.ADD) {
           state.loading = true
-          socket.emit(SHARED_EVENTS.ADD_USER_SONGS, songIds, state.selectedUser, (proceed: boolean) => {
-            if (proceed) {
-              songSelected.value = []
+          socket.emit(
+            SHARED_EVENTS.ADD_USER_SONGS,
+            songIds,
+            state.selectedUser,
+            (proceed: boolean) => {
+              if (proceed) {
+                songSelected.value = []
+              }
+              state.loading = false
             }
-            state.loading = false
-          })
+          )
         } else if (state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
           state.loading = true
-          socket.emit(SHARED_EVENTS.DELETE_USER_SONGS, songIds, state.selectedUser, (proceed: boolean) => {
-            if (proceed) {
-              songSelected.value = []
+          socket.emit(
+            SHARED_EVENTS.DELETE_USER_SONGS,
+            songIds,
+            state.selectedUser,
+            (proceed: boolean) => {
+              if (proceed) {
+                songSelected.value = []
+              }
+              state.loading = false
             }
-            state.loading = false
-          })
+          )
         }
       }
     }
@@ -185,13 +204,14 @@ export default defineComponent({
           return true
         })
         .filter((song: AqSong) => {
-        return shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
-          shouldDisplayResult(state.songTitleFilter, song.song_title) &&
-          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
-          shouldDisplayResult(state.songArtistFilter, song.artist)
+          return (
+            shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
+            shouldDisplayResult(state.songTitleFilter, song.song_title) &&
+            song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
+            shouldDisplayResult(state.songArtistFilter, song.artist)
+          )
         })
     }
-
 
     return {
       ...toRefs(state),

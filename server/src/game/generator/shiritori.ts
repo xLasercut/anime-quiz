@@ -46,7 +46,11 @@ class ShiritoriGameListGenerator extends AbstractGameListGenerator {
   protected _findNextSongFromLastLetter(userSongs: AqSong[], lastLetter: string): AqSong {
     for (const song of userSongs) {
       for (const animeName of song.anime_name) {
-        if (!this._isDupeSong(song) && this._getFirstLetter(animeName) === lastLetter && !this._isDupeAnime(song)) {
+        if (
+          !this._isDupeSong(song) &&
+          this._getFirstLetter(animeName) === lastLetter &&
+          !this._isDupeAnime(song)
+        ) {
           return song
         }
       }
@@ -81,6 +85,4 @@ class ShiritoriGameListGenerator extends AbstractGameListGenerator {
   }
 }
 
-export {
-  ShiritoriGameListGenerator
-}
+export { ShiritoriGameListGenerator }

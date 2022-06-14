@@ -21,7 +21,10 @@ class GameEmitter extends AbstractEmitter {
   }
 
   public updateGameSetting(roomId: string, sid: string): void {
-    this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_SETTINGS, this._settings.getGameSettings(roomId))
+    this._client(sid).emit(
+      SHARED_EVENTS.UPDATE_GAME_SETTINGS,
+      this._settings.getGameSettings(roomId)
+    )
   }
 
   public updateGameChat(socket: Socket, msg: string, sid: string): void {
@@ -65,6 +68,4 @@ class GameEmitter extends AbstractEmitter {
   }
 }
 
-export {
-  GameEmitter
-}
+export { GameEmitter }

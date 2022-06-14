@@ -32,7 +32,6 @@ export default defineComponent({
 })
 </script>
 
-
 <style scoped>
 .volume-slider-container {
   width: 150px;

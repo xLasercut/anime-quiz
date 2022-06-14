@@ -14,7 +14,6 @@ const _GENERATOR_MAP = {
   [GAME_MODE.SHIRITORI]: ShiritoriGameListGenerator
 }
 
-
 class GameListGeneratorFactory {
   protected _songDb: AnimeQuizSongDb
   protected _userDb: AnimeQuizUserDb
@@ -32,6 +31,4 @@ class GameListGeneratorFactory {
   }
 }
 
-export {
-  GameListGeneratorFactory
-}
+export { GameListGeneratorFactory }

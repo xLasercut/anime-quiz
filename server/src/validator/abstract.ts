@@ -18,13 +18,10 @@ class AbstractValidator {
   }
 
   protected _validateBoolean(val: boolean, msg: string): void {
-    if (![ true, false ].includes(val)) {
+    if (![true, false].includes(val)) {
       throw new GameDataValidationError(msg)
     }
   }
 }
 
-export {
-  AbstractValidator
-}
-
+export { AbstractValidator }

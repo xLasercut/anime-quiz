@@ -12,7 +12,10 @@
           :value="$store.state.admin.animeInEdit.anime_name"
           disabled
         ></dialog-multi-combobox>
-        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="editActionDisabled"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -40,9 +43,13 @@ export default defineComponent({
     function submitEdit(): void {
       if (state.valid) {
         editActionDisabled.value = true
-        socket.emit(SHARED_EVENTS.ADMIN_DELETE_ANIME, store.state.admin.animeInEdit, (proceed: boolean) => {
-          editActionComplete(proceed)
-        })
+        socket.emit(
+          SHARED_EVENTS.ADMIN_DELETE_ANIME,
+          store.state.admin.animeInEdit,
+          (proceed: boolean) => {
+            editActionComplete(proceed)
+          }
+        )
       }
     }
 

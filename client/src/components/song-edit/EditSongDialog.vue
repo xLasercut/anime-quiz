@@ -50,7 +50,10 @@
           :rules="typeRules"
           :disabled="editActionDisabled"
         ></dialog-select>
-        <dialog-actions :disabled="editActionDisabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+        <dialog-actions
+          :disabled="editActionDisabled"
+          @dialog:close="$emit('dialog:close')"
+        ></dialog-actions>
       </v-container>
     </v-form>
   </v-card-text>
@@ -70,23 +73,26 @@ import { SHARED_EVENTS } from '../../assets/shared/events'
 import { socket } from '../../plugins/socket'
 import { VALID_SONG_TYPES } from '../../assets/shared/constants'
 import { newTableHelpers } from '../../assets/table-helper'
+import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue'
 
 export default defineComponent({
-  components: { DialogMultiAutocomplete, DialogSelect, DialogTextField, DialogActions },
+  components: {
+    DialogMultiAutocomplete,
+    DialogSelect,
+    DialogTextField,
+    DialogActions,
+    DialogMultiCombobox
+  },
   setup(_props, context) {
     const state = reactive({
       valid: false,
       songTypes: SONG_TYPES,
       animeIdRules: [
-        (v: string[]) => v.length > 0 || 'Name can\'t be blank',
+        (v: string[]) => v.length > 0 || "Name can't be blank",
         (v: string[]) => validAnimeIds(v) || 'Invalid anime name'
       ],
-      titleRules: [
-        (v: string) => !!v || 'Title required'
-      ],
-      sourceRules: [
-        (v: string) => !!v || 'Source required'
-      ],
+      titleRules: [(v: string) => !!v || 'Title required'],
+      sourceRules: [(v: string) => !!v || 'Source required'],
       typeRules: [
         (v: string) => !!v || 'Type required',
         (v: string) => validType(v) || 'Invalid type'
@@ -132,14 +138,21 @@ export default defineComponent({
       if (state.valid) {
         editActionDisabled.value = true
         if (store.state.client.dialogView === DIALOG_ROUTES.NEW_SONG_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_NEW_SONG, store.state.admin.songInEdit, (proceed: boolean) => {
-            editActionComplete(proceed)
-          })
-        }
-        else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_SONG_DIALOG) {
-          socket.emit(SHARED_EVENTS.ADMIN_EDIT_SONG, store.state.admin.songInEdit, (proceed: boolean) => {
-            editActionComplete(proceed)
-          })
+          socket.emit(
+            SHARED_EVENTS.ADMIN_NEW_SONG,
+            store.state.admin.songInEdit,
+            (proceed: boolean) => {
+              editActionComplete(proceed)
+            }
+          )
+        } else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_SONG_DIALOG) {
+          socket.emit(
+            SHARED_EVENTS.ADMIN_EDIT_SONG,
+            store.state.admin.songInEdit,
+            (proceed: boolean) => {
+              editActionComplete(proceed)
+            }
+          )
         }
       }
     }

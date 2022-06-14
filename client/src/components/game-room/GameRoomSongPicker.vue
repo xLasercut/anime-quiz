@@ -26,7 +26,7 @@
         <aq-anime-name :song="item"></aq-anime-name>
       </template>
 
-      <template #item.action="{item}">
+      <template #item.action="{ item }">
         <v-icon color="success" @click="selectSong(item)">mdi-playlist-check</v-icon>
       </template>
 
@@ -73,9 +73,11 @@ export default defineComponent({
 
     function filteredSongList(): AqSong[] {
       return store.getters.songList.filter((song: AqSong) => {
-        return shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
+        return (
+          shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
           shouldDisplayResult(state.songTitleFilter, song.song_title) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())
+        )
       })
     }
 

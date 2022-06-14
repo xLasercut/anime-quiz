@@ -17,8 +17,7 @@ class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
   }
 
   protected _generateList(): AqSong[] {
-    return this._generateNormalList()
-      .concat(this._generateBalancedList())
+    return this._generateNormalList().concat(this._generateBalancedList())
   }
 
   protected _generateNormalList(): AqSong[] {
@@ -61,6 +60,4 @@ class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
   }
 }
 
-export {
-  BalancedPlusGameListGenerator
-}
+export { BalancedPlusGameListGenerator }

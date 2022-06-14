@@ -15,7 +15,6 @@ import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from 'anime-quiz-server/src/shared/events'
 import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants'
 
-
 export default defineComponent({
   components: { NavBtn },
   setup() {
@@ -30,7 +29,6 @@ export default defineComponent({
       socket.emit(SHARED_EVENTS.GET_SONG_TITLE_LIST)
       socket.emit(SHARED_EVENTS.GET_USER_LISTS)
     }
-
 
     return {
       back,

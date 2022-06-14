@@ -1,6 +1,6 @@
 <template>
   <v-avatar v-bind="$attrs">
-    <img :src="getAvatarUrl(avatar)"/>
+    <img :src="getAvatarUrl(avatar)" />
   </v-avatar>
 </template>
 

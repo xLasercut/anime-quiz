@@ -60,6 +60,4 @@ const SHARED_EVENTS = {
   ADMIN_DELETE_USER: 'ADMIN_DELETE_USER'
 }
 
-export {
-  SHARED_EVENTS
-}
+export { SHARED_EVENTS }

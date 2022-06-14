@@ -33,10 +33,7 @@ class AnimeQuizUserDb extends AbstractDb {
   public newUser(user: AqUserSongs): void {
     const userId = `user-${v4()}`
     const sql = `INSERT INTO users (user_id, username) VALUES (?,?)`
-    this._db.prepare(sql).run([
-      userId,
-      this._sanitizeString(user.username)
-    ])
+    this._db.prepare(sql).run([userId, this._sanitizeString(user.username)])
     this.reloadCache()
   }
 
@@ -47,18 +44,15 @@ class AnimeQuizUserDb extends AbstractDb {
         username = ?
       WHERE user_id = ?
     `
-    this._db.prepare(sql).run([
-      this._sanitizeString(user.username),
-      user.user_id
-    ])
+    this._db.prepare(sql).run([this._sanitizeString(user.username), user.user_id])
     this.reloadCache()
   }
 
   public deleteUser(user: AqUserSongs): void {
     const sql = `DELETE FROM users WHERE user_id = ?`
-    this._db.prepare(sql).run([ user.user_id ])
+    this._db.prepare(sql).run([user.user_id])
     const sqlUserSongs = `DELETE FROM user_songs WHERE user_id = ?`
-    this._db.prepare(sqlUserSongs).run([ user.user_id ])
+    this._db.prepare(sqlUserSongs).run([user.user_id])
     this.reloadCache()
   }
 
@@ -80,11 +74,17 @@ class AnimeQuizUserDb extends AbstractDb {
       fs.mkdirSync(this._dataBackupDir)
     }
     const filename = `backup-${moment().format('YYYY-MM-DD-HH-mm-ss')}-anime-quiz-user.db`
-    this._logger.writeLog(LOG_BASE.USER_DATA_BACKUP, { action: 'create backup', filename: filename })
+    this._logger.writeLog(LOG_BASE.USER_DATA_BACKUP, {
+      action: 'create backup',
+      filename: filename
+    })
     await this._db.backup(path.join(this._dataBackupDir, filename))
     const files = fs.readdirSync(this._dataBackupDir)
     if (files.length > this._dataBackupCount) {
-      this._logger.writeLog(LOG_BASE.USER_DATA_BACKUP, { action: 'delete old file', filename: files[0] })
+      this._logger.writeLog(LOG_BASE.USER_DATA_BACKUP, {
+        action: 'delete old file',
+        filename: files[0]
+      })
       fs.unlinkSync(path.join(this._dataBackupDir, files[0]))
     }
   }
@@ -121,13 +121,18 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 
   public getSelectedUserSongIds(userIds: string[]): string[] {
-    return Array.from(new Set(
-      this._userListsCache.filter((userList) => {
-        return userIds.includes(userList.user_id)
-      }).map((userList) => {
-        return userList.song_id
-      }).flat(1)
-    ))
+    return Array.from(
+      new Set(
+        this._userListsCache
+          .filter((userList) => {
+            return userIds.includes(userList.user_id)
+          })
+          .map((userList) => {
+            return userList.song_id
+          })
+          .flat(1)
+      )
+    )
   }
 
   public addSongs(userId: string, songIds: string[]): void {
@@ -135,7 +140,7 @@ class AnimeQuizUserDb extends AbstractDb {
     const insert = this._db.prepare(sql)
     const insertMany = this._db.transaction((_songIds: string[]) => {
       for (const songId of _songIds) {
-        insert.run([ userId, songId ])
+        insert.run([userId, songId])
       }
     })
     insertMany(songIds)
@@ -147,7 +152,7 @@ class AnimeQuizUserDb extends AbstractDb {
     const remove = this._db.prepare(sql)
     const removeMany = this._db.transaction((_songIds: string[]) => {
       for (const songId of _songIds) {
-        remove.run([ userId, songId ])
+        remove.run([userId, songId])
       }
     })
     removeMany(songIds)
@@ -156,7 +161,7 @@ class AnimeQuizUserDb extends AbstractDb {
 
   public removeSongAll(songId: string): void {
     const sql = `DELETE FROM user_songs WHERE song_id = ?`
-    this._db.prepare(sql).run([ songId ])
+    this._db.prepare(sql).run([songId])
     this.reloadCache()
   }
 
@@ -167,7 +172,7 @@ class AnimeQuizUserDb extends AbstractDb {
       FROM users
       WHERE user_id = ?
     `
-    const users = this._db.prepare(sql).all([ userId ])
+    const users = this._db.prepare(sql).all([userId])
 
     if (users.length !== 1) {
       this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { userId: userId })
@@ -182,7 +187,7 @@ class AnimeQuizUserDb extends AbstractDb {
       FROM users
       WHERE username = ?
     `
-    const users = this._db.prepare(sql).all([ username ])
+    const users = this._db.prepare(sql).all([username])
     if (users.length > 0) {
       this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { username: username })
       throw new GameDataValidationError('Username already exists')
@@ -197,7 +202,7 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 
   public validateSongsNotExistsInUserList(userId: string, songIds: string[]): void {
-    const params = [ userId ].concat(songIds)
+    const params = [userId].concat(songIds)
     const sql = `
       SELECT 
         song_id 
@@ -215,7 +220,7 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 
   public validateSongsExistsInUserList(userId: string, songIds: string[]): void {
-    const params = [ userId ].concat(songIds)
+    const params = [userId].concat(songIds)
     const sql = `
       SELECT 
         song_id
@@ -233,7 +238,4 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 }
 
-
-export {
-  AnimeQuizUserDb
-}
+export { AnimeQuizUserDb }

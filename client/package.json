@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env VUE_APP_VERSION=dev vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "prettier-format": "prettier --config ../.prettierrc 'src/**/*.vue' --write && prettier --config ../.prettierrc 'src/**/*.ts' --write"
   },
   "dependencies": {
     "@vue/composition-api": "^1.6.2",

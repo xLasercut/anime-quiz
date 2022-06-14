@@ -20,13 +20,18 @@
       </v-container>
     </template>
 
-    <template #item.anime_name="{item}">
-      <v-chip small v-for="(name, index) in item.anime_name" color="primary" :key="`${item.anime_id}_${index}`">
+    <template #item.anime_name="{ item }">
+      <v-chip
+        small
+        v-for="(name, index) in item.anime_name"
+        color="primary"
+        :key="`${item.anime_id}_${index}`"
+      >
         {{ name }}
       </v-chip>
     </template>
 
-    <template #item.action="{item}">
+    <template #item.action="{ item }">
       <v-icon color="warning" @click="editAnime(item)">mdi-pencil</v-icon>
       <v-icon color="error" @click="deleteAnime(item)">mdi-delete</v-icon>
     </template>
@@ -73,8 +78,10 @@ export default defineComponent({
 
     function filteredAnimeList(): AqAnime[] {
       return store.getters.adminAnimeList.filter((anime: AqAnime) => {
-        return shouldDisplayResult(state.animeNameFilter, anime.anime_name.join(',')) &&
+        return (
+          shouldDisplayResult(state.animeNameFilter, anime.anime_name.join(',')) &&
           anime.anime_id.toLowerCase().includes(state.animeIdFilter.toLowerCase())
+        )
       })
     }
 

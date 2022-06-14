@@ -61,12 +61,26 @@ const aqDataHandler = new AqDataHandler(logger, songDbEmitter, emojiDbEmitter, u
 
 const animeEditHandler = new AnimeEditHandler(logger, systemEmitter, songDb, songDbEmitter)
 const songEditHandler = new SongEditHandler(logger, songDb, userDb, songDbEmitter, systemEmitter)
-const adminHandler = new AdminHandler(logger, systemEmitter, io, songDb, emojiDb, userDb, gameStates)
+const adminHandler = new AdminHandler(
+  logger,
+  systemEmitter,
+  io,
+  songDb,
+  emojiDb,
+  userDb,
+  gameStates
+)
 const emojiEditHandler = new EmojiEditHandler(logger, emojiDb, emojiDbEmitter, systemEmitter)
 const userEditHandler = new UserEditHandler(logger, userDb, userDbEmitter, systemEmitter)
 
-
-const songListHandler = new SongListHandler(logger, songDb, userDb, songDbEmitter, userDbEmitter, systemEmitter)
+const songListHandler = new SongListHandler(
+  logger,
+  songDb,
+  userDb,
+  songDbEmitter,
+  userDbEmitter,
+  systemEmitter
+)
 const roomHandler = new RoomHandler(logger, roomEmitter)
 const gameSettingsHandler = new GameSettingsHandler(logger, gameSettings, gameEmitter)
 const gameListGeneratorFactory = new GameListGeneratorFactory(songDb, userDb)
@@ -109,18 +123,25 @@ io.on('connection', (socket: Socket) => {
     checkClientAuth(logger, socket)
   }, config.clientAuthDelay)
 
-  socket.on(SHARED_EVENTS.AUTHENTICATE, (username: string, password: string, avatar: string, callback: Function) => {
-    try {
-      authenticateUser(socket, username, password, avatar, config)
-      startHandlers(socket, errorHandler)
-      if (!socket.data.auth) {
-        systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, 'Incorrect server password', socket.id)
+  socket.on(
+    SHARED_EVENTS.AUTHENTICATE,
+    (username: string, password: string, avatar: string, callback: Function) => {
+      try {
+        authenticateUser(socket, username, password, avatar, config)
+        startHandlers(socket, errorHandler)
+        if (!socket.data.auth) {
+          systemEmitter.systemNotification(
+            NOTIFICATION_COLOR.ERROR,
+            'Incorrect server password',
+            socket.id
+          )
+        }
+        callback(socket.data.auth)
+      } catch (e) {
+        errorHandler(e)
       }
-      callback(socket.data.auth)
-    } catch (e) {
-      errorHandler(e)
     }
-  })
+  )
 
   socket.on('disconnect', async () => {
     try {

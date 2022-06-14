@@ -17,7 +17,13 @@ class SongEditHandler extends AbstractHandler {
   protected _songDbEmitter: SongDbEmitter
   protected _systemEmitter: SystemEmitter
 
-  constructor(logger: Logger, songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, songDbEmitter: SongDbEmitter, systemEmitter: SystemEmitter) {
+  constructor(
+    logger: Logger,
+    songDb: AnimeQuizSongDb,
+    userDb: AnimeQuizUserDb,
+    songDbEmitter: SongDbEmitter,
+    systemEmitter: SystemEmitter
+  ) {
     super(logger)
     this._songDb = songDb
     this._userDb = userDb
@@ -45,7 +51,11 @@ class SongEditHandler extends AbstractHandler {
         this._songDb.validateIsDbLocked()
         this._songDb.validateAnimeExist(song.anime_id)
         this._songDb.newSong(song)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${song.song_title}`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Added ${song.song_title}`,
+          socket.id
+        )
         this._songDbEmitter.updateSongList(ROOM_IDS.SONG_EDIT)
         callback(true)
       } catch (e) {
@@ -60,10 +70,14 @@ class SongEditHandler extends AbstractHandler {
         this._validateIsAdmin(socket)
         this._songDb.validateIsDbLocked()
         this._userDb.validateIsDbLocked()
-        this._songDb.validateSongsExist([ song.song_id ])
+        this._songDb.validateSongsExist([song.song_id])
         this._songDb.deleteSong(song)
         this._userDb.removeSongAll(song.song_id)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Deleted ${song.song_title}`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Deleted ${song.song_title}`,
+          socket.id
+        )
         this._songDbEmitter.updateSongList(ROOM_IDS.SONG_EDIT)
         callback(true)
       } catch (e) {
@@ -77,10 +91,14 @@ class SongEditHandler extends AbstractHandler {
         this._logger.writeLog(LOG_BASE.ADMIN_SONG_EDIT, { song: song, type: 'edit' })
         this._validateIsAdmin(socket)
         this._songDb.validateIsDbLocked()
-        this._songDb.validateSongsExist([ song.song_id ])
+        this._songDb.validateSongsExist([song.song_id])
         this._songDb.validateAnimeExist(song.anime_id)
         this._songDb.editSong(song)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Edited ${song.song_title}`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Edited ${song.song_title}`,
+          socket.id
+        )
         this._songDbEmitter.updateSongList(ROOM_IDS.SONG_EDIT)
         callback(true)
       } catch (e) {
@@ -91,6 +109,4 @@ class SongEditHandler extends AbstractHandler {
   }
 }
 
-export {
-  SongEditHandler
-}
+export { SongEditHandler }

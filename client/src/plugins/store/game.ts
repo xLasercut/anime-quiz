@@ -41,6 +41,4 @@ const game: Module<GameStoreState, RootStoreState> = {
   }
 }
 
-export {
-  game
-}
+export { game }

@@ -4,7 +4,6 @@ import { AnimeQuizSongDb } from '../../database/song'
 import { AnimeQuizUserDb } from '../../database/user'
 
 class NormalGameListGenerator extends AbstractGameListGenerator {
-
   constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings) {
     super(songDb, userDb, settings, true)
   }
@@ -26,6 +25,4 @@ class NormalGameListGenerator extends AbstractGameListGenerator {
   }
 }
 
-export {
-  NormalGameListGenerator
-}
+export { NormalGameListGenerator }

@@ -16,22 +16,18 @@
           clearable
           @click:append-outer="kickPlayer()"
         >
-          <template #item="{item}">
+          <template #item="{ item }">
             <v-list-item-avatar :size="50">
               <game-avatar :size="50" :avatar="item.avatar"></game-avatar>
             </v-list-item-avatar>
-            <v-list-item-content>
-              {{ item.sid }} - {{ item.username }}
-            </v-list-item-content>
+            <v-list-item-content> {{ item.sid }} - {{ item.username }} </v-list-item-content>
           </template>
 
-          <template #selection="{item}">
+          <template #selection="{ item }">
             <v-list-item-avatar :size="50">
               <game-avatar :size="50" :avatar="item.avatar"></game-avatar>
             </v-list-item-avatar>
-            <v-list-item-content>
-              {{ item.sid }} - {{ item.username }}
-            </v-list-item-content>
+            <v-list-item-content> {{ item.sid }} - {{ item.username }} </v-list-item-content>
           </template>
         </v-select>
       </v-col>

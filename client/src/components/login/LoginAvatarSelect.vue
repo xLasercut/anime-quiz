@@ -9,7 +9,7 @@
         @input="$emit('input', $event)"
         :items="items"
       >
-        <template #item="{item}">
+        <template #item="{ item }">
           <v-list-item-avatar :size="avatarSize">
             <game-avatar :size="avatarSize" :avatar="item"></game-avatar>
           </v-list-item-avatar>
@@ -18,7 +18,7 @@
           </v-list-item-content>
         </template>
 
-        <template #selection="{item}">
+        <template #selection="{ item }">
           <v-list-item-avatar :size="avatarSize">
             <game-avatar :size="avatarSize" :avatar="item"></game-avatar>
           </v-list-item-avatar>

@@ -3,13 +3,8 @@
     <v-col v-for="player in $store.state.game.players" cols="auto" :key="player.sid">
       <div :style="playerContainerStyle()">
         <v-row no-gutters justify="center">
-          <v-tooltip
-            top v-model="show"
-            :color="player.scoreColor"
-            min-width="150"
-            max-width="150"
-          >
-            <template #activator="{on}">
+          <v-tooltip top v-model="show" :color="player.scoreColor" min-width="150" max-width="150">
+            <template #activator="{ on }">
               <v-badge tile overlap dot :color="badgeColor(player)">
                 <game-avatar :avatar="player.avatar" :size="100"></game-avatar>
               </v-badge>
@@ -81,7 +76,6 @@ export default defineComponent({
         width: '150px'
       }
     }
-
 
     onUnmounted(() => {
       socket.off(SHARED_EVENTS.GAME_NEW_ROUND)

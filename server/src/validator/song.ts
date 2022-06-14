@@ -18,6 +18,4 @@ class SongValidator extends AbstractValidator {
   }
 }
 
-export {
-  SongValidator
-}
+export { SongValidator }

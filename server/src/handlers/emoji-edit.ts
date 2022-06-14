@@ -15,7 +15,12 @@ class EmojiEditHandler extends AbstractHandler {
   protected _emojiDbEmitter: EmojiDbEmitter
   protected _systemEmitter: SystemEmitter
 
-  constructor(logger: Logger, emojiDb: AnimeQuizEmojiDb, emojiDbEmitter: EmojiDbEmitter, systemEmitter: SystemEmitter) {
+  constructor(
+    logger: Logger,
+    emojiDb: AnimeQuizEmojiDb,
+    emojiDbEmitter: EmojiDbEmitter,
+    systemEmitter: SystemEmitter
+  ) {
     super(logger)
     this._emojiDb = emojiDb
     this._emojiDbEmitter = emojiDbEmitter
@@ -41,7 +46,11 @@ class EmojiEditHandler extends AbstractHandler {
         this._emojiDb.validateEmojiCommandNotExist(emoji.command)
         this._emojiDb.newEmoji(emoji)
         this._emojiDbEmitter.updateEmojiList(ROOM_IDS.EMOJI_EDIT)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Added ${emoji.command} emoji`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Added ${emoji.command} emoji`,
+          socket.id
+        )
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -58,7 +67,11 @@ class EmojiEditHandler extends AbstractHandler {
         this._emojiDb.validateEmojiCommandNotExist(emoji.command)
         this._emojiDb.editEmoji(emoji)
         this._emojiDbEmitter.updateEmojiList(ROOM_IDS.EMOJI_EDIT)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Edited ${emoji.command} emoji`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Edited ${emoji.command} emoji`,
+          socket.id
+        )
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -74,7 +87,11 @@ class EmojiEditHandler extends AbstractHandler {
         this._emojiDb.validateEmojiExist(emoji.emoji_id)
         this._emojiDb.deleteEmoji(emoji)
         this._emojiDbEmitter.updateEmojiList(ROOM_IDS.EMOJI_EDIT)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, `Deleted ${emoji.command} emoji`, socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          `Deleted ${emoji.command} emoji`,
+          socket.id
+        )
         callback(true)
       } catch (e) {
         errorHandler(e)
@@ -84,6 +101,4 @@ class EmojiEditHandler extends AbstractHandler {
   }
 }
 
-export {
-  EmojiEditHandler
-}
+export { EmojiEditHandler }

@@ -20,7 +20,13 @@ function isValidAvatar(avatar: string): boolean {
   return Object.values(AVATARS).includes(avatar)
 }
 
-function authenticateUser(socket: Socket, username: string, password: string, avatar: string, config: ServerConfig): void {
+function authenticateUser(
+  socket: Socket,
+  username: string,
+  password: string,
+  avatar: string,
+  config: ServerConfig
+): void {
   const validUsername = isValidUsername(username)
   const validPassword = isValidPassword(password, config)
   const validAvatar = isValidAvatar(avatar)
@@ -41,7 +47,4 @@ function checkClientAuth(logger: Logger, socket: Socket): void {
   }
 }
 
-export {
-  authenticateUser,
-  checkClientAuth
-}
+export { authenticateUser, checkClientAuth }

@@ -16,7 +16,6 @@ import { socket } from '../../plugins/socket'
 import { SHARED_EVENTS } from 'anime-quiz-server/src/shared/events'
 import { CLIENT_EVENTS } from '../../assets/events'
 
-
 export default defineComponent({
   components: { NavBtn },
   setup() {

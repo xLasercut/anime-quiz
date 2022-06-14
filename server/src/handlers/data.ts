@@ -11,7 +11,12 @@ class AqDataHandler extends AbstractHandler {
   protected _emojiDbEmitter: EmojiDbEmitter
   protected _userDbEmitter: UserDbEmitter
 
-  constructor(logger: Logger, songDbEmitter: SongDbEmitter, emojiDbEmitter: EmojiDbEmitter, userDbEmitter: UserDbEmitter) {
+  constructor(
+    logger: Logger,
+    songDbEmitter: SongDbEmitter,
+    emojiDbEmitter: EmojiDbEmitter,
+    userDbEmitter: UserDbEmitter
+  ) {
     super(logger)
     this._songDbEmitter = songDbEmitter
     this._emojiDbEmitter = emojiDbEmitter
@@ -61,6 +66,4 @@ class AqDataHandler extends AbstractHandler {
   }
 }
 
-export {
-  AqDataHandler
-}
+export { AqDataHandler }

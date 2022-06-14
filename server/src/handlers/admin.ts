@@ -56,7 +56,11 @@ class AdminHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_KICK_PLAYER, { kickedPlayerId: playerId })
         this._validateIsAdmin(socket)
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, 'You have been kicked', playerId)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.ERROR,
+          'You have been kicked',
+          playerId
+        )
         this._io.kickPlayer(playerId)
       } catch (e) {
         errorHandler(e)
@@ -70,7 +74,11 @@ class AdminHandler extends AbstractHandler {
         this._userDb.lockDb()
         this._songDb.lockDb()
         this._emojiDb.lockDb()
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database locked', socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          'Database locked',
+          socket.id
+        )
       } catch (e) {
         errorHandler(e)
       }
@@ -83,7 +91,11 @@ class AdminHandler extends AbstractHandler {
         this._userDb.unlockDb()
         this._songDb.unlockDb()
         this._emojiDb.unlockDb()
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database unlocked', socket.id)
+        this._systemEmitter.systemNotification(
+          NOTIFICATION_COLOR.SUCCESS,
+          'Database unlocked',
+          socket.id
+        )
       } catch (e) {
         errorHandler(e)
       }
@@ -94,10 +106,14 @@ class AdminHandler extends AbstractHandler {
         this._logger.writeLog(LOG_BASE.ADMIN_GAME_SONG_OVERRIDE, { songId: songId })
         this._validateIsAdmin(socket)
         const roomId = this._getSocketGameRoom(socket)
-        const songs = this._songDb.getSelectedUserSongs([ songId ])
+        const songs = this._songDb.getSelectedUserSongs([songId])
         if (songs.length === 1) {
           this._states.songOverride(songs[0], roomId)
-          this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Song selected', socket.id)
+          this._systemEmitter.systemNotification(
+            NOTIFICATION_COLOR.SUCCESS,
+            'Song selected',
+            socket.id
+          )
         }
       } catch (e) {
         errorHandler(e)
@@ -106,6 +122,4 @@ class AdminHandler extends AbstractHandler {
   }
 }
 
-export {
-  AdminHandler
-}
+export { AdminHandler }

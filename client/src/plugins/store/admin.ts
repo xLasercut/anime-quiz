@@ -83,6 +83,4 @@ const admin: Module<AdminStoreState, RootStoreState> = {
   }
 }
 
-export {
-  admin
-}
+export { admin }

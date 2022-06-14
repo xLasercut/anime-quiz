@@ -6,11 +6,7 @@ import { LOG_LEVEL } from './log-base'
 
 const { combine, timestamp, json } = winston.format
 
-const logFormat = combine(
-  timestamp(),
-  winston.format(transformLogInfo)(),
-  json()
-)
+const logFormat = combine(timestamp(), winston.format(transformLogInfo)(), json())
 
 function transformLogInfo(info) {
   info.level = info.level.toUpperCase()
@@ -36,12 +32,7 @@ class Logger {
         new winston.transports.Console()
       ]
     })
-    this._reservedFields = [
-      'timestamp',
-      'log_reference',
-      'level',
-      'message'
-    ]
+    this._reservedFields = ['timestamp', 'log_reference', 'level', 'message']
   }
 
   public writeLog(logTemplate: LogTemplate, logArgs: object = {}): void {

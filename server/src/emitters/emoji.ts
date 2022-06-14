@@ -16,6 +16,4 @@ class EmojiDbEmitter extends AbstractEmitter {
   }
 }
 
-export {
-  EmojiDbEmitter
-}
+export { EmojiDbEmitter }

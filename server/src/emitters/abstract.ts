@@ -15,6 +15,4 @@ class AbstractEmitter {
   }
 }
 
-export {
-  AbstractEmitter
-}
+export { AbstractEmitter }

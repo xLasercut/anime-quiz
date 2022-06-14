@@ -2,7 +2,8 @@
   <v-row dense>
     <v-col>
       <v-text-field
-        dense outlined
+        dense
+        outlined
         :value="userIdFilter"
         @input="updateFilter('user-is-filter', $event)"
         label="User ID"
@@ -12,7 +13,8 @@
     </v-col>
     <v-col>
       <v-text-field
-        dense outlined
+        dense
+        outlined
         :value="usernameFilter"
         @input="updateFilter('username-filter', $event)"
         label="Username"

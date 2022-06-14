@@ -10,7 +10,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive, ref, toRefs, watch } from '@vue/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRefs,
+  watch
+} from '@vue/composition-api'
 import { SHARED_EVENTS } from '../../../../../assets/shared/events'
 import { socket } from '../../../../../plugins/socket'
 import { calculateStartPosition, isYoutubeVideo } from '../../../../../assets/game-helper'
@@ -26,9 +34,12 @@ export default defineComponent({
       guessTime: 0
     })
 
-    watch(() => store.state.client.volume, (val: number) => {
-      changeVolume(val)
-    })
+    watch(
+      () => store.state.client.volume,
+      (val: number) => {
+        changeVolume(val)
+      }
+    )
 
     function changeVolume(volume: number): void {
       if (player.value) {
@@ -90,7 +101,11 @@ export default defineComponent({
 
     function metaDataLoaded(): void {
       if (player.value && _isNormalVideo()) {
-        player.value.currentTime = calculateStartPosition(state.startPosition, state.guessTime, player.value.duration)
+        player.value.currentTime = calculateStartPosition(
+          state.startPosition,
+          state.guessTime,
+          player.value.duration
+        )
       }
     }
 

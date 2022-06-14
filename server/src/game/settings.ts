@@ -53,6 +53,4 @@ class GameSettings {
   }
 }
 
-export {
-  GameSettings
-}
+export { GameSettings }

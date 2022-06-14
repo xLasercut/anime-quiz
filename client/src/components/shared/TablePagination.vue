@@ -13,7 +13,9 @@
       <v-select
         :value="itemsPerPage"
         @input="$emit('update:items-per-page', $event)"
-        hide-details dense outlined
+        hide-details
+        dense
+        outlined
         :items="paginationSelectItems"
       ></v-select>
     </div>
@@ -45,12 +47,12 @@ export default defineComponent({
   },
   setup(props) {
     const state = reactive({
-      paginationSelectItems: [ 5, 10, 15, 20 ]
+      paginationSelectItems: [5, 10, 15, 20]
     })
 
     function footerStyle() {
       return {
-        'width': props.width
+        width: props.width
       }
     }
 

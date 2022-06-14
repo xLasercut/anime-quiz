@@ -1,7 +1,7 @@
 import { AqAnime, AqEmoji, AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces'
 
 interface DataStoreState {
-  songList: AqSong[],
+  songList: AqSong[]
   animeList: AqAnime[]
   songTitleList: string[]
   userLists: AqUserSongs[]
@@ -16,9 +16,9 @@ interface AdminStoreState {
 }
 
 interface RootStoreState {
-  client: ClientStoreState,
-  data: DataStoreState,
-  game: GameStoreState,
+  client: ClientStoreState
+  data: DataStoreState
+  game: GameStoreState
   admin: AdminStoreState
 }
 
@@ -41,10 +41,4 @@ interface GameStoreState {
   disableSettings: boolean
 }
 
-export {
-  DataStoreState,
-  RootStoreState,
-  ClientStoreState,
-  GameStoreState,
-  AdminStoreState
-}
+export { DataStoreState, RootStoreState, ClientStoreState, GameStoreState, AdminStoreState }

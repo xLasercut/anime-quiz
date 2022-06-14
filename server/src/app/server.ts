@@ -8,7 +8,12 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events'
 import { SocketData } from './socket-data'
 
 class Server extends SocketIoServer {
-  declare readonly sockets: Namespace<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>
+  declare readonly sockets: Namespace<
+    DefaultEventsMap,
+    DefaultEventsMap,
+    DefaultEventsMap,
+    SocketData
+  >
 
   public getGameRoomList(): string[] {
     const roomList = []
@@ -80,6 +85,4 @@ class Server extends SocketIoServer {
   }
 }
 
-export {
-  Server
-}
+export { Server }

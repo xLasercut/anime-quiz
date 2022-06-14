@@ -12,6 +12,4 @@ class SystemEmitter extends AbstractEmitter {
   }
 }
 
-export {
-  SystemEmitter
-}
+export { SystemEmitter }

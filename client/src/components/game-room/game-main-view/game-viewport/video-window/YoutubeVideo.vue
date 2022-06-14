@@ -38,9 +38,12 @@ export default defineComponent({
 
     let timeout: number
 
-    watch(() => store.state.client.volume, (val: number) => {
-      changeVolume(val)
-    })
+    watch(
+      () => store.state.client.volume,
+      (val: number) => {
+        changeVolume(val)
+      }
+    )
 
     function changeVolume(volume: number): void {
       player.setVolume(volume)
@@ -62,7 +65,10 @@ export default defineComponent({
 
     function fullLoaded(): void {
       clearInterval(timeout)
-      player.seekTo(calculateStartPosition(state.startPosition, state.guessTime, player.getDuration()), true)
+      player.seekTo(
+        calculateStartPosition(state.startPosition, state.guessTime, player.getDuration()),
+        true
+      )
       player.pauseVideo()
       player.unMute()
       console.log('Song loaded')

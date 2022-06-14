@@ -19,6 +19,4 @@ socket.on('disconnect', () => {
   store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOGIN)
 })
 
-export {
-  socket
-}
+export { socket }

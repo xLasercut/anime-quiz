@@ -24,6 +24,4 @@ class SongDbEmitter extends AbstractEmitter {
   }
 }
 
-export {
-  SongDbEmitter
-}
+export { SongDbEmitter }

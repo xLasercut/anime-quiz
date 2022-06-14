@@ -13,7 +13,8 @@
         icon="mdi-check"
         color="success"
         @click="$emit('confirm:edit')"
-      >Confirm
+      >
+        Confirm
       </icon-btn>
     </v-col>
   </v-row>
@@ -22,10 +23,6 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from '@vue/composition-api'
 import IconBtn from '../shared/buttons/IconBtn.vue'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from '../../assets/shared/events'
 import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants'
 
 export default defineComponent({
@@ -42,13 +39,19 @@ export default defineComponent({
   setup(props, context) {
     const internalModel = ref(props.value)
 
-    watch(() => internalModel.value, (val) => {
-      context.emit('input', val)
-    })
+    watch(
+      () => internalModel.value,
+      (val) => {
+        context.emit('input', val)
+      }
+    )
 
-    watch(() => props.value, (val) => {
-      internalModel.value = val
-    })
+    watch(
+      () => props.value,
+      (val) => {
+        internalModel.value = val
+      }
+    )
 
     return {
       internalModel,

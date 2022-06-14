@@ -4,6 +4,4 @@ const CLIENT_EVENTS = {
   OPEN_DIALOG: 'OPEN_DIALOG'
 }
 
-export {
-  CLIENT_EVENTS
-}
+export { CLIENT_EVENTS }

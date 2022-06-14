@@ -31,12 +31,13 @@ class AbstractHandler {
 
   protected _validateIsAdmin(socket: Socket): void {
     if (!socket.data.admin) {
-      this._logger.writeLog(LOG_BASE.UNAUTHORISED_ADMIN, { id: socket.id, username: socket.data.username })
+      this._logger.writeLog(LOG_BASE.UNAUTHORISED_ADMIN, {
+        id: socket.id,
+        username: socket.data.username
+      })
       throw new GameDataValidationDcError('Unauthorised')
     }
   }
 }
 
-export {
-  AbstractHandler
-}
+export { AbstractHandler }

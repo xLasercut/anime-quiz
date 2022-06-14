@@ -32,6 +32,4 @@ class ServerConfig {
   }
 }
 
-export {
-  ServerConfig
-}
+export { ServerConfig }
