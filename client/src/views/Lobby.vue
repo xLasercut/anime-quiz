@@ -21,13 +21,13 @@
 </template>
 
 <script lang="ts">
-import { MUTATIONS } from '../plugins/store/mutations'
-import { ROUTES } from '../plugins/routing/routes'
-import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-api'
-import { store } from '../plugins/store'
-import LobbyMenuCard from '../components/lobby/LobbyMenuCard.vue'
-import { socket } from '../plugins/socket'
-import { SHARED_EVENTS } from '../assets/shared/events'
+import { MUTATIONS } from '../plugins/store/mutations';
+import { ROUTES } from '../plugins/routing/routes';
+import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-api';
+import { store } from '../plugins/store';
+import LobbyMenuCard from '../components/lobby/LobbyMenuCard.vue';
+import { socket } from '../plugins/socket';
+import { SHARED_EVENTS } from '../assets/shared/events';
 
 export default defineComponent({
   components: { LobbyMenuCard },
@@ -91,30 +91,30 @@ export default defineComponent({
           icon: 'mdi-database-edit'
         }
       ]
-    })
+    });
 
     function changeView(route: string): void {
-      store.commit(MUTATIONS.CHANGE_VIEW, route)
+      store.commit(MUTATIONS.CHANGE_VIEW, route);
     }
 
     function showCard(requireAdmin: boolean): boolean {
       if (!requireAdmin) {
-        return true
+        return true;
       }
 
-      return !!store.state.client.admin
+      return !!store.state.client.admin;
     }
 
     onMounted(() => {
-      socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
-      store.commit(MUTATIONS.RESET_STORE_STATE)
-    })
+      socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS);
+      store.commit(MUTATIONS.RESET_STORE_STATE);
+    });
 
     return {
       changeView,
       ...toRefs(state),
       showCard
-    }
+    };
   }
-})
+});
 </script>

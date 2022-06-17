@@ -60,20 +60,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import DialogActions from '../shared/dialog/DialogActions.vue'
-import DialogTextField from '../shared/dialog/DialogTextField.vue'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import DialogSelect from '../shared/dialog/DialogSelect.vue'
-import { SONG_TYPES } from '../../assets/constants'
-import DialogMultiAutocomplete from '../shared/dialog/DialogMultiAutocomplete.vue'
-import { DIALOG_ROUTES } from '../../plugins/routing/routes'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { socket } from '../../plugins/socket'
-import { VALID_SONG_TYPES } from '../../assets/shared/constants'
-import { newTableHelpers } from '../../assets/table-helper'
-import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import DialogActions from '../shared/dialog/DialogActions.vue';
+import DialogTextField from '../shared/dialog/DialogTextField.vue';
+import { store } from '../../plugins/store';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import DialogSelect from '../shared/dialog/DialogSelect.vue';
+import { SONG_TYPES } from '../../assets/constants';
+import DialogMultiAutocomplete from '../shared/dialog/DialogMultiAutocomplete.vue';
+import { DIALOG_ROUTES } from '../../plugins/routing/routes';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { socket } from '../../plugins/socket';
+import { VALID_SONG_TYPES } from '../../assets/shared/constants';
+import { newTableHelpers } from '../../assets/table-helper';
+import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue';
 
 export default defineComponent({
   components: {
@@ -97,62 +97,62 @@ export default defineComponent({
         (v: string) => !!v || 'Type required',
         (v: string) => validType(v) || 'Invalid type'
       ]
-    })
+    });
 
     function validAnimeIds(animeIds: string[]): boolean {
       for (const animeId of animeIds) {
         if (!animeId || typeof animeId !== 'string') {
-          return false
+          return false;
         }
       }
-      return true
+      return true;
     }
 
     function validType(type: string): boolean {
-      return VALID_SONG_TYPES.includes(type)
+      return VALID_SONG_TYPES.includes(type);
     }
 
     function updateTitle(title: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TITLE, title)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TITLE, title);
     }
 
     function updateArtist(artist: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ARTIST, artist)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ARTIST, artist);
     }
 
     function updateSource(source: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_SRC, source)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_SRC, source);
     }
 
     function updateType(type: string): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, type)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, type);
     }
 
     function updateAnimeIds(animeIds: string[]) {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_ID, animeIds)
+      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_ID, animeIds);
     }
 
-    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context);
 
     function submitEdit(): void {
       if (state.valid) {
-        editActionDisabled.value = true
+        editActionDisabled.value = true;
         if (store.state.client.dialogView === DIALOG_ROUTES.NEW_SONG_DIALOG) {
           socket.emit(
             SHARED_EVENTS.ADMIN_NEW_SONG,
             store.state.admin.songInEdit,
             (proceed: boolean) => {
-              editActionComplete(proceed)
+              editActionComplete(proceed);
             }
-          )
+          );
         } else if (store.state.client.dialogView === DIALOG_ROUTES.EDIT_SONG_DIALOG) {
           socket.emit(
             SHARED_EVENTS.ADMIN_EDIT_SONG,
             store.state.admin.songInEdit,
             (proceed: boolean) => {
-              editActionComplete(proceed)
+              editActionComplete(proceed);
             }
-          )
+          );
         }
       }
     }
@@ -166,7 +166,7 @@ export default defineComponent({
       updateSource,
       updateType,
       editActionDisabled
-    }
+    };
   }
-})
+});
 </script>

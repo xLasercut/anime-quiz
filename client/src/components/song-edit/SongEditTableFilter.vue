@@ -50,9 +50,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { newTableHelpers } from '../../assets/table-helper'
-import FilteredCombobox from '../shared/comboboxes/FilteredCombobox.vue'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import { newTableHelpers } from '../../assets/table-helper';
+import FilteredCombobox from '../shared/comboboxes/FilteredCombobox.vue';
 
 export default defineComponent({
   components: { FilteredCombobox },
@@ -78,14 +78,14 @@ export default defineComponent({
         { text: 'ED', value: 'ED' },
         { text: 'INSERT', value: 'INSERT' }
       ]
-    })
+    });
 
-    const { updateFilter } = newTableHelpers(context)
+    const { updateFilter } = newTableHelpers(context);
 
     return {
       ...toRefs(state),
       updateFilter
-    }
+    };
   }
-})
+});
 </script>

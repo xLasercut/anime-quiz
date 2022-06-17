@@ -56,11 +56,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, toRefs, watch } from '@vue/composition-api'
-import TablePagination from '../shared/TablePagination.vue'
-import AqAnimeName from '../shared/AqAnimeName.vue'
-import { newTableHelpers } from '../../assets/table-helper'
-import { AqSong } from '../../assets/shared/interfaces'
+import { defineComponent, PropType, reactive, toRefs, watch } from '@vue/composition-api';
+import TablePagination from '../shared/TablePagination.vue';
+import AqAnimeName from '../shared/AqAnimeName.vue';
+import { newTableHelpers } from '../../assets/table-helper';
+import { AqSong } from '../../assets/shared/interfaces';
 
 export default defineComponent({
   props: {
@@ -89,27 +89,27 @@ export default defineComponent({
       ],
       itemsPerPage: 10,
       currentPage: 0
-    })
+    });
 
     watch(
       () => props.currentSong,
       (song) => {
-        const songIndex = props.playlist.indexOf(song)
-        state.currentPage = Math.floor(songIndex / state.itemsPerPage) + 1
+        const songIndex = props.playlist.indexOf(song);
+        state.currentPage = Math.floor(songIndex / state.itemsPerPage) + 1;
       }
-    )
+    );
 
     function playSong(song: AqSong): void {
-      context.emit('change:song', props.playlist.indexOf(song))
+      context.emit('change:song', props.playlist.indexOf(song));
     }
 
-    const { updateFilter } = newTableHelpers(context)
+    const { updateFilter } = newTableHelpers(context);
 
     return {
       ...toRefs(state),
       updateFilter,
       playSong
-    }
+    };
   }
-})
+});
 </script>

@@ -64,10 +64,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import FilteredCombobox from '../shared/comboboxes/FilteredCombobox.vue'
-import { SONG_TYPES } from '../../assets/constants'
-import { newTableHelpers } from '../../assets/table-helper'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import FilteredCombobox from '../shared/comboboxes/FilteredCombobox.vue';
+import { SONG_TYPES } from '../../assets/constants';
+import { newTableHelpers } from '../../assets/table-helper';
 
 export default defineComponent({
   components: { FilteredCombobox },
@@ -91,14 +91,14 @@ export default defineComponent({
   setup(_props, context) {
     const state = reactive({
       songTypes: [{ text: 'ALL', value: '' }].concat(SONG_TYPES)
-    })
+    });
 
-    const { updateFilter } = newTableHelpers(context)
+    const { updateFilter } = newTableHelpers(context);
 
     return {
       ...toRefs(state),
       updateFilter
-    }
+    };
   }
-})
+});
 </script>

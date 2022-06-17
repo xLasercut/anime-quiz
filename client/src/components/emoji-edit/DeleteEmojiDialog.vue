@@ -33,20 +33,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import DialogActions from '../shared/dialog/DialogActions.vue'
-import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue'
-import DialogTextField from '../shared/dialog/DialogTextField.vue'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import DialogSelect from '../shared/dialog/DialogSelect.vue'
-import { EMOJI_TYPES } from '../../assets/constants'
-import DialogMultiAutocomplete from '../shared/dialog/DialogMultiAutocomplete.vue'
-import { DIALOG_ROUTES } from '../../plugins/routing/routes'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { socket } from '../../plugins/socket'
-import { VALID_EMOJI_TYPES } from '../../assets/shared/constants'
-import { newTableHelpers } from '../../assets/table-helper'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import DialogActions from '../shared/dialog/DialogActions.vue';
+import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue';
+import DialogTextField from '../shared/dialog/DialogTextField.vue';
+import { store } from '../../plugins/store';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import DialogSelect from '../shared/dialog/DialogSelect.vue';
+import { EMOJI_TYPES } from '../../assets/constants';
+import DialogMultiAutocomplete from '../shared/dialog/DialogMultiAutocomplete.vue';
+import { DIALOG_ROUTES } from '../../plugins/routing/routes';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { socket } from '../../plugins/socket';
+import { VALID_EMOJI_TYPES } from '../../assets/shared/constants';
+import { newTableHelpers } from '../../assets/table-helper';
 
 export default defineComponent({
   components: {
@@ -60,20 +60,20 @@ export default defineComponent({
     const state = reactive({
       valid: false,
       emojiTypes: EMOJI_TYPES
-    })
+    });
 
-    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context);
 
     function submitEdit(): void {
       if (state.valid) {
-        editActionDisabled.value = true
+        editActionDisabled.value = true;
         socket.emit(
           SHARED_EVENTS.ADMIN_DELETE_EMOJI,
           store.state.admin.emojiInEdit,
           (proceed: boolean) => {
-            editActionComplete(proceed)
+            editActionComplete(proceed);
           }
-        )
+        );
       }
     }
 
@@ -81,7 +81,7 @@ export default defineComponent({
       ...toRefs(state),
       submitEdit,
       editActionDisabled
-    }
+    };
   }
-})
+});
 </script>

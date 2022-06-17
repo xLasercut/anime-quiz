@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import IconBtn from '../shared/buttons/IconBtn.vue'
+import { defineComponent } from '@vue/composition-api';
+import IconBtn from '../shared/buttons/IconBtn.vue';
 
 export default defineComponent({
   components: { IconBtn },
@@ -42,5 +42,5 @@ export default defineComponent({
       required: true
     }
   }
-})
+});
 </script>

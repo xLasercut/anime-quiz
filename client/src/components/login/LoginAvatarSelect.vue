@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { getAvatarSelect } from '../../assets/avatar'
-import GameAvatar from '../shared/GameAvatar.vue'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import { getAvatarSelect } from '../../assets/avatar';
+import GameAvatar from '../shared/GameAvatar.vue';
 
 export default defineComponent({
   components: { GameAvatar },
@@ -47,13 +47,13 @@ export default defineComponent({
     const state = reactive({
       items: getAvatarSelect(),
       avatarSize: '100'
-    })
+    });
 
     return {
       ...toRefs(state)
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

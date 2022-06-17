@@ -14,10 +14,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import DialogTextField from '../shared/dialog/DialogTextField.vue'
-import DialogActions from '../shared/dialog/DialogActions.vue'
-import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import DialogTextField from '../shared/dialog/DialogTextField.vue';
+import DialogActions from '../shared/dialog/DialogActions.vue';
+import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants';
 
 export default defineComponent({
   components: { DialogTextField, DialogActions },
@@ -26,19 +26,19 @@ export default defineComponent({
       serverUrl: localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER] || '',
       valid: false,
       rules: [(v: string): boolean | string => !!v || 'Game server required']
-    })
+    });
 
     function setSettings(): void {
       if (state.valid) {
-        localStorage.GAME_SERVER = state.serverUrl
-        location.reload()
+        localStorage.GAME_SERVER = state.serverUrl;
+        location.reload();
       }
     }
 
     return {
       ...toRefs(state),
       setSettings
-    }
+    };
   }
-})
+});
 </script>

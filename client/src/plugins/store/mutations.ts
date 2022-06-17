@@ -1,4 +1,4 @@
-import { SHARED_EVENTS } from '../../assets/shared/events'
+import { SHARED_EVENTS } from '../../assets/shared/events';
 
 const MUTATIONS = {
   CHANGE_DIALOG_VIEW: 'CHANGE_DIALOG_VIEW',
@@ -30,6 +30,6 @@ const MUTATIONS = {
   ADMIN_UPDATE_USER_ID: 'ADMIN_UPDATE_USER_ID',
   ADMIN_UPDATE_USER_NAME: 'ADMIN_UPDATE_USER_NAME',
   UPDATE_VOLUME: 'UPDATE_VOLUME'
-}
+};
 
-export { MUTATIONS }
+export { MUTATIONS };

@@ -18,53 +18,53 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from '@vue/composition-api'
-import NavBtn from '../shared/buttons/NavBtn.vue'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { CLIENT_EVENTS } from '../../assets/events'
-import PanelVolumeControl from '../shared/PanelVolumeControl.vue'
+import { defineComponent, inject } from '@vue/composition-api';
+import NavBtn from '../shared/buttons/NavBtn.vue';
+import { store } from '../../plugins/store';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes';
+import { socket } from '../../plugins/socket';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { CLIENT_EVENTS } from '../../assets/events';
+import PanelVolumeControl from '../shared/PanelVolumeControl.vue';
 
 export default defineComponent({
   components: { PanelVolumeControl, NavBtn },
   setup() {
     function back(): void {
-      socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS)
-      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.ROOM_LIST)
+      socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS);
+      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.ROOM_LIST);
     }
 
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
+    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
     function openSettings(): void {
       if (openDialog) {
-        store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, true)
-        socket.emit(SHARED_EVENTS.GET_GAME_SETTINGS)
-        openDialog(DIALOG_ROUTES.GAME_ROOM_SETTINGS, 'Settings')
+        store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, true);
+        socket.emit(SHARED_EVENTS.GET_GAME_SETTINGS);
+        openDialog(DIALOG_ROUTES.GAME_ROOM_SETTINGS, 'Settings');
       }
     }
 
     function showPlayBtn(): boolean {
-      return (store.state.client.host || store.state.client.admin) && !store.state.game.playing
+      return (store.state.client.host || store.state.client.admin) && !store.state.game.playing;
     }
 
     function showStopBtn(): boolean {
-      return (store.state.client.host || store.state.client.admin) && store.state.game.playing
+      return (store.state.client.host || store.state.client.admin) && store.state.game.playing;
     }
 
     function startGame(): void {
-      socket.emit(SHARED_EVENTS.START_GAME)
+      socket.emit(SHARED_EVENTS.START_GAME);
     }
 
     function stopGame(): void {
-      socket.emit(SHARED_EVENTS.STOP_GAME)
+      socket.emit(SHARED_EVENTS.STOP_GAME);
     }
 
     function openSongPicker(): void {
       if (openDialog) {
-        openDialog(DIALOG_ROUTES.GAME_ROOM_SONG_PICKER, 'Song Picker')
+        openDialog(DIALOG_ROUTES.GAME_ROOM_SONG_PICKER, 'Song Picker');
       }
     }
 
@@ -76,9 +76,9 @@ export default defineComponent({
       showPlayBtn,
       showStopBtn,
       openSongPicker
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

@@ -1,4 +1,4 @@
-import { AVATARS } from './shared/constants'
+import { AVATARS } from './shared/constants';
 
 const AVATAR_MAP = {
   [AVATARS.ZERO_TWO]: 'https://i.imgur.com/qQ0Fkkx.png',
@@ -16,14 +16,14 @@ const AVATAR_MAP = {
   [AVATARS.EREN]: 'https://i.imgur.com/5Dip9VY.jpg',
   [AVATARS.JUDAI]: 'https://i.imgur.com/IpCOoWU.png',
   [AVATARS.YUGI]: 'https://i.imgur.com/JUdFemG.png'
-}
+};
 
 function getAvatarSelect(): string[] {
-  return Object.keys(AVATAR_MAP)
+  return Object.keys(AVATAR_MAP);
 }
 
 function getAvatarUrl(avatar: string): string {
-  return AVATAR_MAP[avatar] || 'https://i.imgur.com/dFFwfIx.jpg'
+  return AVATAR_MAP[avatar] || 'https://i.imgur.com/dFFwfIx.jpg';
 }
 
-export { getAvatarSelect, getAvatarUrl }
+export { getAvatarSelect, getAvatarUrl };

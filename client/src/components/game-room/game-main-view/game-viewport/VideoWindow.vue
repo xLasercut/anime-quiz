@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import NormalVideo from './video-window/NormalVideo.vue'
-import LoadingCircle from './video-window/LoadingCircle.vue'
-import CountdownTimer from './video-window/CountdownTimer.vue'
-import YoutubeVideo from './video-window/YoutubeVideo.vue'
+import { defineComponent } from '@vue/composition-api';
+import NormalVideo from './video-window/NormalVideo.vue';
+import LoadingCircle from './video-window/LoadingCircle.vue';
+import CountdownTimer from './video-window/CountdownTimer.vue';
+import YoutubeVideo from './video-window/YoutubeVideo.vue';
 
 export default defineComponent({
   components: { YoutubeVideo, CountdownTimer, LoadingCircle, NormalVideo },
@@ -24,12 +24,12 @@ export default defineComponent({
     function styles() {
       return {
         ['text-align']: 'center'
-      }
+      };
     }
 
     return {
       styles
-    }
+    };
   }
-})
+});
 </script>

@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from '@vue/composition-api'
-import { store } from '../../plugins/store'
+import { defineComponent, onMounted, ref, watch } from '@vue/composition-api';
+import { store } from '../../plugins/store';
 
 export default defineComponent({
   props: {
@@ -25,54 +25,54 @@ export default defineComponent({
     }
   },
   setup() {
-    const player = ref<HTMLVideoElement>()
+    const player = ref<HTMLVideoElement>();
 
     watch(
       () => store.state.client.volume,
       (val: number) => {
-        changeVolume(val)
+        changeVolume(val);
       }
-    )
+    );
 
     function changeVolume(volume: number): void {
       if (player.value) {
-        player.value.volume = volume / 100
+        player.value.volume = volume / 100;
       }
     }
 
     onMounted(() => {
-      changeVolume(store.state.client.volume)
-    })
+      changeVolume(store.state.client.volume);
+    });
 
     function pause(): void {
       if (player.value) {
-        player.value.pause()
+        player.value.pause();
       }
     }
 
     function play(): void {
       if (player.value) {
-        player.value.play()
+        player.value.play();
       }
     }
 
     function getMaxTime(): number {
       if (player.value) {
-        return player.value.duration
+        return player.value.duration;
       }
-      return 0
+      return 0;
     }
 
     function getCurrentTime(): number {
       if (player.value) {
-        return player.value.currentTime
+        return player.value.currentTime;
       }
-      return 0
+      return 0;
     }
 
     function seek(duration: number): void {
       if (player.value) {
-        player.value.currentTime = duration
+        player.value.currentTime = duration;
       }
     }
 
@@ -83,7 +83,7 @@ export default defineComponent({
       getMaxTime,
       getCurrentTime,
       seek
-    }
+    };
   }
-})
+});
 </script>

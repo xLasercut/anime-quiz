@@ -19,34 +19,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { store } from '../../plugins/store'
-import { CLIENT_EVENTS } from '../../assets/events'
-import { dialogComponent } from '../../plugins/routing/mapping'
+import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import { store } from '../../plugins/store';
+import { CLIENT_EVENTS } from '../../assets/events';
+import { dialogComponent } from '../../plugins/routing/mapping';
 
 export default defineComponent({
   setup() {
     const state = reactive({
       label: '',
       show: false
-    })
+    });
 
     function openDialog(dialog: string, label: string): void {
-      store.commit(MUTATIONS.CHANGE_DIALOG_VIEW, dialog)
-      state.label = label
-      state.show = true
+      store.commit(MUTATIONS.CHANGE_DIALOG_VIEW, dialog);
+      state.label = label;
+      state.show = true;
     }
 
-    const registerOpenDialog = inject<Function>(CLIENT_EVENTS.REGISTER_OPEN_DIALOG)
+    const registerOpenDialog = inject<Function>(CLIENT_EVENTS.REGISTER_OPEN_DIALOG);
     if (registerOpenDialog) {
-      registerOpenDialog(openDialog)
+      registerOpenDialog(openDialog);
     }
 
     return {
       ...toRefs(state),
       dialogComponent
-    }
+    };
   }
-})
+});
 </script>

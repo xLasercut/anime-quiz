@@ -42,19 +42,19 @@
 </template>
 
 <script lang="ts">
-import { SHARED_EVENTS } from '../assets/shared/events'
-import LoginInput from '../components/login/LoginInput.vue'
-import { socket } from '../plugins/socket'
-import { MUTATIONS } from '../plugins/store/mutations'
-import { ROUTES } from '../plugins/routing/routes'
-import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-api'
-import { store } from '../plugins/store'
-import IconBtn from '../components/shared/buttons/IconBtn.vue'
-import LoginAvatarSelect from '../components/login/LoginAvatarSelect.vue'
-import { AVATARS, USERNAME_FORMAT } from '../assets/shared/constants'
-import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants'
+import { SHARED_EVENTS } from '../assets/shared/events';
+import LoginInput from '../components/login/LoginInput.vue';
+import { socket } from '../plugins/socket';
+import { MUTATIONS } from '../plugins/store/mutations';
+import { ROUTES } from '../plugins/routing/routes';
+import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-api';
+import { store } from '../plugins/store';
+import IconBtn from '../components/shared/buttons/IconBtn.vue';
+import LoginAvatarSelect from '../components/login/LoginAvatarSelect.vue';
+import { AVATARS, USERNAME_FORMAT } from '../assets/shared/constants';
+import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants';
 
-const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$')
+const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$');
 
 export default defineComponent({
   components: { IconBtn, LoginInput, LoginAvatarSelect },
@@ -80,38 +80,38 @@ export default defineComponent({
       disabled: false,
       showPassword: false,
       clientVersion: process.env.VUE_APP_VERSION
-    })
+    });
 
     function login() {
       if (state.valid) {
-        state.disabled = true
-        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_USERNAME] = state.username
-        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_AVATAR] = state.avatar
-        socket.connect()
+        state.disabled = true;
+        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_USERNAME] = state.username;
+        localStorage[LOCAL_STORAGE_CONSTANTS.AQ_AVATAR] = state.avatar;
+        socket.connect();
         socket.emit(
           SHARED_EVENTS.AUTHENTICATE,
           state.username,
           state.password,
           state.avatar,
           (auth: boolean): void => {
-            state.disabled = false
+            state.disabled = false;
             if (auth) {
-              store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
+              store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY);
             }
           }
-        )
+        );
       }
     }
 
     onMounted(() => {
-      store.commit(MUTATIONS.RESET_STORE_STATE)
-      store.commit(MUTATIONS.RESET_CLIENT_STORE_STATE)
-    })
+      store.commit(MUTATIONS.RESET_STORE_STATE);
+      store.commit(MUTATIONS.RESET_CLIENT_STORE_STATE);
+    });
 
     return {
       ...toRefs(state),
       login
-    }
+    };
   }
-})
+});
 </script>

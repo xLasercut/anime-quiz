@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { client } from './client'
-import { data } from './data'
-import { game } from './game'
-import { admin } from './admin'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { client } from './client';
+import { data } from './data';
+import { game } from './game';
+import { admin } from './admin';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
@@ -14,6 +14,6 @@ const store = new Vuex.Store({
     game,
     admin
   }
-})
+});
 
-export { store }
+export { store };

@@ -70,8 +70,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, watch } from '@vue/composition-api'
-import FabBtn from '../shared/buttons/FabBtn.vue'
+import { defineComponent, reactive, toRefs, watch } from '@vue/composition-api';
+import FabBtn from '../shared/buttons/FabBtn.vue';
 
 export default defineComponent({
   components: { FabBtn },
@@ -91,7 +91,7 @@ export default defineComponent({
     disabled: {
       type: Boolean,
       default: (): boolean => {
-        return false
+        return false;
       }
     }
   },
@@ -99,30 +99,30 @@ export default defineComponent({
     const state = reactive({
       seeking: false,
       currentDisplayTime: props.currentTime
-    })
+    });
 
     watch(
       () => props.currentTime,
       (time: number) => {
         if (!state.seeking) {
-          state.currentDisplayTime = time
+          state.currentDisplayTime = time;
         }
       }
-    )
+    );
 
     function getTimestamp(time: number): string {
       if (time < 3600) {
-        return new Date(time * 1000).toISOString().substring(14, 19)
+        return new Date(time * 1000).toISOString().substring(14, 19);
       }
-      return new Date(time * 1000).toISOString().substring(11, 16)
+      return new Date(time * 1000).toISOString().substring(11, 16);
     }
 
     return {
       getTimestamp,
       ...toRefs(state)
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

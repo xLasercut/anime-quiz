@@ -26,8 +26,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import { newTableHelpers } from '../../assets/table-helper'
+import { defineComponent } from '@vue/composition-api';
+import { newTableHelpers } from '../../assets/table-helper';
 
 export default defineComponent({
   props: {
@@ -39,11 +39,11 @@ export default defineComponent({
     }
   },
   setup(_props, context) {
-    const { updateFilter } = newTableHelpers(context)
+    const { updateFilter } = newTableHelpers(context);
 
     return {
       updateFilter
-    }
+    };
   }
-})
+});
 </script>

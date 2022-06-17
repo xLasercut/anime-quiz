@@ -22,33 +22,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import DialogActions from '../shared/dialog/DialogActions.vue'
-import DialogTextField from '../shared/dialog/DialogTextField.vue'
-import { store } from '../../plugins/store'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { socket } from '../../plugins/socket'
-import { newTableHelpers } from '../../assets/table-helper'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import DialogActions from '../shared/dialog/DialogActions.vue';
+import DialogTextField from '../shared/dialog/DialogTextField.vue';
+import { store } from '../../plugins/store';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { socket } from '../../plugins/socket';
+import { newTableHelpers } from '../../assets/table-helper';
 
 export default defineComponent({
   components: { DialogTextField, DialogActions },
   setup(_props, context) {
     const state = reactive({
       valid: false
-    })
+    });
 
-    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context);
 
     function submitEdit(): void {
       if (state.valid) {
-        editActionDisabled.value = true
+        editActionDisabled.value = true;
         socket.emit(
           SHARED_EVENTS.ADMIN_DELETE_USER,
           store.state.admin.userInEdit,
           (proceed: boolean) => {
-            editActionComplete(proceed)
+            editActionComplete(proceed);
           }
-        )
+        );
       }
     }
 
@@ -56,7 +56,7 @@ export default defineComponent({
       ...toRefs(state),
       submitEdit,
       editActionDisabled
-    }
+    };
   }
-})
+});
 </script>

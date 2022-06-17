@@ -33,19 +33,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-api'
-import { socket } from '../../../plugins/socket'
-import { SHARED_EVENTS } from '../../../assets/shared/events'
-import { store } from '../../../plugins/store'
-import { AqEmoji } from '../../../assets/shared/interfaces'
+import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-api';
+import { socket } from '../../../plugins/socket';
+import { SHARED_EVENTS } from '../../../assets/shared/events';
+import { store } from '../../../plugins/store';
+import { AqEmoji } from '../../../assets/shared/interfaces';
 
-const EMOJI_CHAT_FORMAT = new RegExp('(:)(?:[^:]+)$', 'ig')
+const EMOJI_CHAT_FORMAT = new RegExp('(:)(?:[^:]+)$', 'ig');
 
 interface State {
-  message: string
-  show: boolean
-  choices: AqEmoji[]
-  choicesOldLength: number
+  message: string;
+  show: boolean;
+  choices: AqEmoji[];
+  choicesOldLength: number;
 }
 
 export default defineComponent({
@@ -55,14 +55,14 @@ export default defineComponent({
       show: false,
       choices: [],
       choicesOldLength: 0
-    })
+    });
 
-    const chatInput: any = ref(null)
+    const chatInput: any = ref(null);
 
     function sendMsg(): void {
       if (state.message) {
-        socket.emit(SHARED_EVENTS.GAME_CHAT, state.message)
-        state.message = ''
+        socket.emit(SHARED_EVENTS.GAME_CHAT, state.message);
+        state.message = '';
       }
     }
 
@@ -70,32 +70,32 @@ export default defineComponent({
       () => state.message,
       (val: string) => {
         if (val) {
-          const match = val.match(EMOJI_CHAT_FORMAT)
+          const match = val.match(EMOJI_CHAT_FORMAT);
           if (match) {
-            const command = match[0]
+            const command = match[0];
             state.choices = store.getters.emojiList.filter((emoji: AqEmoji) => {
-              return `:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase())
-            })
-            const currentLength = state.choices.length
+              return `:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase());
+            });
+            const currentLength = state.choices.length;
             if (currentLength > 0) {
               if (currentLength !== state.choicesOldLength) {
-                state.choicesOldLength = currentLength
-                state.show = false
+                state.choicesOldLength = currentLength;
+                state.show = false;
               }
               setTimeout(() => {
-                state.show = true
-              }, 1)
+                state.show = true;
+              }, 1);
             } else {
-              state.show = false
+              state.show = false;
             }
           }
         }
       }
-    )
+    );
 
     function addEmoji(command: string): void {
-      state.message = state.message.replace(EMOJI_CHAT_FORMAT, `:${command}:`)
-      chatInput.value.focus()
+      state.message = state.message.replace(EMOJI_CHAT_FORMAT, `:${command}:`);
+      chatInput.value.focus();
     }
 
     return {
@@ -103,7 +103,7 @@ export default defineComponent({
       sendMsg,
       addEmoji,
       chatInput
-    }
+    };
   }
-})
+});
 </script>

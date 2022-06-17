@@ -1,7 +1,7 @@
-import { GameStoreState, RootStoreState } from '../../assets/interfaces'
-import { Module } from 'vuex'
-import { MUTATIONS } from './mutations'
-import { AqGamePlayer, AqGameState } from '../../assets/shared/interfaces'
+import { GameStoreState, RootStoreState } from '../../assets/interfaces';
+import { Module } from 'vuex';
+import { MUTATIONS } from './mutations';
+import { AqGamePlayer, AqGameState } from '../../assets/shared/interfaces';
 
 const DEFAULT_STATE: GameStoreState = {
   players: [],
@@ -18,27 +18,27 @@ const DEFAULT_STATE: GameStoreState = {
   maxSongCount: 0,
   playing: false,
   disableSettings: false
-}
+};
 
 const game: Module<GameStoreState, RootStoreState> = {
   state: Object.assign({}, DEFAULT_STATE),
   mutations: {
     [MUTATIONS.SOCKET_UPDATE_GAME_PLAYERS]: (state: GameStoreState, players: AqGamePlayer[]) => {
-      state.players = players
+      state.players = players;
     },
     [MUTATIONS.SOCKET_UPDATE_GAME_STATE]: (state: GameStoreState, gameState: AqGameState) => {
-      state.currentSong = gameState.currentSong
-      state.playing = gameState.playing
-      state.maxSongCount = gameState.maxSongCount
-      state.currentSongCount = gameState.currentSongCount
+      state.currentSong = gameState.currentSong;
+      state.playing = gameState.playing;
+      state.maxSongCount = gameState.maxSongCount;
+      state.currentSongCount = gameState.currentSongCount;
     },
     [MUTATIONS.RESET_STORE_STATE]: (state: GameStoreState) => {
-      Object.assign(state, DEFAULT_STATE)
+      Object.assign(state, DEFAULT_STATE);
     },
     [MUTATIONS.EDIT_DISABLE_GAME_SETTINGS]: (state: GameStoreState, disabled: boolean) => {
-      state.disableSettings = disabled
+      state.disableSettings = disabled;
     }
   }
-}
+};
 
-export { game }
+export { game };

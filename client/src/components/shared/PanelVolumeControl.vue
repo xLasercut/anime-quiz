@@ -13,23 +13,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants'
+import { defineComponent } from '@vue/composition-api';
+import { store } from '../../plugins/store';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants';
 
 export default defineComponent({
   setup() {
     function changeVolume(volume: number): void {
-      store.commit(MUTATIONS.UPDATE_VOLUME, volume)
-      localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = volume
+      store.commit(MUTATIONS.UPDATE_VOLUME, volume);
+      localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = volume;
     }
 
     return {
       changeVolume
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

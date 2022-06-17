@@ -42,27 +42,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs } from '@vue/composition-api'
-import { getIdFromURL } from 'vue-youtube-embed'
-import MusicPlayerYoutube from '../components/music-player/MusicPlayerYoutube.vue'
-import MusicPlayerNormal from '../components/music-player/MusicPlayerNormal.vue'
-import MusicPlayerControls from '../components/music-player/MusicPlayerControls.vue'
-import { isYoutubeVideo } from '../assets/game-helper'
-import { socket } from '../plugins/socket'
-import { SHARED_EVENTS } from '../assets/shared/events'
-import { store } from '../plugins/store'
-import { AqSong } from '../assets/shared/interfaces'
-import MusicPlayerPlaylist from '../components/music-player/MusicPlayerPlaylist.vue'
-import { shuffleSongList } from '../assets/shared/helpers'
+import { defineComponent, reactive, ref, toRefs } from '@vue/composition-api';
+import { getIdFromURL } from 'vue-youtube-embed';
+import MusicPlayerYoutube from '../components/music-player/MusicPlayerYoutube.vue';
+import MusicPlayerNormal from '../components/music-player/MusicPlayerNormal.vue';
+import MusicPlayerControls from '../components/music-player/MusicPlayerControls.vue';
+import { isYoutubeVideo } from '../assets/game-helper';
+import { socket } from '../plugins/socket';
+import { SHARED_EVENTS } from '../assets/shared/events';
+import { store } from '../plugins/store';
+import { AqSong } from '../assets/shared/interfaces';
+import MusicPlayerPlaylist from '../components/music-player/MusicPlayerPlaylist.vue';
+import { shuffleSongList } from '../assets/shared/helpers';
 
 interface State {
-  currentTime: number
-  maxTime: number
-  playing: boolean
-  selectedUser: string
-  playlist: AqSong[]
-  currentSongCount: number
-  currentSong: AqSong
+  currentTime: number;
+  maxTime: number;
+  playing: boolean;
+  selectedUser: string;
+  playlist: AqSong[];
+  currentSongCount: number;
+  currentSong: AqSong;
 }
 
 export default defineComponent({
@@ -84,101 +84,101 @@ export default defineComponent({
         song_title: '',
         type: ''
       }
-    })
+    });
 
-    const youtube = ref()
-    const normal = ref()
+    const youtube = ref();
+    const normal = ref();
 
-    let progressCheck: any
+    let progressCheck: any;
 
     function _changeSong(): void {
       if (state.playlist.length > 0) {
-        state.currentSong = state.playlist[state.currentSongCount]
+        state.currentSong = state.playlist[state.currentSongCount];
       }
     }
 
     function ended(): void {
-      next()
+      next();
     }
 
     function getPlayer() {
       if (isYoutubeVideo(state.currentSong.src)) {
-        return youtube
+        return youtube;
       }
-      return normal
+      return normal;
     }
 
     function videoSrc(): string {
       if (!isYoutubeVideo(state.currentSong.src)) {
-        return state.currentSong.src
+        return state.currentSong.src;
       }
-      return ''
+      return '';
     }
 
     function youtubeVideoSrc(): string {
       if (isYoutubeVideo(state.currentSong.src)) {
-        return getIdFromURL(state.currentSong.src)
+        return getIdFromURL(state.currentSong.src);
       }
-      return ''
+      return '';
     }
 
     function startCheckProgress(): void {
-      console.log('start progress check')
-      clearInterval(progressCheck)
-      state.playing = true
-      state.maxTime = getPlayer().value.getMaxTime()
+      console.log('start progress check');
+      clearInterval(progressCheck);
+      state.playing = true;
+      state.maxTime = getPlayer().value.getMaxTime();
       progressCheck = setInterval(() => {
-        state.currentTime = getPlayer().value.getCurrentTime()
-      }, 500)
+        state.currentTime = getPlayer().value.getCurrentTime();
+      }, 500);
     }
 
     function stopCheckProgress(): void {
-      console.log('stop progress check')
-      state.playing = false
-      clearInterval(progressCheck)
+      console.log('stop progress check');
+      state.playing = false;
+      clearInterval(progressCheck);
     }
 
     function play(): void {
-      _changeSong()
-      getPlayer().value.play()
+      _changeSong();
+      getPlayer().value.play();
     }
 
     function pause(): void {
-      getPlayer().value.pause()
+      getPlayer().value.pause();
     }
 
     function next(): void {
-      state.currentSongCount += 1
+      state.currentSongCount += 1;
       if (state.currentSongCount >= state.playlist.length) {
-        state.currentSongCount = 0
+        state.currentSongCount = 0;
       }
-      _changeSong()
+      _changeSong();
     }
 
     function previous(): void {
-      state.currentSongCount -= 1
+      state.currentSongCount -= 1;
       if (state.currentSongCount < 0) {
-        state.currentSongCount = state.playlist.length - 1
+        state.currentSongCount = state.playlist.length - 1;
       }
-      _changeSong()
+      _changeSong();
     }
 
     function seek(duration: number): void {
-      getPlayer().value.seek(duration)
+      getPlayer().value.seek(duration);
     }
 
     function updatePlaylist(): void {
-      state.playlist = shuffleSongList(store.getters.userPlaylist(state.selectedUser))
-      state.currentSongCount = 0
+      state.playlist = shuffleSongList(store.getters.userPlaylist(state.selectedUser));
+      state.currentSongCount = 0;
     }
 
     function changeSong(index: number): void {
-      state.currentSongCount = index
-      _changeSong()
+      state.currentSongCount = index;
+      _changeSong();
     }
 
-    socket.emit(SHARED_EVENTS.GET_SONG_LIST)
-    socket.emit(SHARED_EVENTS.GET_USER_LISTS)
+    socket.emit(SHARED_EVENTS.GET_SONG_LIST);
+    socket.emit(SHARED_EVENTS.GET_USER_LISTS);
 
     return {
       ...toRefs(state),
@@ -196,7 +196,7 @@ export default defineComponent({
       startCheckProgress,
       stopCheckProgress,
       changeSong
-    }
+    };
   }
-})
+});
 </script>

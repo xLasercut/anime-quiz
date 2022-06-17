@@ -18,44 +18,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
-import { SHARED_EVENTS } from '../../../assets/shared/events'
-import { socket } from '../../../plugins/socket'
-import MainAnswerAnswerDisplay from './game-main-answer-display/MainAnswerAnswerDisplay.vue'
-import MainAnswerQuestionDisplay from './game-main-answer-display/MainAnswerQuestionDisplay.vue'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api';
+import { SHARED_EVENTS } from '../../../assets/shared/events';
+import { socket } from '../../../plugins/socket';
+import MainAnswerAnswerDisplay from './game-main-answer-display/MainAnswerAnswerDisplay.vue';
+import MainAnswerQuestionDisplay from './game-main-answer-display/MainAnswerQuestionDisplay.vue';
 
 export default defineComponent({
   setup() {
     const state = reactive({
       show: false
-    })
+    });
 
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
-      state.show = false
-    })
+      state.show = false;
+    });
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
-      state.show = true
-    })
+      state.show = true;
+    });
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
-      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
-    })
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND);
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS);
+    });
 
     function component() {
       if (state.show) {
-        return MainAnswerAnswerDisplay
+        return MainAnswerAnswerDisplay;
       }
-      return MainAnswerQuestionDisplay
+      return MainAnswerQuestionDisplay;
     }
 
     return {
       ...toRefs(state),
       component
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
-import { CLIENT_EVENTS } from '../../assets/events'
+import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
+import { CLIENT_EVENTS } from '../../assets/events';
 
 export default defineComponent({
   setup() {
@@ -19,33 +19,33 @@ export default defineComponent({
       message: '',
       show: false,
       color: 'error'
-    })
+    });
 
     function _showNotification(color: string, message: string): void {
-      state.color = color
-      state.message = message
-      state.show = true
+      state.color = color;
+      state.message = message;
+      state.show = true;
     }
 
     function sendNotification(color: string, message: string): void {
       if (state.show) {
-        state.show = false
+        state.show = false;
         setTimeout((): void => {
-          _showNotification(color, message)
-        }, 100)
+          _showNotification(color, message);
+        }, 100);
       } else {
-        _showNotification(color, message)
+        _showNotification(color, message);
       }
     }
 
-    const registerSendNotification = inject<Function>(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION)
+    const registerSendNotification = inject<Function>(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION);
     if (registerSendNotification) {
-      registerSendNotification(sendNotification)
+      registerSendNotification(sendNotification);
     }
 
     return {
       ...toRefs(state)
-    }
+    };
   }
-})
+});
 </script>

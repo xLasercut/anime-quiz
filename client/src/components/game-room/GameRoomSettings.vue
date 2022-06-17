@@ -47,37 +47,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
-import DialogActions from '../shared/dialog/DialogActions.vue'
-import DialogSlider from '../shared/dialog/DialogSlider.vue'
-import DialogSelect from '../shared/dialog/DialogSelect.vue'
-import { GAME_MODE } from '../../assets/shared/constants'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { AqGameSettings } from '../../assets/shared/interfaces'
-import { store } from '../../plugins/store'
-import { newTableHelpers } from '../../assets/table-helper'
-import { MUTATIONS } from '../../plugins/store/mutations'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api';
+import DialogActions from '../shared/dialog/DialogActions.vue';
+import DialogSlider from '../shared/dialog/DialogSlider.vue';
+import DialogSelect from '../shared/dialog/DialogSelect.vue';
+import { GAME_MODE } from '../../assets/shared/constants';
+import { socket } from '../../plugins/socket';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { AqGameSettings } from '../../assets/shared/interfaces';
+import { store } from '../../plugins/store';
+import { newTableHelpers } from '../../assets/table-helper';
+import { MUTATIONS } from '../../plugins/store/mutations';
 
 interface GameModeItem {
-  text: string
-  value: string
+  text: string;
+  value: string;
 }
 
 interface ToggleItem {
-  text: string
-  value: boolean
+  text: string;
+  value: boolean;
 }
 
 interface State {
-  valid: boolean
-  songCount: number
-  guessTime: number
-  gameMode: string
-  duplicate: boolean
-  users: string[]
-  gameModes: GameModeItem[]
-  toggleItems: ToggleItem[]
+  valid: boolean;
+  songCount: number;
+  guessTime: number;
+  gameMode: string;
+  duplicate: boolean;
+  users: string[];
+  gameModes: GameModeItem[];
+  toggleItems: ToggleItem[];
 }
 
 export default defineComponent({
@@ -100,52 +100,52 @@ export default defineComponent({
         { text: 'Yes', value: true },
         { text: 'No', value: false }
       ]
-    })
+    });
 
     function setSettings() {
       if (state.valid) {
-        store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, true)
+        store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, true);
         const settings: AqGameSettings = {
           songCount: state.songCount,
           guessTime: state.guessTime,
           gameMode: state.gameMode,
           duplicate: state.duplicate,
           users: state.users
-        }
+        };
         socket.emit(SHARED_EVENTS.EDIT_GAME_SETTINGS, settings, (proceed: boolean) => {
           if (proceed) {
-            context.emit('dialog:close')
+            context.emit('dialog:close');
           }
-          store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, false)
-        })
+          store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, false);
+        });
       }
     }
 
     socket.on(SHARED_EVENTS.UPDATE_GAME_SETTINGS, (settings: AqGameSettings) => {
-      state.songCount = settings.songCount
-      state.guessTime = settings.guessTime
-      state.gameMode = settings.gameMode
-      state.duplicate = settings.duplicate
-      state.users = settings.users
-      store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, false)
-    })
+      state.songCount = settings.songCount;
+      state.guessTime = settings.guessTime;
+      state.gameMode = settings.gameMode;
+      state.duplicate = settings.duplicate;
+      state.users = settings.users;
+      store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, false);
+    });
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.UPDATE_GAME_SETTINGS)
-    })
+      socket.off(SHARED_EVENTS.UPDATE_GAME_SETTINGS);
+    });
 
     function disabled(): boolean {
       if (store.state.game.playing || store.state.game.disableSettings) {
-        return true
+        return true;
       }
-      return !store.state.client.admin && !store.state.client.host
+      return !store.state.client.admin && !store.state.client.host;
     }
 
     return {
       ...toRefs(state),
       setSettings,
       disabled
-    }
+    };
   }
-})
+});
 </script>

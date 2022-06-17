@@ -7,31 +7,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from '@vue/composition-api'
-import NavBtn from '../shared/buttons/NavBtn.vue'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { CLIENT_EVENTS } from '../../assets/events'
+import { defineComponent, inject } from '@vue/composition-api';
+import NavBtn from '../shared/buttons/NavBtn.vue';
+import { store } from '../../plugins/store';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes';
+import { socket } from '../../plugins/socket';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { CLIENT_EVENTS } from '../../assets/events';
 
 export default defineComponent({
   components: { NavBtn },
   setup() {
     function back(): void {
-      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
+      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY);
     }
 
     function reload(): void {
-      socket.emit(SHARED_EVENTS.GET_ROOM_LIST)
+      socket.emit(SHARED_EVENTS.GET_ROOM_LIST);
     }
 
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
+    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
     function newRoom(): void {
       if (openDialog) {
-        openDialog(DIALOG_ROUTES.NEW_ROOM, 'New Room')
+        openDialog(DIALOG_ROUTES.NEW_ROOM, 'New Room');
       }
     }
 
@@ -39,7 +39,7 @@ export default defineComponent({
       back,
       reload,
       newRoom
-    }
+    };
   }
-})
+});
 </script>

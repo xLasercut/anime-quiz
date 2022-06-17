@@ -66,18 +66,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-api'
-import { CLIENT_CONSTANTS } from '../../assets/constants'
-import SongListTableFilter from './SongListTableFilter.vue'
-import { store } from '../../plugins/store'
-import { AqSong } from '../../assets/shared/interfaces'
-import SongListTableActions from './SongListTableActions.vue'
-import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import TablePagination from '../shared/TablePagination.vue'
-import { shouldDisplayResult } from '../../assets/game-helper'
-import AqAnimeName from '../shared/AqAnimeName.vue'
+import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-api';
+import { CLIENT_CONSTANTS } from '../../assets/constants';
+import SongListTableFilter from './SongListTableFilter.vue';
+import { store } from '../../plugins/store';
+import { AqSong } from '../../assets/shared/interfaces';
+import SongListTableActions from './SongListTableActions.vue';
+import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants';
+import { socket } from '../../plugins/socket';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import TablePagination from '../shared/TablePagination.vue';
+import { shouldDisplayResult } from '../../assets/game-helper';
+import AqAnimeName from '../shared/AqAnimeName.vue';
 
 export default defineComponent({
   components: { AqAnimeName, TablePagination, SongListTableActions, SongListTableFilter },
@@ -100,96 +100,96 @@ export default defineComponent({
       songTypeFilter: '',
       songTitleFilter: '',
       songArtistFilter: ''
-    })
+    });
 
-    const songSelected = ref<AqSong[]>([])
+    const songSelected = ref<AqSong[]>([]);
 
     watch(
       () => state.editMode,
       () => {
-        songSelected.value = []
+        songSelected.value = [];
       }
-    )
+    );
 
     watch(
       () => state.selectedUser,
       () => {
-        songSelected.value = []
+        songSelected.value = [];
       }
-    )
+    );
 
     function isSelectDisabled(song: AqSong, isSelected: boolean): boolean {
       if (songSelected.value.length >= 50 && !isSelected) {
-        return false
+        return false;
       }
 
       if (!state.selectedUser || state.editMode === SONG_LIST_EDIT_MODE.NONE) {
-        return false
+        return false;
       }
 
       if (
         state.editMode === SONG_LIST_EDIT_MODE.ADD &&
         !store.getters.userList(state.selectedUser).includes(song.song_id)
       ) {
-        return true
+        return true;
       }
 
       return !!(
         state.editMode === SONG_LIST_EDIT_MODE.REMOVE &&
         store.getters.userList(state.selectedUser).includes(song.song_id)
-      )
+      );
     }
 
     function checkboxColor(isSelected: boolean): string {
       if (isSelected && state.editMode === SONG_LIST_EDIT_MODE.ADD) {
-        return 'success'
+        return 'success';
       }
 
       if (isSelected && state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
-        return 'error'
+        return 'error';
       }
 
-      return ''
+      return '';
     }
 
     function checkboxOnIcon(): string {
       if (state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
-        return 'mdi-minus-box'
+        return 'mdi-minus-box';
       }
-      return 'mdi-checkbox-marked'
+      return 'mdi-checkbox-marked';
     }
 
     function submitEdit(): void {
       if (songSelected.value.length > 0) {
         const songIds = songSelected.value.map((song) => {
-          return song.song_id
-        })
+          return song.song_id;
+        });
         if (state.editMode === SONG_LIST_EDIT_MODE.ADD) {
-          state.loading = true
+          state.loading = true;
           socket.emit(
             SHARED_EVENTS.ADD_USER_SONGS,
             songIds,
             state.selectedUser,
             (proceed: boolean) => {
               if (proceed) {
-                songSelected.value = []
+                songSelected.value = [];
               }
-              state.loading = false
+              state.loading = false;
             }
-          )
+          );
         } else if (state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
-          state.loading = true
+          state.loading = true;
           socket.emit(
             SHARED_EVENTS.DELETE_USER_SONGS,
             songIds,
             state.selectedUser,
             (proceed: boolean) => {
               if (proceed) {
-                songSelected.value = []
+                songSelected.value = [];
               }
-              state.loading = false
+              state.loading = false;
             }
-          )
+          );
         }
       }
     }
@@ -198,10 +198,10 @@ export default defineComponent({
       return store.getters.songList
         .filter((song: AqSong) => {
           if (state.selectedUser && state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
-            return store.getters.userList(state.selectedUser).includes(song.song_id)
+            return store.getters.userList(state.selectedUser).includes(song.song_id);
           }
 
-          return true
+          return true;
         })
         .filter((song: AqSong) => {
           return (
@@ -209,8 +209,8 @@ export default defineComponent({
             shouldDisplayResult(state.songTitleFilter, song.song_title) &&
             song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
             shouldDisplayResult(state.songArtistFilter, song.artist)
-          )
-        })
+          );
+        });
     }
 
     return {
@@ -222,7 +222,7 @@ export default defineComponent({
       checkboxColor,
       checkboxOnIcon,
       filteredSongList
-    }
+    };
   }
-})
+});
 </script>

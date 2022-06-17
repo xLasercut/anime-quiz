@@ -3,7 +3,7 @@ const LOG_LEVEL = {
   WARN: 'WARN',
   ERROR: 'ERROR',
   DEBUG: 'DEBUG'
-}
+};
 
 const LOG_REFERENCES = {
   SERVER001: 'SERVER001',
@@ -32,7 +32,7 @@ const LOG_REFERENCES = {
   SERVER024: 'SERVER024',
   SERVER025: 'SERVER025',
   SERVER026: 'SERVER026'
-}
+};
 
 const LOG_BASE = {
   ADMIN_USER_EDIT: {
@@ -165,6 +165,6 @@ const LOG_BASE = {
     level: LOG_LEVEL.INFO,
     message: 'admin emoji edit'
   }
-}
+};
 
-export { LOG_BASE, LOG_LEVEL }
+export { LOG_BASE, LOG_LEVEL };

@@ -37,15 +37,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
-import TablePagination from '../shared/TablePagination.vue'
-import { CLIENT_CONSTANTS } from '../../assets/constants'
-import { AqUserSongs } from '../../assets/shared/interfaces'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { CLIENT_EVENTS } from '../../assets/events'
-import { DIALOG_ROUTES } from '../../plugins/routing/routes'
-import UserEditTableFilter from './UserEditTableFilter.vue'
+import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
+import TablePagination from '../shared/TablePagination.vue';
+import { CLIENT_CONSTANTS } from '../../assets/constants';
+import { AqUserSongs } from '../../assets/shared/interfaces';
+import { store } from '../../plugins/store';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import { CLIENT_EVENTS } from '../../assets/events';
+import { DIALOG_ROUTES } from '../../plugins/routing/routes';
+import UserEditTableFilter from './UserEditTableFilter.vue';
 
 export default defineComponent({
   components: { TablePagination, UserEditTableFilter },
@@ -60,35 +60,35 @@ export default defineComponent({
       currentPage: 0,
       userIdFilter: '',
       usernameFilter: ''
-    })
+    });
 
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
+    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
     function filteredUserLists(): AqUserSongs[] {
       return store.getters.userLists.filter((userSong: AqUserSongs) => {
         return (
           userSong.user_id.toLowerCase().includes(state.userIdFilter.toLowerCase()) &&
           userSong.username.toLowerCase().includes(state.usernameFilter.toLowerCase())
-        )
-      })
+        );
+      });
     }
 
     function updateStore(user: AqUserSongs): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_USER_NAME, user.username)
-      store.commit(MUTATIONS.ADMIN_UPDATE_USER_ID, user.user_id)
+      store.commit(MUTATIONS.ADMIN_UPDATE_USER_NAME, user.username);
+      store.commit(MUTATIONS.ADMIN_UPDATE_USER_ID, user.user_id);
     }
 
     function editUser(user: AqUserSongs): void {
       if (openDialog) {
-        updateStore(user)
-        openDialog(DIALOG_ROUTES.EDIT_USER_DIALOG, 'Edit User')
+        updateStore(user);
+        openDialog(DIALOG_ROUTES.EDIT_USER_DIALOG, 'Edit User');
       }
     }
 
     function deleteUser(user: AqUserSongs): void {
       if (openDialog) {
-        updateStore(user)
-        openDialog(DIALOG_ROUTES.DELETE_USER_DIALOG, 'Delete User')
+        updateStore(user);
+        openDialog(DIALOG_ROUTES.DELETE_USER_DIALOG, 'Delete User');
       }
     }
 
@@ -98,7 +98,7 @@ export default defineComponent({
       filteredUserLists,
       editUser,
       deleteUser
-    }
+    };
   }
-})
+});
 </script>

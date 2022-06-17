@@ -37,9 +37,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { newTableHelpers } from '../../assets/table-helper'
-import { EMOJI_TYPES } from '../../assets/constants'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import { newTableHelpers } from '../../assets/table-helper';
+import { EMOJI_TYPES } from '../../assets/constants';
 
 export default defineComponent({
   props: {
@@ -56,14 +56,14 @@ export default defineComponent({
   setup(_props, context) {
     const state = reactive({
       emojiTypes: [{ text: 'ALL', value: '' }].concat(EMOJI_TYPES)
-    })
+    });
 
-    const { updateFilter } = newTableHelpers(context)
+    const { updateFilter } = newTableHelpers(context);
 
     return {
       ...toRefs(state),
       updateFilter
-    }
+    };
   }
-})
+});
 </script>

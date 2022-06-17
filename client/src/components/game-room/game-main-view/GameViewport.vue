@@ -7,11 +7,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import CurrentSongInfo from './game-viewport/CurrentSongInfo.vue'
-import VideoWindow from './game-viewport/VideoWindow.vue'
+import { defineComponent } from '@vue/composition-api';
+import CurrentSongInfo from './game-viewport/CurrentSongInfo.vue';
+import VideoWindow from './game-viewport/VideoWindow.vue';
 
 export default defineComponent({
   components: { VideoWindow, CurrentSongInfo }
-})
+});
 </script>

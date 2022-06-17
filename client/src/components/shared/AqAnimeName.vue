@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api'
-import { AqSong } from '../../assets/shared/interfaces'
+import { defineComponent, PropType } from '@vue/composition-api';
+import { AqSong } from '../../assets/shared/interfaces';
 
 export default defineComponent({
   props: {
@@ -22,5 +22,5 @@ export default defineComponent({
       required: true
     }
   }
-})
+});
 </script>

@@ -30,11 +30,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
-import { socket } from '../../../plugins/socket'
-import { SHARED_EVENTS } from '../../../assets/shared/events'
-import { AqGameGuess } from '../../../assets/shared/interfaces'
-import FilteredCombobox from '../../shared/comboboxes/FilteredCombobox.vue'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api';
+import { socket } from '../../../plugins/socket';
+import { SHARED_EVENTS } from '../../../assets/shared/events';
+import { AqGameGuess } from '../../../assets/shared/interfaces';
+import FilteredCombobox from '../../shared/comboboxes/FilteredCombobox.vue';
 
 export default defineComponent({
   components: { FilteredCombobox },
@@ -45,43 +45,43 @@ export default defineComponent({
       selectedAnime: '',
       selectedTitle: '',
       disabled: true
-    })
+    });
 
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
-      state.anime = ''
-      state.title = ''
-      state.selectedAnime = ''
-      state.selectedTitle = ''
-      state.disabled = false
-    })
+      state.anime = '';
+      state.title = '';
+      state.selectedAnime = '';
+      state.selectedTitle = '';
+      state.disabled = false;
+    });
 
     socket.on(SHARED_EVENTS.UPDATE_GUESS, (guess: AqGameGuess) => {
-      state.selectedAnime = guess.anime
-      state.selectedTitle = guess.title
-    })
+      state.selectedAnime = guess.anime;
+      state.selectedTitle = guess.title;
+    });
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
-      state.disabled = true
-    })
+      state.disabled = true;
+    });
 
     function sendGuess(): void {
       const guess: AqGameGuess = {
         anime: state.anime,
         title: state.title
-      }
-      socket.emit(SHARED_EVENTS.EDIT_GUESS, guess)
+      };
+      socket.emit(SHARED_EVENTS.EDIT_GUESS, guess);
     }
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
-      socket.off(SHARED_EVENTS.UPDATE_GUESS)
-      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
-    })
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND);
+      socket.off(SHARED_EVENTS.UPDATE_GUESS);
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS);
+    });
 
     return {
       ...toRefs(state),
       sendGuess
-    }
+    };
   }
-})
+});
 </script>

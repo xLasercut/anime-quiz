@@ -47,15 +47,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import IconBtn from '../shared/buttons/IconBtn.vue'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { socket } from '../../plugins/socket'
-import GameAvatar from '../shared/GameAvatar.vue'
-import { AqGamePlayer } from '../../assets/shared/interfaces'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import IconBtn from '../shared/buttons/IconBtn.vue';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { socket } from '../../plugins/socket';
+import GameAvatar from '../shared/GameAvatar.vue';
+import { AqGamePlayer } from '../../assets/shared/interfaces';
 
 interface State {
-  playerToKick: AqGamePlayer | null
+  playerToKick: AqGamePlayer | null;
 }
 
 export default defineComponent({
@@ -63,24 +63,24 @@ export default defineComponent({
   setup() {
     const state = reactive<State>({
       playerToKick: null
-    })
+    });
 
     function reloadDb(): void {
-      socket.emit(SHARED_EVENTS.ADMIN_RELOAD_DB)
+      socket.emit(SHARED_EVENTS.ADMIN_RELOAD_DB);
     }
 
     function kickPlayer(): void {
       if (state.playerToKick && state.playerToKick.sid) {
-        socket.emit(SHARED_EVENTS.ADMIN_KICK_PLAYER, state.playerToKick.sid)
+        socket.emit(SHARED_EVENTS.ADMIN_KICK_PLAYER, state.playerToKick.sid);
       }
     }
 
     function lockDb(): void {
-      socket.emit(SHARED_EVENTS.ADMIN_LOCK_DB)
+      socket.emit(SHARED_EVENTS.ADMIN_LOCK_DB);
     }
 
     function unlockDb(): void {
-      socket.emit(SHARED_EVENTS.ADMIN_UNLOCK_DB)
+      socket.emit(SHARED_EVENTS.ADMIN_UNLOCK_DB);
     }
 
     return {
@@ -89,7 +89,7 @@ export default defineComponent({
       kickPlayer,
       lockDb,
       unlockDb
-    }
+    };
   }
-})
+});
 </script>

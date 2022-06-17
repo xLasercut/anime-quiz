@@ -13,10 +13,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api'
-import GameAvatar from '../../shared/GameAvatar.vue'
-import { AqGameChatMessage } from '../../../assets/shared/interfaces'
-import { store } from '../../../plugins/store'
+import { computed, defineComponent, PropType } from '@vue/composition-api';
+import GameAvatar from '../../shared/GameAvatar.vue';
+import { AqGameChatMessage } from '../../../assets/shared/interfaces';
+import { store } from '../../../plugins/store';
 
 export default defineComponent({
   components: { GameAvatar },
@@ -28,44 +28,44 @@ export default defineComponent({
   },
   setup(props, _context) {
     const nameClass = computed(() => {
-      const classes = ['chat-username']
+      const classes = ['chat-username'];
       if (props.message.admin) {
-        classes.push('admin')
+        classes.push('admin');
       }
-      return classes.join(' ')
-    })
+      return classes.join(' ');
+    });
 
     const messageRowClass = computed(() => {
-      const classes = ['message-row']
+      const classes = ['message-row'];
       if (props.message.repeat) {
-        classes.push('repeat-message-row')
+        classes.push('repeat-message-row');
       }
-      return classes.join(' ')
-    })
+      return classes.join(' ');
+    });
 
     function chatMessage(): string {
-      let output = props.message.text
+      let output = props.message.text;
       for (const emoji of store.getters.emojiList) {
-        const command = new RegExp(`:${emoji.command}:`, 'gi')
-        const type = emoji.type
-        const src = emoji.src
+        const command = new RegExp(`:${emoji.command}:`, 'gi');
+        const type = emoji.type;
+        const src = emoji.src;
 
         if (type === 'img') {
-          output = output.replace(command, `<img src="${src}" class="emoji" />`)
+          output = output.replace(command, `<img src="${src}" class="emoji" />`);
         } else if (type === 'dec') {
-          output = output.replace(command, src)
+          output = output.replace(command, src);
         }
       }
-      return output
+      return output;
     }
 
     return {
       nameClass,
       messageRowClass,
       chatMessage
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

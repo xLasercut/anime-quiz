@@ -44,15 +44,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import TablePagination from '../shared/TablePagination.vue'
-import { AqSong } from 'anime-quiz-server/src/shared/interfaces'
-import { store } from '../../plugins/store'
-import { shouldDisplayResult } from '../../assets/game-helper'
-import AqAnimeName from '../shared/AqAnimeName.vue'
-import GameRoomSongPickerFilter from './GameRoomSongPickerFilter.vue'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from '../../assets/shared/events'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import TablePagination from '../shared/TablePagination.vue';
+import { AqSong } from 'anime-quiz-server/src/shared/interfaces';
+import { store } from '../../plugins/store';
+import { shouldDisplayResult } from '../../assets/game-helper';
+import AqAnimeName from '../shared/AqAnimeName.vue';
+import GameRoomSongPickerFilter from './GameRoomSongPickerFilter.vue';
+import { socket } from '../../plugins/socket';
+import { SHARED_EVENTS } from '../../assets/shared/events';
 
 export default defineComponent({
   components: { GameRoomSongPickerFilter, TablePagination, AqAnimeName },
@@ -69,7 +69,7 @@ export default defineComponent({
       animeFilter: '',
       songTypeFilter: '',
       songTitleFilter: ''
-    })
+    });
 
     function filteredSongList(): AqSong[] {
       return store.getters.songList.filter((song: AqSong) => {
@@ -77,20 +77,20 @@ export default defineComponent({
           shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
           shouldDisplayResult(state.songTitleFilter, song.song_title) &&
           song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase())
-        )
-      })
+        );
+      });
     }
 
     function selectSong(song: AqSong): void {
-      socket.emit(SHARED_EVENTS.ADMIN_GAME_SONG_OVERRIDE, song.song_id)
-      context.emit('dialog:close')
+      socket.emit(SHARED_EVENTS.ADMIN_GAME_SONG_OVERRIDE, song.song_id);
+      context.emit('dialog:close');
     }
 
     return {
       ...toRefs(state),
       filteredSongList,
       selectSong
-    }
+    };
   }
-})
+});
 </script>

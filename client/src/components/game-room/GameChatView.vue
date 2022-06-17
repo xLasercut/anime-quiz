@@ -24,16 +24,16 @@ import {
   reactive,
   toRefs,
   watch
-} from '@vue/composition-api'
-import { CLIENT_CONSTANTS } from '../../assets/constants'
-import ChatInput from './game-chat-view/ChatInput.vue'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { socket } from '../../plugins/socket'
-import { AqGameChatMessage } from '../../assets/shared/interfaces'
-import ChatMessage from './game-chat-view/ChatMessage.vue'
+} from '@vue/composition-api';
+import { CLIENT_CONSTANTS } from '../../assets/constants';
+import ChatInput from './game-chat-view/ChatInput.vue';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { socket } from '../../plugins/socket';
+import { AqGameChatMessage } from '../../assets/shared/interfaces';
+import ChatMessage from './game-chat-view/ChatMessage.vue';
 
 interface State {
-  messages: AqGameChatMessage[]
+  messages: AqGameChatMessage[];
 }
 
 export default defineComponent({
@@ -41,44 +41,44 @@ export default defineComponent({
   setup() {
     const state = reactive<State>({
       messages: []
-    })
+    });
 
     watch(
       () => state.messages,
       () => {
         nextTick(() => {
-          const element = document.querySelector('.chat-message-container')
+          const element = document.querySelector('.chat-message-container');
           if (element) {
-            element.scrollTop = element.scrollHeight - element.clientHeight
+            element.scrollTop = element.scrollHeight - element.clientHeight;
           }
-        })
+        });
       }
-    )
+    );
 
     socket.on(SHARED_EVENTS.UPDATE_GAME_CHAT, (message: AqGameChatMessage) => {
       if (state.messages.length > 100) {
-        state.messages.splice(0, 1)
+        state.messages.splice(0, 1);
       }
 
       if (state.messages.length > 0) {
         if (message.sid === state.messages[state.messages.length - 1].sid) {
-          message.repeat = true
+          message.repeat = true;
         }
       }
 
-      state.messages.push(message)
-    })
+      state.messages.push(message);
+    });
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.UPDATE_GAME_CHAT)
-    })
+      socket.off(SHARED_EVENTS.UPDATE_GAME_CHAT);
+    });
 
     return {
       CLIENT_CONSTANTS,
       ...toRefs(state)
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

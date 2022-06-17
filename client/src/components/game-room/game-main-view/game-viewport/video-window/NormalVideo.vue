@@ -18,84 +18,84 @@ import {
   ref,
   toRefs,
   watch
-} from '@vue/composition-api'
-import { SHARED_EVENTS } from '../../../../../assets/shared/events'
-import { socket } from '../../../../../plugins/socket'
-import { calculateStartPosition, isYoutubeVideo } from '../../../../../assets/game-helper'
-import { store } from '../../../../../plugins/store'
+} from '@vue/composition-api';
+import { SHARED_EVENTS } from '../../../../../assets/shared/events';
+import { socket } from '../../../../../plugins/socket';
+import { calculateStartPosition, isYoutubeVideo } from '../../../../../assets/game-helper';
+import { store } from '../../../../../plugins/store';
 
 export default defineComponent({
   setup() {
-    const player = ref<HTMLVideoElement>()
+    const player = ref<HTMLVideoElement>();
 
     const state = reactive({
       show: false,
       startPosition: 0,
       guessTime: 0
-    })
+    });
 
     watch(
       () => store.state.client.volume,
       (val: number) => {
-        changeVolume(val)
+        changeVolume(val);
       }
-    )
+    );
 
     function changeVolume(volume: number): void {
       if (player.value) {
-        player.value.volume = volume / 100
+        player.value.volume = volume / 100;
       }
     }
 
     function _isNormalVideo(): boolean {
-      return !isYoutubeVideo(store.state.game.currentSong.src)
+      return !isYoutubeVideo(store.state.game.currentSong.src);
     }
 
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
-      state.show = false
-    })
+      state.show = false;
+    });
 
     socket.on(SHARED_EVENTS.GAME_START_LOAD, (startPosition: number, guessTime: number) => {
-      pause()
-      state.show = false
-      state.guessTime = guessTime
-      state.startPosition = startPosition
+      pause();
+      state.show = false;
+      state.guessTime = guessTime;
+      state.startPosition = startPosition;
       if (_isNormalVideo()) {
-        load()
+        load();
       }
-    })
+    });
 
     socket.on(SHARED_EVENTS.GAME_START_COUNTDOWN, () => {
       if (_isNormalVideo()) {
-        play()
+        play();
       }
-    })
+    });
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
       if (_isNormalVideo()) {
-        state.show = true
+        state.show = true;
       }
-    })
+    });
 
     socket.on(SHARED_EVENTS.STOP_CLIENT_GAME, () => {
-      pause()
-    })
+      pause();
+    });
 
     function load(): void {
       if (player.value) {
-        player.value.load()
+        player.value.load();
       }
     }
 
     function pause(): void {
       if (player.value) {
-        player.value.pause()
+        player.value.pause();
       }
     }
 
     function play(): void {
       if (player.value) {
-        player.value.play()
+        player.value.play();
       }
     }
 
@@ -105,36 +105,36 @@ export default defineComponent({
           state.startPosition,
           state.guessTime,
           player.value.duration
-        )
+        );
       }
     }
 
     function fullLoaded(): void {
       if (_isNormalVideo()) {
-        console.log('Song Loaded')
-        socket.emit(SHARED_EVENTS.GAME_SONG_LOADED)
+        console.log('Song Loaded');
+        socket.emit(SHARED_EVENTS.GAME_SONG_LOADED);
       }
     }
 
     function videoSrc(): string {
       if (_isNormalVideo()) {
-        return store.state.game.currentSong.src
+        return store.state.game.currentSong.src;
       }
 
-      return ''
+      return '';
     }
 
     onMounted(() => {
-      changeVolume(store.state.client.volume)
-    })
+      changeVolume(store.state.client.volume);
+    });
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.GAME_START_LOAD)
-      socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN)
-      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
-      socket.off(SHARED_EVENTS.STOP_CLIENT_GAME)
-      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
-    })
+      socket.off(SHARED_EVENTS.GAME_START_LOAD);
+      socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN);
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS);
+      socket.off(SHARED_EVENTS.STOP_CLIENT_GAME);
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND);
+    });
 
     return {
       ...toRefs(state),
@@ -142,9 +142,9 @@ export default defineComponent({
       metaDataLoaded,
       fullLoaded,
       videoSrc
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

@@ -1,15 +1,15 @@
-import { AbstractHandler } from './abstract'
-import { Logger } from '../app/logging/logger'
-import { Socket } from '../types'
-import { SHARED_EVENTS } from '../shared/events'
-import { RoomEmitter } from '../emitters/room'
+import { AbstractHandler } from './abstract';
+import { Logger } from '../app/logging/logger';
+import { Socket } from '../types';
+import { SHARED_EVENTS } from '../shared/events';
+import { RoomEmitter } from '../emitters/room';
 
 class RoomHandler extends AbstractHandler {
-  protected _roomEmitter: RoomEmitter
+  protected _roomEmitter: RoomEmitter;
 
   constructor(logger: Logger, roomEmitter: RoomEmitter) {
-    super(logger)
-    this._roomEmitter = roomEmitter
+    super(logger);
+    this._roomEmitter = roomEmitter;
   }
 
   public start(socket: Socket, errorHandler: Function) {
@@ -17,22 +17,22 @@ class RoomHandler extends AbstractHandler {
       try {
         for (const roomId of Array.from(socket.rooms)) {
           if (roomId !== socket.id) {
-            socket.leave(roomId)
+            socket.leave(roomId);
           }
         }
       } catch (e) {
-        errorHandler(e)
+        errorHandler(e);
       }
-    })
+    });
 
     socket.on(SHARED_EVENTS.GET_ROOM_LIST, () => {
       try {
-        this._roomEmitter.updateRoomList(socket.id)
+        this._roomEmitter.updateRoomList(socket.id);
       } catch (e) {
-        errorHandler(e)
+        errorHandler(e);
       }
-    })
+    });
   }
 }
 
-export { RoomHandler }
+export { RoomHandler };

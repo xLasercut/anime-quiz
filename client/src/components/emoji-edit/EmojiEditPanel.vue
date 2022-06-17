@@ -7,36 +7,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from '@vue/composition-api'
-import { store } from '../../plugins/store'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes'
-import NavBtn from '../shared/buttons/NavBtn.vue'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from 'anime-quiz-server/src/shared/events'
-import { CLIENT_EVENTS } from '../../assets/events'
+import { defineComponent, inject } from '@vue/composition-api';
+import { store } from '../../plugins/store';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes';
+import NavBtn from '../shared/buttons/NavBtn.vue';
+import { socket } from '../../plugins/socket';
+import { SHARED_EVENTS } from 'anime-quiz-server/src/shared/events';
+import { CLIENT_EVENTS } from '../../assets/events';
 
 export default defineComponent({
   components: { NavBtn },
   setup() {
     function back(): void {
-      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY)
+      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY);
     }
 
     function reload(): void {
-      store.commit(MUTATIONS.SOCKET_UPDATE_EMOJI_LIST, [])
-      socket.emit(SHARED_EVENTS.GET_EMOJI_LIST)
+      store.commit(MUTATIONS.SOCKET_UPDATE_EMOJI_LIST, []);
+      socket.emit(SHARED_EVENTS.GET_EMOJI_LIST);
     }
 
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG)
+    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
     function newEmoji(): void {
       if (openDialog) {
-        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_ID, '')
-        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_TYPE, '')
-        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_COMMAND, '')
-        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_SRC, '')
-        openDialog(DIALOG_ROUTES.NEW_EMOJI_DIALOG, 'New Emoji')
+        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_ID, '');
+        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_TYPE, '');
+        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_COMMAND, '');
+        store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_SRC, '');
+        openDialog(DIALOG_ROUTES.NEW_EMOJI_DIALOG, 'New Emoji');
       }
     }
 
@@ -44,7 +44,7 @@ export default defineComponent({
       back,
       reload,
       newEmoji
-    }
+    };
   }
-})
+});
 </script>

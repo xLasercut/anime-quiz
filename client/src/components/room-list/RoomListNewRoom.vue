@@ -16,15 +16,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import DialogTextField from '../shared/dialog/DialogTextField.vue'
-import DialogActions from '../shared/dialog/DialogActions.vue'
-import { socket } from '../../plugins/socket'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { store } from '../../plugins/store'
-import { ROUTES } from '../../plugins/routing/routes'
-import { MUTATIONS } from '../../plugins/store/mutations'
-import { ROOM_NAME_FORMAT } from '../../assets/shared/constants'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import DialogTextField from '../shared/dialog/DialogTextField.vue';
+import DialogActions from '../shared/dialog/DialogActions.vue';
+import { socket } from '../../plugins/socket';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { store } from '../../plugins/store';
+import { ROUTES } from '../../plugins/routing/routes';
+import { MUTATIONS } from '../../plugins/store/mutations';
+import { ROOM_NAME_FORMAT } from '../../assets/shared/constants';
 
 export default defineComponent({
   components: { DialogTextField, DialogActions },
@@ -40,26 +40,26 @@ export default defineComponent({
       ],
       valid: false,
       disabled: false
-    })
+    });
 
     function newRoom(): void {
       if (state.valid) {
-        state.disabled = true
+        state.disabled = true;
         socket.emit(SHARED_EVENTS.NEW_GAME_ROOM, state.roomName, (proceed: boolean) => {
           if (proceed) {
-            state.roomName = ''
-            context.emit('dialog:close')
-            store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.GAME_ROOM)
+            state.roomName = '';
+            context.emit('dialog:close');
+            store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.GAME_ROOM);
           }
-          state.disabled = false
-        })
+          state.disabled = false;
+        });
       }
     }
 
     return {
       ...toRefs(state),
       newRoom
-    }
+    };
   }
-})
+});
 </script>

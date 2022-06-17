@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, toRefs, watch } from '@vue/composition-api'
-import { socket } from '../../../../../plugins/socket'
-import { SHARED_EVENTS } from '../../../../../assets/shared/events'
-import { store } from '../../../../../plugins/store'
-import { getIdFromURL } from 'vue-youtube-embed'
-import { calculateStartPosition, isYoutubeVideo } from '../../../../../assets/game-helper'
+import { defineComponent, onUnmounted, reactive, toRefs, watch } from '@vue/composition-api';
+import { socket } from '../../../../../plugins/socket';
+import { SHARED_EVENTS } from '../../../../../assets/shared/events';
+import { store } from '../../../../../plugins/store';
+import { getIdFromURL } from 'vue-youtube-embed';
+import { calculateStartPosition, isYoutubeVideo } from '../../../../../assets/game-helper';
 
 export default defineComponent({
   setup() {
@@ -32,106 +32,106 @@ export default defineComponent({
       },
       guessTime: 0,
       startPosition: 0
-    })
+    });
 
-    let player: any
+    let player: any;
 
-    let timeout: number
+    let timeout: number;
 
     watch(
       () => store.state.client.volume,
       (val: number) => {
-        changeVolume(val)
+        changeVolume(val);
       }
-    )
+    );
 
     function changeVolume(volume: number): void {
-      player.setVolume(volume)
+      player.setVolume(volume);
     }
 
     function ready(event: any): void {
-      player = event.target
-      changeVolume(store.state.client.volume)
+      player = event.target;
+      changeVolume(store.state.client.volume);
     }
 
     function load(): void {
-      player.mute()
+      player.mute();
       timeout = setInterval(() => {
         if (player.getDuration() !== 0) {
-          fullLoaded()
+          fullLoaded();
         }
-      }, 500)
+      }, 500);
     }
 
     function fullLoaded(): void {
-      clearInterval(timeout)
+      clearInterval(timeout);
       player.seekTo(
         calculateStartPosition(state.startPosition, state.guessTime, player.getDuration()),
         true
-      )
-      player.pauseVideo()
-      player.unMute()
-      console.log('Song loaded')
-      socket.emit(SHARED_EVENTS.GAME_SONG_LOADED)
+      );
+      player.pauseVideo();
+      player.unMute();
+      console.log('Song loaded');
+      socket.emit(SHARED_EVENTS.GAME_SONG_LOADED);
     }
 
     function _isYoutubeVideo(): boolean {
-      return isYoutubeVideo(store.state.game.currentSong.src)
+      return isYoutubeVideo(store.state.game.currentSong.src);
     }
 
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
-      state.show = false
-    })
+      state.show = false;
+    });
 
     socket.on(SHARED_EVENTS.GAME_START_LOAD, (startPosition: number, guessTime: number) => {
-      player.pauseVideo()
-      state.show = false
-      state.guessTime = guessTime
-      state.startPosition = startPosition
+      player.pauseVideo();
+      state.show = false;
+      state.guessTime = guessTime;
+      state.startPosition = startPosition;
       if (_isYoutubeVideo()) {
-        load()
+        load();
       }
-    })
+    });
 
     socket.on(SHARED_EVENTS.GAME_START_COUNTDOWN, () => {
       if (_isYoutubeVideo()) {
-        player.unMute()
-        player.playVideo()
+        player.unMute();
+        player.playVideo();
       }
-    })
+    });
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
       if (_isYoutubeVideo()) {
-        state.show = true
+        state.show = true;
       }
-    })
+    });
 
     socket.on(SHARED_EVENTS.STOP_CLIENT_GAME, () => {
-      player.pauseVideo()
-    })
+      player.pauseVideo();
+    });
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.GAME_START_LOAD)
-      socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN)
-      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
-      socket.off(SHARED_EVENTS.STOP_CLIENT_GAME)
-      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
-    })
+      socket.off(SHARED_EVENTS.GAME_START_LOAD);
+      socket.off(SHARED_EVENTS.GAME_START_COUNTDOWN);
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS);
+      socket.off(SHARED_EVENTS.STOP_CLIENT_GAME);
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND);
+    });
 
     function videoSrc(): string {
       if (_isYoutubeVideo()) {
-        return getIdFromURL(store.state.game.currentSong.src)
+        return getIdFromURL(store.state.game.currentSong.src);
       }
-      return ''
+      return '';
     }
 
     return {
       ...toRefs(state),
       ready,
       videoSrc
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

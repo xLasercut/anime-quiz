@@ -1,21 +1,21 @@
-import * as winston from 'winston'
-import * as DailyRotateFile from 'winston-daily-rotate-file'
-import { LogTemplate } from '../../interfaces'
-import { ServerConfig } from '../config'
-import { LOG_LEVEL } from './log-base'
+import * as winston from 'winston';
+import * as DailyRotateFile from 'winston-daily-rotate-file';
+import { LogTemplate } from '../../interfaces';
+import { ServerConfig } from '../config';
+import { LOG_LEVEL } from './log-base';
 
-const { combine, timestamp, json } = winston.format
+const { combine, timestamp, json } = winston.format;
 
-const logFormat = combine(timestamp(), winston.format(transformLogInfo)(), json())
+const logFormat = combine(timestamp(), winston.format(transformLogInfo)(), json());
 
 function transformLogInfo(info) {
-  info.level = info.level.toUpperCase()
-  return info
+  info.level = info.level.toUpperCase();
+  return info;
 }
 
 class Logger {
-  protected _logger: winston.Logger
-  protected _reservedFields: string[]
+  protected _logger: winston.Logger;
+  protected _reservedFields: string[];
 
   constructor(config: ServerConfig) {
     this._logger = winston.createLogger({
@@ -31,42 +31,42 @@ class Logger {
         }),
         new winston.transports.Console()
       ]
-    })
-    this._reservedFields = ['timestamp', 'log_reference', 'level', 'message']
+    });
+    this._reservedFields = ['timestamp', 'log_reference', 'level', 'message'];
   }
 
   public writeLog(logTemplate: LogTemplate, logArgs: object = {}): void {
-    const cleanedLogArgs = this._removeReservedFields(logArgs)
+    const cleanedLogArgs = this._removeReservedFields(logArgs);
     const logMsg = {
       ['log_reference']: logTemplate.reference,
       ['message']: logTemplate.message,
       ...cleanedLogArgs
-    }
+    };
     switch (logTemplate.level) {
       case LOG_LEVEL.INFO:
-        this._logger.info(logMsg)
-        break
+        this._logger.info(logMsg);
+        break;
       case LOG_LEVEL.WARN:
-        this._logger.warn(logMsg)
-        break
+        this._logger.warn(logMsg);
+        break;
       case LOG_LEVEL.DEBUG:
-        this._logger.debug(logMsg)
-        break
+        this._logger.debug(logMsg);
+        break;
       default:
-        this._logger.error(logMsg)
-        break
+        this._logger.error(logMsg);
+        break;
     }
   }
 
   protected _removeReservedFields(logArgs: object = {}): object {
-    const cleanedArgs = Object.assign({}, logArgs)
+    const cleanedArgs = Object.assign({}, logArgs);
     for (const field in cleanedArgs) {
       if (this._reservedFields.includes(field)) {
-        delete cleanedArgs[field]
+        delete cleanedArgs[field];
       }
     }
-    return cleanedArgs
+    return cleanedArgs;
   }
 }
 
-export { Logger }
+export { Logger };

@@ -1,39 +1,39 @@
-import { Component } from 'vue/types/options'
-import { DIALOG_ROUTES, ROUTES } from './routes'
-import { store } from '../store'
-import Login from '../../views/Login.vue'
-import LoginSettings from '../../components/login/LoginSettings.vue'
-import LoginPanel from '../../components/login/LoginPanel.vue'
-import Lobby from '../../views/Lobby.vue'
-import SongListPanel from '../../components/song-list/SongListPanel.vue'
-import SongList from '../../views/SongList.vue'
-import RoomList from '../../views/RoomList.vue'
-import RoomListPanel from '../../components/room-list/RoomListPanel.vue'
-import GameRoom from '../../views/GameRoom.vue'
-import GameRoomPanel from '../../components/game-room/GameRoomPanel.vue'
-import RoomListNewRoom from '../../components/room-list/RoomListNewRoom.vue'
-import GameRoomSettings from '../../components/game-room/GameRoomSettings.vue'
-import DefaultPanel from '../../components/app/DefaultPanel.vue'
-import AnimeEdit from '../../views/AnimeEdit.vue'
-import AnimeEditPanel from '../../components/anime-edit/AnimeEditPanel.vue'
-import EditAnimeDialog from '../../components/anime-edit/EditAnimeDialog.vue'
-import DeleteAnimeDialog from '../../components/anime-edit/DeleteAnimeDialog.vue'
-import SongEdit from '../../views/SongEdit.vue'
-import SongEditPanel from '../../components/song-edit/SongEditPanel.vue'
-import EditSongDialog from '../../components/song-edit/EditSongDialog.vue'
-import DeleteSongDialog from '../../components/song-edit/DeleteSongDialog.vue'
-import AdminDialog from '../../components/app/AdminDialog.vue'
-import EmojiEditPanel from '../../components/emoji-edit/EmojiEditPanel.vue'
-import EmojiEdit from '../../views/EmojiEdit.vue'
-import EditEmojiDialog from '../../components/emoji-edit/EditEmojiDialog.vue'
-import DeleteEmojiDialog from '../../components/emoji-edit/DeleteEmojiDialog.vue'
-import GameRoomSongPicker from '../../components/game-room/GameRoomSongPicker.vue'
-import UserEditPanel from '../../components/user-edit/UserEditPanel.vue'
-import UserEdit from '../../views/UserEdit.vue'
-import EditUserDialog from '../../components/user-edit/EditUserDialog.vue'
-import DeleteUserDialog from '../../components/user-edit/DeleteUserDialog.vue'
-import MusicPlayer from '../../views/MusicPlayer.vue'
-import MusicPlayerPanel from '../../components/music-player/MusicPlayerPanel.vue'
+import { Component } from 'vue/types/options';
+import { DIALOG_ROUTES, ROUTES } from './routes';
+import { store } from '../store';
+import Login from '../../views/Login.vue';
+import LoginSettings from '../../components/login/LoginSettings.vue';
+import LoginPanel from '../../components/login/LoginPanel.vue';
+import Lobby from '../../views/Lobby.vue';
+import SongListPanel from '../../components/song-list/SongListPanel.vue';
+import SongList from '../../views/SongList.vue';
+import RoomList from '../../views/RoomList.vue';
+import RoomListPanel from '../../components/room-list/RoomListPanel.vue';
+import GameRoom from '../../views/GameRoom.vue';
+import GameRoomPanel from '../../components/game-room/GameRoomPanel.vue';
+import RoomListNewRoom from '../../components/room-list/RoomListNewRoom.vue';
+import GameRoomSettings from '../../components/game-room/GameRoomSettings.vue';
+import DefaultPanel from '../../components/app/DefaultPanel.vue';
+import AnimeEdit from '../../views/AnimeEdit.vue';
+import AnimeEditPanel from '../../components/anime-edit/AnimeEditPanel.vue';
+import EditAnimeDialog from '../../components/anime-edit/EditAnimeDialog.vue';
+import DeleteAnimeDialog from '../../components/anime-edit/DeleteAnimeDialog.vue';
+import SongEdit from '../../views/SongEdit.vue';
+import SongEditPanel from '../../components/song-edit/SongEditPanel.vue';
+import EditSongDialog from '../../components/song-edit/EditSongDialog.vue';
+import DeleteSongDialog from '../../components/song-edit/DeleteSongDialog.vue';
+import AdminDialog from '../../components/app/AdminDialog.vue';
+import EmojiEditPanel from '../../components/emoji-edit/EmojiEditPanel.vue';
+import EmojiEdit from '../../views/EmojiEdit.vue';
+import EditEmojiDialog from '../../components/emoji-edit/EditEmojiDialog.vue';
+import DeleteEmojiDialog from '../../components/emoji-edit/DeleteEmojiDialog.vue';
+import GameRoomSongPicker from '../../components/game-room/GameRoomSongPicker.vue';
+import UserEditPanel from '../../components/user-edit/UserEditPanel.vue';
+import UserEdit from '../../views/UserEdit.vue';
+import EditUserDialog from '../../components/user-edit/EditUserDialog.vue';
+import DeleteUserDialog from '../../components/user-edit/DeleteUserDialog.vue';
+import MusicPlayer from '../../views/MusicPlayer.vue';
+import MusicPlayerPanel from '../../components/music-player/MusicPlayerPanel.vue';
 
 const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -45,7 +45,7 @@ const _PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.EMOJI_EDIT]: EmojiEditPanel,
   [ROUTES.USER_EDIT]: UserEditPanel,
   [ROUTES.MUSIC_PLAYER]: MusicPlayerPanel
-}
+};
 
 const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: Login,
@@ -58,7 +58,7 @@ const _VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.EMOJI_EDIT]: EmojiEdit,
   [ROUTES.USER_EDIT]: UserEdit,
   [ROUTES.MUSIC_PLAYER]: MusicPlayer
-}
+};
 
 const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings,
@@ -78,18 +78,18 @@ const _DIALOG_MAPPING: { [key: string]: Component } = {
   [DIALOG_ROUTES.EDIT_USER_DIALOG]: EditUserDialog,
   [DIALOG_ROUTES.NEW_USER_DIALOG]: EditUserDialog,
   [DIALOG_ROUTES.DELETE_USER_DIALOG]: DeleteUserDialog
-}
+};
 
 function viewComponent(): any {
-  return _VIEW_MAPPING[store.state.client.view]
+  return _VIEW_MAPPING[store.state.client.view];
 }
 
 function panelComponent(): any {
-  return _PANEL_MAPPING[store.state.client.view] || DefaultPanel
+  return _PANEL_MAPPING[store.state.client.view] || DefaultPanel;
 }
 
 function dialogComponent(): any {
-  return _DIALOG_MAPPING[store.state.client.dialogView]
+  return _DIALOG_MAPPING[store.state.client.dialogView];
 }
 
-export { viewComponent, panelComponent, dialogComponent }
+export { viewComponent, panelComponent, dialogComponent };

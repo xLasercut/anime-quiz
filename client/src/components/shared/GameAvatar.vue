@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import { getAvatarUrl } from '../../assets/avatar'
+import { defineComponent } from '@vue/composition-api';
+import { getAvatarUrl } from '../../assets/avatar';
 
 export default defineComponent({
   props: {
@@ -18,9 +18,9 @@ export default defineComponent({
   setup() {
     return {
       getAvatarUrl
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

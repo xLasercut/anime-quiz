@@ -2,23 +2,23 @@ const NOTIFICATION_COLOR = {
   SUCCESS: 'success',
   WARNING: 'warning',
   ERROR: 'error'
-}
+};
 
 const SONG_LIST_EDIT_MODE = {
   ADD: 'add',
   REMOVE: 'remove',
   NONE: 'none'
-}
+};
 
-const ROOM_NAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
-const USERNAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$')
+const ROOM_NAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$');
+const USERNAME_FORMAT = new RegExp('^[A-Za-z0-9 ]+$');
 
 const GAME_MODE = {
   NORMAL: 'normal',
   BALANCED: 'balanced',
   BALANCED_PLUS: 'balanced_plus',
   SHIRITORI: 'shiritori'
-}
+};
 
 const AVATARS = {
   ZERO_TWO: 'Zero Two',
@@ -36,10 +36,10 @@ const AVATARS = {
   EREN: 'Eren',
   JUDAI: 'Judai',
   YUGI: 'Yugi'
-}
+};
 
-const VALID_SONG_TYPES = ['OP', 'ED', 'INSERT']
-const VALID_EMOJI_TYPES = ['img', 'dec']
+const VALID_SONG_TYPES = ['OP', 'ED', 'INSERT'];
+const VALID_EMOJI_TYPES = ['img', 'dec'];
 
 export {
   NOTIFICATION_COLOR,
@@ -50,4 +50,4 @@ export {
   USERNAME_FORMAT,
   VALID_SONG_TYPES,
   VALID_EMOJI_TYPES
-}
+};

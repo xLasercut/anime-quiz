@@ -12,21 +12,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import { CLIENT_CONSTANTS } from '../../assets/constants'
-import GamePlayers from './game-main-view/GamePlayers.vue'
-import GameGuessInput from './game-main-view/GameGuessInput.vue'
-import GameViewport from './game-main-view/GameViewport.vue'
-import GameMainAnswerDisplay from './game-main-view/GameMainAnswerDisplay.vue'
+import { defineComponent } from '@vue/composition-api';
+import { CLIENT_CONSTANTS } from '../../assets/constants';
+import GamePlayers from './game-main-view/GamePlayers.vue';
+import GameGuessInput from './game-main-view/GameGuessInput.vue';
+import GameViewport from './game-main-view/GameViewport.vue';
+import GameMainAnswerDisplay from './game-main-view/GameMainAnswerDisplay.vue';
 
 export default defineComponent({
   components: { GameMainAnswerDisplay, GameGuessInput, GamePlayers, GameViewport },
   setup() {
     return {
       CLIENT_CONSTANTS
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

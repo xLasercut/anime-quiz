@@ -50,17 +50,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import DialogActions from '../shared/dialog/DialogActions.vue'
-import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue'
-import DialogTextField from '../shared/dialog/DialogTextField.vue'
-import { store } from '../../plugins/store'
-import DialogSelect from '../shared/dialog/DialogSelect.vue'
-import { SONG_TYPES } from '../../assets/constants'
-import DialogMultiAutocomplete from '../shared/dialog/DialogMultiAutocomplete.vue'
-import { SHARED_EVENTS } from '../../assets/shared/events'
-import { socket } from '../../plugins/socket'
-import { newTableHelpers } from '../../assets/table-helper'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
+import DialogActions from '../shared/dialog/DialogActions.vue';
+import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue';
+import DialogTextField from '../shared/dialog/DialogTextField.vue';
+import { store } from '../../plugins/store';
+import DialogSelect from '../shared/dialog/DialogSelect.vue';
+import { SONG_TYPES } from '../../assets/constants';
+import DialogMultiAutocomplete from '../shared/dialog/DialogMultiAutocomplete.vue';
+import { SHARED_EVENTS } from '../../assets/shared/events';
+import { socket } from '../../plugins/socket';
+import { newTableHelpers } from '../../assets/table-helper';
 
 export default defineComponent({
   components: {
@@ -74,20 +74,20 @@ export default defineComponent({
     const state = reactive({
       valid: false,
       songTypes: SONG_TYPES
-    })
+    });
 
-    const { editActionComplete, editActionDisabled } = newTableHelpers(context)
+    const { editActionComplete, editActionDisabled } = newTableHelpers(context);
 
     function submitEdit(): void {
       if (state.valid) {
-        editActionDisabled.value = true
+        editActionDisabled.value = true;
         socket.emit(
           SHARED_EVENTS.ADMIN_DELETE_SONG,
           store.state.admin.songInEdit,
           (proceed: boolean) => {
-            editActionComplete(proceed)
+            editActionComplete(proceed);
           }
-        )
+        );
       }
     }
 
@@ -95,7 +95,7 @@ export default defineComponent({
       ...toRefs(state),
       submitEdit,
       editActionDisabled
-    }
+    };
   }
-})
+});
 </script>

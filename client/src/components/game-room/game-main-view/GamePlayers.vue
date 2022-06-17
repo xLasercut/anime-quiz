@@ -28,15 +28,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api'
-import { AqGamePlayer } from '../../../assets/shared/interfaces'
-import GameAvatar from '../../shared/GameAvatar.vue'
-import { socket } from '../../../plugins/socket'
-import { SHARED_EVENTS } from '../../../assets/shared/events'
+import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api';
+import { AqGamePlayer } from '../../../assets/shared/interfaces';
+import GameAvatar from '../../shared/GameAvatar.vue';
+import { socket } from '../../../plugins/socket';
+import { SHARED_EVENTS } from '../../../assets/shared/events';
 
 interface State {
-  players: AqGamePlayer[]
-  show: boolean
+  players: AqGamePlayer[];
+  show: boolean;
 }
 
 export default defineComponent({
@@ -45,50 +45,50 @@ export default defineComponent({
     const state = reactive<State>({
       players: [],
       show: false
-    })
+    });
 
     socket.on(SHARED_EVENTS.GAME_NEW_ROUND, () => {
-      state.show = false
-    })
+      state.show = false;
+    });
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
-      state.show = true
+      state.show = true;
 
       setTimeout(() => {
-        state.show = false
-      }, 8000)
-    })
+        state.show = false;
+      }, 8000);
+    });
 
     function badgeColor(player: AqGamePlayer): string {
       if (player.admin) {
-        return 'warning'
+        return 'warning';
       }
 
       if (player.host) {
-        return 'info'
+        return 'info';
       }
 
-      return 'primary'
+      return 'primary';
     }
 
     function playerContainerStyle() {
       return {
         width: '150px'
-      }
+      };
     }
 
     onUnmounted(() => {
-      socket.off(SHARED_EVENTS.GAME_NEW_ROUND)
-      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS)
-    })
+      socket.off(SHARED_EVENTS.GAME_NEW_ROUND);
+      socket.off(SHARED_EVENTS.GAME_SHOW_GUESS);
+    });
 
     return {
       ...toRefs(state),
       badgeColor,
       playerContainerStyle
-    }
+    };
   }
-})
+});
 </script>
 
 <style scoped>

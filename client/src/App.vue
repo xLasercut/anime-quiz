@@ -10,51 +10,51 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, provide } from '@vue/composition-api'
-import NavBar from './components/app/NavBar.vue'
-import { CLIENT_EVENTS } from './assets/events'
-import { SHARED_EVENTS } from './assets/shared/events'
-import { NOTIFICATION_COLOR } from './assets/shared/constants'
-import { socket } from './plugins/socket'
-import { viewComponent } from './plugins/routing/mapping'
-import GlobalDialog from './components/app/GlobalDialog.vue'
-import SystemNotification from './components/app/SystemNotification.vue'
-import { LOCAL_STORAGE_CONSTANTS } from './assets/constants'
+import { defineComponent, onMounted, provide } from '@vue/composition-api';
+import NavBar from './components/app/NavBar.vue';
+import { CLIENT_EVENTS } from './assets/events';
+import { SHARED_EVENTS } from './assets/shared/events';
+import { NOTIFICATION_COLOR } from './assets/shared/constants';
+import { socket } from './plugins/socket';
+import { viewComponent } from './plugins/routing/mapping';
+import GlobalDialog from './components/app/GlobalDialog.vue';
+import SystemNotification from './components/app/SystemNotification.vue';
+import { LOCAL_STORAGE_CONSTANTS } from './assets/constants';
 
 export default defineComponent({
   components: { SystemNotification, GlobalDialog, NavBar },
   setup() {
-    let sendNotification: Function
-    let openDialog: Function
+    let sendNotification: Function;
+    let openDialog: Function;
     provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: Function): void => {
-      sendNotification = _sendNotification
-    })
+      sendNotification = _sendNotification;
+    });
     provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: Function): void => {
-      openDialog = _openDialog
-    })
+      openDialog = _openDialog;
+    });
 
     provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
-      openDialog(route, label)
-    })
+      openDialog(route, label);
+    });
     provide(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
-      sendNotification(color, message)
-    })
+      sendNotification(color, message);
+    });
 
     socket.on(SHARED_EVENTS.SYSTEM_NOTIFICATION, (color: string, message: string): void => {
-      sendNotification(color, message)
-    })
+      sendNotification(color, message);
+    });
 
     onMounted((): void => {
       if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
-        sendNotification(NOTIFICATION_COLOR.ERROR, 'Server URL not set')
+        sendNotification(NOTIFICATION_COLOR.ERROR, 'Server URL not set');
       }
-    })
+    });
 
     return {
       viewComponent
-    }
+    };
   }
-})
+});
 </script>
 
 <style>

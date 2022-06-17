@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, watch } from '@vue/composition-api'
-import { store } from '../../plugins/store'
+import { defineComponent, reactive, toRefs, watch } from '@vue/composition-api';
+import { store } from '../../plugins/store';
 
 export default defineComponent({
   props: {
@@ -34,51 +34,51 @@ export default defineComponent({
         modestbranding: 1,
         autoplay: 1
       }
-    })
+    });
 
-    let player: any
+    let player: any;
 
     watch(
       () => store.state.client.volume,
       (volume: number) => {
-        changeVolume(volume)
+        changeVolume(volume);
       }
-    )
+    );
 
     watch(
       () => props.src,
       () => {
-        context.emit('load', player.getDuration())
+        context.emit('load', player.getDuration());
       }
-    )
+    );
 
     function changeVolume(volume: number): void {
-      player.setVolume(volume)
+      player.setVolume(volume);
     }
 
     function ready(event: any): void {
-      player = event.target
-      changeVolume(store.state.client.volume)
+      player = event.target;
+      changeVolume(store.state.client.volume);
     }
 
     function play(): void {
-      player.playVideo()
+      player.playVideo();
     }
 
     function pause(): void {
-      player.pauseVideo()
+      player.pauseVideo();
     }
 
     function getCurrentTime(): number {
-      return player.getCurrentTime()
+      return player.getCurrentTime();
     }
 
     function seek(duration: number): void {
-      player.seekTo(duration, true)
+      player.seekTo(duration, true);
     }
 
     function getMaxTime(): number {
-      return player.getDuration()
+      return player.getDuration();
     }
 
     return {
@@ -89,7 +89,7 @@ export default defineComponent({
       pause,
       seek,
       getMaxTime
-    }
+    };
   }
-})
+});
 </script>

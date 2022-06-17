@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import IconBtn from '../buttons/IconBtn.vue'
+import { defineComponent } from '@vue/composition-api';
+import IconBtn from '../buttons/IconBtn.vue';
 
 export default defineComponent({
   components: { IconBtn },
@@ -23,9 +23,9 @@ export default defineComponent({
     disabled: {
       type: Boolean,
       default: (): boolean => {
-        return false
+        return false;
       }
     }
   }
-})
+});
 </script>

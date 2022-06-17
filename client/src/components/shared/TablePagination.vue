@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
 
 export default defineComponent({
   props: {
@@ -41,25 +41,25 @@ export default defineComponent({
     width: {
       type: String,
       default: (): string => {
-        return '550px'
+        return '550px';
       }
     }
   },
   setup(props) {
     const state = reactive({
       paginationSelectItems: [5, 10, 15, 20]
-    })
+    });
 
     function footerStyle() {
       return {
         width: props.width
-      }
+      };
     }
 
     return {
       ...toRefs(state),
       footerStyle
-    }
+    };
   }
-})
+});
 </script>
