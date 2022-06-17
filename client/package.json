@@ -1,5 +1,6 @@
 {
   "name": "anime-quiz-client",
+  "description": "Anime Quiz Client",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -7,6 +8,8 @@
     "build": "vue-cli-service build",
     "prettier-format": "prettier --config ../.prettierrc 'src/**/*.{ts,vue}' --write"
   },
+  "author": "xLasercut",
+  "license": "MIT",
   "dependencies": {
     "@vue/composition-api": "^1.6.2",
     "core-js": "^3.8.3",

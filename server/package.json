@@ -1,7 +1,7 @@
 {
   "name": "anime-quiz-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Anime Quiz Server",
   "main": "index.js",
   "scripts": {
     "build": "rm -rf ./dist && tsc -b",
@@ -10,7 +10,7 @@
     "init:userdb": "ts-node tools/init-user-db.ts",
     "prettier-format": "prettier --config ../.prettierrc 'src/**/*.ts' --write"
   },
-  "author": "",
+  "author": "xLasercut",
   "license": "MIT",
   "dependencies": {
     "@types/better-sqlite3": "^7.5.0",
