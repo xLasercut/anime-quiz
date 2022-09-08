@@ -13,12 +13,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { AqSong } from '../../assets/shared/interfaces';
+import { ISong } from '../../assets/shared/interfaces';
 
 export default defineComponent({
   props: {
     song: {
-      type: Object as PropType<AqSong>,
+      type: Object as PropType<ISong>,
       required: true
     }
   }

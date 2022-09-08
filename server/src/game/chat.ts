@@ -1,8 +1,8 @@
 import { Logger } from '../app/logging/logger';
 import { SANITIZE_MAP } from '../constants';
-import { AqGameChatMessage } from '../shared/interfaces';
-import { Socket } from '../types';
-import { AVATARS } from '../shared/constants';
+import { IGameAvatar, IGameChatMessage } from '../shared/interfaces';
+import { ISocket } from '../types';
+import { EVA_UNIT_1 } from '../shared/constants/avatars';
 
 class ChatManager {
   protected _logger: Logger;
@@ -11,7 +11,7 @@ class ChatManager {
     this._logger = logger;
   }
 
-  public generateUserMsg(socket: Socket, msg: string): AqGameChatMessage {
+  public generateUserMsg(socket: ISocket, msg: string): IGameChatMessage {
     return this._generateChatMsg(
       socket.data.username,
       socket.data.admin,
@@ -21,11 +21,17 @@ class ChatManager {
     );
   }
 
-  public generateSysMsg(msg: string): AqGameChatMessage {
-    return this._generateChatMsg('Eva Unit-01', false, AVATARS.EVA_UNIT_1, 'system_message', msg);
+  public generateSysMsg(msg: string): IGameChatMessage {
+    return this._generateChatMsg('Eva Unit-01', false, EVA_UNIT_1, 'system_message', msg);
   }
 
-  protected _generateChatMsg(username, admin, avatar, sid, msg: string): AqGameChatMessage {
+  protected _generateChatMsg(
+    username: string,
+    admin: boolean,
+    avatar: IGameAvatar,
+    sid: string,
+    msg: string
+  ): IGameChatMessage {
     return {
       username: username,
       admin: admin,

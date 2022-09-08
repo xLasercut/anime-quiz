@@ -7,13 +7,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { AqEmoji } from '../../assets/shared/interfaces';
+import { IEmoji } from '../../assets/shared/interfaces';
 
 export default defineComponent({
   props: {
     emoji: {
       required: true,
-      type: Object as PropType<AqEmoji>
+      type: Object as PropType<IEmoji>
     }
   }
 });

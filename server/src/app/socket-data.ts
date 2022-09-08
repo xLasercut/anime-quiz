@@ -1,19 +1,27 @@
-import { AqClientData, AqGameGuess, AqGamePlayer } from '../shared/interfaces';
-import { NOTIFICATION_COLOR } from '../shared/constants';
+import {
+  IClientData,
+  IGameAvatar,
+  IGameGuess,
+  IGameLoginData,
+  IGamePlayer,
+  INotificationColor
+} from '../shared/interfaces';
+import { EVA_UNIT_1 } from '../shared/constants/avatars';
+import { ERROR, SUCCESS, WARNING } from '../shared/constants/colors';
 
 class SocketData {
   public auth: boolean;
   public admin: boolean;
   public username: string;
-  public avatar: string;
+  public avatar: IGameAvatar;
   protected _id: string;
   public clientAuthTimer: NodeJS.Timeout;
   public host: boolean;
   public score: number;
-  public gameGuess: AqGameGuess;
+  public gameGuess: IGameGuess;
   public songLoaded: boolean;
   public pendingScore: number;
-  public scoreColor: string;
+  public scoreColor: INotificationColor;
 
   constructor(id: string) {
     this.auth = false;
@@ -21,9 +29,9 @@ class SocketData {
     this.host = false;
     this._id = id;
     this.username = '';
-    this.avatar = '';
+    this.avatar = EVA_UNIT_1;
     this.score = 0;
-    this.scoreColor = NOTIFICATION_COLOR.ERROR;
+    this.scoreColor = ERROR;
     this.gameGuess = {
       anime: '',
       title: ''
@@ -32,12 +40,12 @@ class SocketData {
     this.pendingScore = 0;
   }
 
-  public userLogin(username: string, avatar: string): void {
-    this.username = username;
-    this.avatar = avatar;
+  public userLogin(loginData: IGameLoginData): void {
+    this.username = loginData.username;
+    this.avatar = loginData.avatar;
   }
 
-  public getClientData(): AqClientData {
+  public getClientData(): IClientData {
     return {
       username: this.username,
       avatar: this.avatar,
@@ -46,7 +54,7 @@ class SocketData {
     };
   }
 
-  public getPlayerData(): AqGamePlayer {
+  public getPlayerData(): IGamePlayer {
     return {
       username: this.username,
       avatar: this.avatar,
@@ -66,7 +74,7 @@ class SocketData {
       title: ''
     };
     this.pendingScore = 0;
-    this.scoreColor = NOTIFICATION_COLOR.ERROR;
+    this.scoreColor = ERROR;
   }
 
   public updateScore(): void {
@@ -74,16 +82,16 @@ class SocketData {
     this.scoreColor = this._getScoreColor();
   }
 
-  protected _getScoreColor(): string {
+  protected _getScoreColor(): INotificationColor {
     if (this.pendingScore >= 2) {
-      return NOTIFICATION_COLOR.SUCCESS;
+      return SUCCESS;
     }
 
     if (this.pendingScore >= 1) {
-      return NOTIFICATION_COLOR.WARNING;
+      return WARNING;
     }
 
-    return NOTIFICATION_COLOR.ERROR;
+    return ERROR;
   }
 }
 

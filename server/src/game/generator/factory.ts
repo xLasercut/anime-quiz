@@ -1,29 +1,29 @@
-import { GAME_MODE } from '../../shared/constants';
 import { NormalGameListGenerator } from './normal';
 import { BalancedPlusGameListGenerator } from './balanced-plus';
 import { BalancedGameListGenerator } from './balanced';
 import { ShiritoriGameListGenerator } from './shiritori';
-import { AnimeQuizSongDb } from '../../database/song';
-import { AnimeQuizUserDb } from '../../database/user';
-import { AqGameSettings } from '../../shared/interfaces';
+import { SongDb } from '../../database/song';
+import { UserDb } from '../../database/user';
+import { IGameSettings } from '../../shared/interfaces';
+import { BALANCED, BALANCED_PLUS, NORMAL, SHIRITORI } from '../../shared/constants/game-modes';
 
 const _GENERATOR_MAP = {
-  [GAME_MODE.NORMAL]: NormalGameListGenerator,
-  [GAME_MODE.BALANCED_PLUS]: BalancedPlusGameListGenerator,
-  [GAME_MODE.BALANCED]: BalancedGameListGenerator,
-  [GAME_MODE.SHIRITORI]: ShiritoriGameListGenerator
+  [NORMAL]: NormalGameListGenerator,
+  [BALANCED_PLUS]: BalancedPlusGameListGenerator,
+  [BALANCED]: BalancedGameListGenerator,
+  [SHIRITORI]: ShiritoriGameListGenerator
 };
 
 class GameListGeneratorFactory {
-  protected _songDb: AnimeQuizSongDb;
-  protected _userDb: AnimeQuizUserDb;
+  protected _songDb: SongDb;
+  protected _userDb: UserDb;
 
-  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb) {
+  constructor(songDb: SongDb, userDb: UserDb) {
     this._songDb = songDb;
     this._userDb = userDb;
   }
 
-  public getGenerator(settings: AqGameSettings) {
+  public getGenerator(settings: IGameSettings) {
     if (settings.gameMode in _GENERATOR_MAP) {
       return new _GENERATOR_MAP[settings.gameMode](this._songDb, this._userDb, settings);
     }

@@ -1,27 +1,31 @@
 import { AbstractHandler } from './abstract';
-import { Socket } from '../types';
+import { ISocket } from '../types';
 import { SHARED_EVENTS } from '../shared/events';
 import { Logger } from '../app/logging/logger';
 import { ROOM_NAME_PREFIX } from '../constants';
 import { v4 } from 'uuid';
 import { Server } from '../app/server';
-import { ROOM_NAME_FORMAT } from '../shared/constants';
+import { ROOM_NAME_FORMAT } from '../shared/constants/formats';
 import { LOG_BASE } from '../app/logging/log-base';
 import { GameDataValidationError } from '../app/exceptions';
-import { GameSettings } from '../game/settings';
-import { AqGameGuess, AqGameSettings, AqSong } from '../shared/interfaces';
-import { GameStates } from '../game/state';
+import { GameSettingsDb } from '../game/settings';
+import { IGameGuess, IGameSettings, ISong } from '../shared/interfaces';
+import { GameStatesDb } from '../game/state';
 import { GameListGeneratorFactory } from '../game/generator/factory';
 import { EmojiDbEmitter } from '../emitters/emoji';
 import { GameEmitter } from '../emitters/game';
 import { UserDbEmitter } from '../emitters/user';
 import { SongDbEmitter } from '../emitters/song';
 import { SystemEmitter } from '../emitters/system';
+import { GameGuess } from '../models/game';
+import { UserDb } from '../database/user';
+import { SongDb } from '../database/song';
+import { EmojiDb } from '../database/emoji';
 
 class GameHandler extends AbstractHandler {
   protected _io: Server;
-  protected _settings: GameSettings;
-  protected _states: GameStates;
+  protected _settings: GameSettingsDb;
+  protected _states: GameStatesDb;
   protected _userDbEmitter: UserDbEmitter;
   protected _songDbEmitter: SongDbEmitter;
   protected _emojiDbEmitter: EmojiDbEmitter;
@@ -30,30 +34,27 @@ class GameHandler extends AbstractHandler {
   protected _gameListGeneratorFactory: GameListGeneratorFactory;
 
   constructor(
-    logger: Logger,
     io: Server,
-    settings: GameSettings,
-    states: GameStates,
-    userDbEmitter: UserDbEmitter,
-    songDbEmitter: SongDbEmitter,
-    emojiDbEmitter: EmojiDbEmitter,
-    gameEmitter: GameEmitter,
-    systemEmitter: SystemEmitter,
-    gameListGeneratorFactory: GameListGeneratorFactory
+    logger: Logger,
+    settings: GameSettingsDb,
+    states: GameStatesDb,
+    userDb: UserDb,
+    songDb: SongDb,
+    emojiDb: EmojiDb
   ) {
     super(logger);
     this._io = io;
     this._settings = settings;
     this._states = states;
-    this._userDbEmitter = userDbEmitter;
-    this._songDbEmitter = songDbEmitter;
-    this._emojiDbEmitter = emojiDbEmitter;
-    this._gameEmitter = gameEmitter;
-    this._systemEmitter = systemEmitter;
-    this._gameListGeneratorFactory = gameListGeneratorFactory;
+    this._userDbEmitter = new UserDbEmitter(io, userDb);
+    this._songDbEmitter = new SongDbEmitter(io, songDb);
+    this._emojiDbEmitter = new EmojiDbEmitter(io, emojiDb);
+    this._gameEmitter = new GameEmitter(io, logger, settings, states);
+    this._systemEmitter = new SystemEmitter(io);
+    this._gameListGeneratorFactory = new GameListGeneratorFactory(songDb, userDb);
   }
 
-  public start(socket: Socket, errorHandler: Function) {
+  public start(socket: ISocket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.NEW_GAME_ROOM, (roomName: string, callback: Function) => {
       try {
         this._validateNewRoomName(roomName);
@@ -103,12 +104,12 @@ class GameHandler extends AbstractHandler {
       }
     });
 
-    socket.on(SHARED_EVENTS.EDIT_GUESS, (guess: AqGameGuess) => {
+    socket.on(SHARED_EVENTS.EDIT_GUESS, (_guess: IGameGuess) => {
       try {
         const roomId = this._getSocketGameRoom(socket);
-        const _guess = this._sanitiseGuess(guess);
-        socket.data.gameGuess = _guess;
-        socket.data.pendingScore = this._states.calculateScore(_guess, roomId);
+        const guess = new GameGuess(_guess).dict();
+        socket.data.gameGuess = guess;
+        socket.data.pendingScore = this._states.calculateScore(guess, roomId);
         this._gameEmitter.updateGuess(socket.data.gameGuess, socket.id);
       } catch (e) {
         errorHandler(e);
@@ -156,14 +157,14 @@ class GameHandler extends AbstractHandler {
     });
   }
 
-  protected _sanitiseGuess(guess: AqGameGuess): AqGameGuess {
+  protected _sanitiseGuess(guess: IGameGuess): IGameGuess {
     return {
       anime: (guess.anime || '').trim(),
       title: (guess.title || '').trim()
     };
   }
 
-  protected async _newRound(roomId: string, settings: AqGameSettings): Promise<void> {
+  protected async _newRound(roomId: string, settings: IGameSettings): Promise<void> {
     const startPosition = Math.random();
     const gameState = this._states.getGameState(roomId);
     this._logger.writeLog(LOG_BASE.NEW_GAME_ROUND, { state: gameState, roomId: roomId });
@@ -194,12 +195,12 @@ class GameHandler extends AbstractHandler {
     this._gameEmitter.stopClientGame(roomId);
   }
 
-  protected _generateGameList(settings: AqGameSettings): AqSong[] {
+  protected _generateGameList(settings: IGameSettings): ISong[] {
     const generator = this._gameListGeneratorFactory.getGenerator(settings);
     return generator.generate();
   }
 
-  protected _validateGameSongList(songList: AqSong[]): void {
+  protected _validateGameSongList(songList: ISong[]): void {
     if (songList.length === 0) {
       throw new GameDataValidationError('Empty song list');
     }

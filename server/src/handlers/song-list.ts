@@ -1,39 +1,33 @@
 import { Logger } from '../app/logging/logger';
 import { AbstractHandler } from './abstract';
 import { SHARED_EVENTS } from '../shared/events';
-import { AnimeQuizUserDb } from '../database/user';
-import { NOTIFICATION_COLOR } from '../shared/constants';
+import { UserDb } from '../database/user';
 import { ROOM_IDS } from '../constants';
-import { Socket } from '../types';
-import { AnimeQuizSongDb } from '../database/song';
+import { ISocket } from '../types';
+import { SongDb } from '../database/song';
 import { SongDbEmitter } from '../emitters/song';
 import { UserDbEmitter } from '../emitters/user';
 import { SystemEmitter } from '../emitters/system';
+import { Server } from '../app/server';
+import { SUCCESS } from '../shared/constants/colors';
 
 class SongListHandler extends AbstractHandler {
-  protected _songDb: AnimeQuizSongDb;
-  protected _userDb: AnimeQuizUserDb;
+  protected _songDb: SongDb;
+  protected _userDb: UserDb;
   protected _songDbEmitter: SongDbEmitter;
   protected _userDbEmitter: UserDbEmitter;
   protected _systemEmitter: SystemEmitter;
 
-  constructor(
-    logger: Logger,
-    songDb: AnimeQuizSongDb,
-    userDb: AnimeQuizUserDb,
-    songDbEmitter: SongDbEmitter,
-    userDbEmitter: UserDbEmitter,
-    systemEmitter: SystemEmitter
-  ) {
+  constructor(io: Server, logger: Logger, songDb: SongDb, userDb: UserDb) {
     super(logger);
     this._songDb = songDb;
     this._userDb = userDb;
-    this._songDbEmitter = songDbEmitter;
-    this._userDbEmitter = userDbEmitter;
-    this._systemEmitter = systemEmitter;
+    this._songDbEmitter = new SongDbEmitter(io, songDb);
+    this._userDbEmitter = new UserDbEmitter(io, userDb);
+    this._systemEmitter = new SystemEmitter(io);
   }
 
-  public start(socket: Socket, errorHandler: Function): void {
+  public start(socket: ISocket, errorHandler: Function): void {
     socket.on(SHARED_EVENTS.JOIN_SONG_LIST, () => {
       try {
         socket.join(ROOM_IDS.SONG_LIST);
@@ -50,8 +44,8 @@ class SongListHandler extends AbstractHandler {
       SHARED_EVENTS.ADD_USER_SONGS,
       (songIds: string[], userId: string, callback: Function) => {
         try {
-          this._songDb.validateIsDbLocked();
-          this._userDb.validateIsDbLocked();
+          this._songDb.validateDbNotLocked();
+          this._userDb.validateDbNotLocked();
           this._userDb.validateLessThanFiftySongs(songIds);
           this._userDb.validateUserExist(userId);
           this._songDb.validateSongsExist(songIds);
@@ -59,7 +53,7 @@ class SongListHandler extends AbstractHandler {
           this._userDb.addSongs(userId, songIds);
           this._userDbEmitter.updateUserLists(ROOM_IDS.SONG_LIST);
           this._systemEmitter.systemNotification(
-            NOTIFICATION_COLOR.SUCCESS,
+            SUCCESS,
             `Added ${songIds.length} songs to list`,
             socket.id
           );
@@ -75,8 +69,8 @@ class SongListHandler extends AbstractHandler {
       SHARED_EVENTS.DELETE_USER_SONGS,
       (songIds: string[], userId: string, callback: Function) => {
         try {
-          this._songDb.validateIsDbLocked();
-          this._userDb.validateIsDbLocked();
+          this._songDb.validateDbNotLocked();
+          this._userDb.validateDbNotLocked();
           this._userDb.validateLessThanFiftySongs(songIds);
           this._userDb.validateUserExist(userId);
           this._songDb.validateSongsExist(songIds);
@@ -84,7 +78,7 @@ class SongListHandler extends AbstractHandler {
           this._userDb.removeSongs(userId, songIds);
           this._userDbEmitter.updateUserLists(ROOM_IDS.SONG_LIST);
           this._systemEmitter.systemNotification(
-            NOTIFICATION_COLOR.SUCCESS,
+            SUCCESS,
             `Removed ${songIds.length} songs from list`,
             socket.id
           );

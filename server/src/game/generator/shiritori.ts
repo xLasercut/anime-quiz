@@ -1,23 +1,23 @@
 import { AbstractGameListGenerator } from './abstract';
-import { AqGameSettings, AqSong } from '../../shared/interfaces';
-import { AnimeQuizSongDb } from '../../database/song';
-import { AnimeQuizUserDb } from '../../database/user';
+import { IGameSettings, ISong } from '../../shared/interfaces';
+import { SongDb } from '../../database/song';
+import { UserDb } from '../../database/user';
 
 class ShiritoriGameListGenerator extends AbstractGameListGenerator {
   protected _firstLetterPattern: RegExp;
 
-  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings) {
+  constructor(songDb: SongDb, userDb: UserDb, settings: IGameSettings) {
     super(songDb, userDb, settings, false);
     this._firstLetterPattern = new RegExp('[A-Za-z]');
   }
 
-  protected _generateList(): AqSong[] {
+  protected _generateList(): ISong[] {
     const userSongIds = this._userDb.getSelectedUserSongIds(this._users);
     const userSongs = this._songDb.getSelectedUserSongs(userSongIds);
     if (userSongs.length <= 0) {
       return [];
     }
-    const songList: AqSong[] = [];
+    const songList: ISong[] = [];
     let lastLetter = '';
     let unmatchCount = 0;
     while (songList.length < this._songCount && unmatchCount < 2) {
@@ -36,14 +36,14 @@ class ShiritoriGameListGenerator extends AbstractGameListGenerator {
     return songList;
   }
 
-  protected _findNextSong(userSongs: AqSong[], lastLetter: string): AqSong {
+  protected _findNextSong(userSongs: ISong[], lastLetter: string): ISong {
     if (lastLetter) {
       return this._findNextSongFromLastLetter(userSongs, lastLetter);
     }
     return this._findNextSongStandard(userSongs);
   }
 
-  protected _findNextSongFromLastLetter(userSongs: AqSong[], lastLetter: string): AqSong {
+  protected _findNextSongFromLastLetter(userSongs: ISong[], lastLetter: string): ISong {
     for (const song of userSongs) {
       for (const animeName of song.anime_name) {
         if (
@@ -58,7 +58,7 @@ class ShiritoriGameListGenerator extends AbstractGameListGenerator {
     return null;
   }
 
-  protected _findNextSongStandard(userSongs: AqSong[]): AqSong {
+  protected _findNextSongStandard(userSongs: ISong[]): ISong {
     for (const song of userSongs) {
       if (!this._isDupeSong(song) && !this._isDupeAnime(song)) {
         return song;

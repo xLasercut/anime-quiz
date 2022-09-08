@@ -1,8 +1,8 @@
 import { Server as SocketIoServer } from 'socket.io';
 import { ROOM_NAME_PREFIX } from '../constants';
 import { SHARED_EVENTS } from '../shared/events';
-import { Socket } from '../types';
-import { AqGamePlayer } from '../shared/interfaces';
+import { ISocket } from '../types';
+import { IGamePlayer } from '../shared/interfaces';
 import { Namespace } from 'socket.io/dist/namespace';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { SocketData } from './socket-data';
@@ -34,15 +34,15 @@ class Server extends SocketIoServer {
     const socketIds = Array.from(this.sockets.adapter.rooms.get(roomId));
     for (let i = 0; i < socketIds.length; i++) {
       this.sockets.sockets.get(socketIds[i]).data.host = i === 0;
-      const socket: Socket = this.sockets.sockets.get(socketIds[i]);
+      const socket: ISocket = this.sockets.sockets.get(socketIds[i]);
       socket.emit(SHARED_EVENTS.UPDATE_CLIENT_DATA, socket.data.getClientData());
     }
   }
 
-  public getPlayerList(roomId: string): AqGamePlayer[] {
+  public getPlayerList(roomId: string): IGamePlayer[] {
     const socketIds = Array.from(this.sockets.adapter.rooms.get(roomId));
     return socketIds.map((sid) => {
-      const socket: Socket = this.sockets.sockets.get(sid);
+      const socket: ISocket = this.sockets.sockets.get(sid);
       return socket.data.getPlayerData();
     });
   }
@@ -64,7 +64,7 @@ class Server extends SocketIoServer {
   public isLoaded(roomId: string): boolean {
     const socketIds = Array.from(this.sockets.adapter.rooms.get(roomId));
     for (const sid of socketIds) {
-      const socket: Socket = this.sockets.sockets.get(sid);
+      const socket: ISocket = this.sockets.sockets.get(sid);
       if (!socket.data.songLoaded) {
         return false;
       }
@@ -80,7 +80,7 @@ class Server extends SocketIoServer {
   }
 
   public kickPlayer(sid: string): void {
-    const socket: Socket = this.sockets.sockets.get(sid);
+    const socket: ISocket = this.sockets.sockets.get(sid);
     socket.disconnect();
   }
 }

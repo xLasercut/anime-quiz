@@ -1,18 +1,18 @@
-import { AqAnime, AqEmoji, AqGamePlayer, AqSong, AqUserSongs } from './shared/interfaces';
+import { IAnime, IEmoji, IGamePlayer, ISong, IUserSongs } from './shared/interfaces';
 
 interface DataStoreState {
-  songList: AqSong[];
-  animeList: AqAnime[];
+  songList: ISong[];
+  animeList: IAnime[];
   songTitleList: string[];
-  userLists: AqUserSongs[];
-  emojiList: AqEmoji[];
+  userLists: IUserSongs[];
+  emojiList: IEmoji[];
 }
 
 interface AdminStoreState {
-  animeInEdit: AqAnime;
-  songInEdit: AqSong;
-  emojiInEdit: AqEmoji;
-  userInEdit: AqUserSongs;
+  animeInEdit: IAnime;
+  songInEdit: ISong;
+  emojiInEdit: IEmoji;
+  userInEdit: IUserSongs;
 }
 
 interface RootStoreState {
@@ -33,8 +33,8 @@ interface ClientStoreState {
 }
 
 interface GameStoreState {
-  players: AqGamePlayer[];
-  currentSong: AqSong;
+  players: IGamePlayer[];
+  currentSong: ISong;
   currentSongCount: number;
   maxSongCount: number;
   playing: boolean;

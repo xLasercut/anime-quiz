@@ -71,9 +71,9 @@ import DialogMultiAutocomplete from '../shared/dialog/DialogMultiAutocomplete.vu
 import { DIALOG_ROUTES } from '../../plugins/routing/routes';
 import { SHARED_EVENTS } from '../../assets/shared/events';
 import { socket } from '../../plugins/socket';
-import { VALID_SONG_TYPES } from '../../assets/shared/constants';
 import { newTableHelpers } from '../../assets/table-helper';
 import DialogMultiCombobox from '../shared/dialog/DialogMultiCombobox.vue';
+import { VALID_SONG_TYPES } from '../../assets/shared/constants/song-types';
 
 export default defineComponent({
   components: {

@@ -51,8 +51,9 @@ import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-a
 import { store } from '../plugins/store';
 import IconBtn from '../components/shared/buttons/IconBtn.vue';
 import LoginAvatarSelect from '../components/login/LoginAvatarSelect.vue';
-import { AVATARS, USERNAME_FORMAT } from '../assets/shared/constants';
+import { USERNAME_FORMAT } from '../assets/shared/constants/formats';
 import { LOCAL_STORAGE_CONSTANTS } from '../assets/constants';
+import { ZERO_TWO } from '../assets/shared/constants/avatars';
 
 const SERVER_PASSWORD_FORMAT = new RegExp('^[A-Za-z0-9]+$');
 
@@ -63,7 +64,7 @@ export default defineComponent({
       valid: false,
       username: localStorage[LOCAL_STORAGE_CONSTANTS.AQ_USERNAME] || '',
       password: '',
-      avatar: localStorage[LOCAL_STORAGE_CONSTANTS.AQ_AVATAR] || AVATARS.ZERO_TWO,
+      avatar: localStorage[LOCAL_STORAGE_CONSTANTS.AQ_AVATAR] || ZERO_TWO,
       usernameRules: [
         (v: string): boolean | string => !!v || 'Display name required',
         (v: string): boolean | string =>

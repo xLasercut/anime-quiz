@@ -51,7 +51,7 @@ import { isYoutubeVideo } from '../assets/game-helper';
 import { socket } from '../plugins/socket';
 import { SHARED_EVENTS } from '../assets/shared/events';
 import { store } from '../plugins/store';
-import { AqSong } from '../assets/shared/interfaces';
+import { ISong } from '../assets/shared/interfaces';
 import MusicPlayerPlaylist from '../components/music-player/MusicPlayerPlaylist.vue';
 import { shuffleSongList } from '../assets/shared/helpers';
 
@@ -60,9 +60,9 @@ interface State {
   maxTime: number;
   playing: boolean;
   selectedUser: string;
-  playlist: AqSong[];
+  playlist: ISong[];
   currentSongCount: number;
-  currentSong: AqSong;
+  currentSong: ISong;
 }
 
 export default defineComponent({
@@ -82,7 +82,7 @@ export default defineComponent({
         anime_name: [],
         song_id: '',
         song_title: '',
-        type: ''
+        type: 'OP'
       }
     });
 

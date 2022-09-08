@@ -50,7 +50,7 @@
 import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
 import TablePagination from '../shared/TablePagination.vue';
 import { CLIENT_CONSTANTS } from '../../assets/constants';
-import { AqSong } from '../../assets/shared/interfaces';
+import { ISong } from '../../assets/shared/interfaces';
 import { store } from '../../plugins/store';
 import { MUTATIONS } from '../../plugins/store/mutations';
 import { CLIENT_EVENTS } from '../../assets/events';
@@ -82,8 +82,8 @@ export default defineComponent({
 
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
-    function filteredSongList(): AqSong[] {
-      return store.getters.songList.filter((song: AqSong) => {
+    function filteredSongList(): ISong[] {
+      return store.getters.songList.filter((song: ISong) => {
         return (
           shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
           shouldDisplayResult(state.songTitleFilter, song.song_title) &&
@@ -93,7 +93,7 @@ export default defineComponent({
       });
     }
 
-    function updateStore(song: AqSong): void {
+    function updateStore(song: ISong): void {
       store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_NAME, song.anime_name);
       store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_ID, song.anime_id);
       store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ID, song.song_id);
@@ -103,14 +103,14 @@ export default defineComponent({
       store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, song.type);
     }
 
-    function editSong(song: AqSong): void {
+    function editSong(song: ISong): void {
       if (openDialog) {
         updateStore(song);
         openDialog(DIALOG_ROUTES.EDIT_SONG_DIALOG, 'Edit Song');
       }
     }
 
-    function deleteSong(song: AqSong): void {
+    function deleteSong(song: ISong): void {
       if (openDialog) {
         updateStore(song);
         openDialog(DIALOG_ROUTES.DELETE_SONG_DIALOG, 'Delete Song');

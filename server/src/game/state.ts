@@ -1,11 +1,12 @@
 import { Logger } from '../app/logging/logger';
-import { AqGameStateRaw } from '../interfaces';
-import { AqGameGuess, AqGameState, AqSong } from '../shared/interfaces';
+import { IGameStateRaw } from '../interfaces';
+import { IGameGuess, IGameState, ISong } from '../shared/interfaces';
 import { Server } from '../app/server';
+import { OP } from '../shared/constants/song-types';
 
-class GameStates {
+class GameStatesDb {
   protected _logger: Logger;
-  protected _states: { [key: string]: AqGameStateRaw };
+  protected _states: { [key: string]: IGameStateRaw };
   protected _io: Server;
 
   constructor(logger: Logger, io: Server) {
@@ -14,7 +15,7 @@ class GameStates {
     this._states = {};
   }
 
-  public songOverride(song: AqSong, roomId: string): void {
+  public songOverride(song: ISong, roomId: string): void {
     this._states[roomId].songOverride = song;
   }
 
@@ -31,7 +32,7 @@ class GameStates {
         anime_name: [],
         anime_id: [],
         song_id: '',
-        type: '',
+        type: OP,
         artist: '',
         song_title: '',
         src: ''
@@ -59,7 +60,7 @@ class GameStates {
     delete this._states[roomId];
   }
 
-  public startGame(roomId: string, gameList: AqSong[]): void {
+  public startGame(roomId: string, gameList: ISong[]): void {
     this._states[roomId].gameList = gameList;
     this._states[roomId].playing = true;
     this._states[roomId].currentSongCount = 0;
@@ -73,7 +74,7 @@ class GameStates {
     this._states[roomId].playing = false;
   }
 
-  public getGameState(roomId: string): AqGameState {
+  public getGameState(roomId: string): IGameState {
     const state = this._states[roomId];
     return {
       currentSongCount: state.currentSongCount + 1,
@@ -83,15 +84,15 @@ class GameStates {
     };
   }
 
-  public calculateScore(guess: AqGameGuess, roomId: string): number {
+  public calculateScore(guess: IGameGuess, roomId: string): number {
     const currentSong = this._states[roomId].currentSong;
     let score = 0;
-    if (guess.title.toLowerCase() === currentSong.song_title.toLowerCase().trim()) {
+    if (guess.title && guess.title.toLowerCase() === currentSong.song_title.toLowerCase()) {
       score += 1;
     }
 
     for (const anime of currentSong.anime_name) {
-      if (anime.toLowerCase() === guess.anime.toLowerCase().trim()) {
+      if (guess.anime && guess.anime.toLowerCase() === anime.toLowerCase()) {
         score += 1;
         break;
       }
@@ -100,7 +101,7 @@ class GameStates {
     return score;
   }
 
-  protected _getCurrentSong(roomId: string): AqSong {
+  protected _getCurrentSong(roomId: string): ISong {
     const state = this._states[roomId];
     if (state.songOverride) {
       return state.songOverride;
@@ -110,7 +111,7 @@ class GameStates {
         anime_name: [],
         anime_id: [],
         song_id: '',
-        type: '',
+        type: OP,
         artist: '',
         song_title: '',
         src: ''
@@ -152,4 +153,4 @@ class GameStates {
   }
 }
 
-export { GameStates };
+export { GameStatesDb };

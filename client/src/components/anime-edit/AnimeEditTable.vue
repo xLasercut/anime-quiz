@@ -52,7 +52,7 @@ import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api'
 import TablePagination from '../shared/TablePagination.vue';
 import { CLIENT_CONSTANTS } from '../../assets/constants';
 import AnimeEditTableFilter from './AnimeEditTableFilter.vue';
-import { AqAnime } from '../../assets/shared/interfaces';
+import { IAnime } from '../../assets/shared/interfaces';
 import { store } from '../../plugins/store';
 import { MUTATIONS } from '../../plugins/store/mutations';
 import { CLIENT_EVENTS } from '../../assets/events';
@@ -76,8 +76,8 @@ export default defineComponent({
 
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
-    function filteredAnimeList(): AqAnime[] {
-      return store.getters.adminAnimeList.filter((anime: AqAnime) => {
+    function filteredAnimeList(): IAnime[] {
+      return store.getters.adminAnimeList.filter((anime: IAnime) => {
         return (
           shouldDisplayResult(state.animeNameFilter, anime.anime_name.join(',')) &&
           anime.anime_id.toLowerCase().includes(state.animeIdFilter.toLowerCase())
@@ -85,7 +85,7 @@ export default defineComponent({
       });
     }
 
-    function editAnime(anime: AqAnime): void {
+    function editAnime(anime: IAnime): void {
       if (openDialog) {
         store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_ID, anime.anime_id);
         store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, anime.anime_name);
@@ -93,7 +93,7 @@ export default defineComponent({
       }
     }
 
-    function deleteAnime(anime: AqAnime): void {
+    function deleteAnime(anime: IAnime): void {
       if (openDialog) {
         store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_ID, anime.anime_id);
         store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, anime.anime_name);

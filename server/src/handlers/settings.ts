@@ -1,23 +1,23 @@
 import { AbstractHandler } from './abstract';
-import { Socket } from '../types';
+import { ISocket } from '../types';
 import { SHARED_EVENTS } from '../shared/events';
-import { GameSettings } from '../game/settings';
+import { GameSettingsDb } from '../game/settings';
 import { Logger } from '../app/logging/logger';
-import { AqGameSettings } from '../shared/interfaces';
+import { IGameSettings } from '../shared/interfaces';
 import { LOG_BASE } from '../app/logging/log-base';
 import { GameEmitter } from '../emitters/game';
 
 class GameSettingsHandler extends AbstractHandler {
-  protected _settings: GameSettings;
+  protected _settings: GameSettingsDb;
   protected _gameEmitter: GameEmitter;
 
-  constructor(logger: Logger, settings: GameSettings, gameEmitter: GameEmitter) {
+  constructor(logger: Logger, settings: GameSettingsDb, gameEmitter: GameEmitter) {
     super(logger);
     this._settings = settings;
     this._gameEmitter = gameEmitter;
   }
 
-  public start(socket: Socket, errorHandler: Function) {
+  public start(socket: ISocket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.GET_GAME_SETTINGS, () => {
       try {
         const roomId = this._getSocketGameRoom(socket);
@@ -27,7 +27,7 @@ class GameSettingsHandler extends AbstractHandler {
       }
     });
 
-    socket.on(SHARED_EVENTS.EDIT_GAME_SETTINGS, (settings: AqGameSettings, callback: Function) => {
+    socket.on(SHARED_EVENTS.EDIT_GAME_SETTINGS, (settings: IGameSettings, callback: Function) => {
       try {
         this._logger.writeLog(LOG_BASE.EDIT_GAME_SETTINGS, {
           sid: socket.id,

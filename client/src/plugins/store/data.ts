@@ -1,7 +1,7 @@
 import { DataStoreState, RootStoreState } from '../../assets/interfaces';
 import { Module } from 'vuex';
 import { MUTATIONS } from './mutations';
-import { AqAnime, AqEmoji, AqSong, AqUserSongs } from '../../assets/shared/interfaces';
+import { IAnime, IEmoji, ISong, IUserSongs } from '../../assets/shared/interfaces';
 
 const DEFAULT_STATE: DataStoreState = {
   songList: [],
@@ -14,19 +14,19 @@ const DEFAULT_STATE: DataStoreState = {
 const data: Module<DataStoreState, RootStoreState> = {
   state: Object.assign({}, DEFAULT_STATE),
   mutations: {
-    [MUTATIONS.SOCKET_UPDATE_SONG_LIST]: (state: DataStoreState, songList: AqSong[]) => {
+    [MUTATIONS.SOCKET_UPDATE_SONG_LIST]: (state: DataStoreState, songList: ISong[]) => {
       state.songList = songList;
     },
-    [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: DataStoreState, animeList: AqAnime[]) => {
+    [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: DataStoreState, animeList: IAnime[]) => {
       state.animeList = animeList;
     },
     [MUTATIONS.SOCKET_UPDATE_SONG_TITLE_LIST]: (state: DataStoreState, titleList: string[]) => {
       state.songTitleList = titleList;
     },
-    [MUTATIONS.SOCKET_UPDATE_USER_LISTS]: (state: DataStoreState, userLists: AqUserSongs[]) => {
+    [MUTATIONS.SOCKET_UPDATE_USER_LISTS]: (state: DataStoreState, userLists: IUserSongs[]) => {
       state.userLists = userLists;
     },
-    [MUTATIONS.SOCKET_UPDATE_EMOJI_LIST]: (state: DataStoreState, emojiList: AqEmoji[]) => {
+    [MUTATIONS.SOCKET_UPDATE_EMOJI_LIST]: (state: DataStoreState, emojiList: IEmoji[]) => {
       state.emojiList = emojiList;
     },
     [MUTATIONS.RESET_STORE_STATE]: (state: DataStoreState) => {
@@ -50,7 +50,7 @@ const data: Module<DataStoreState, RootStoreState> = {
       },
     userPlaylist:
       (state: DataStoreState): Function =>
-      (userId: string): AqSong[] => {
+      (userId: string): ISong[] => {
         if (!userId) {
           return [];
         }
@@ -65,7 +65,7 @@ const data: Module<DataStoreState, RootStoreState> = {
         }
         return [];
       },
-    songList: (state: DataStoreState): AqSong[] => {
+    songList: (state: DataStoreState): ISong[] => {
       return [...state.songList].sort((a, b) => {
         const animeA = a.anime_name[0];
         const animeB = b.anime_name[0];
@@ -90,7 +90,7 @@ const data: Module<DataStoreState, RootStoreState> = {
     songTitleList: (state: DataStoreState): string[] => {
       return [...state.songTitleList].sort();
     },
-    adminAnimeList: (state: DataStoreState): AqAnime[] => {
+    adminAnimeList: (state: DataStoreState): IAnime[] => {
       return [...state.animeList].sort((a, b) => {
         const nameA = a.anime_name;
         const nameB = b.anime_name;
@@ -103,7 +103,7 @@ const data: Module<DataStoreState, RootStoreState> = {
         return -1;
       });
     },
-    emojiList: (state: DataStoreState): AqEmoji[] => {
+    emojiList: (state: DataStoreState): IEmoji[] => {
       return [...state.emojiList].sort((a, b) => {
         const commandA = a.command;
         const commandB = b.command;
@@ -116,7 +116,7 @@ const data: Module<DataStoreState, RootStoreState> = {
         return -1;
       });
     },
-    userLists: (state: DataStoreState): AqUserSongs[] => {
+    userLists: (state: DataStoreState): IUserSongs[] => {
       return [...state.userLists].sort((a, b) => {
         const nameA = a.username;
         const nameB = b.username;

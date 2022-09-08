@@ -2,7 +2,7 @@ import { ClientStoreState, RootStoreState } from '../../assets/interfaces';
 import { DIALOG_ROUTES, ROUTES } from '../routing/routes';
 import { MUTATIONS } from './mutations';
 import { Module } from 'vuex';
-import { AqClientData } from '../../assets/shared/interfaces';
+import { IClientData } from '../../assets/shared/interfaces';
 import { getDefaultVolume } from '../../assets/game-helper';
 
 const DEFAULT_STATE: ClientStoreState = {
@@ -24,7 +24,7 @@ const client: Module<ClientStoreState, RootStoreState> = {
     [MUTATIONS.CHANGE_VIEW]: (state: ClientStoreState, route: string) => {
       state.view = route;
     },
-    [MUTATIONS.SOCKET_UPDATE_CLIENT_DATA]: (state: ClientStoreState, clientData: AqClientData) => {
+    [MUTATIONS.SOCKET_UPDATE_CLIENT_DATA]: (state: ClientStoreState, clientData: IClientData) => {
       state.username = clientData.username;
       state.avatar = clientData.avatar;
       state.admin = clientData.admin;

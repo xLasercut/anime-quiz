@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api';
 import TablePagination from '../shared/TablePagination.vue';
-import { AqSong } from 'anime-quiz-server/src/shared/interfaces';
+import { ISong } from '../../assets/shared/interfaces';
 import { store } from '../../plugins/store';
 import { shouldDisplayResult } from '../../assets/game-helper';
 import AqAnimeName from '../shared/AqAnimeName.vue';
@@ -71,8 +71,8 @@ export default defineComponent({
       songTitleFilter: ''
     });
 
-    function filteredSongList(): AqSong[] {
-      return store.getters.songList.filter((song: AqSong) => {
+    function filteredSongList(): ISong[] {
+      return store.getters.songList.filter((song: ISong) => {
         return (
           shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
           shouldDisplayResult(state.songTitleFilter, song.song_title) &&
@@ -81,7 +81,7 @@ export default defineComponent({
       });
     }
 
-    function selectSong(song: AqSong): void {
+    function selectSong(song: ISong): void {
       socket.emit(SHARED_EVENTS.ADMIN_GAME_SONG_OVERRIDE, song.song_id);
       context.emit('dialog:close');
     }

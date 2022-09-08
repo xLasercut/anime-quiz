@@ -67,12 +67,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-api';
-import { CLIENT_CONSTANTS } from '../../assets/constants';
+import { CLIENT_CONSTANTS, SONG_LIST_EDIT_MODE } from '../../assets/constants';
 import SongListTableFilter from './SongListTableFilter.vue';
 import { store } from '../../plugins/store';
-import { AqSong } from '../../assets/shared/interfaces';
+import { ISong } from '../../assets/shared/interfaces';
 import SongListTableActions from './SongListTableActions.vue';
-import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants';
 import { socket } from '../../plugins/socket';
 import { SHARED_EVENTS } from '../../assets/shared/events';
 import TablePagination from '../shared/TablePagination.vue';
@@ -102,7 +101,7 @@ export default defineComponent({
       songArtistFilter: ''
     });
 
-    const songSelected = ref<AqSong[]>([]);
+    const songSelected = ref<ISong[]>([]);
 
     watch(
       () => state.editMode,
@@ -118,7 +117,7 @@ export default defineComponent({
       }
     );
 
-    function isSelectDisabled(song: AqSong, isSelected: boolean): boolean {
+    function isSelectDisabled(song: ISong, isSelected: boolean): boolean {
       if (songSelected.value.length >= 50 && !isSelected) {
         return false;
       }
@@ -194,21 +193,21 @@ export default defineComponent({
       }
     }
 
-    function filteredSongList(): AqSong[] {
+    function filteredSongList(): ISong[] {
       return store.getters.songList
-        .filter((song: AqSong) => {
+        .filter((song: ISong) => {
           if (state.selectedUser && state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
             return store.getters.userList(state.selectedUser).includes(song.song_id);
           }
 
           return true;
         })
-        .filter((song: AqSong) => {
+        .filter((song: ISong) => {
           return (
             shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
             shouldDisplayResult(state.songTitleFilter, song.song_title) &&
             song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
-            shouldDisplayResult(state.songArtistFilter, song.artist)
+            shouldDisplayResult(state.songArtistFilter, song.artist || '')
           );
         });
     }

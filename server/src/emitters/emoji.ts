@@ -1,12 +1,12 @@
 import { AbstractEmitter } from './abstract';
 import { SHARED_EVENTS } from '../shared/events';
 import { Server } from '../app/server';
-import { AnimeQuizEmojiDb } from '../database/emoji';
+import { EmojiDb } from '../database/emoji';
 
 class EmojiDbEmitter extends AbstractEmitter {
-  protected _emojiDb: AnimeQuizEmojiDb;
+  protected _emojiDb: EmojiDb;
 
-  constructor(io: Server, emojiDb: AnimeQuizEmojiDb) {
+  constructor(io: Server, emojiDb: EmojiDb) {
     super(io);
     this._emojiDb = emojiDb;
   }

@@ -60,7 +60,7 @@ import { defineComponent, PropType, reactive, toRefs, watch } from '@vue/composi
 import TablePagination from '../shared/TablePagination.vue';
 import AqAnimeName from '../shared/AqAnimeName.vue';
 import { newTableHelpers } from '../../assets/table-helper';
-import { AqSong } from '../../assets/shared/interfaces';
+import { ISong } from '../../assets/shared/interfaces';
 
 export default defineComponent({
   props: {
@@ -70,11 +70,11 @@ export default defineComponent({
     },
     playlist: {
       required: true,
-      type: Array as PropType<AqSong[]>
+      type: Array as PropType<ISong[]>
     },
     currentSong: {
       required: true,
-      type: Object as PropType<AqSong>
+      type: Object as PropType<ISong>
     }
   },
   components: { TablePagination, AqAnimeName },
@@ -99,7 +99,7 @@ export default defineComponent({
       }
     );
 
-    function playSong(song: AqSong): void {
+    function playSong(song: ISong): void {
       context.emit('change:song', props.playlist.indexOf(song));
     }
 

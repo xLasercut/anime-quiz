@@ -29,13 +29,13 @@
 
 <script lang="ts">
 import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api';
-import { AqGamePlayer } from '../../../assets/shared/interfaces';
+import { IGamePlayer } from '../../../assets/shared/interfaces';
 import GameAvatar from '../../shared/GameAvatar.vue';
 import { socket } from '../../../plugins/socket';
 import { SHARED_EVENTS } from '../../../assets/shared/events';
 
 interface State {
-  players: AqGamePlayer[];
+  players: IGamePlayer[];
   show: boolean;
 }
 
@@ -59,7 +59,7 @@ export default defineComponent({
       }, 8000);
     });
 
-    function badgeColor(player: AqGamePlayer): string {
+    function badgeColor(player: IGamePlayer): string {
       if (player.admin) {
         return 'warning';
       }

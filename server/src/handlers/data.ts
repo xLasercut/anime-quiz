@@ -1,29 +1,28 @@
 import { AbstractHandler } from './abstract';
 import { Logger } from '../app/logging/logger';
-import { Socket } from '../types';
+import { ISocket } from '../types';
 import { SHARED_EVENTS } from '../shared/events';
 import { SongDbEmitter } from '../emitters/song';
 import { EmojiDbEmitter } from '../emitters/emoji';
 import { UserDbEmitter } from '../emitters/user';
+import { UserDb } from '../database/user';
+import { SongDb } from '../database/song';
+import { EmojiDb } from '../database/emoji';
+import { Server } from '../app/server';
 
-class AqDataHandler extends AbstractHandler {
+class DataHandler extends AbstractHandler {
   protected _songDbEmitter: SongDbEmitter;
   protected _emojiDbEmitter: EmojiDbEmitter;
   protected _userDbEmitter: UserDbEmitter;
 
-  constructor(
-    logger: Logger,
-    songDbEmitter: SongDbEmitter,
-    emojiDbEmitter: EmojiDbEmitter,
-    userDbEmitter: UserDbEmitter
-  ) {
+  constructor(io: Server, logger: Logger, userDb: UserDb, songDb: SongDb, emojiDb: EmojiDb) {
     super(logger);
-    this._songDbEmitter = songDbEmitter;
-    this._emojiDbEmitter = emojiDbEmitter;
-    this._userDbEmitter = userDbEmitter;
+    this._songDbEmitter = new SongDbEmitter(io, songDb);
+    this._emojiDbEmitter = new EmojiDbEmitter(io, emojiDb);
+    this._userDbEmitter = new UserDbEmitter(io, userDb);
   }
 
-  public start(socket: Socket, errorHandler: Function) {
+  public start(socket: ISocket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.GET_ANIME_LIST, () => {
       try {
         this._songDbEmitter.updateAnimeList(socket.id);
@@ -66,4 +65,4 @@ class AqDataHandler extends AbstractHandler {
   }
 }
 
-export { AqDataHandler };
+export { DataHandler };

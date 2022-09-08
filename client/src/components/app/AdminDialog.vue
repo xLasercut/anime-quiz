@@ -52,10 +52,10 @@ import IconBtn from '../shared/buttons/IconBtn.vue';
 import { SHARED_EVENTS } from '../../assets/shared/events';
 import { socket } from '../../plugins/socket';
 import GameAvatar from '../shared/GameAvatar.vue';
-import { AqGamePlayer } from '../../assets/shared/interfaces';
+import { IGamePlayer } from '../../assets/shared/interfaces';
 
 interface State {
-  playerToKick: AqGamePlayer | null;
+  playerToKick: IGamePlayer | null;
 }
 
 export default defineComponent({

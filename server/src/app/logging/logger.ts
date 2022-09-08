@@ -1,6 +1,6 @@
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
-import { LogTemplate } from '../../interfaces';
+import { ILogTemplate } from '../../interfaces';
 import { ServerConfig } from '../config';
 import { LOG_LEVEL } from './log-base';
 
@@ -35,7 +35,7 @@ class Logger {
     this._reservedFields = ['timestamp', 'log_reference', 'level', 'message'];
   }
 
-  public writeLog(logTemplate: LogTemplate, logArgs: object = {}): void {
+  public writeLog(logTemplate: ILogTemplate, logArgs: object = {}): void {
     const cleanedLogArgs = this._removeReservedFields(logArgs);
     const logMsg = {
       ['log_reference']: logTemplate.reference,

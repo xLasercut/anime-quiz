@@ -40,7 +40,7 @@
 import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
 import TablePagination from '../shared/TablePagination.vue';
 import { CLIENT_CONSTANTS } from '../../assets/constants';
-import { AqUserSongs } from '../../assets/shared/interfaces';
+import { IUserSongs } from '../../assets/shared/interfaces';
 import { store } from '../../plugins/store';
 import { MUTATIONS } from '../../plugins/store/mutations';
 import { CLIENT_EVENTS } from '../../assets/events';
@@ -64,8 +64,8 @@ export default defineComponent({
 
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
-    function filteredUserLists(): AqUserSongs[] {
-      return store.getters.userLists.filter((userSong: AqUserSongs) => {
+    function filteredUserLists(): IUserSongs[] {
+      return store.getters.userLists.filter((userSong: IUserSongs) => {
         return (
           userSong.user_id.toLowerCase().includes(state.userIdFilter.toLowerCase()) &&
           userSong.username.toLowerCase().includes(state.usernameFilter.toLowerCase())
@@ -73,19 +73,19 @@ export default defineComponent({
       });
     }
 
-    function updateStore(user: AqUserSongs): void {
+    function updateStore(user: IUserSongs): void {
       store.commit(MUTATIONS.ADMIN_UPDATE_USER_NAME, user.username);
       store.commit(MUTATIONS.ADMIN_UPDATE_USER_ID, user.user_id);
     }
 
-    function editUser(user: AqUserSongs): void {
+    function editUser(user: IUserSongs): void {
       if (openDialog) {
         updateStore(user);
         openDialog(DIALOG_ROUTES.EDIT_USER_DIALOG, 'Edit User');
       }
     }
 
-    function deleteUser(user: AqUserSongs): void {
+    function deleteUser(user: IUserSongs): void {
       if (openDialog) {
         updateStore(user);
         openDialog(DIALOG_ROUTES.DELETE_USER_DIALOG, 'Delete User');

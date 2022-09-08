@@ -1,8 +1,8 @@
 import { Logger } from './logging/logger';
-import { Socket } from '../types';
+import { ISocket } from '../types';
 import { LOG_BASE } from './logging/log-base';
-import { NOTIFICATION_COLOR } from '../shared/constants';
 import { SystemEmitter } from '../emitters/system';
+import { ERROR } from '../shared/constants/colors';
 
 class GameDataValidationError extends Error {
   constructor(message: string) {
@@ -22,7 +22,7 @@ class DatabaseLockedError extends Error {
   }
 }
 
-function newSocketErrorHandler(socket: Socket, logger: Logger, systemEmitter: SystemEmitter) {
+function newSocketErrorHandler(socket: ISocket, logger: Logger, systemEmitter: SystemEmitter) {
   function errorHandler(e: Error) {
     if (e instanceof GameDataValidationError) {
       logger.writeLog(LOG_BASE.GAME_DATA_VALIDATION_FAILURE, {
@@ -30,17 +30,17 @@ function newSocketErrorHandler(socket: Socket, logger: Logger, systemEmitter: Sy
         username: socket.data.username,
         error: e.message
       });
-      systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id);
+      systemEmitter.systemNotification(ERROR, e.message, socket.id);
     } else if (e instanceof GameDataValidationDcError) {
       logger.writeLog(LOG_BASE.GAME_DATA_VALIDATION_FAILURE, {
         id: socket.id,
         username: socket.data.username,
         error: e.message
       });
-      systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id);
+      systemEmitter.systemNotification(ERROR, e.message, socket.id);
       socket.disconnect();
     } else if (e instanceof DatabaseLockedError) {
-      systemEmitter.systemNotification(NOTIFICATION_COLOR.ERROR, e.message, socket.id);
+      systemEmitter.systemNotification(ERROR, e.message, socket.id);
     } else {
       logger.writeLog(LOG_BASE.UNHANDLED_ERROR, { stack: e.stack });
     }

@@ -1,7 +1,7 @@
 import { GameStoreState, RootStoreState } from '../../assets/interfaces';
 import { Module } from 'vuex';
 import { MUTATIONS } from './mutations';
-import { AqGamePlayer, AqGameState } from '../../assets/shared/interfaces';
+import { IGamePlayer, IGameState } from '../../assets/shared/interfaces';
 
 const DEFAULT_STATE: GameStoreState = {
   players: [],
@@ -12,7 +12,7 @@ const DEFAULT_STATE: GameStoreState = {
     song_title: '',
     artist: '',
     src: '',
-    type: ''
+    type: 'OP'
   },
   currentSongCount: 0,
   maxSongCount: 0,
@@ -23,10 +23,10 @@ const DEFAULT_STATE: GameStoreState = {
 const game: Module<GameStoreState, RootStoreState> = {
   state: Object.assign({}, DEFAULT_STATE),
   mutations: {
-    [MUTATIONS.SOCKET_UPDATE_GAME_PLAYERS]: (state: GameStoreState, players: AqGamePlayer[]) => {
+    [MUTATIONS.SOCKET_UPDATE_GAME_PLAYERS]: (state: GameStoreState, players: IGamePlayer[]) => {
       state.players = players;
     },
-    [MUTATIONS.SOCKET_UPDATE_GAME_STATE]: (state: GameStoreState, gameState: AqGameState) => {
+    [MUTATIONS.SOCKET_UPDATE_GAME_STATE]: (state: GameStoreState, gameState: IGameState) => {
       state.currentSong = gameState.currentSong;
       state.playing = gameState.playing;
       state.maxSongCount = gameState.maxSongCount;

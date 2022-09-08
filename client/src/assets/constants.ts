@@ -1,3 +1,6 @@
+import { DEC, IMG } from './shared/constants/emoji-types';
+import { ED, INSERT, OP } from './shared/constants/song-types';
+
 const CLIENT_CONSTANTS = {
   PAGE_HEIGHT: 'calc(100vh - 67px)',
   TABLE_HEIGHT: 'calc(100vh - 202px)',
@@ -14,14 +17,20 @@ const LOCAL_STORAGE_CONSTANTS = {
 };
 
 const SONG_TYPES = [
-  { text: 'OP', value: 'OP' },
-  { text: 'ED', value: 'ED' },
-  { text: 'INSERT', value: 'INSERT' }
+  { text: 'OP', value: OP },
+  { text: 'ED', value: ED },
+  { text: 'INSERT', value: INSERT }
 ];
 
 const EMOJI_TYPES = [
-  { text: 'IMG', value: 'img' },
-  { text: 'DEC', value: 'dec' }
+  { text: 'IMG', value: IMG },
+  { text: 'DEC', value: DEC }
 ];
 
-export { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, SONG_TYPES, EMOJI_TYPES };
+const SONG_LIST_EDIT_MODE = {
+  ADD: 'add',
+  REMOVE: 'remove',
+  NONE: 'none'
+};
+
+export { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, SONG_TYPES, EMOJI_TYPES, SONG_LIST_EDIT_MODE };

@@ -1,6 +1,6 @@
-import { AqSong } from './interfaces';
+import { ISong } from './interfaces';
 
-function shuffleSongList(songList: AqSong[]): AqSong[] {
+function shuffleSongList(songList: ISong[]): ISong[] {
   const shuffledList = [...songList];
   let currentIndex = shuffledList.length,
     randomIndex;
