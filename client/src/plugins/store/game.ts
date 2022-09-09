@@ -2,6 +2,7 @@ import { GameStoreState, RootStoreState } from '../../assets/interfaces';
 import { Module } from 'vuex';
 import { MUTATIONS } from './mutations';
 import { IGamePlayer, IGameState } from '../../assets/shared/interfaces';
+import { OP } from '../../assets/shared/constants/song-types';
 
 const DEFAULT_STATE: GameStoreState = {
   players: [],
@@ -12,7 +13,7 @@ const DEFAULT_STATE: GameStoreState = {
     song_title: '',
     artist: '',
     src: '',
-    type: 'OP'
+    type: OP
   },
   currentSongCount: 0,
   maxSongCount: 0,

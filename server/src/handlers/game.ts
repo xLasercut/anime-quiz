@@ -157,13 +157,6 @@ class GameHandler extends AbstractHandler {
     });
   }
 
-  protected _sanitiseGuess(guess: IGameGuess): IGameGuess {
-    return {
-      anime: (guess.anime || '').trim(),
-      title: (guess.title || '').trim()
-    };
-  }
-
   protected async _newRound(roomId: string, settings: IGameSettings): Promise<void> {
     const startPosition = Math.random();
     const gameState = this._states.getGameState(roomId);

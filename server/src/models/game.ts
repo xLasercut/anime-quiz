@@ -1,21 +1,10 @@
 import { AbstractModel } from './abstract';
-import { IClientData, IGameGuess, IGameLoginData, IGameSettings } from '../shared/interfaces';
-import {
-  gameClientSchema,
-  gameGuessSchema,
-  gameLoginSchema,
-  gameSettingsSchema
-} from '../schemas/game';
+import { IGameGuess, IGameLoginData, IGameSettings } from '../shared/interfaces';
+import { gameGuessSchema, gameLoginSchema, gameSettingsSchema } from '../schemas/game';
 
 class GameGuess extends AbstractModel<IGameGuess> {
   constructor(guess: IGameGuess) {
     super(gameGuessSchema, guess);
-  }
-}
-
-class ClientData extends AbstractModel<IClientData> {
-  constructor(client: IClientData) {
-    super(gameClientSchema, client);
   }
 }
 
@@ -31,4 +20,4 @@ class GameSettings extends AbstractModel<IGameSettings> {
   }
 }
 
-export { GameGuess, ClientData, GameLoginData, GameSettings };
+export { GameGuess, GameLoginData, GameSettings };
