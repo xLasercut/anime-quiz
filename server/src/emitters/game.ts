@@ -1,19 +1,19 @@
 import { AbstractEmitter } from './abstract';
 import { SHARED_EVENTS } from '../shared/events';
 import { Server } from '../app/server';
-import { GameSettings } from '../game/settings';
+import { GameSettingsDb } from '../game/settings';
 import { ChatManager } from '../game/chat';
 import { Logger } from '../app/logging/logger';
-import { Socket } from '../types';
-import { AqGameGuess } from '../shared/interfaces';
-import { GameStates } from '../game/state';
+import { ISocket } from '../types';
+import { IGameGuess } from '../shared/interfaces';
+import { GameStatesDb } from '../game/state';
 
 class GameEmitter extends AbstractEmitter {
-  protected _settings: GameSettings;
+  protected _settings: GameSettingsDb;
   protected _chat: ChatManager;
-  protected _states: GameStates;
+  protected _states: GameStatesDb;
 
-  constructor(io: Server, logger: Logger, settings: GameSettings, states: GameStates) {
+  constructor(io: Server, logger: Logger, settings: GameSettingsDb, states: GameStatesDb) {
     super(io);
     this._settings = settings;
     this._states = states;
@@ -27,7 +27,7 @@ class GameEmitter extends AbstractEmitter {
     );
   }
 
-  public updateGameChat(socket: Socket, msg: string, sid: string): void {
+  public updateGameChat(socket: ISocket, msg: string, sid: string): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GAME_CHAT, this._chat.generateUserMsg(socket, msg));
   }
 
@@ -39,7 +39,7 @@ class GameEmitter extends AbstractEmitter {
     this._client(sid).emit(SHARED_EVENTS.GAME_NEW_ROUND);
   }
 
-  public updateGuess(guess: AqGameGuess, sid: string): void {
+  public updateGuess(guess: IGameGuess, sid: string): void {
     this._client(sid).emit(SHARED_EVENTS.UPDATE_GUESS, guess);
   }
 

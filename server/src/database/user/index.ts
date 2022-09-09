@@ -1,58 +1,57 @@
-import { ServerConfig } from '../app/config';
-import { AqUserSongs } from '../shared/interfaces';
-import { AqUserSongsRaw } from '../interfaces';
-import { GameDataValidationError } from '../app/exceptions';
-import { LOG_BASE } from '../app/logging/log-base';
-import { Logger } from '../app/logging/logger';
-import { AbstractDb } from './abstract';
+import { AbstractDb } from '../abstract';
+import { IUserSongs, IUserSongsRaw } from '../../shared/interfaces';
 import * as cron from 'node-cron';
+import { ServerConfig } from '../../app/config';
+import { Logger } from '../../app/logging/logger';
+import { LOG_BASE } from '../../app/logging/log-base';
 import * as fs from 'fs';
-import * as path from 'path';
 import * as moment from 'moment';
-import { v4 } from 'uuid';
+import * as path from 'path';
+import { GameDataValidationError } from '../../app/exceptions';
+import * as Database from 'better-sqlite3';
+import { GetListUserSongByUserIdAndSongIds, UserDbStatements } from './sql';
+import { UserRaw } from '../../models/user';
 
-class AnimeQuizUserDb extends AbstractDb {
-  protected _userListsCache: AqUserSongs[];
+class UserDb extends AbstractDb {
+  protected _userListsCache: IUserSongs[];
   protected _dbBackupTask: cron.ScheduledTask;
   protected _dataBackupDir: string;
   protected _dataBackupSchedule: string;
   protected _dataBackupCount: number;
+  protected _statements: UserDbStatements;
 
   constructor(config: ServerConfig, logger: Logger) {
     super(logger, config.userDbPath);
+    this.reloadDb();
     this.reloadCache();
     this._dataBackupDir = config.dataBackupDir;
     this._dataBackupSchedule = config.dbBackupSchedule;
     this._dataBackupCount = config.dbBackupCount;
   }
 
+  public reloadDb(): void {
+    this._closeDb();
+    this._db = new Database(this._filepath, { fileMustExist: true });
+    this._statements = new UserDbStatements(this._db);
+  }
+
   public reloadCache(): void {
     this._userListsCache = this._getUserLists();
   }
 
-  public newUser(user: AqUserSongs): void {
-    const userId = `user-${v4()}`;
-    const sql = `INSERT INTO users (user_id, username) VALUES (?,?)`;
-    this._db.prepare(sql).run([userId, this._sanitizeString(user.username)]);
+  public newUser(user: IUserSongs): void {
+    this._statements.insertUser.run([user.user_id, user.username]);
     this.reloadCache();
   }
 
-  public editUser(user: AqUserSongs): void {
-    const sql = `
-      UPDATE users
-      SET 
-        username = ?
-      WHERE user_id = ?
-    `;
-    this._db.prepare(sql).run([this._sanitizeString(user.username), user.user_id]);
+  public editUser(user: IUserSongs): void {
+    this._statements.updateUserById.run([user.username, user.user_id]);
     this.reloadCache();
   }
 
-  public deleteUser(user: AqUserSongs): void {
-    const sql = `DELETE FROM users WHERE user_id = ?`;
-    this._db.prepare(sql).run([user.user_id]);
-    const sqlUserSongs = `DELETE FROM user_songs WHERE user_id = ?`;
-    this._db.prepare(sqlUserSongs).run([user.user_id]);
+  public deleteUser(user: IUserSongs): void {
+    this._statements.deleteUserById.run([user.user_id]);
+    this._statements.deleteUserSongByUserId.run([user.user_id]);
     this.reloadCache();
   }
 
@@ -89,32 +88,18 @@ class AnimeQuizUserDb extends AbstractDb {
     }
   }
 
-  protected _getUserLists(): AqUserSongs[] {
-    const sql = `
-      SELECT 
-        users.user_id,
-        username,
-        json_group_array(song_id) as song_id 
-      FROM users
-        LEFT JOIN user_songs
-        ON users.user_id = user_songs.user_id
-      GROUP BY users.user_id
-    `;
-    const userLists: AqUserSongsRaw[] = this._db.prepare(sql).all();
-    return userLists.map((userList) => {
-      const { song_id, ...rest } = userList;
-      return {
-        song_id: JSON.parse(song_id),
-        ...rest
-      };
+  protected _getUserLists(): IUserSongs[] {
+    const userLists: IUserSongsRaw[] = this._statements.getAllUser.all();
+    return userLists.map((user) => {
+      return new UserRaw(user).toUser().dict();
     });
   }
 
-  public getUserLists(): AqUserSongs[] {
+  public getUserLists(): IUserSongs[] {
     return this._userListsCache;
   }
 
-  public getSelectedUserLists(userIds: string[]): AqUserSongs[] {
+  public getSelectedUserLists(userIds: string[]): IUserSongs[] {
     return this._userListsCache.filter((userList) => {
       return userIds.includes(userList.user_id);
     });
@@ -136,11 +121,9 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 
   public addSongs(userId: string, songIds: string[]): void {
-    const sql = `INSERT INTO user_songs (user_id, song_id) VALUES (?,?)`;
-    const insert = this._db.prepare(sql);
     const insertMany = this._db.transaction((_songIds: string[]) => {
       for (const songId of _songIds) {
-        insert.run([userId, songId]);
+        this._statements.insertUserSong.run([userId, songId]);
       }
     });
     insertMany(songIds);
@@ -148,11 +131,9 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 
   public removeSongs(userId: string, songIds: string[]): void {
-    const sql = `DELETE FROM user_songs WHERE user_id = ? AND song_id = ?`;
-    const remove = this._db.prepare(sql);
     const removeMany = this._db.transaction((_songIds: string[]) => {
       for (const songId of _songIds) {
-        remove.run([userId, songId]);
+        this._statements.deleteUserSongByUserIdAndSongId.run([userId, songId]);
       }
     });
     removeMany(songIds);
@@ -160,38 +141,8 @@ class AnimeQuizUserDb extends AbstractDb {
   }
 
   public removeSongAll(songId: string): void {
-    const sql = `DELETE FROM user_songs WHERE song_id = ?`;
-    this._db.prepare(sql).run([songId]);
+    this._statements.deleteUserSongBySongId.run([songId]);
     this.reloadCache();
-  }
-
-  public validateUserExist(userId: string): void {
-    const sql = `
-      SELECT
-        *
-      FROM users
-      WHERE user_id = ?
-    `;
-    const users = this._db.prepare(sql).all([userId]);
-
-    if (users.length !== 1) {
-      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { userId: userId });
-      throw new GameDataValidationError('User does not exist');
-    }
-  }
-
-  public validateUsernameNotExist(username: string): void {
-    const sql = `
-      SELECT
-        *
-      FROM users
-      WHERE username = ?
-    `;
-    const users = this._db.prepare(sql).all([username]);
-    if (users.length > 0) {
-      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { username: username });
-      throw new GameDataValidationError('Username already exists');
-    }
   }
 
   public validateLessThanFiftySongs(songIds: string[]) {
@@ -203,15 +154,7 @@ class AnimeQuizUserDb extends AbstractDb {
 
   public validateSongsNotExistsInUserList(userId: string, songIds: string[]): void {
     const params = [userId].concat(songIds);
-    const sql = `
-      SELECT 
-        song_id 
-      FROM user_songs 
-      WHERE user_id = ? AND 
-            song_id IN (${this._questionString(songIds.length)})
-    `;
-
-    const existSongs = this._db.prepare(sql).all(params);
+    const existSongs = new GetListUserSongByUserIdAndSongIds(this._db, songIds.length).all(params);
 
     if (existSongs.length > 0) {
       this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { songIds: songIds });
@@ -221,21 +164,29 @@ class AnimeQuizUserDb extends AbstractDb {
 
   public validateSongsExistsInUserList(userId: string, songIds: string[]): void {
     const params = [userId].concat(songIds);
-    const sql = `
-      SELECT 
-        song_id
-      FROM user_songs 
-      WHERE user_id = ? AND 
-            song_id IN (${this._questionString(songIds.length)})
-    `;
+    const existSongs = new GetListUserSongByUserIdAndSongIds(this._db, songIds.length).all(params);
 
-    const notExistsSongs = this._db.prepare(sql).all(params);
-
-    if (notExistsSongs.length !== songIds.length) {
+    if (existSongs.length !== songIds.length) {
       this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { songIds: songIds });
       throw new GameDataValidationError('Song does not exist in list');
     }
   }
+
+  public validateUsernameNotExist(username: string): void {
+    const users = this._statements.getUserByUsername.all([username]);
+    if (users.length > 0) {
+      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { username: username });
+      throw new GameDataValidationError('Username already exists');
+    }
+  }
+
+  public validateUserExist(userId: string): void {
+    const users = this._statements.getUserById.all([userId]);
+    if (users.length !== 1) {
+      this._logger.writeLog(LOG_BASE.USER_DATA_VALIDATION_FAILURE, { userId: userId });
+      throw new GameDataValidationError('User does not exist');
+    }
+  }
 }
 
-export { AnimeQuizUserDb };
+export { UserDb };

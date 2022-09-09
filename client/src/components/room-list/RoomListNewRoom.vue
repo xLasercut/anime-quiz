@@ -24,7 +24,7 @@ import { SHARED_EVENTS } from '../../assets/shared/events';
 import { store } from '../../plugins/store';
 import { ROUTES } from '../../plugins/routing/routes';
 import { MUTATIONS } from '../../plugins/store/mutations';
-import { ROOM_NAME_FORMAT } from '../../assets/shared/constants';
+import { ROOM_NAME_FORMAT } from '../../assets/shared/constants/formats';
 
 export default defineComponent({
   components: { DialogTextField, DialogActions },

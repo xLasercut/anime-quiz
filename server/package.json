@@ -8,7 +8,8 @@
     "start": "node dist/index.js",
     "dev": "env-cmd -f ./config.env nodemon src/index.ts",
     "init:userdb": "ts-node tools/init-user-db.ts",
-    "prettier-format": "prettier --config ../.prettierrc 'src/**/*.ts' --write"
+    "prettier-format": "prettier --config ../.prettierrc 'src/**/*.ts' --write",
+    "interface:generate": "ts-node ./tools/generate-interfaces.ts"
   },
   "author": "xLasercut",
   "license": "MIT",
@@ -18,6 +19,7 @@
     "@types/uuid": "^8.3.4",
     "better-sqlite3": "^7.5.3",
     "env-cmd": "^10.1.0",
+    "joi": "^17.6.0",
     "moment": "^2.29.3",
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.16",
@@ -27,5 +29,8 @@
     "uuid": "^8.3.2",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.6.1"
+  },
+  "devDependencies": {
+    "joi-to-typescript": "^4.0.5"
   }
 }

@@ -33,7 +33,7 @@
 import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition-api';
 import { socket } from '../../../plugins/socket';
 import { SHARED_EVENTS } from '../../../assets/shared/events';
-import { AqGameGuess } from '../../../assets/shared/interfaces';
+import { IGameGuess } from '../../../assets/shared/interfaces';
 import FilteredCombobox from '../../shared/comboboxes/FilteredCombobox.vue';
 
 export default defineComponent({
@@ -55,9 +55,9 @@ export default defineComponent({
       state.disabled = false;
     });
 
-    socket.on(SHARED_EVENTS.UPDATE_GUESS, (guess: AqGameGuess) => {
-      state.selectedAnime = guess.anime;
-      state.selectedTitle = guess.title;
+    socket.on(SHARED_EVENTS.UPDATE_GUESS, (guess: IGameGuess) => {
+      state.selectedAnime = guess.anime || '';
+      state.selectedTitle = guess.title || '';
     });
 
     socket.on(SHARED_EVENTS.GAME_SHOW_GUESS, () => {
@@ -65,7 +65,7 @@ export default defineComponent({
     });
 
     function sendGuess(): void {
-      const guess: AqGameGuess = {
+      const guess: IGameGuess = {
         anime: state.anime,
         title: state.title
       };

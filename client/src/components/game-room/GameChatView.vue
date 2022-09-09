@@ -29,11 +29,11 @@ import { CLIENT_CONSTANTS } from '../../assets/constants';
 import ChatInput from './game-chat-view/ChatInput.vue';
 import { SHARED_EVENTS } from '../../assets/shared/events';
 import { socket } from '../../plugins/socket';
-import { AqGameChatMessage } from '../../assets/shared/interfaces';
+import { IGameChatMessage } from '../../assets/shared/interfaces';
 import ChatMessage from './game-chat-view/ChatMessage.vue';
 
 interface State {
-  messages: AqGameChatMessage[];
+  messages: IGameChatMessage[];
 }
 
 export default defineComponent({
@@ -55,7 +55,7 @@ export default defineComponent({
       }
     );
 
-    socket.on(SHARED_EVENTS.UPDATE_GAME_CHAT, (message: AqGameChatMessage) => {
+    socket.on(SHARED_EVENTS.UPDATE_GAME_CHAT, (message: IGameChatMessage) => {
       if (state.messages.length > 100) {
         state.messages.splice(0, 1);
       }

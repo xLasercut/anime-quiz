@@ -33,7 +33,7 @@ import { DIALOG_ROUTES } from '../../plugins/routing/routes';
 import { SHARED_EVENTS } from '../../assets/shared/events';
 import { socket } from '../../plugins/socket';
 import { newTableHelpers } from '../../assets/table-helper';
-import { USERNAME_FORMAT } from '../../assets/shared/constants';
+import { USERNAME_FORMAT } from '../../assets/shared/constants/formats';
 
 export default defineComponent({
   components: { DialogTextField, DialogActions },

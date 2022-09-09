@@ -1,6 +1,9 @@
 import { AdminStoreState, RootStoreState } from '../../assets/interfaces';
 import { Module } from 'vuex';
 import { MUTATIONS } from './mutations';
+import { OP } from '../../assets/shared/constants/song-types';
+import { IMG } from '../../assets/shared/constants/emoji-types';
+import { ISongType, IEmojiType } from '../../assets/shared/interfaces';
 
 const DEFAULT_STATE: AdminStoreState = {
   animeInEdit: {
@@ -14,13 +17,13 @@ const DEFAULT_STATE: AdminStoreState = {
     song_id: '',
     song_title: '',
     artist: '',
-    type: ''
+    type: OP
   },
   emojiInEdit: {
     emoji_id: '',
     command: '',
     src: '',
-    type: ''
+    type: IMG
   },
   userInEdit: {
     user_id: '',
@@ -59,7 +62,7 @@ const admin: Module<AdminStoreState, RootStoreState> = {
     [MUTATIONS.ADMIN_UPDATE_SONG_ANIME_NAME]: (state: AdminStoreState, animeNames: string[]) => {
       state.songInEdit.anime_name = animeNames;
     },
-    [MUTATIONS.ADMIN_UPDATE_SONG_TYPE]: (state: AdminStoreState, type: string) => {
+    [MUTATIONS.ADMIN_UPDATE_SONG_TYPE]: (state: AdminStoreState, type: ISongType) => {
       state.songInEdit.type = type;
     },
     [MUTATIONS.ADMIN_UPDATE_EMOJI_SRC]: (state: AdminStoreState, src: string) => {
@@ -68,7 +71,7 @@ const admin: Module<AdminStoreState, RootStoreState> = {
     [MUTATIONS.ADMIN_UPDATE_EMOJI_COMMAND]: (state: AdminStoreState, command: string) => {
       state.emojiInEdit.command = command;
     },
-    [MUTATIONS.ADMIN_UPDATE_EMOJI_TYPE]: (state: AdminStoreState, type: string) => {
+    [MUTATIONS.ADMIN_UPDATE_EMOJI_TYPE]: (state: AdminStoreState, type: IEmojiType) => {
       state.emojiInEdit.type = type;
     },
     [MUTATIONS.ADMIN_UPDATE_EMOJI_ID]: (state: AdminStoreState, id: string) => {

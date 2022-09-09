@@ -13,7 +13,6 @@ import { ROUTES } from '../../plugins/routing/routes';
 import NavBtn from '../shared/buttons/NavBtn.vue';
 import { socket } from '../../plugins/socket';
 import { SHARED_EVENTS } from 'anime-quiz-server/src/shared/events';
-import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants';
 
 export default defineComponent({
   components: { NavBtn },

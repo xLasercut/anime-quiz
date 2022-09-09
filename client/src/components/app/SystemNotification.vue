@@ -12,6 +12,7 @@
 <script lang="ts">
 import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
 import { CLIENT_EVENTS } from '../../assets/events';
+import { INotificationColor } from '../../assets/shared/interfaces';
 
 export default defineComponent({
   setup() {
@@ -21,13 +22,13 @@ export default defineComponent({
       color: 'error'
     });
 
-    function _showNotification(color: string, message: string): void {
+    function _showNotification(color: INotificationColor, message: string): void {
       state.color = color;
       state.message = message;
       state.show = true;
     }
 
-    function sendNotification(color: string, message: string): void {
+    function sendNotification(color: INotificationColor, message: string): void {
       if (state.show) {
         state.show = false;
         setTimeout((): void => {

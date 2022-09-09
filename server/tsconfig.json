@@ -6,7 +6,8 @@
     "module": "CommonJS",
     "lib": [
       "ESNext"
-    ]
+    ],
+    "moduleResolution": "Node"
   },
   "include": [
     "src/**/*"

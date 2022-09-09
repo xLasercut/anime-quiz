@@ -1,32 +1,31 @@
 import { AbstractHandler } from './abstract';
-import { Socket } from '../types';
+import { ISocket } from '../types';
 import { Logger } from '../app/logging/logger';
 import { SHARED_EVENTS } from '../shared/events';
-import { NOTIFICATION_COLOR } from '../shared/constants';
 import { LOG_BASE } from '../app/logging/log-base';
 import { Server } from '../app/server';
-import { AnimeQuizEmojiDb } from '../database/emoji';
-import { AnimeQuizSongDb } from '../database/song';
-import { AnimeQuizUserDb } from '../database/user';
-import { GameStates } from '../game/state';
+import { EmojiDb } from '../database/emoji';
+import { SongDb } from '../database/song';
+import { UserDb } from '../database/user';
+import { GameStatesDb } from '../game/state';
 import { SystemEmitter } from '../emitters/system';
+import { ERROR, SUCCESS } from '../shared/constants/colors';
 
 class AdminHandler extends AbstractHandler {
-  protected _emojiDb: AnimeQuizEmojiDb;
-  protected _songDb: AnimeQuizSongDb;
-  protected _userDb: AnimeQuizUserDb;
+  protected _emojiDb: EmojiDb;
+  protected _songDb: SongDb;
+  protected _userDb: UserDb;
   protected _io: Server;
-  protected _states: GameStates;
+  protected _states: GameStatesDb;
   protected _systemEmitter: SystemEmitter;
 
   constructor(
     logger: Logger,
-    systemEmitter: SystemEmitter,
     io: Server,
-    songDb: AnimeQuizSongDb,
-    emojiDb: AnimeQuizEmojiDb,
-    userDb: AnimeQuizUserDb,
-    states: GameStates
+    songDb: SongDb,
+    emojiDb: EmojiDb,
+    userDb: UserDb,
+    states: GameStatesDb
   ) {
     super(logger);
     this._songDb = songDb;
@@ -34,19 +33,19 @@ class AdminHandler extends AbstractHandler {
     this._emojiDb = emojiDb;
     this._userDb = userDb;
     this._states = states;
-    this._systemEmitter = systemEmitter;
+    this._systemEmitter = new SystemEmitter(io);
   }
 
-  public start(socket: Socket, errorHandler: Function) {
+  public start(socket: ISocket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.ADMIN_RELOAD_DB, () => {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_RELOAD_DB);
         this._validateIsAdmin(socket);
         this._songDb.reloadDb();
-        this._songDb.reloadCache();
+        // this._songDb.reloadCache();
         this._emojiDb.reloadDb();
         this._emojiDb.reloadCache();
-        this._systemEmitter.systemNotification(NOTIFICATION_COLOR.SUCCESS, 'Database reloaded');
+        this._systemEmitter.systemNotification(SUCCESS, 'Database reloaded');
       } catch (e) {
         errorHandler(e);
       }
@@ -56,11 +55,7 @@ class AdminHandler extends AbstractHandler {
       try {
         this._logger.writeLog(LOG_BASE.ADMIN_KICK_PLAYER, { kickedPlayerId: playerId });
         this._validateIsAdmin(socket);
-        this._systemEmitter.systemNotification(
-          NOTIFICATION_COLOR.ERROR,
-          'You have been kicked',
-          playerId
-        );
+        this._systemEmitter.systemNotification(ERROR, 'You have been kicked', playerId);
         this._io.kickPlayer(playerId);
       } catch (e) {
         errorHandler(e);
@@ -74,11 +69,7 @@ class AdminHandler extends AbstractHandler {
         this._userDb.lockDb();
         this._songDb.lockDb();
         this._emojiDb.lockDb();
-        this._systemEmitter.systemNotification(
-          NOTIFICATION_COLOR.SUCCESS,
-          'Database locked',
-          socket.id
-        );
+        this._systemEmitter.systemNotification(SUCCESS, 'Database locked', socket.id);
       } catch (e) {
         errorHandler(e);
       }
@@ -91,11 +82,7 @@ class AdminHandler extends AbstractHandler {
         this._userDb.unlockDb();
         this._songDb.unlockDb();
         this._emojiDb.unlockDb();
-        this._systemEmitter.systemNotification(
-          NOTIFICATION_COLOR.SUCCESS,
-          'Database unlocked',
-          socket.id
-        );
+        this._systemEmitter.systemNotification(SUCCESS, 'Database unlocked', socket.id);
       } catch (e) {
         errorHandler(e);
       }
@@ -109,11 +96,7 @@ class AdminHandler extends AbstractHandler {
         const songs = this._songDb.getSelectedUserSongs([songId]);
         if (songs.length === 1) {
           this._states.songOverride(songs[0], roomId);
-          this._systemEmitter.systemNotification(
-            NOTIFICATION_COLOR.SUCCESS,
-            'Song selected',
-            socket.id
-          );
+          this._systemEmitter.systemNotification(SUCCESS, 'Song selected', socket.id);
         }
       } catch (e) {
         errorHandler(e);

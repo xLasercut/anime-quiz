@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from '@vue/composition-api';
 import IconBtn from '../shared/buttons/IconBtn.vue';
-import { SONG_LIST_EDIT_MODE } from '../../assets/shared/constants';
+import { SONG_LIST_EDIT_MODE } from '../../assets/constants';
 
 export default defineComponent({
   components: { IconBtn },

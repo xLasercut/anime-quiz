@@ -1,6 +1,6 @@
 import { AbstractHandler } from './abstract';
 import { Logger } from '../app/logging/logger';
-import { Socket } from '../types';
+import { ISocket } from '../types';
 import { SHARED_EVENTS } from '../shared/events';
 import { RoomEmitter } from '../emitters/room';
 
@@ -12,7 +12,7 @@ class RoomHandler extends AbstractHandler {
     this._roomEmitter = roomEmitter;
   }
 
-  public start(socket: Socket, errorHandler: Function) {
+  public start(socket: ISocket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.LEAVE_ALL_ROOMS, () => {
       try {
         for (const roomId of Array.from(socket.rooms)) {

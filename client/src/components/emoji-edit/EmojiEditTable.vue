@@ -45,7 +45,7 @@
 import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
 import TablePagination from '../shared/TablePagination.vue';
 import { CLIENT_CONSTANTS } from '../../assets/constants';
-import { AqEmoji } from '../../assets/shared/interfaces';
+import { IEmoji } from '../../assets/shared/interfaces';
 import { store } from '../../plugins/store';
 import { MUTATIONS } from '../../plugins/store/mutations';
 import { CLIENT_EVENTS } from '../../assets/events';
@@ -73,8 +73,8 @@ export default defineComponent({
 
     const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
 
-    function filteredEmojiList(): AqEmoji[] {
-      return store.getters.emojiList.filter((emoji: AqEmoji) => {
+    function filteredEmojiList(): IEmoji[] {
+      return store.getters.emojiList.filter((emoji: IEmoji) => {
         return (
           emoji.command.toLowerCase().includes(state.emojiCommandFilter.toLowerCase()) &&
           emoji.src.toLowerCase().includes(state.emojiSourceFilter.toLowerCase()) &&
@@ -83,21 +83,21 @@ export default defineComponent({
       });
     }
 
-    function updateStore(emoji: AqEmoji): void {
+    function updateStore(emoji: IEmoji): void {
       store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_TYPE, emoji.type);
       store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_COMMAND, emoji.command);
       store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_SRC, emoji.src);
       store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_ID, emoji.emoji_id);
     }
 
-    function editEmoji(emoji: AqEmoji): void {
+    function editEmoji(emoji: IEmoji): void {
       if (openDialog) {
         updateStore(emoji);
         openDialog(DIALOG_ROUTES.EDIT_EMOJI_DIALOG, 'Edit Emoji');
       }
     }
 
-    function deleteEmoji(emoji: AqEmoji): void {
+    function deleteEmoji(emoji: IEmoji): void {
       if (openDialog) {
         updateStore(emoji);
         openDialog(DIALOG_ROUTES.DELETE_EMOJI_DIALOG, 'Delete Emoji');

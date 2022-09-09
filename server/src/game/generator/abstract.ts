@@ -1,11 +1,11 @@
-import { AnimeQuizSongDb } from '../../database/song';
-import { AnimeQuizUserDb } from '../../database/user';
-import { AqGameSettings, AqSong } from '../../shared/interfaces';
+import { SongDb } from '../../database/song';
+import { UserDb } from '../../database/user';
+import { IGameSettings, ISong } from '../../shared/interfaces';
 import { shuffleSongList } from '../../shared/helpers';
 
 class AbstractGameListGenerator {
-  protected _songDb: AnimeQuizSongDb;
-  protected _userDb: AnimeQuizUserDb;
+  protected _songDb: SongDb;
+  protected _userDb: UserDb;
   protected _duplicate: boolean;
   protected _songCount: number;
   protected _users: string[];
@@ -13,12 +13,7 @@ class AbstractGameListGenerator {
   protected _dupeAnimeIds: Set<string>;
   protected _shuffle: boolean;
 
-  constructor(
-    songDb: AnimeQuizSongDb,
-    userDb: AnimeQuizUserDb,
-    settings: AqGameSettings,
-    shuffle: boolean
-  ) {
+  constructor(songDb: SongDb, userDb: UserDb, settings: IGameSettings, shuffle: boolean) {
     this._songDb = songDb;
     this._userDb = userDb;
     this._duplicate = settings.duplicate;
@@ -29,7 +24,7 @@ class AbstractGameListGenerator {
     this._shuffle = shuffle;
   }
 
-  protected _isDupeAnime(song: AqSong): boolean {
+  protected _isDupeAnime(song: ISong): boolean {
     if (this._duplicate) {
       return false;
     }
@@ -42,27 +37,27 @@ class AbstractGameListGenerator {
     return false;
   }
 
-  protected _addDupeAnimeIds(song: AqSong): void {
+  protected _addDupeAnimeIds(song: ISong): void {
     for (const animeId of song.anime_id) {
       this._dupeAnimeIds.add(animeId);
     }
   }
 
-  protected _addDupeSongId(song: AqSong): void {
+  protected _addDupeSongId(song: ISong): void {
     this._dupeSongIds.add(song.song_id);
   }
 
-  protected _isDupeSong(song: AqSong): boolean {
+  protected _isDupeSong(song: ISong): boolean {
     return this._dupeSongIds.has(song.song_id);
   }
 
   protected _initGeneratorVars(): void {}
 
-  protected _generateList(): AqSong[] {
+  protected _generateList(): ISong[] {
     return [];
   }
 
-  public generate(): AqSong[] {
+  public generate(): ISong[] {
     if (this._users.length <= 0) {
       return [];
     }

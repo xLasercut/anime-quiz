@@ -1,33 +1,30 @@
 import { AbstractHandler } from './abstract';
 import { Logger } from '../app/logging/logger';
-import { Socket } from '../types';
+import { ISocket } from '../types';
 import { SHARED_EVENTS } from '../shared/events';
 import { ROOM_IDS } from '../constants';
-import { AqAnime } from '../shared/interfaces';
-import { NOTIFICATION_COLOR } from '../shared/constants';
+import { IAnime } from '../shared/interfaces';
 import { LOG_BASE } from '../app/logging/log-base';
-import { AnimeQuizSongDb } from '../database/song';
+import { SongDb } from '../database/song';
 import { SongDbEmitter } from '../emitters/song';
 import { SystemEmitter } from '../emitters/system';
+import { Server } from '../app/server';
+import { Anime, NewAnime } from '../models/anime';
+import { SUCCESS } from '../shared/constants/colors';
 
 class AnimeEditHandler extends AbstractHandler {
-  protected _songDb: AnimeQuizSongDb;
+  protected _songDb: SongDb;
   protected _songDbEmitter: SongDbEmitter;
   protected _systemEmitter: SystemEmitter;
 
-  constructor(
-    logger: Logger,
-    systemEmitter: SystemEmitter,
-    songDb: AnimeQuizSongDb,
-    songDbEmitter: SongDbEmitter
-  ) {
+  constructor(io: Server, logger: Logger, songDb: SongDb) {
     super(logger);
     this._songDb = songDb;
-    this._songDbEmitter = songDbEmitter;
-    this._systemEmitter = systemEmitter;
+    this._songDbEmitter = new SongDbEmitter(io, songDb);
+    this._systemEmitter = new SystemEmitter(io);
   }
 
-  public start(socket: Socket, errorHandler: Function) {
+  public start(socket: ISocket, errorHandler: Function) {
     socket.on(SHARED_EVENTS.JOIN_ANIME_EDIT, () => {
       try {
         this._validateIsAdmin(socket);
@@ -38,15 +35,16 @@ class AnimeEditHandler extends AbstractHandler {
       }
     });
 
-    socket.on(SHARED_EVENTS.ADMIN_EDIT_ANIME, (anime: AqAnime, callback: Function) => {
+    socket.on(SHARED_EVENTS.ADMIN_EDIT_ANIME, (_anime: IAnime, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: anime, type: 'edit' });
+        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: _anime, type: 'edit' });
         this._validateIsAdmin(socket);
-        this._songDb.validateIsDbLocked();
-        this._songDb.validateAnimeExist([anime.anime_id]);
+        this._songDb.validateDbNotLocked();
+        const anime = new Anime(_anime).dict();
+        this._songDb.validateAnimesExist([anime.anime_id]);
         this._songDb.editAnime(anime);
         this._systemEmitter.systemNotification(
-          NOTIFICATION_COLOR.SUCCESS,
+          SUCCESS,
           `${anime.anime_name.join(',')} edited`,
           socket.id
         );
@@ -58,14 +56,15 @@ class AnimeEditHandler extends AbstractHandler {
       }
     });
 
-    socket.on(SHARED_EVENTS.ADMIN_NEW_ANIME, (anime: AqAnime, callback: Function) => {
+    socket.on(SHARED_EVENTS.ADMIN_NEW_ANIME, (_anime: IAnime, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: anime, type: 'add' });
+        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: _anime, type: 'add' });
         this._validateIsAdmin(socket);
-        this._songDb.validateIsDbLocked();
+        this._songDb.validateDbNotLocked();
+        const anime = new NewAnime(_anime).dict();
         this._songDb.newAnime(anime);
         this._systemEmitter.systemNotification(
-          NOTIFICATION_COLOR.SUCCESS,
+          SUCCESS,
           `${anime.anime_name.join(',')} added`,
           socket.id
         );
@@ -77,15 +76,16 @@ class AnimeEditHandler extends AbstractHandler {
       }
     });
 
-    socket.on(SHARED_EVENTS.ADMIN_DELETE_ANIME, (anime: AqAnime, callback: Function) => {
+    socket.on(SHARED_EVENTS.ADMIN_DELETE_ANIME, (_anime: IAnime, callback: Function) => {
       try {
-        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: anime, type: 'delete' });
+        this._logger.writeLog(LOG_BASE.ADMIN_ANIME_EDIT, { anime: _anime, type: 'delete' });
         this._validateIsAdmin(socket);
-        this._songDb.validateIsDbLocked();
-        this._songDb.validateAnimeExist([anime.anime_id]);
+        this._songDb.validateDbNotLocked();
+        const anime = new Anime(_anime).dict();
+        this._songDb.validateAnimesExist([anime.anime_id]);
         this._songDb.deleteAnime(anime);
         this._systemEmitter.systemNotification(
-          NOTIFICATION_COLOR.SUCCESS,
+          SUCCESS,
           `${anime.anime_name.join(',')} deleted`,
           socket.id
         );

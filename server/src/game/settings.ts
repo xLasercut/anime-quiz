@@ -1,44 +1,38 @@
-import { AqGameSettings } from '../shared/interfaces';
-import { GAME_MODE } from '../shared/constants';
+import { IGameSettings } from '../shared/interfaces';
 import { Logger } from '../app/logging/logger';
 import { LOG_BASE } from '../app/logging/log-base';
 import { GameDataValidationError } from '../app/exceptions';
-import { SettingsValidator } from '../validator/settings';
+import { NORMAL } from '../shared/constants/game-modes';
+import { GameSettings } from '../models/game';
 
-class GameSettings {
+class GameSettingsDb {
   protected _logger: Logger;
-  protected _settings: { [key: string]: AqGameSettings };
-  protected _validator: SettingsValidator;
+  protected _settings: { [key: string]: GameSettings };
 
   constructor(logger: Logger) {
     this._logger = logger;
     this._settings = {};
-    this._validator = new SettingsValidator();
   }
 
-  public getGameSettings(roomId: string): AqGameSettings {
+  public getGameSettings(roomId: string): IGameSettings {
     this._validateRoomExists(roomId);
-    return this._settings[roomId];
+    return this._settings[roomId].dict();
   }
 
-  public editSettings(roomId: string, settings: AqGameSettings): void {
+  public editSettings(roomId: string, _settings: IGameSettings): void {
     this._validateRoomExists(roomId);
-    this._validator.validateSettings(settings);
-    this._settings[roomId].songCount = settings.songCount;
-    this._settings[roomId].guessTime = settings.guessTime;
-    this._settings[roomId].gameMode = settings.gameMode;
-    this._settings[roomId].duplicate = settings.duplicate;
-    this._settings[roomId].users = settings.users;
+    this._settings[roomId] = new GameSettings(_settings);
   }
 
   public addRoom(roomId: string): void {
-    this._settings[roomId] = {
+    const settings: IGameSettings = {
       songCount: 20,
       guessTime: 30,
-      gameMode: GAME_MODE.NORMAL,
+      gameMode: NORMAL,
       duplicate: false,
       users: []
     };
+    this._settings[roomId] = new GameSettings(settings);
   }
 
   public deleteRoom(roomId: string): void {
@@ -47,10 +41,12 @@ class GameSettings {
 
   protected _validateRoomExists(roomId: string): void {
     if (!(roomId in this._settings)) {
-      this._logger.writeLog(LOG_BASE.ROOM_DATA_VALIDATION_FAILURE, { roomName: roomId });
+      this._logger.writeLog(LOG_BASE.ROOM_DATA_VALIDATION_FAILURE, {
+        roomName: roomId
+      });
       throw new GameDataValidationError('Room does not exist');
     }
   }
 }
 
-export { GameSettings };
+export { GameSettingsDb };

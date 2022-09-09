@@ -1,12 +1,12 @@
 import { AbstractGameListGenerator } from './abstract';
-import { AqGameSettings, AqSong } from '../../shared/interfaces';
-import { AnimeQuizSongDb } from '../../database/song';
-import { AnimeQuizUserDb } from '../../database/user';
+import { IGameSettings, ISong } from '../../shared/interfaces';
+import { SongDb } from '../../database/song';
+import { UserDb } from '../../database/user';
 
 class BalancedGameListGenerator extends AbstractGameListGenerator {
   protected _songsPerUser: number;
 
-  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings) {
+  constructor(songDb: SongDb, userDb: UserDb, settings: IGameSettings) {
     super(songDb, userDb, settings, true);
   }
 
@@ -14,7 +14,7 @@ class BalancedGameListGenerator extends AbstractGameListGenerator {
     this._songsPerUser = Math.floor(this._songCount / this._users.length);
   }
 
-  protected _generateList(): AqSong[] {
+  protected _generateList(): ISong[] {
     const userLists = this._userDb.getSelectedUserLists(this._users);
     const songList = [];
     for (const userList of userLists) {

@@ -51,17 +51,21 @@ import { defineComponent, onUnmounted, reactive, toRefs } from '@vue/composition
 import DialogActions from '../shared/dialog/DialogActions.vue';
 import DialogSlider from '../shared/dialog/DialogSlider.vue';
 import DialogSelect from '../shared/dialog/DialogSelect.vue';
-import { GAME_MODE } from '../../assets/shared/constants';
 import { socket } from '../../plugins/socket';
 import { SHARED_EVENTS } from '../../assets/shared/events';
-import { AqGameSettings } from '../../assets/shared/interfaces';
+import { IGameMode, IGameSettings } from '../../assets/shared/interfaces';
 import { store } from '../../plugins/store';
-import { newTableHelpers } from '../../assets/table-helper';
 import { MUTATIONS } from '../../plugins/store/mutations';
+import {
+  BALANCED,
+  BALANCED_PLUS,
+  NORMAL,
+  SHIRITORI
+} from '../../assets/shared/constants/game-modes';
 
 interface GameModeItem {
   text: string;
-  value: string;
+  value: IGameMode;
 }
 
 interface ToggleItem {
@@ -73,7 +77,7 @@ interface State {
   valid: boolean;
   songCount: number;
   guessTime: number;
-  gameMode: string;
+  gameMode: IGameMode;
   duplicate: boolean;
   users: string[];
   gameModes: GameModeItem[];
@@ -87,14 +91,14 @@ export default defineComponent({
       valid: false,
       songCount: 20,
       guessTime: 30,
-      gameMode: GAME_MODE.NORMAL,
+      gameMode: NORMAL,
       duplicate: false,
       users: [],
       gameModes: [
-        { text: 'Normal', value: GAME_MODE.NORMAL },
-        { text: 'Balanced', value: GAME_MODE.BALANCED },
-        { text: 'Balanced Plus', value: GAME_MODE.BALANCED_PLUS },
-        { text: 'Shiritori', value: GAME_MODE.SHIRITORI }
+        { text: 'Normal', value: NORMAL },
+        { text: 'Balanced', value: BALANCED },
+        { text: 'Balanced Plus', value: BALANCED_PLUS },
+        { text: 'Shiritori', value: SHIRITORI }
       ],
       toggleItems: [
         { text: 'Yes', value: true },
@@ -105,7 +109,7 @@ export default defineComponent({
     function setSettings() {
       if (state.valid) {
         store.commit(MUTATIONS.EDIT_DISABLE_GAME_SETTINGS, true);
-        const settings: AqGameSettings = {
+        const settings: IGameSettings = {
           songCount: state.songCount,
           guessTime: state.guessTime,
           gameMode: state.gameMode,
@@ -121,7 +125,7 @@ export default defineComponent({
       }
     }
 
-    socket.on(SHARED_EVENTS.UPDATE_GAME_SETTINGS, (settings: AqGameSettings) => {
+    socket.on(SHARED_EVENTS.UPDATE_GAME_SETTINGS, (settings: IGameSettings) => {
       state.songCount = settings.songCount;
       state.guessTime = settings.guessTime;
       state.gameMode = settings.gameMode;

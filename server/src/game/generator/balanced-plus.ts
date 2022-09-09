@@ -1,13 +1,13 @@
 import { AbstractGameListGenerator } from './abstract';
-import { AqGameSettings, AqSong } from '../../shared/interfaces';
-import { AnimeQuizSongDb } from '../../database/song';
-import { AnimeQuizUserDb } from '../../database/user';
+import { IGameSettings, ISong } from '../../shared/interfaces';
+import { SongDb } from '../../database/song';
+import { UserDb } from '../../database/user';
 
 class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
   protected _songsPerUser: number;
   protected _normalSongCount: number;
 
-  constructor(songDb: AnimeQuizSongDb, userDb: AnimeQuizUserDb, settings: AqGameSettings) {
+  constructor(songDb: SongDb, userDb: UserDb, settings: IGameSettings) {
     super(songDb, userDb, settings, true);
   }
 
@@ -16,11 +16,11 @@ class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
     this._songsPerUser = Math.floor(this._normalSongCount / this._users.length);
   }
 
-  protected _generateList(): AqSong[] {
+  protected _generateList(): ISong[] {
     return this._generateNormalList().concat(this._generateBalancedList());
   }
 
-  protected _generateNormalList(): AqSong[] {
+  protected _generateNormalList(): ISong[] {
     const userSongIds = this._userDb.getSelectedUserSongIds(this._users);
     const userSongs = this._songDb.getSelectedUserSongs(userSongIds);
     const songList = [];
@@ -37,7 +37,7 @@ class BalancedPlusGameListGenerator extends AbstractGameListGenerator {
     return songList;
   }
 
-  protected _generateBalancedList(): AqSong[] {
+  protected _generateBalancedList(): ISong[] {
     const userLists = this._userDb.getSelectedUserLists(this._users);
     const songList = [];
     for (const userList of userLists) {

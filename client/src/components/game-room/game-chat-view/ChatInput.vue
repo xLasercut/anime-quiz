@@ -37,14 +37,14 @@ import { defineComponent, reactive, ref, toRefs, watch } from '@vue/composition-
 import { socket } from '../../../plugins/socket';
 import { SHARED_EVENTS } from '../../../assets/shared/events';
 import { store } from '../../../plugins/store';
-import { AqEmoji } from '../../../assets/shared/interfaces';
+import { IEmoji } from '../../../assets/shared/interfaces';
 
 const EMOJI_CHAT_FORMAT = new RegExp('(:)(?:[^:]+)$', 'ig');
 
 interface State {
   message: string;
   show: boolean;
-  choices: AqEmoji[];
+  choices: IEmoji[];
   choicesOldLength: number;
 }
 
@@ -73,7 +73,7 @@ export default defineComponent({
           const match = val.match(EMOJI_CHAT_FORMAT);
           if (match) {
             const command = match[0];
-            state.choices = store.getters.emojiList.filter((emoji: AqEmoji) => {
+            state.choices = store.getters.emojiList.filter((emoji: IEmoji) => {
               return `:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase());
             });
             const currentLength = state.choices.length;

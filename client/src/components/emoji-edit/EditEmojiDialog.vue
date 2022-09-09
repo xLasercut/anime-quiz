@@ -49,8 +49,8 @@ import { EMOJI_TYPES } from '../../assets/constants';
 import { DIALOG_ROUTES } from '../../plugins/routing/routes';
 import { SHARED_EVENTS } from '../../assets/shared/events';
 import { socket } from '../../plugins/socket';
-import { VALID_EMOJI_TYPES } from '../../assets/shared/constants';
 import { newTableHelpers } from '../../assets/table-helper';
+import { VALID_EMOJI_TYPES } from '../../assets/shared/constants/emoji-types';
 
 export default defineComponent({
   components: { DialogSelect, DialogTextField, DialogActions },

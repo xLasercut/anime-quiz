@@ -15,7 +15,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from '@vue/composition-api';
 import GameAvatar from '../../shared/GameAvatar.vue';
-import { AqGameChatMessage } from '../../../assets/shared/interfaces';
+import { IGameChatMessage } from '../../../assets/shared/interfaces';
 import { store } from '../../../plugins/store';
 
 export default defineComponent({
@@ -23,7 +23,7 @@ export default defineComponent({
   props: {
     message: {
       required: true,
-      type: Object as PropType<AqGameChatMessage>
+      type: Object as PropType<IGameChatMessage>
     }
   },
   setup(props, _context) {

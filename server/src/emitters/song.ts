@@ -1,12 +1,12 @@
 import { AbstractEmitter } from './abstract';
 import { Server } from '../app/server';
-import { AnimeQuizSongDb } from '../database/song';
+import { SongDb } from '../database/song';
 import { SHARED_EVENTS } from '../shared/events';
 
 class SongDbEmitter extends AbstractEmitter {
-  protected _songDb: AnimeQuizSongDb;
+  protected _songDb: SongDb;
 
-  constructor(io: Server, songDb: AnimeQuizSongDb) {
+  constructor(io: Server, songDb: SongDb) {
     super(io);
     this._songDb = songDb;
   }

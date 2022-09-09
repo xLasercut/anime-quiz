@@ -1,41 +1,20 @@
-import { AqSong } from './shared/interfaces';
+import { ISong } from './shared/interfaces';
 
-interface LogTemplate {
+interface ILogTemplate {
   reference: string;
   level: string;
   message: string;
 }
 
-interface AqSongRaw {
-  anime_name: string;
-  anime_id: string;
-  song_id: string;
-  type: string;
-  artist: string;
-  song_title: string;
-  src: string;
-}
-
-interface AqUserSongsRaw {
-  user_id: string;
-  song_id: string;
-  username: string;
-}
-
-interface AqGameStateRaw {
+interface IGameStateRaw {
   playing: boolean;
   currentSongCount: number;
   startPosition: number;
-  gameList: AqSong[];
-  songOverride: AqSong | null;
+  gameList: ISong[];
+  songOverride: ISong | null;
   countdown: NodeJS.Timer;
   timeout: NodeJS.Timeout;
-  currentSong: AqSong;
+  currentSong: ISong;
 }
 
-interface AqAnimeRaw {
-  anime_id: string;
-  anime_name: string;
-}
-
-export { LogTemplate, AqSongRaw, AqUserSongsRaw, AqGameStateRaw, AqAnimeRaw };
+export { ILogTemplate, IGameStateRaw };
