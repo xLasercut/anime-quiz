@@ -16,7 +16,7 @@
     "socket.io-client": "^4.5.0",
     "vue": "^2.6.14",
     "vue-youtube-embed": "^2.2.2",
-    "vuetify": "^2.6.0",
+    "vuetify": "^2.6.10",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
