@@ -42,7 +42,7 @@ class AdminHandler extends AbstractHandler {
         this._logger.writeLog(LOG_BASE.ADMIN_RELOAD_DB);
         this._validateIsAdmin(socket);
         this._songDb.reloadDb();
-        // this._songDb.reloadCache();
+        this._songDb.reloadCache();
         this._emojiDb.reloadDb();
         this._emojiDb.reloadCache();
         this._systemEmitter.systemNotification(SUCCESS, 'Database reloaded');
