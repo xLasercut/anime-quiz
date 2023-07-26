@@ -1,16 +1,19 @@
-import Database from 'better-sqlite3'
-import {SERVER_CONFIG} from "../src/app/config";
+import Database from 'better-sqlite3';
+import { SERVER_CONFIG } from '../src/app/config';
 
-const db = new Database(SERVER_CONFIG.userDbPath)
+const db = new Database(SERVER_CONFIG.userDbPath);
 
-db.prepare(`
+db.prepare(
+  `
 CREATE TABLE IF NOT EXISTS user_songs
 (
     user_id text not null,
     song_id text not null
-)`).run()
+)`
+).run();
 
-db.prepare(`
+db.prepare(
+  `
 CREATE TABLE IF NOT EXISTS users
 (
     discord_id   text    not null
@@ -21,6 +24,7 @@ CREATE TABLE IF NOT EXISTS users
     avatar       text    not null,
     admin        integer not null
 );
-`).run()
+`
+).run();
 
-db.close()
+db.close();

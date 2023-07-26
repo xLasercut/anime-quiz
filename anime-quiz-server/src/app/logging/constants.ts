@@ -11,7 +11,8 @@ const LOG_REFERENCES = Object.freeze({
   SERVER_START: 'SERVER001',
   CLIENT_CONNECTED: 'SERVER002',
   CLIENT_DISCONNECTED: 'SERVER003',
-  INTERNAL_SERVER_ERROR: 'SERVER004'
+  INTERNAL_SERVER_ERROR: 'SERVER004',
+  UNAUTHORIZED_CLIENT: 'SERVER005'
 });
 
 const LOG_TEMPLATES = Object.freeze<{ [key: string]: LogTemplate }>({
@@ -30,6 +31,10 @@ const LOG_TEMPLATES = Object.freeze<{ [key: string]: LogTemplate }>({
   [LOG_REFERENCES.INTERNAL_SERVER_ERROR]: {
     message: 'internal server error',
     level: LOG_LEVEL.ERROR
+  },
+  [LOG_REFERENCES.UNAUTHORIZED_CLIENT]: {
+    message: 'unauthorized client',
+    level: LOG_LEVEL.WARN
   }
 });
 

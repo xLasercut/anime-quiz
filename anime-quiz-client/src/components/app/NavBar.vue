@@ -14,9 +14,10 @@
 import {Component, defineComponent} from 'vue';
 import { LOCAL_STORAGE_CONSTANTS } from 'anime-quiz-client/src/assets/constants';
 import { useTheme } from 'vuetify';
-import {PANEL_MAPPING} from "@/plugins/routing/mapping";
+import {PANEL_MAPPING} from "@/assets/routing/mapping";
 import {useClientStore} from "@/plugins/store/client";
 import NavBtn from "@/components/common/buttons/NavBtn.vue";
+import DefaultPanel from "@/components/app/DefaultPanel.vue";
 
 export default defineComponent({
   components: {NavBtn},
@@ -25,7 +26,7 @@ export default defineComponent({
     const clientStore = useClientStore()
 
     function panelComponent(): Component {
-      return PANEL_MAPPING[clientStore.view]
+      return PANEL_MAPPING[clientStore.view] || DefaultPanel
     }
 
     function changeTheme(): void {

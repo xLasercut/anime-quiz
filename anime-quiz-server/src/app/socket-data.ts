@@ -4,6 +4,7 @@ import { ClientData } from '../shared/models/client';
 
 class SocketData {
   protected _clientData: ClientDataType;
+  public clientAuthTimer?: NodeJS.Timeout;
 
   constructor() {
     this._clientData = {

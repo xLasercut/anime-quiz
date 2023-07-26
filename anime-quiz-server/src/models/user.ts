@@ -10,4 +10,8 @@ const DbUser = z.object({
   avatar: z.string().trim().min(1)
 });
 
-export { DbUser };
+const DbAllowedUser = z.object({
+  discord_id: z.string().trim().min(1)
+})
+
+export { DbUser, DbAllowedUser };

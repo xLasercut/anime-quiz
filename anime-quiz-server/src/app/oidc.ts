@@ -12,8 +12,8 @@ interface DiscordTokenApiResponse {
 interface DiscordUserApiResponse {
   id: string;
   username: string;
-  avatar: string | null;
-  global_name: string | null;
+  avatar?: string;
+  global_name?: string;
 }
 
 class Oidc {

@@ -9,6 +9,9 @@ import { Server } from './app/server';
 import { UserDb } from './database/user';
 import { Socket } from './types';
 import { SocketData } from './app/socket-data';
+import { SOCKET_EVENTS } from './shared/events';
+import { Emitter } from './emitters/emitter';
+import { newSocketErrorHandler, UnauthorizedError } from './app/exceptions';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -18,23 +21,36 @@ const io = new Server(httpServer, {
 });
 const oidc = new Oidc(SERVER_CONFIG);
 const logger = new Logger(SERVER_CONFIG);
+const emitter = new Emitter(io);
 const userDb = new UserDb(SERVER_CONFIG, logger);
 const handlerDependencies = Object.freeze<HandlerDependencies>({
   logger: logger,
   config: SERVER_CONFIG,
   oidc: oidc,
-  userDb: userDb
+  userDb: userDb,
+  emitter: emitter
 });
 
-io.on('connection', (socket: Socket) => {
+io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   logger.writeLog(LOG_REFERENCES.CLIENT_CONNECTED, { id: socket.id });
-  socket.data = new SocketData();
-  const oidcHandler = new OidcHandler(socket, handlerDependencies);
+  const socketErrHandler = newSocketErrorHandler(logger, socket, emitter);
+  const oidcHandler = new OidcHandler(socket, socketErrHandler, handlerDependencies);
   oidcHandler.start();
+  socket.data = new SocketData();
+  socket.data.clientAuthTimer = setTimeout(
+    socketErrHandler(() => {
+      checkClientAuth(socket);
+    }),
+    SERVER_CONFIG.clientAuthDelay
+  );
 
-  socket.on('disconnect', async () => {
-    logger.writeLog(LOG_REFERENCES.CLIENT_DISCONNECTED, { id: socket.id });
-  });
+  socket.on(
+    SOCKET_EVENTS.DISCONNECT,
+    socketErrHandler(() => {
+      logger.writeLog(LOG_REFERENCES.CLIENT_DISCONNECTED, { id: socket.id });
+      clearTimeout(socket.data.clientAuthTimer);
+    })
+  );
 });
 
 httpServer.listen(SERVER_CONFIG.serverPort, async () => {
@@ -43,3 +59,9 @@ httpServer.listen(SERVER_CONFIG.serverPort, async () => {
     corsConfig: SERVER_CONFIG.corsConfig
   });
 });
+
+function checkClientAuth(socket: Socket) {
+  if (!socket.data.clientData.auth) {
+    throw new UnauthorizedError();
+  }
+}

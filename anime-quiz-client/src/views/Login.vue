@@ -1,5 +1,26 @@
 <template>
-  <v-btn @click="login()">login via discord</v-btn>
+  <v-main>
+    <v-card :flat="true">
+      <v-card-title>
+        <v-row justify="center">
+          <v-col cols="auto">
+            <h2>Login</h2>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-text>
+        <v-container :fluid="true">
+          <v-row justify="center" no-gutters>
+            <v-col cols="auto">
+              <icon-btn icon="mdi-login" color="success" @click="login()">
+                login via discord
+              </icon-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </v-card>
+  </v-main>
 </template>
 
 <script lang="ts">
@@ -9,13 +30,24 @@ import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { ClientDataType } from '@/assets/shared/models/types';
 import { useClientStore } from '@/plugins/store/client';
 import { ClientData } from '@/assets/shared/models/client';
-import { ROUTES } from '@/plugins/routing/routes';
+import { ROUTES } from '@/assets/routing/routes';
+import IconBtn from '@/components/common/buttons/IconBtn.vue';
+import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { injectStrict } from '@/assets/game-helpers';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { SendNotification } from '@/assets/types';
 
 export default defineComponent({
+  components: { IconBtn },
   setup() {
     const clientStore = useClientStore();
+    const sendNotification = injectStrict<SendNotification>(CLIENT_EVENTS.SYSTEM_NOTIFICATION);
 
     function login() {
+      if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
+        sendNotification('error', 'Server URL not set');
+        return
+      }
       socket.connect();
       socket.emit(SOCKET_EVENTS.GET_AUTHORIZE_URL, (url: string) => {
         window.location.href = url;
@@ -46,6 +78,7 @@ export default defineComponent({
     onMounted(() => {
       authorizeUser();
     });
+
     return { login };
   }
 });

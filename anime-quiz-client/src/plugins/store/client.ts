@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ROUTES } from '@/plugins/routing/routes';
+import { ROUTES } from '@/assets/routing/routes';
 import { getDefaultVolume } from '@/assets/game-helpers';
 import { ClientDataType } from '@/assets/shared/models/types';
 
@@ -33,6 +33,9 @@ const useClientStore = defineStore('client', {
     },
     changeView(view: string) {
       this.view = view
+    },
+    changeDialogView(view: string) {
+      this.dialogView = view
     }
   }
 });

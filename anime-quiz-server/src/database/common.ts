@@ -21,7 +21,12 @@ abstract class AbstractDb {
     this._db.close();
     this._db = new Database(this._filepath, { fileMustExist: true });
     this._db.pragma('journal_mode = WAL');
+    this.reloadCache();
     this.unlockDb();
+  }
+
+  public reloadCache(): void {
+    throw new Error('not implemented');
   }
 
   public lockDb(): void {

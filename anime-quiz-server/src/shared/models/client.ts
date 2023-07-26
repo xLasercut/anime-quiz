@@ -10,4 +10,16 @@ const ClientData = z.object({
   auth: z.boolean()
 });
 
-export { ClientData };
+const NotificationColor = z.union([
+  z.literal('error'),
+  z.literal('warning'),
+  z.literal('success'),
+  z.literal('info')
+]);
+
+const SystemNotification = z.object({
+  color: NotificationColor,
+  message: z.string().trim().min(1)
+});
+
+export { ClientData, NotificationColor, SystemNotification };

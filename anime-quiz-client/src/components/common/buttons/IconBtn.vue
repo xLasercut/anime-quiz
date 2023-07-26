@@ -1,5 +1,5 @@
 <template>
-  <v-btn :append-icon="icon" size="small" density="comfortable" variant="text">
+  <v-btn :append-icon="icon" :flat="true">
     <slot></slot>
   </v-btn>
 </template>
