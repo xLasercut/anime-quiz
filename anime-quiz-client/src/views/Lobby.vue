@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="login()">Login with discord</v-btn>
+  home
 </template>
 
 <script lang="ts">

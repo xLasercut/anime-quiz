@@ -23,10 +23,12 @@ dist-ssr
 *.sw?
 
 # server logs
-server/log/
+*/log/
 server/data-backup/
 
 anime-quiz-user.db
+anime-quiz-user.db-wal
+anime-quiz-user.db-shm
 
 !.gitkeep
 

@@ -1,30 +1,45 @@
 import { createServer } from 'http';
-import { Server } from 'socket.io';
-import {DISCORD_URL} from "./app/oidc";
-import {LOG_BASE} from "anime-quiz-server/src/app/logging/log-base";
+import { Oidc } from './app/oidc';
+import { Logger } from './app/logging/logger';
+import { SERVER_CONFIG } from './app/config';
+import { LOG_REFERENCES } from './app/logging/constants';
+import { HandlerDependencies } from './interfaces';
+import { OidcHandler } from './handlers/authentication';
+import { Server } from './app/server';
+import { UserDb } from './database/user';
+import { Socket } from './types';
+import { SocketData } from './app/socket-data';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: '*'
+    origin: SERVER_CONFIG.corsConfig
   }
 });
+const oidc = new Oidc(SERVER_CONFIG);
+const logger = new Logger(SERVER_CONFIG);
+const userDb = new UserDb(SERVER_CONFIG, logger);
+const handlerDependencies = Object.freeze<HandlerDependencies>({
+  logger: logger,
+  config: SERVER_CONFIG,
+  oidc: oidc,
+  userDb: userDb
+});
 
-
-io.on('connection', (socket) => {
-  console.log(`connected: ${socket.id}`)
-  socket.emit("discord_redirect", DISCORD_URL)
-
-  socket.on("discord_code", (code) => {
-    console.log("discord code")
-    console.log(code)
-  })
+io.on('connection', (socket: Socket) => {
+  logger.writeLog(LOG_REFERENCES.CLIENT_CONNECTED, { id: socket.id });
+  socket.data = new SocketData();
+  const oidcHandler = new OidcHandler(socket, handlerDependencies);
+  oidcHandler.start();
 
   socket.on('disconnect', async () => {
-    console.log(`disconnected ${socket.id}`)
+    logger.writeLog(LOG_REFERENCES.CLIENT_DISCONNECTED, { id: socket.id });
   });
 });
 
-httpServer.listen(3000, async () => {
-  console.log('started server');
+httpServer.listen(SERVER_CONFIG.serverPort, async () => {
+  logger.writeLog(LOG_REFERENCES.SERVER_START, {
+    port: SERVER_CONFIG.serverPort,
+    corsConfig: SERVER_CONFIG.corsConfig
+  });
 });

@@ -1,26 +1,42 @@
-/**
- * plugins/vuetify.ts
- *
- * Framework documentation: https://vuetifyjs.com`
- */
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
+import { createVuetify, ThemeDefinition } from 'vuetify';
+import { getDefaultTheme } from '@/assets/game-helpers';
 
-// Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+const nordDark: ThemeDefinition = {
+  dark: true,
+  colors: {
+    background: '#4c566a',
+    surface: '#2e3440',
+    primary: '#81a1c1',
+    secondary: '#5e81ac',
+    error: '#bf616a',
+    info: '#b48ead',
+    success: '#a3be8c',
+    warning: '#ebcb8b'
+  }
+};
 
-// Composables
-import { createVuetify } from 'vuetify'
+const nordLight: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#ffffff',
+    surface: '#d8dee9',
+    primary: '#81a1c1',
+    secondary: '#5e81ac',
+    error: '#bf616a',
+    info: '#b48ead',
+    success: '#a3be8c',
+    warning: '#ebcb8b'
+  }
+};
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
+    defaultTheme: getDefaultTheme(),
     themes: {
-      light: {
-        colors: {
-          primary: '#1867C0',
-          secondary: '#5CBBF6',
-        },
-      },
-    },
-  },
-})
+      dark: nordDark,
+      light: nordLight
+    }
+  }
+});

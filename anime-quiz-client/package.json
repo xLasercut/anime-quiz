@@ -10,12 +10,13 @@
     "@mdi/font": "7.0.96",
     "axios": "^1.4.0",
     "install": "^0.13.0",
+    "pinia": "^2.1.4",
     "roboto-fontface": "*",
     "socket.io-client": "^4.7.1",
     "vue": "^3.2.0",
-    "vue-router": "^4.2.4",
     "vuetify": "^3.0.0",
-    "webfontloader": "^1.0.0"
+    "webfontloader": "^1.0.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",
