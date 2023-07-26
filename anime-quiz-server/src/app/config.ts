@@ -4,7 +4,7 @@ import { ServerConfig } from '../interfaces';
 const ROOT_DIR = path.join(__dirname, '..', '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
 
-const SERVER_CONFIG = Object.freeze<ServerConfig>({
+const SERVER_CONFIG: ServerConfig = {
   rootDir: ROOT_DIR,
   logDir: path.join(ROOT_DIR, 'log'),
   dataDir: DATA_DIR,
@@ -19,6 +19,6 @@ const SERVER_CONFIG = Object.freeze<ServerConfig>({
   redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080',
   discordClientId: process.env.DISCORD_CLIENT_ID || '',
   discordClientSecret: process.env.DISCORD_CLIENT_SECRET || ''
-});
+}
 
 export { SERVER_CONFIG };

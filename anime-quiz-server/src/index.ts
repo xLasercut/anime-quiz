@@ -23,13 +23,13 @@ const oidc = new Oidc(SERVER_CONFIG);
 const logger = new Logger(SERVER_CONFIG);
 const emitter = new Emitter(io);
 const userDb = new UserDb(SERVER_CONFIG, logger);
-const handlerDependencies = Object.freeze<HandlerDependencies>({
+const handlerDependencies: HandlerDependencies = {
   logger: logger,
   config: SERVER_CONFIG,
   oidc: oidc,
   userDb: userDb,
   emitter: emitter
-});
+};
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   logger.writeLog(LOG_REFERENCES.CLIENT_CONNECTED, { id: socket.id });

@@ -1,21 +1,21 @@
 import { LogTemplate } from '../../interfaces';
 
-const LOG_LEVEL = Object.freeze({
+const LOG_LEVEL = {
   INFO: 'INFO',
   WARN: 'WARN',
   ERROR: 'ERROR',
   DEBUG: 'DEBUG'
-});
+};
 
-const LOG_REFERENCES = Object.freeze({
+const LOG_REFERENCES = {
   SERVER_START: 'SERVER001',
   CLIENT_CONNECTED: 'SERVER002',
   CLIENT_DISCONNECTED: 'SERVER003',
   INTERNAL_SERVER_ERROR: 'SERVER004',
   UNAUTHORIZED_CLIENT: 'SERVER005'
-});
+};
 
-const LOG_TEMPLATES = Object.freeze<{ [key: string]: LogTemplate }>({
+const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
   [LOG_REFERENCES.SERVER_START]: {
     message: 'server started',
     level: LOG_LEVEL.INFO
@@ -36,6 +36,6 @@ const LOG_TEMPLATES = Object.freeze<{ [key: string]: LogTemplate }>({
     message: 'unauthorized client',
     level: LOG_LEVEL.WARN
   }
-});
+};
 
 export { LOG_TEMPLATES, LOG_LEVEL, LOG_REFERENCES };

@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="show" transition="fade-transition" width="800px">
-    <v-card :flat="true">
+    <v-card variant="flat">
       <v-card-title>
         <v-row justify="space-between">
           <v-col cols="auto">

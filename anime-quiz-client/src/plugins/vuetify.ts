@@ -27,7 +27,7 @@ const nordLight: ThemeDefinition = {
     error: '#bf616a',
     info: '#b48ead',
     success: '#a3be8c',
-    warning: '#ebcb8b'
+    warning: '#d89f47'
   }
 };
 

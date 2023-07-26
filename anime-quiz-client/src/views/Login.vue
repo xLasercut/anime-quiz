@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-card :flat="true">
+    <v-card variant="flat">
       <v-card-title>
         <v-row justify="center">
           <v-col cols="auto">

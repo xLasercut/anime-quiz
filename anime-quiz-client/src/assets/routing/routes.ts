@@ -1,10 +1,11 @@
-const ROUTES = Object.freeze({
+const ROUTES = {
   LOGIN: 'LOGIN',
-  LOBBY: 'LOBBY'
-});
+  LOBBY: 'LOBBY',
+  USER_SETTINGS: 'USER_SETTINGS'
+};
 
-const DIALOG_ROUTES = Object.freeze({
+const DIALOG_ROUTES = {
   LOGIN_SETTINGS: 'LOGIN_SETTINGS'
-})
+};
 
 export { ROUTES, DIALOG_ROUTES };
