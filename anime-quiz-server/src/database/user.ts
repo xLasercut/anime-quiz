@@ -4,6 +4,7 @@ import { Logger } from '../app/logging/logger';
 import { DbAllowedUser, DbUser } from '../models/user';
 import { DbUserType } from '../models/types';
 import { UnauthorizedError } from '../app/exceptions';
+import {ClientDataType} from "../shared/models/types";
 
 class UserDb extends AbstractDb {
   protected _allowedUsers: string[] = [];
@@ -18,7 +19,6 @@ class UserDb extends AbstractDb {
   }
 
   public getUserInfo(discordId: string): DbUserType {
-    this._validateAllowedUser(discordId);
     const statement = this._db.prepare(`
       SELECT 
         *
@@ -29,7 +29,18 @@ class UserDb extends AbstractDb {
     return DbUser.parse(response);
   }
 
-  protected _validateAllowedUser(discordId: string) {
+  public updateUserSettings(clientData: ClientDataType, discordId: string): void {
+    const statement = this._db.prepare(`
+      UPDATE users
+      SET
+        display_name = ?,
+        avatar = ?
+      WHERE discord_id = ?
+    `);
+    statement.run([clientData.displayName, clientData.avatar, discordId])
+  }
+
+  public validateAllowedUser(discordId: string): void {
     if (!this._allowedUsers.includes(discordId)) {
       throw new UnauthorizedError();
     }

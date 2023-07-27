@@ -1,5 +1,5 @@
 import { Server } from '../app/server';
-import { SystemNotificationType } from '../shared/models/types';
+import {ClientDataType, SystemNotificationType} from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
 
 class Emitter {
@@ -11,6 +11,10 @@ class Emitter {
 
   public systemNotification(notification: SystemNotificationType, sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.SYSTEM_NOTIFICATION, notification);
+  }
+
+  public updateStoreClientData(clientData: ClientDataType, sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_CLIENT_DATA, clientData)
   }
 
   protected _client(sid?: string) {

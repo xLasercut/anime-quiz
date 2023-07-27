@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="end">
+  <v-row justify="end" :dense="true">
     <v-col cols="auto">
       <icon-btn :disabled="disabled" color="error" @click="$emit('dialog:close')" icon="mdi-close">
         Cancel

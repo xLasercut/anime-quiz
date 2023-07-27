@@ -22,7 +22,12 @@ class SocketData {
     return this._clientData;
   }
 
-  public authorizeClient(dbUser: DbUserType) {
+  public updateUserSettings(clientData: ClientDataType): void {
+    this._clientData.avatar = clientData.avatar;
+    this._clientData.displayName = clientData.displayName;
+  }
+
+  public initClientData(dbUser: DbUserType): void {
     this._clientData = ClientData.parse({
       userId: dbUser.user_id,
       displayName: dbUser.display_name,

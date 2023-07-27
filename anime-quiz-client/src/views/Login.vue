@@ -12,7 +12,7 @@
         <v-container :fluid="true">
           <v-row justify="center" no-gutters>
             <v-col cols="auto">
-              <icon-btn icon="mdi-login" color="success" @click="login()">
+              <icon-btn icon="mdi-login" color="success" @click="login()" :disabled="disabled">
                 login via discord
               </icon-btn>
             </v-col>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { ClientDataType } from '@/assets/shared/models/types';
@@ -36,32 +36,36 @@ import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { injectStrict } from '@/assets/game-helpers';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { SendNotification } from '@/assets/types';
+import { getAuthorizeUrl } from '@/assets/authorization';
 
 export default defineComponent({
   components: { IconBtn },
   setup() {
     const clientStore = useClientStore();
     const sendNotification = injectStrict<SendNotification>(CLIENT_EVENTS.SYSTEM_NOTIFICATION);
+    const state = reactive({
+      disabled: false
+    });
 
     function login() {
       if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
         sendNotification('error', 'Server URL not set');
-        return
+        return;
       }
-      socket.connect();
-      socket.emit(SOCKET_EVENTS.GET_AUTHORIZE_URL, (url: string) => {
-        window.location.href = url;
-      });
+      state.disabled = true;
+      window.location.href = getAuthorizeUrl();
     }
 
     function authorizeUser() {
       if (window.location.search.includes('code=')) {
         const code = getCodeFromUrl();
+        state.disabled = true;
         socket.connect();
-        socket.emit(SOCKET_EVENTS.AUTHORIZE_USER, code, (_clientData: ClientDataType) => {
-          const clientData = ClientData.parse(_clientData);
-          clientStore.updateClientData(clientData);
-          clientStore.changeView(ROUTES.LOBBY);
+        socket.emit(SOCKET_EVENTS.AUTHORIZE_USER, code, (auth: boolean) => {
+          state.disabled = false;
+          if (auth) {
+            clientStore.changeView(ROUTES.LOBBY);
+          }
         });
       }
     }
@@ -79,7 +83,7 @@ export default defineComponent({
       authorizeUser();
     });
 
-    return { login };
+    return { login, ...toRefs(state) };
   }
 });
 </script>

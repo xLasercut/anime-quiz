@@ -4,7 +4,6 @@ import { Logger } from './app/logging/logger';
 import { SERVER_CONFIG } from './app/config';
 import { LOG_REFERENCES } from './app/logging/constants';
 import { HandlerDependencies } from './interfaces';
-import { OidcHandler } from './handlers/authentication';
 import { Server } from './app/server';
 import { UserDb } from './database/user';
 import { Socket } from './types';
@@ -12,6 +11,8 @@ import { SocketData } from './app/socket-data';
 import { SOCKET_EVENTS } from './shared/events';
 import { Emitter } from './emitters/emitter';
 import { newSocketErrorHandler, UnauthorizedError } from './app/exceptions';
+import { startHandler } from './handlers/init';
+import { ClientData } from './shared/models/client';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -34,14 +35,25 @@ const handlerDependencies: HandlerDependencies = {
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   logger.writeLog(LOG_REFERENCES.CLIENT_CONNECTED, { id: socket.id });
   const socketErrHandler = newSocketErrorHandler(logger, socket, emitter);
-  const oidcHandler = new OidcHandler(socket, socketErrHandler, handlerDependencies);
-  oidcHandler.start();
   socket.data = new SocketData();
   socket.data.clientAuthTimer = setTimeout(
     socketErrHandler(() => {
       checkClientAuth(socket);
     }),
     SERVER_CONFIG.clientAuthDelay
+  );
+
+  socket.on(
+    SOCKET_EVENTS.AUTHORIZE_USER,
+    socketErrHandler(async (code: string, callback: Function) => {
+      const discordUser = await oidc.getUserInfo(code);
+      userDb.validateAllowedUser(discordUser.id);
+      const dbUser = userDb.getUserInfo(discordUser.id);
+      socket.data.initClientData(dbUser);
+      emitter.updateStoreClientData(socket.data.clientData, socket.id);
+      startHandler(socket, socketErrHandler, handlerDependencies);
+      callback(true);
+    })
   );
 
   socket.on(

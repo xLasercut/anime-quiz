@@ -17,7 +17,9 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <component :is="dialogComponent()" @dialog:close="show = false"></component>
+      <v-card-text>
+        <component :is="dialogComponent()" @dialog:close="show = false"></component>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>

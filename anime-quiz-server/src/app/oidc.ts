@@ -18,22 +18,11 @@ interface DiscordUserApiResponse {
 
 class Oidc {
   protected _config: ServerConfig;
-  protected _authUrl: string = 'https://discord.com/oauth2/authorize';
   protected _tokenUrl: string = 'https://discord.com/api/oauth2/token';
   protected _userInfoUrl: string = 'https://discord.com/api/users/@me';
 
   constructor(config: ServerConfig) {
     this._config = config;
-  }
-
-  public getAuthorizeUrl(): string {
-    const urlParams = [
-      `client_id=${this._config.discordClientId}`,
-      'scope=identify',
-      'response_type=code',
-      `redirect_uri=${encodeURIComponent(this._config.redirectUrl)}`
-    ];
-    return `${this._authUrl}?${urlParams.join('&')}`;
   }
 
   public async getUserInfo(code: string): Promise<DiscordUserApiResponse> {
@@ -53,7 +42,7 @@ class Oidc {
         client_id: this._config.discordClientId,
         client_secret: this._config.discordClientSecret,
         grant_type: 'authorization_code',
-        code: code,
+        code: `${code}`,
         redirect_uri: this._config.redirectUrl
       },
       {

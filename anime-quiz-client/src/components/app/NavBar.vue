@@ -22,6 +22,7 @@ import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import DefaultPanel from '@/components/app/DefaultPanel.vue';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { ROUTES } from '@/assets/routing/routes';
+import { socket } from '@/plugins/socket';
 
 export default defineComponent({
   components: { NavBtn },
@@ -39,7 +40,7 @@ export default defineComponent({
     }
 
     function logout(): void {
-      window.location.href = '/';
+      socket.disconnect();
     }
 
     function showLogout(): boolean {
