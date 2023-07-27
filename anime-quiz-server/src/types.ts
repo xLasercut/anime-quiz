@@ -3,4 +3,3 @@ import { Socket as SocketIoSocket } from 'socket.io';
 import { SocketData } from './app/socket-data';
 
 export type Socket = SocketIoSocket<DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData>;
-export type Sid = string | null | undefined

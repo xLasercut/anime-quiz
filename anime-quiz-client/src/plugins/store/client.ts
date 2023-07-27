@@ -29,13 +29,13 @@ const useClientStore = defineStore('client', {
   },
   actions: {
     updateClientData(clientData: ClientDataType) {
-      this.clientData = clientData
+      this.clientData = clientData;
     },
     changeView(view: string) {
-      this.view = view
+      this.view = view;
     },
     changeDialogView(view: string) {
-      this.dialogView = view
+      this.dialogView = view;
     }
   }
 });

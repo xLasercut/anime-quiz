@@ -44,7 +44,7 @@ import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import UserSettingsAvatarSelect from '@/components/user-settings/UserSettingsAvatarSelect.vue';
 import { ClientDisplayName } from '@/assets/shared/models/client';
 import { socket } from '@/plugins/socket';
-import {SOCKET_EVENTS} from "@/assets/shared/events";
+import { SOCKET_EVENTS } from '@/assets/shared/events';
 
 export default defineComponent({
   components: { UserSettingsAvatarSelect, DialogActions, DialogTextField, DialogForm, IconBtn },
@@ -78,7 +78,7 @@ export default defineComponent({
 
     function save() {
       if (state.valid) {
-        socket.emit(SOCKET_EVENTS.UPDATE_USER_SETTINGS, state.clientData)
+        socket.emit(SOCKET_EVENTS.UPDATE_USER_SETTINGS, state.clientData);
       }
     }
 

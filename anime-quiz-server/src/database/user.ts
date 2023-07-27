@@ -4,7 +4,7 @@ import { Logger } from '../app/logging/logger';
 import { DbAllowedUser, DbUser } from '../models/user';
 import { DbUserType } from '../models/types';
 import { UnauthorizedError } from '../app/exceptions';
-import {ClientDataType} from "../shared/models/types";
+import { ClientDataType } from '../shared/models/types';
 
 class UserDb extends AbstractDb {
   protected _allowedUsers: string[] = [];
@@ -37,7 +37,7 @@ class UserDb extends AbstractDb {
         avatar = ?
       WHERE discord_id = ?
     `);
-    statement.run([clientData.displayName, clientData.avatar, discordId])
+    statement.run([clientData.displayName, clientData.avatar, discordId]);
   }
 
   public validateAllowedUser(discordId: string): void {

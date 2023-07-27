@@ -1,30 +1,26 @@
 import { Logger } from '../app/logging/logger';
 import { HandlerDependencies, ServerConfig } from '../interfaces';
-import { Oidc } from '../app/oidc';
 import { UserDb } from '../database/user';
 import { Socket } from '../types';
 import { Emitter } from '../emitters/emitter';
+import { SongDb } from '../database/song';
 
 class AbstractHandler {
   protected _logger: Logger;
-  protected _socket: Socket;
   protected _config: ServerConfig;
-  protected _oidc: Oidc;
   protected _userDb: UserDb;
-  protected _errHandler: Function;
   protected _emitter: Emitter;
+  protected _songDb: SongDb;
 
-  constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
+  constructor(dependencies: HandlerDependencies) {
     this._logger = dependencies.logger;
     this._config = dependencies.config;
-    this._oidc = dependencies.oidc;
     this._userDb = dependencies.userDb;
     this._emitter = dependencies.emitter;
-    this._socket = socket;
-    this._errHandler = errHandler;
+    this._songDb = dependencies.songDb;
   }
 
-  public start() {
+  public start(socket: Socket, errHandler: Function): void {
     throw new Error('not implemented');
   }
 }

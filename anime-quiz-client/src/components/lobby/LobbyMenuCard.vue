@@ -22,7 +22,7 @@ import { defineComponent } from 'vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 
 export default defineComponent({
-  emits: ["click"],
+  emits: ['click'],
   components: { IconBtn },
   props: {
     title: {

@@ -1,7 +1,7 @@
 import { Logger } from './app/logging/logger';
-import { Oidc } from './app/oidc';
 import { UserDb } from './database/user';
 import { Emitter } from './emitters/emitter';
+import { SongDb } from './database/song';
 
 interface LogTemplate {
   level: string;
@@ -11,8 +11,8 @@ interface LogTemplate {
 interface HandlerDependencies {
   logger: Logger;
   config: ServerConfig;
-  oidc: Oidc;
   userDb: UserDb;
+  songDb: SongDb;
   emitter: Emitter;
 }
 

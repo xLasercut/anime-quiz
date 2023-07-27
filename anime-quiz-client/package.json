@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite --port 8080",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier 'src/**/*.{ts,vue}' --write"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
@@ -14,7 +15,7 @@
     "roboto-fontface": "*",
     "socket.io-client": "^4.7.1",
     "vue": "^3.2.0",
-    "vuetify": "^3.0.0",
+    "vuetify": "^3.3.10",
     "webfontloader": "^1.0.0",
     "zod": "^3.21.4"
   },

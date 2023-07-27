@@ -28,13 +28,21 @@ export default defineComponent({
     const state = reactive({
       cards: [
         {
+          color: 'primary',
+          title: 'Song List',
+          description: 'Add/Remove songs from your song list',
+          route: ROUTES.SONG_LIST_EDIT,
+          requireAdmin: false,
+          icon: 'mdi-playlist-music'
+        },
+        {
           color: 'success',
           title: 'User Settings',
           description: 'Update your user settings',
           route: ROUTES.USER_SETTINGS,
           requireAdmin: false,
           icon: 'mdi-gamepad-variant'
-        },
+        }
       ]
     });
 

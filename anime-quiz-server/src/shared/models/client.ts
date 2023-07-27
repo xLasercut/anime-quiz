@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { AVATARS } from '../avatars';
+import { UserId } from './user';
 
 const DiscordId = z.string().trim().min(1);
 
@@ -10,7 +11,7 @@ const ClientDisplayName = z
   .regex(/^[A-Za-z0-9 ]+$/);
 
 const ClientData = z.object({
-  userId: z.string().trim().min(1),
+  userId: UserId,
   displayName: ClientDisplayName,
   discordId: DiscordId,
   admin: z.boolean(),

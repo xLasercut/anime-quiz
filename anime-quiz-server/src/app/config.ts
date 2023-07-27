@@ -19,6 +19,6 @@ const SERVER_CONFIG: ServerConfig = {
   redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080',
   discordClientId: process.env.DISCORD_CLIENT_ID || '',
   discordClientSecret: process.env.DISCORD_CLIENT_SECRET || ''
-}
+};
 
 export { SERVER_CONFIG };

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "env-cmd -f ./config.env nodemon src/index.ts",
     "build": "rm -rf ./dist && tsc -b",
-    "bootstrap": "ts-node tools/bootstrap.ts"
+    "bootstrap": "ts-node tools/bootstrap.ts",
+    "format": "prettier 'src/**/*.ts' --write"
   },
   "author": "xLasercut",
   "license": "MIT",

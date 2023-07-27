@@ -12,7 +12,7 @@ import { SOCKET_EVENTS } from './shared/events';
 import { Emitter } from './emitters/emitter';
 import { newSocketErrorHandler, UnauthorizedError } from './app/exceptions';
 import { startHandler } from './handlers/init';
-import { ClientData } from './shared/models/client';
+import { SongDb } from './database/song';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -24,11 +24,12 @@ const oidc = new Oidc(SERVER_CONFIG);
 const logger = new Logger(SERVER_CONFIG);
 const emitter = new Emitter(io);
 const userDb = new UserDb(SERVER_CONFIG, logger);
+const songDb = new SongDb(SERVER_CONFIG, logger);
 const handlerDependencies: HandlerDependencies = {
   logger: logger,
   config: SERVER_CONFIG,
-  oidc: oidc,
   userDb: userDb,
+  songDb: songDb,
   emitter: emitter
 };
 
@@ -51,6 +52,10 @@ io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
       const dbUser = userDb.getUserInfo(discordUser.id);
       socket.data.initClientData(dbUser);
       emitter.updateStoreClientData(socket.data.clientData, socket.id);
+      emitter.updateStoreSongTitles(songDb.songTitles, socket.id);
+      emitter.updateStoreAnimeNames(songDb.animeNames, socket.id);
+      emitter.updateStoreSongList(songDb.songList, socket.id);
+      emitter.updateStoreAnimeList(songDb.animeList, socket.id);
       startHandler(socket, socketErrHandler, handlerDependencies);
       callback(true);
     })
