@@ -68,3 +68,9 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+thead {
+  z-index: 30;
+}
+</style>

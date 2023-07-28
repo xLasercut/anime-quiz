@@ -57,8 +57,17 @@ export default defineComponent({
     }
 
     function authorizeUser() {
-      if (window.location.search.includes('code=')) {
-        const code = getCodeFromUrl();
+      const parseSearchParams = new URLSearchParams(window.location.search);
+      const returnedState = parseSearchParams.get('state');
+      const code = parseSearchParams.get('code');
+
+      if (code && returnedState !== localStorage[LOCAL_STORAGE_CONSTANTS.OAUTH_STATE]) {
+        console.error('State mismatch');
+        window.location.href = '/';
+        return;
+      }
+
+      if (code && returnedState === localStorage[LOCAL_STORAGE_CONSTANTS.OAUTH_STATE]) {
         state.disabled = true;
         socket.connect();
         socket.emit(SOCKET_EVENTS.AUTHORIZE_USER, code, (auth: boolean) => {
@@ -68,15 +77,6 @@ export default defineComponent({
           }
         });
       }
-    }
-
-    function getCodeFromUrl(): string {
-      const regex = new RegExp('code=([^&]*)', 'g');
-      const matches = regex.exec(window.location.search);
-      if (!matches) {
-        return '';
-      }
-      return matches[1];
     }
 
     onMounted(() => {

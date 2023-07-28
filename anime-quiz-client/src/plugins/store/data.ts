@@ -1,11 +1,18 @@
 import { defineStore } from 'pinia';
-import { AnimeNameType, AnimeType, SongTitleType, SongType } from '@/assets/shared/models/types';
+import {
+  AnimeNameType,
+  AnimeType,
+  SongTitleType,
+  SongType,
+  SongIdType
+} from '@/assets/shared/models/types';
 
 interface State {
   songList: SongType[];
   animeList: AnimeType[];
   songTitles: SongTitleType[];
   animeNames: AnimeNameType[];
+  userSongList: SongIdType[];
 }
 
 const useDataStore = defineStore('data', {
@@ -14,7 +21,8 @@ const useDataStore = defineStore('data', {
       songList: [],
       animeList: [],
       songTitles: [],
-      animeNames: []
+      animeNames: [],
+      userSongList: []
     };
   },
   actions: {
@@ -29,6 +37,9 @@ const useDataStore = defineStore('data', {
     },
     updateAnimeNames(animeNames: AnimeNameType[]) {
       this.animeNames = animeNames;
+    },
+    updateUserSongList(userSongList: SongIdType[]) {
+      this.userSongList = userSongList;
     }
   }
 });

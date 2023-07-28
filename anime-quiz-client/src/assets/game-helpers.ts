@@ -28,4 +28,13 @@ function injectStrict<T>(key: string): T {
   return resolved;
 }
 
-export { getDefaultVolume, getDefaultTheme, injectStrict };
+function isMatchFilter(queryText: string, itemText: string): boolean {
+  for (const word of (queryText || '').split(' ')) {
+    if (!itemText.toLowerCase().includes(word.toLowerCase())) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter };
