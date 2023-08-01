@@ -31,6 +31,7 @@ interface ServerConfig {
   redirectUrl: string;
   discordClientId: string;
   discordClientSecret: string;
+  logLevel: string;
 }
 
 export { LogTemplate, HandlerDependencies, ServerConfig };

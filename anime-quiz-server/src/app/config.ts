@@ -18,7 +18,8 @@ const SERVER_CONFIG: ServerConfig = {
   dbBackupCount: parseInt(process.env.DB_BACKUP_COUNT || '5'),
   redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080',
   discordClientId: process.env.DISCORD_CLIENT_ID || '',
-  discordClientSecret: process.env.DISCORD_CLIENT_SECRET || ''
+  discordClientSecret: process.env.DISCORD_CLIENT_SECRET || '',
+  logLevel: process.env.LOG_LEVEL || 'info'
 };
 
 export { SERVER_CONFIG };

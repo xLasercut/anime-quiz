@@ -13,7 +13,8 @@ const LOG_REFERENCES = {
   CLIENT_DISCONNECTED: 'SERVER003',
   INTERNAL_SERVER_ERROR: 'SERVER004',
   UNAUTHORIZED_CLIENT: 'SERVER005',
-  DATA_QUALITY_ERROR: 'SERVER006'
+  DATA_QUALITY_ERROR: 'SERVER006',
+  FETCHED_USER_SONG_LIST: 'SERVER007'
 };
 
 const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
@@ -40,6 +41,10 @@ const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
   [LOG_REFERENCES.DATA_QUALITY_ERROR]: {
     message: 'data quality issue',
     level: LOG_LEVEL.WARN
+  },
+  [LOG_REFERENCES.FETCHED_USER_SONG_LIST]: {
+    message: 'fetched user song list',
+    level: LOG_LEVEL.DEBUG
   }
 };
 

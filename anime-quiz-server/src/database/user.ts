@@ -1,10 +1,11 @@
 import { AbstractDb } from './common';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logging/logger';
-import { DbAllowedUser, DbUser } from '../models/user';
+import { DbAllowedUser, DbUser, DbUserSongList } from '../models/user';
 import { DbUserType } from '../models/types';
 import { UnauthorizedError } from '../app/exceptions';
-import { ClientDataType } from '../shared/models/types';
+import { ClientDataType, SongIdType } from '../shared/models/types';
+import { LOG_REFERENCES } from '../app/logging/constants';
 
 class UserDb extends AbstractDb {
   protected _allowedUsers: string[] = [];
@@ -12,6 +13,32 @@ class UserDb extends AbstractDb {
   constructor(config: ServerConfig, logger: Logger) {
     super(logger, config.userDbPath);
     this.reloadCache();
+  }
+
+  public getUserSongList(discordId: string): SongIdType[] {
+    const statement = this._db.prepare(`
+      SELECT
+        discord_id,
+        users.user_id,
+        display_name,
+        avatar,
+        admin,
+        json_group_array(song_id) AS song_id
+      FROM users
+        LEFT JOIN user_songs
+        ON users.user_id = user_songs.user_id
+      WHERE discord_id = ?
+      GROUP BY users.user_id
+    `);
+    const response = statement.get(discordId);
+    this._logger.writeLog(LOG_REFERENCES.FETCHED_USER_SONG_LIST, {
+      response: response
+    });
+    if (!response) {
+      return [];
+    }
+    const dbUserSongList = DbUserSongList.parse(response);
+    return dbUserSongList.song_id;
   }
 
   public reloadCache() {

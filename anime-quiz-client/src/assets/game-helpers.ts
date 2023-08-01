@@ -28,13 +28,23 @@ function injectStrict<T>(key: string): T {
   return resolved;
 }
 
-function isMatchFilter(queryText: string, itemText: string): boolean {
+function isMatchFilter(queryText: string | null, itemText: string | null): boolean {
   for (const word of (queryText || '').split(' ')) {
-    if (!itemText.toLowerCase().includes(word.toLowerCase())) {
+    if (!(itemText || '').toLowerCase().includes(word.toLowerCase())) {
       return false;
     }
   }
   return true;
 }
 
-export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter };
+function debounce(f: Function, delay: number): Function {
+  let inDebounce: NodeJS.Timeout;
+  return function (this: ThisParameterType<Function>) {
+    clearTimeout(inDebounce);
+    inDebounce = setTimeout((): void => {
+      f.apply(this, arguments);
+    }, delay);
+  };
+}
+
+export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter, debounce };

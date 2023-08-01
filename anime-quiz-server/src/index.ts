@@ -56,6 +56,10 @@ io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
       emitter.updateStoreAnimeNames(songDb.animeNames, socket.id);
       emitter.updateStoreSongList(songDb.songList, socket.id);
       emitter.updateStoreAnimeList(songDb.animeList, socket.id);
+      emitter.updateStoreUserSongList(
+        userDb.getUserSongList(socket.data.clientData.discordId),
+        socket.id
+      );
       startHandler(socket, socketErrHandler, handlerDependencies);
       callback(true);
     })

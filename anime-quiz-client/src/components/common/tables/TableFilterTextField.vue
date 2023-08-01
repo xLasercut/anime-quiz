@@ -1,14 +1,9 @@
 <template>
-  <v-combobox
-    :model-value="modelValue"
-    @update:model-value="updateModel($event)"
-    :custom-filter="customFilter"
-  ></v-combobox>
+  <v-text-field :model-value="modelValue" @update:model-value="updateModel($event)"></v-text-field>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { isMatchFilter } from '@/assets/game-helpers';
 
 export default defineComponent({
   props: {
@@ -17,17 +12,13 @@ export default defineComponent({
     }
   },
   setup(_props, context) {
-    function customFilter(value: string, query: string) {
-      return isMatchFilter(query, value);
-    }
-
     function updateModel(val: string) {
       const valToSend = val || '';
 
       context.emit('update:model-value', valToSend);
     }
 
-    return { customFilter, updateModel };
+    return { updateModel };
   }
 });
 </script>

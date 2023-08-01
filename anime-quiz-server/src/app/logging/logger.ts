@@ -19,7 +19,7 @@ class Logger {
 
   constructor(config: ServerConfig) {
     this._logger = winston.createLogger({
-      level: 'debug',
+      level: config.logLevel,
       format: logFormat,
       transports: [
         new DailyRotateFile({
