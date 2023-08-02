@@ -1,7 +1,7 @@
 <template>
   <v-combobox
     :model-value="modelValue"
-    @update:model-value="updateModel($event)"
+    @update:model-value="$emit('update:model-value', $event || '')"
     :custom-filter="customFilter"
   ></v-combobox>
 </template>
@@ -16,18 +16,12 @@ export default defineComponent({
       required: true
     }
   },
-  setup(_props, context) {
+  setup() {
     function customFilter(value: string, query: string) {
       return isMatchFilter(query, value);
     }
 
-    function updateModel(val: string) {
-      const valToSend = val || '';
-
-      context.emit('update:model-value', valToSend);
-    }
-
-    return { customFilter, updateModel };
+    return { customFilter };
   }
 });
 </script>

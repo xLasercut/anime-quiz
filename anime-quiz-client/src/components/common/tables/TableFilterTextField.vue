@@ -1,5 +1,12 @@
 <template>
-  <v-text-field :model-value="modelValue" @update:model-value="updateModel($event)"></v-text-field>
+  <v-text-field
+    :model-value="modelValue"
+    @update:model-value="$emit('update:model-value', $event || '')"
+    variant="outlined"
+    density="compact"
+    :clearable="true"
+    hide-details
+  ></v-text-field>
 </template>
 
 <script lang="ts">
@@ -10,15 +17,6 @@ export default defineComponent({
     modelValue: {
       required: true
     }
-  },
-  setup(_props, context) {
-    function updateModel(val: string) {
-      const valToSend = val || '';
-
-      context.emit('update:model-value', valToSend);
-    }
-
-    return { updateModel };
   }
 });
 </script>

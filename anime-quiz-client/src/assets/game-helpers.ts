@@ -1,5 +1,6 @@
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { inject, InjectionKey } from 'vue';
+import { v4 as uuid4 } from 'uuid';
 
 function getDefaultVolume(): number {
   try {
@@ -47,4 +48,8 @@ function debounce(f: Function, delay: number): Function {
   };
 }
 
-export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter, debounce };
+function generateId(prefix: string): string {
+  return `${prefix}-${uuid4()}`;
+}
+
+export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter, debounce, generateId };

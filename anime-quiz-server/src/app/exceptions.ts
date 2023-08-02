@@ -16,6 +16,12 @@ class UnauthorizedError extends Error {
   }
 }
 
+class DataQualityError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
 function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e: any) {
   if (e instanceof UnauthorizedError) {
     logger.writeLog(LOG_REFERENCES.UNAUTHORIZED_CLIENT, {
@@ -52,14 +58,37 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e:
     return;
   }
 
+  if (e instanceof DataQualityError) {
+    logger.writeLog(LOG_REFERENCES.DATA_QUALITY_ERROR, {
+      id: socket.id,
+      clientData: socket.data.clientData,
+      stack: e.stack
+    });
+    emitter.systemNotification(
+      {
+        color: 'error',
+        message: e.message
+      },
+      socket.id
+    );
+    return;
+  }
+
   logger.writeLog(LOG_REFERENCES.INTERNAL_SERVER_ERROR, {
     stack: e.stack
   });
 }
 
+function _handleCallback(callback: any): void {
+  if (typeof callback === 'function') {
+    callback(false);
+  }
+}
+
 function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter): Function {
   return function (func: Function) {
-    return (...args: any) => {
+    return (...args: any[]) => {
+      const callback = args[args.length - 1];
       try {
         // @ts-ignore
         const ret = func.apply(this, args);
@@ -67,14 +96,16 @@ function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter)
           // async handler
           ret.catch((e: any) => {
             _handleSocketError(logger, socket, emitter, e);
+            _handleCallback(callback);
           });
         }
       } catch (e: any) {
         // sync handler
         _handleSocketError(logger, socket, emitter, e);
+        _handleCallback(callback);
       }
     };
   };
 }
 
-export { newSocketErrorHandler, DatabaseLockedError, UnauthorizedError };
+export { newSocketErrorHandler, DatabaseLockedError, UnauthorizedError, DataQualityError };

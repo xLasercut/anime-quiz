@@ -1,7 +1,8 @@
 import { z } from 'zod';
-import { Avatar, ClientData, NotificationColor, SystemNotification } from './client';
+import { ClientData, NotificationColor, SystemNotification } from './client';
 import { Song, SongId, SongTitle, SongType } from './song';
 import { Anime, AnimeId, AnimeName } from './anime';
+import { Avatar, DiscordId, User, UserId } from './user';
 
 export type ClientDataType = z.infer<typeof ClientData>;
 export type NotificationColorType = z.infer<typeof NotificationColor>;
@@ -14,3 +15,6 @@ export type AnimeIdType = z.infer<typeof AnimeId>;
 export type SongType = z.infer<typeof Song>;
 export type AnimeType = z.infer<typeof Anime>;
 export type SongIdType = z.infer<typeof SongId>;
+export type UserType = z.infer<typeof User>;
+export type UserIdType = z.infer<typeof UserId>;
+export type DiscordIdType = z.infer<typeof DiscordId>;

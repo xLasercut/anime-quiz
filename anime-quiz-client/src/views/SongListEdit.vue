@@ -1,9 +1,7 @@
 <template>
-  <v-main>
-    <v-card :flat="true">
-      <song-list-edit-table></song-list-edit-table>
-    </v-card>
-  </v-main>
+  <v-card variant="flat">
+    <song-list-edit-table></song-list-edit-table>
+  </v-card>
 </template>
 
 <script lang="ts">

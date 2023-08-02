@@ -36,11 +36,18 @@ import GameAvatar from '@/components/common/GameAvatar.vue';
 import { AVATARS } from '@/assets/shared/avatars';
 
 export default defineComponent({
+  props: {
+    avatarSize: {
+      type: String,
+      default: (): string => {
+        return '100';
+      }
+    }
+  },
   components: { GameAvatar },
-  setup(props) {
+  setup() {
     const state = reactive({
-      avatars: Object.values(AVATARS),
-      avatarSize: '100'
+      avatars: Object.values(AVATARS)
     });
 
     return {

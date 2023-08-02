@@ -3,13 +3,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { AVATAR_MAP } from '@/assets/avatars';
+import { AvatarType } from '@/assets/shared/models/types';
 
 export default defineComponent({
   props: {
     avatar: {
-      type: String,
+      type: String as PropType<AvatarType>,
       required: true
     }
   },

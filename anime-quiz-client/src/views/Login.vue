@@ -1,26 +1,24 @@
 <template>
-  <v-main>
-    <v-card variant="flat">
-      <v-card-title>
-        <v-row justify="center">
+  <v-card variant="flat">
+    <v-card-title>
+      <v-row justify="center">
+        <v-col cols="auto">
+          <h2>Login</h2>
+        </v-col>
+      </v-row>
+    </v-card-title>
+    <v-card-text>
+      <v-container :fluid="true">
+        <v-row justify="center" no-gutters>
           <v-col cols="auto">
-            <h2>Login</h2>
+            <icon-btn icon="mdi-login" color="success" @click="login()" :disabled="disabled">
+              login via discord
+            </icon-btn>
           </v-col>
         </v-row>
-      </v-card-title>
-      <v-card-text>
-        <v-container :fluid="true">
-          <v-row justify="center" no-gutters>
-            <v-col cols="auto">
-              <icon-btn icon="mdi-login" color="success" @click="login()" :disabled="disabled">
-                login via discord
-              </icon-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-card>
-  </v-main>
+      </v-container>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -74,6 +72,8 @@ export default defineComponent({
           state.disabled = false;
           if (auth) {
             clientStore.changeView(ROUTES.LOBBY);
+          } else {
+            socket.disconnect();
           }
         });
       }

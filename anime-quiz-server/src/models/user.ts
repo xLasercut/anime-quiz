@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ClientDisplayName, DiscordId } from '../shared/models/client';
-import { UserId } from '../shared/models/user';
+
+import { Avatar, DiscordId, DisplayName, UserId } from '../shared/models/user';
 import { isValidJson } from './common';
 import { SongId } from '../shared/models/song';
 
@@ -8,14 +8,12 @@ const DbUserAdmin = z.number().transform((arg) => {
   return arg === 1;
 });
 
-const DbUserAvatar = z.string().trim().min(1);
-
 const DbUser = z.object({
   user_id: UserId,
-  display_name: ClientDisplayName,
+  display_name: DisplayName,
   discord_id: DiscordId,
   admin: DbUserAdmin,
-  avatar: DbUserAvatar
+  avatar: Avatar
 });
 
 const DbAllowedUser = z.object({
@@ -25,9 +23,9 @@ const DbAllowedUser = z.object({
 const DbUserSongList = z.object({
   user_id: UserId,
   discord_id: DiscordId,
-  display_name: ClientDisplayName,
+  display_name: DisplayName,
   admin: DbUserAdmin,
-  avatar: DbUserAvatar,
+  avatar: Avatar,
   song_id: z
     .string()
     .trim()

@@ -11,8 +11,8 @@ import { SocketData } from './app/socket-data';
 import { SOCKET_EVENTS } from './shared/events';
 import { Emitter } from './emitters/emitter';
 import { newSocketErrorHandler, UnauthorizedError } from './app/exceptions';
-import { startHandler } from './handlers/init';
 import { SongDb } from './database/song';
+import { EntryPointHandler } from './handlers/entry';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -30,7 +30,8 @@ const handlerDependencies: HandlerDependencies = {
   config: SERVER_CONFIG,
   userDb: userDb,
   songDb: songDb,
-  emitter: emitter
+  emitter: emitter,
+  oidc: oidc
 };
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
@@ -43,35 +44,8 @@ io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
     }),
     SERVER_CONFIG.clientAuthDelay
   );
-
-  socket.on(
-    SOCKET_EVENTS.AUTHORIZE_USER,
-    socketErrHandler(async (code: string, callback: Function) => {
-      const discordUser = await oidc.getUserInfo(code);
-      userDb.validateAllowedUser(discordUser.id);
-      const dbUser = userDb.getUserInfo(discordUser.id);
-      socket.data.initClientData(dbUser);
-      emitter.updateStoreClientData(socket.data.clientData, socket.id);
-      emitter.updateStoreSongTitles(songDb.songTitles, socket.id);
-      emitter.updateStoreAnimeNames(songDb.animeNames, socket.id);
-      emitter.updateStoreSongList(songDb.songList, socket.id);
-      emitter.updateStoreAnimeList(songDb.animeList, socket.id);
-      emitter.updateStoreUserSongList(
-        userDb.getUserSongList(socket.data.clientData.discordId),
-        socket.id
-      );
-      startHandler(socket, socketErrHandler, handlerDependencies);
-      callback(true);
-    })
-  );
-
-  socket.on(
-    SOCKET_EVENTS.DISCONNECT,
-    socketErrHandler(() => {
-      logger.writeLog(LOG_REFERENCES.CLIENT_DISCONNECTED, { id: socket.id });
-      clearTimeout(socket.data.clientAuthTimer);
-    })
-  );
+  const entryHandler = new EntryPointHandler(socket, socketErrHandler, handlerDependencies);
+  entryHandler.start();
 });
 
 httpServer.listen(SERVER_CONFIG.serverPort, async () => {

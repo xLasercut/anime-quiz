@@ -7,10 +7,12 @@ import {
   AnimeType,
   SongIdType,
   SongTitleType,
-  SongType
+  SongType,
+  UserType
 } from '@/assets/shared/models/types';
 import { Song, SongId, SongTitle } from '@/assets/shared/models/song';
 import { Anime, AnimeName } from '@/assets/shared/models/anime';
+import { User } from '@/assets/shared/models/user';
 
 const dataStore = useDataStore(pinia);
 
@@ -38,6 +40,11 @@ function startDataStoreListeners(socket: Socket): void {
   socket.on(SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST, (_userSongList: SongIdType[]) => {
     const userSongList = _userSongList.map((id) => SongId.parse(id));
     dataStore.updateUserSongList(userSongList);
+  });
+
+  socket.on(SOCKET_EVENTS.UPDATE_STORE_USER_LIST, (_userList: UserType[]) => {
+    const userList = _userList.map((user) => User.parse(user));
+    dataStore.updateUserList(userList);
   });
 }
 

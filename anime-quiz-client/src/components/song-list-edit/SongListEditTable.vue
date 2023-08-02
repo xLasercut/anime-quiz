@@ -21,14 +21,15 @@
         hide-details
         :true-icon="checkboxIcon()"
         :color="checkboxColor()"
+        :disabled="checkboxDisabled(item.raw.songId, isSelected(item))"
       ></v-checkbox>
     </template>
     <template #item.animeName="{ item }">
-      <table-anime-name :song="item.selectable"></table-anime-name>
+      <table-anime-name :song="item.raw"></table-anime-name>
     </template>
 
     <template #item.src="{ item }">
-      <a :href="item.selectable.src" target="_blank">View</a>
+      <a :href="item.raw.src" target="_blank">View</a>
     </template>
 
     <template #top>
@@ -55,10 +56,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { VDataTable } from 'vuetify/labs/VDataTable';
-import { SongType } from '@/assets/shared/models/types';
+import { SongIdType, SongType } from '@/assets/shared/models/types';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import { CLIENT_CONSTANTS, SONG_LIST_EDIT_MODE } from '@/assets/constants';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
@@ -71,8 +71,7 @@ export default defineComponent({
     SongListEditTableActions,
     SongListEditTableFilters,
     TablePagination,
-    TableAnimeName,
-    VDataTable
+    TableAnimeName
   },
   setup() {
     const dataStore = useDataStore();
@@ -85,8 +84,8 @@ export default defineComponent({
         { title: 'Source', key: 'src', sortable: false }
       ],
       currentPage: 1,
-      itemsPerPage: 20,
-      songsSelected: ['song-000793d2-8f17-428e-a842-027ed59a2583'],
+      itemsPerPage: 15,
+      songsSelected: [],
       filters: {
         anime: '',
         type: '',
@@ -96,15 +95,29 @@ export default defineComponent({
       editMode: SONG_LIST_EDIT_MODE.NONE
     });
 
+    watch(
+      () => state.editMode,
+      () => {
+        state.songsSelected = [];
+      }
+    );
+
     function filteredSongs(): SongType[] {
-      return dataStore.songList.filter((song) => {
-        return (
-          isMatchFilter(state.filters.anime, song.animeName.join(',')) &&
-          isMatchFilter(state.filters.title, song.songTitle) &&
-          isMatchFilter(state.filters.artist, song.artist) &&
-          isMatchFilter(state.filters.type, song.type)
-        );
-      });
+      return dataStore.songList
+        .filter((song) => {
+          if (state.editMode !== SONG_LIST_EDIT_MODE.REMOVE) {
+            return true;
+          }
+          return dataStore.userSongList.includes(song.songId);
+        })
+        .filter((song) => {
+          return (
+            isMatchFilter(state.filters.anime, song.animeName.join(',')) &&
+            isMatchFilter(state.filters.title, song.songTitle) &&
+            isMatchFilter(state.filters.artist, song.artist) &&
+            isMatchFilter(state.filters.type, song.type)
+          );
+        });
     }
 
     function checkboxIcon(): string {
@@ -121,13 +134,22 @@ export default defineComponent({
       return 'success';
     }
 
+    function checkboxDisabled(songId: SongIdType, isSelected: boolean): boolean {
+      if (state.songsSelected.length >= 50 && !isSelected) {
+        return true;
+      }
+
+      return state.editMode === SONG_LIST_EDIT_MODE.ADD && dataStore.userSongList.includes(songId);
+    }
+
     return {
       ...toRefs(state),
       filteredSongs,
       CLIENT_CONSTANTS,
       SONG_LIST_EDIT_MODE,
       checkboxIcon,
-      checkboxColor
+      checkboxColor,
+      checkboxDisabled
     };
   }
 });

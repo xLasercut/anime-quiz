@@ -78,7 +78,7 @@ class SongDb extends AbstractDb {
   }
 
   protected _getSongTitles(): SongTitleType[] {
-    return this._songList.map((song) => SongTitle.parse(song.songTitle));
+    return Array.from(new Set(this._songList.map((song) => SongTitle.parse(song.songTitle))));
   }
 
   protected _getAnimeNames(): AnimeNameType[] {
@@ -87,7 +87,7 @@ class SongDb extends AbstractDb {
       animeNames = animeNames.concat(anime.animeName);
     }
 
-    return animeNames.map((name) => AnimeName.parse(name));
+    return Array.from(new Set(animeNames.map((name) => AnimeName.parse(name))));
   }
 
   protected _dbSongToSong(dbSong: DbSongType): SongType {

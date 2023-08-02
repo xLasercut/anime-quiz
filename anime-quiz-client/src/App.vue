@@ -2,7 +2,9 @@
   <v-app>
     <nav-bar></nav-bar>
     <v-container :fluid="true">
-      <component :is="viewComponent()"></component>
+      <v-main>
+        <component :is="viewComponent()"></component>
+      </v-main>
     </v-container>
     <system-notification></system-notification>
     <global-dialog></global-dialog>

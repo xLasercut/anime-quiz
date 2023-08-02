@@ -44,7 +44,7 @@ export default defineComponent({
   },
   setup() {
     const state = reactive({
-      itemsPerPageSelections: [5, 10, 20, 30]
+      itemsPerPageSelections: [5, 10, 15, 20, 30]
     });
 
     return { ...toRefs(state) };

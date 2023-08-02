@@ -14,7 +14,8 @@ const LOG_REFERENCES = {
   INTERNAL_SERVER_ERROR: 'SERVER004',
   UNAUTHORIZED_CLIENT: 'SERVER005',
   DATA_QUALITY_ERROR: 'SERVER006',
-  FETCHED_USER_SONG_LIST: 'SERVER007'
+  FETCHED_USER_SONG_LIST: 'SERVER007',
+  FETCHED_USER_LIST: 'SERVER008'
 };
 
 const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
@@ -44,6 +45,10 @@ const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
   },
   [LOG_REFERENCES.FETCHED_USER_SONG_LIST]: {
     message: 'fetched user song list',
+    level: LOG_LEVEL.DEBUG
+  },
+  [LOG_REFERENCES.FETCHED_USER_LIST]: {
+    message: 'fetched user list',
     level: LOG_LEVEL.DEBUG
   }
 };

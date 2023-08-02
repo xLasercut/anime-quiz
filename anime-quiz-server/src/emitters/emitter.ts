@@ -1,11 +1,13 @@
 import { Server } from '../app/server';
 import {
-    AnimeNameType,
-    AnimeType,
-    ClientDataType, SongIdType,
-    SongTitleType,
-    SongType,
-    SystemNotificationType
+  AnimeNameType,
+  AnimeType,
+  ClientDataType,
+  SongIdType,
+  SongTitleType,
+  SongType,
+  SystemNotificationType,
+  UserType
 } from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
 
@@ -41,7 +43,11 @@ class Emitter {
   }
 
   public updateStoreUserSongList(userSongList: SongIdType[], sid: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST, userSongList)
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST, userSongList);
+  }
+
+  public updateStoreUserList(userList: UserType[], sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_LIST, userList);
   }
 
   protected _client(sid?: string) {

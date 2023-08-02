@@ -1,34 +1,23 @@
 <template>
   <v-row :dense="true">
     <v-col>
-      <custom-combobox
-        :clearable="true"
-        variant="outlined"
-        density="compact"
+      <table-filter-combobox
         label="Anime"
         :items="dataStore.animeNames"
         :model-value="anime"
         @update:model-value="updateAnimeFilter($event)"
-        hide-details
-      ></custom-combobox>
+      ></table-filter-combobox>
     </v-col>
     <v-col>
-      <custom-combobox
-        :clearable="true"
-        variant="outlined"
-        density="compact"
+      <table-filter-combobox
         label="Song Title"
         :items="dataStore.songTitles"
         :model-value="title"
         @update:model-value="updateTitleFilter($event)"
-        hide-details
-      ></custom-combobox>
+      ></table-filter-combobox>
     </v-col>
     <v-col>
       <table-filter-text-field
-        :clearable="true"
-        variant="outlined"
-        density="compact"
         label="Artist"
         :model-value="artist"
         @update:model-value="updateArtistFilter($event)"
@@ -53,12 +42,12 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import CustomCombobox from '@/components/common/inputs/CustomCombobox.vue';
 import { debounce } from '@/assets/game-helpers';
 import TableFilterTextField from '@/components/common/tables/TableFilterTextField.vue';
+import TableFilterCombobox from '@/components/common/tables/TableFilterCombobox.vue';
 
 export default defineComponent({
-  components: { TableFilterTextField, CustomCombobox },
+  components: { TableFilterCombobox, TableFilterTextField },
   props: {
     anime: {
       required: true,

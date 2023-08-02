@@ -1,17 +1,15 @@
 <template>
-  <v-main>
-    <v-row justify="center">
-      <v-col v-for="card of filteredCards()" :key="card.route" cols="6" md="4">
-        <lobby-menu-card
-          :icon="card.icon"
-          :color="card.color"
-          :title="card.title"
-          :description="card.description"
-          @click="changeView(card.route)"
-        ></lobby-menu-card>
-      </v-col>
-    </v-row>
-  </v-main>
+  <v-row justify="center">
+    <v-col v-for="card of filteredCards()" :key="card.route" cols="6" md="4">
+      <lobby-menu-card
+        :icon="card.icon"
+        :color="card.color"
+        :title="card.title"
+        :description="card.description"
+        @click="changeView(card.route)"
+      ></lobby-menu-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -42,6 +40,14 @@ export default defineComponent({
           route: ROUTES.USER_SETTINGS,
           requireAdmin: false,
           icon: 'mdi-gamepad-variant'
+        },
+        {
+          color: 'error',
+          title: 'User Edit',
+          description: 'Add/Delete users',
+          route: ROUTES.USER_EDIT,
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
         }
       ]
     });
