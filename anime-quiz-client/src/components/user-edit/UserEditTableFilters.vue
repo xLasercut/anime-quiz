@@ -1,25 +1,13 @@
 <template>
   <v-row :dense="true">
     <v-col>
-      <table-filter-text-field
-        label="Discord ID"
-        :model-value="discordId"
-        @update:model-value="updateDiscordId($event)"
-      ></table-filter-text-field>
+      <table-filter-text-field label="Discord ID" :model-value="discordId" @update:model-value="updateDiscordId($event)"></table-filter-text-field>
     </v-col>
     <v-col>
-      <table-filter-text-field
-        label="User ID"
-        :model-value="userId"
-        @update:model-value="updateUserId($event)"
-      ></table-filter-text-field>
+      <table-filter-text-field label="User ID" :model-value="userId" @update:model-value="updateUserId($event)"></table-filter-text-field>
     </v-col>
     <v-col>
-      <table-filter-text-field
-        label="Display Name"
-        :model-value="displayName"
-        @update:model-value="updateDisplayName($event)"
-      ></table-filter-text-field>
+      <table-filter-text-field label="Display Name" :model-value="displayName" @update:model-value="updateDisplayName($event)"></table-filter-text-field>
     </v-col>
   </v-row>
 </template>

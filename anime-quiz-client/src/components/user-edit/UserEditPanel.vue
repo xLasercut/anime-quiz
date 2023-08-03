@@ -16,6 +16,7 @@ import { generateId, injectStrict } from '@/assets/game-helpers';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
 import { useAdminStore } from '@/plugins/store/admin';
+import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
 export default defineComponent({
   components: { NavBtn },
@@ -43,7 +44,8 @@ export default defineComponent({
         admin: false
       });
       adminStore.generateNewUserId();
-      openDialog(DIALOG_ROUTES.NEW_USER, 'New User');
+      adminStore.updateEditMode(DATABASE_EDIT_MODE.NEW);
+      openDialog(DIALOG_ROUTES.USER_EDIT, 'New User');
     }
 
     return { back, newUser, reload };

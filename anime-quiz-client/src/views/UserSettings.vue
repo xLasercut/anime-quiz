@@ -9,16 +9,8 @@
     </v-card-title>
     <v-card-text>
       <dialog-form v-model="valid" @submit.prevent="save()">
-        <dialog-text-field
-          v-model="clientData.displayName"
-          label="Display Name"
-          :rules="displayNameRules"
-          counter="20"
-        ></dialog-text-field>
-        <user-settings-avatar-select
-          :rules="avatarRules"
-          v-model="clientData.avatar"
-        ></user-settings-avatar-select>
+        <dialog-text-field v-model="clientData.displayName" label="Display Name" :rules="DISPLAY_NAME_RULES" counter="20"></dialog-text-field>
+        <user-settings-avatar-select :rules="AVATAR_RULES" v-model="clientData.avatar"></user-settings-avatar-select>
         <v-row justify="end" :dense="true">
           <v-col cols="auto">
             <icon-btn icon="mdi-refresh" color="warning" @click="reset()">Reset</icon-btn>
@@ -43,6 +35,7 @@ import UserSettingsAvatarSelect from '@/components/common/dialogs/DialogAvatarSe
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { DisplayName } from '@/assets/shared/models/user';
+import { AVATAR_RULES, DISPLAY_NAME_RULES } from '@/assets/form-rules';
 
 export default defineComponent({
   components: { UserSettingsAvatarSelect, DialogActions, DialogTextField, DialogForm, IconBtn },
@@ -50,15 +43,7 @@ export default defineComponent({
     const clientStore = useClientStore();
     const state = reactive({
       valid: false,
-      clientData: Object.assign({}, clientStore.clientData),
-      displayNameRules: [
-        (v: string): boolean | string => !!v || 'Display name required',
-        (v: string): boolean | string =>
-          isValidDisplayName(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
-        (v: string): boolean | string =>
-          (v && v.length <= 20) || 'Display name must be under 20 characters'
-      ],
-      avatarRules: [(v: string): boolean | string => !!v || 'Avatar required']
+      clientData: Object.assign({}, clientStore.clientData)
     });
 
     function isValidDisplayName(val: string): boolean {
@@ -80,7 +65,7 @@ export default defineComponent({
       }
     }
 
-    return { clientStore, ...toRefs(state), reset, save };
+    return { clientStore, ...toRefs(state), reset, save, DISPLAY_NAME_RULES, AVATAR_RULES };
   }
 });
 </script>

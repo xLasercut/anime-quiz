@@ -10,9 +10,10 @@ import { Socket } from './types';
 import { SocketData } from './app/socket-data';
 import { SOCKET_EVENTS } from './shared/events';
 import { Emitter } from './emitters/emitter';
-import { newSocketErrorHandler, UnauthorizedError } from './app/exceptions';
+import { newSocketErrorHandler } from './app/exceptions';
 import { SongDb } from './database/song';
 import { EntryPointHandler } from './handlers/entry';
+import { AnimeDb } from './database/anime';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -25,11 +26,13 @@ const logger = new Logger(SERVER_CONFIG);
 const emitter = new Emitter(io);
 const userDb = new UserDb(SERVER_CONFIG, logger);
 const songDb = new SongDb(SERVER_CONFIG, logger);
+const animeDb = new AnimeDb(SERVER_CONFIG, logger);
 const handlerDependencies: HandlerDependencies = {
   logger: logger,
   config: SERVER_CONFIG,
   userDb: userDb,
   songDb: songDb,
+  animeDb: animeDb,
   emitter: emitter,
   oidc: oidc
 };
@@ -38,12 +41,6 @@ io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   logger.writeLog(LOG_REFERENCES.CLIENT_CONNECTED, { id: socket.id });
   const socketErrHandler = newSocketErrorHandler(logger, socket, emitter);
   socket.data = new SocketData();
-  socket.data.clientAuthTimer = setTimeout(
-    socketErrHandler(() => {
-      checkClientAuth(socket);
-    }),
-    SERVER_CONFIG.clientAuthDelay
-  );
   const entryHandler = new EntryPointHandler(socket, socketErrHandler, handlerDependencies);
   entryHandler.start();
 });
@@ -54,9 +51,3 @@ httpServer.listen(SERVER_CONFIG.serverPort, async () => {
     corsConfig: SERVER_CONFIG.corsConfig
   });
 });
-
-function checkClientAuth(socket: Socket) {
-  if (!socket.data.clientData.auth) {
-    throw new UnauthorizedError();
-  }
-}

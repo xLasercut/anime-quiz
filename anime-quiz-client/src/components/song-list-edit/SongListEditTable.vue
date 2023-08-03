@@ -2,12 +2,12 @@
   <v-data-table
     :height="CLIENT_CONSTANTS.SONG_LIST_EDIT_TABLE_HEIGHT"
     v-model:page="currentPage"
+    :items-per-page="itemsPerPage"
     density="compact"
     :items="filteredSongs()"
     :headers="headers"
     :fixed-header="true"
     :fixed-footer="true"
-    :items-per-page="itemsPerPage"
     :show-select="editMode !== SONG_LIST_EDIT_MODE.NONE"
     v-model="songsSelected"
     item-value="songId"
@@ -40,19 +40,14 @@
           v-model:artist.trim="filters.artist"
           v-model:type.trim="filters.type"
         ></song-list-edit-table-filters>
-        <song-list-edit-table-actions v-model="editMode"></song-list-edit-table-actions>
+        <song-list-edit-table-actions :disabled="disabled" v-model="editMode" @submit:change="submitChange()"></song-list-edit-table-actions>
       </v-container>
     </template>
 
     <template #bottom="{ pageCount }">
-      <table-pagination
-        v-model:current-page="currentPage"
-        v-model:items-per-page="itemsPerPage"
-        :length="pageCount"
-      ></table-pagination>
+      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
     </template>
   </v-data-table>
-  {{ songsSelected }}
 </template>
 
 <script lang="ts">
@@ -65,6 +60,8 @@ import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableActions from '@/components/song-list-edit/SongListEditTableActions.vue';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { socket } from '@/plugins/socket';
 
 export default defineComponent({
   components: {
@@ -92,7 +89,8 @@ export default defineComponent({
         title: '',
         artist: ''
       },
-      editMode: SONG_LIST_EDIT_MODE.NONE
+      editMode: SONG_LIST_EDIT_MODE.NONE,
+      disabled: false
     });
 
     watch(
@@ -135,11 +133,47 @@ export default defineComponent({
     }
 
     function checkboxDisabled(songId: SongIdType, isSelected: boolean): boolean {
+      if (state.disabled) {
+        return true;
+      }
+
       if (state.songsSelected.length >= 50 && !isSelected) {
         return true;
       }
 
       return state.editMode === SONG_LIST_EDIT_MODE.ADD && dataStore.userSongList.includes(songId);
+    }
+
+    const CHANGE_MAP = {
+      [SONG_LIST_EDIT_MODE.ADD]: addSongs,
+      [SONG_LIST_EDIT_MODE.REMOVE]: removeSongs
+    };
+
+    function submitChange() {
+      if (state.songsSelected.length > 0) {
+        const submit = CHANGE_MAP[state.editMode];
+        submit();
+      }
+    }
+
+    function addSongs(): void {
+      state.disabled = true;
+      socket.emit(SOCKET_EVENTS.ADD_USER_SONGS, state.songsSelected, (success: boolean) => {
+        state.disabled = false;
+        if (success) {
+          state.songsSelected = [];
+        }
+      });
+    }
+
+    function removeSongs(): void {
+      state.disabled = true;
+      socket.emit(SOCKET_EVENTS.REMOVE_USER_SONGS, state.songsSelected, (success: boolean) => {
+        state.disabled = false;
+        if (success) {
+          state.songsSelected = [];
+        }
+      });
     }
 
     return {
@@ -149,7 +183,8 @@ export default defineComponent({
       SONG_LIST_EDIT_MODE,
       checkboxIcon,
       checkboxColor,
-      checkboxDisabled
+      checkboxDisabled,
+      submitChange
     };
   }
 });

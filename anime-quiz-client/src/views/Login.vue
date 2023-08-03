@@ -11,9 +11,7 @@
       <v-container :fluid="true">
         <v-row justify="center" no-gutters>
           <v-col cols="auto">
-            <icon-btn icon="mdi-login" color="success" @click="login()" :disabled="disabled">
-              login via discord
-            </icon-btn>
+            <icon-btn icon="mdi-login" color="success" @click="login()" :disabled="disabled"> login via discord </icon-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -73,7 +71,7 @@ export default defineComponent({
           if (auth) {
             clientStore.changeView(ROUTES.LOBBY);
           } else {
-            socket.disconnect();
+            // socket.disconnect();
           }
         });
       }

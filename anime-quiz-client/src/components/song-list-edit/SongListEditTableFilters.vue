@@ -17,12 +17,7 @@
       ></table-filter-combobox>
     </v-col>
     <v-col>
-      <table-filter-text-field
-        label="Artist"
-        :model-value="artist"
-        @update:model-value="updateArtistFilter($event)"
-        hide-details
-      ></table-filter-text-field>
+      <table-filter-text-field label="Artist" :model-value="artist" @update:model-value="updateArtistFilter($event)" hide-details></table-filter-text-field>
     </v-col>
     <v-col>
       <v-select

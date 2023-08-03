@@ -4,13 +4,7 @@ import { Logger } from '../app/logging/logger';
 import { DbAllowedUser, DbUser, DbUserSongList } from '../models/user';
 import { DbUserType } from '../models/types';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
-import {
-  ClientDataType,
-  DiscordIdType,
-  SongIdType,
-  UserIdType,
-  UserType
-} from '../shared/models/types';
+import { ClientDataType, DiscordIdType, SongIdType, UserIdType, UserType } from '../shared/models/types';
 import { LOG_REFERENCES } from '../app/logging/constants';
 import { User } from '../shared/models/user';
 
@@ -18,7 +12,7 @@ class UserDb extends AbstractDb {
   protected _allowedUsers: DiscordIdType[] = [];
 
   constructor(config: ServerConfig, logger: Logger) {
-    super(logger, config.userDbPath);
+    super(config.userDbPath, logger);
     this.reloadCache();
   }
 
@@ -88,11 +82,11 @@ class UserDb extends AbstractDb {
     const statement = this._db.prepare(`
       UPDATE users
       SET
-        display_name = ?,
-        avatar = ?
+        display_name = @displayName,
+        avatar = @avatar
       WHERE discord_id = ?
     `);
-    statement.run([clientData.displayName, clientData.avatar, discordId]);
+    statement.run(discordId, clientData);
   }
 
   public validateAllowedUser(discordId: DiscordIdType): void {
@@ -101,24 +95,112 @@ class UserDb extends AbstractDb {
     }
   }
 
-  public validateUserNotExists(userId: UserIdType, discordId: DiscordIdType): void {
+  public validateUserNotExists(user: UserType): void {
     const statement = this._db.prepare(`
       SELECT
         *
       FROM users
-      WHERE user_id = ? OR discord_id = ?
+      WHERE user_id = @userId OR discord_id = @discordId
     `);
-    const response = statement.get([userId, discordId]);
+    const response = statement.get(user);
     if (response) {
       throw new DataQualityError('User already exists');
     }
   }
 
+  public validateUserExists(user: UserType): void {
+    const statement = this._db.prepare(`
+      SELECT
+        *
+      FROM users
+      WHERE user_id = @userId OR discord_id = @discordId
+    `);
+    const response = statement.get(user);
+    if (!response) {
+      throw new DataQualityError('User does not exist');
+    }
+  }
+
+  public validateUserSongsNotExists(songIds: SongIdType[], userId: UserIdType): void {
+    if (songIds.length > 50) {
+      throw new DataQualityError('Cannot add more thn 50 songs at a time');
+    }
+
+    const statement = this._db.prepare(`
+      SELECT
+        user_id,
+        song_id
+      FROM user_songs
+      WHERE user_id = ? AND
+            song_id IN (${this._questionString(songIds.length)})
+    `);
+    const response = statement.all(userId, songIds);
+    if (response.length > 0) {
+      throw new DataQualityError('Songs already exists in list');
+    }
+  }
+
+  public validateUserSongsExists(songIds: SongIdType[], userId: UserIdType): void {
+    if (songIds.length > 50) {
+      throw new DataQualityError('Cannot remove more thn 50 songs at a time');
+    }
+  }
+
   public newUser(user: UserType): void {
     const statement = this._db.prepare(`
-      INSERT INTO users (discord_id, user_id, display_name, avatar, admin) VALUES (?,?,?,?,?)
+      INSERT INTO users (discord_id, user_id, display_name, avatar, admin) VALUES (@discordId,@userId,@displayName,@avatar,?)
     `);
-    statement.run([user.discordId, user.userId, user.displayName, user.avatar, user.admin ? 1 : 0]);
+    statement.run(user.admin ? 1 : 0, user);
+  }
+
+  public deleteUser(user: UserType): void {
+    const statement = this._db.prepare(`
+      DELETE FROM users WHERE discord_id = @discordId AND user_id = @userId
+    `);
+    statement.run(user);
+  }
+
+  public deleteAllUserSongs(user: UserType): void {
+    const statement = this._db.prepare(`
+      DELETE FROM user_songs WHERE user_id = @userId
+    `);
+    statement.run(user);
+  }
+
+  public editUser(user: UserType): void {
+    const statement = this._db.prepare(`
+      UPDATE users
+      SET
+        display_name = @displayName,
+        avatar = @avatar,
+        admin = ?
+      WHERE discord_id = @discordId AND user_id = @userId
+    `);
+    statement.run(user.admin ? 1 : 0, user);
+  }
+
+  public addUserSongs(songIds: SongIdType[], userId: UserIdType): void {
+    const statement = this._db.prepare(`
+      INSERT INTO user_songs (user_id, song_id) VALUES (?,?)
+    `);
+    const insertMany = this._db.transaction((_songIds: SongIdType[]) => {
+      for (const songId of _songIds) {
+        statement.run(userId, songId);
+      }
+    });
+    insertMany(songIds);
+  }
+
+  public deleteUserSongs(songIds: SongIdType[], userId: UserIdType): void {
+    const statement = this._db.prepare(`
+      DELETE FROM user_songs WHERE user_id = ? AND song_id = ?
+    `);
+    const deleteMany = this._db.transaction((_songIds: SongIdType[]) => {
+      for (const songId of _songIds) {
+        statement.run(userId, songId);
+      }
+    });
+    deleteMany(songIds);
   }
 
   protected _getAllowedUsers(): string[] {

@@ -1,10 +1,10 @@
 <template>
-  <dialog-form v-model="valid" @submit.prevent="newUser()">
+  <dialog-form v-model="valid" @submit.prevent="submitChange()">
     <dialog-text-field
       label="Discord ID"
       v-model.trim="adminStore.userInEdit.discordId"
       :rules="DISCORD_ID_RULES"
-      :disabled="disabled"
+      :disabled="adminStore.editModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
       label="User ID"
@@ -12,26 +12,21 @@
       append-icon="mdi-refresh"
       @click:append="adminStore.generateNewUserId()"
       :rules="USER_ID_RULES"
-      :disabled="disabled"
+      :disabled="adminStore.editModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
       label="Display Name"
       v-model.trim="adminStore.userInEdit.displayName"
       :rules="DISPLAY_NAME_RULES"
-      :disabled="disabled"
+      :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <user-settings-avatar-select
       avatar-size="50"
       v-model.trim="adminStore.userInEdit.avatar"
       :rules="AVATAR_RULES"
-      :disabled="disabled"
+      :disabled="adminStore.deleteModeDisabled || disabled"
     ></user-settings-avatar-select>
-    <dialog-radio
-      label="Admin"
-      v-model="adminStore.userInEdit.admin"
-      :rules="ADMIN_RULES"
-      :disabled="disabled"
-    >
+    <dialog-radio label="Admin" v-model="adminStore.userInEdit.admin" :rules="ADMIN_RULES" :disabled="adminStore.deleteModeDisabled || disabled">
       <v-radio label="True" :value="true"></v-radio>
       <v-radio label="False" :value="false"></v-radio>
     </dialog-radio>
@@ -47,17 +42,12 @@ import UserSettingsAvatarSelect from '@/components/common/dialogs/DialogAvatarSe
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogRadio from '@/components/common/dialogs/DialogRadio.vue';
 import { useAdminStore } from '@/plugins/store/admin';
-import {
-  ADMIN_RULES,
-  AVATAR_RULES,
-  DISCORD_ID_RULES,
-  DISPLAY_NAME_RULES,
-  USER_ID_RULES
-} from '@/assets/form-rules';
+import { ADMIN_RULES, AVATAR_RULES, DISCORD_ID_RULES, DISPLAY_NAME_RULES, USER_ID_RULES } from '@/assets/form-rules';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { User } from '@/assets/shared/models/user';
+import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
 export default defineComponent({
   components: {
@@ -74,21 +64,47 @@ export default defineComponent({
       valid: false,
       disabled: false
     });
+    const CHANGE_MAP = {
+      [DATABASE_EDIT_MODE.NEW]: newUser,
+      [DATABASE_EDIT_MODE.EDIT]: editUser,
+      [DATABASE_EDIT_MODE.DELETE]: deleteUser
+    };
+
+    function submitChange() {
+      if (state.valid) {
+        const submit = CHANGE_MAP[adminStore.editMode];
+        submit();
+      }
+    }
 
     function newUser() {
-      if (state.valid) {
-        state.disabled = true;
-        socket.emit(
-          SOCKET_EVENTS.ADMIN_NEW_USER,
-          User.parse(adminStore.userInEdit),
-          (success: boolean) => {
-            state.disabled = false;
-            if (success) {
-              context.emit('dialog:close');
-            }
-          }
-        );
-      }
+      state.disabled = true;
+      socket.emit(SOCKET_EVENTS.ADMIN_NEW_USER, User.parse(adminStore.userInEdit), (success: boolean) => {
+        state.disabled = false;
+        if (success) {
+          context.emit('dialog:close');
+        }
+      });
+    }
+
+    function editUser() {
+      state.disabled = true;
+      socket.emit(SOCKET_EVENTS.ADMIN_EDIT_USER, User.parse(adminStore.userInEdit), (success: boolean) => {
+        state.disabled = false;
+        if (success) {
+          context.emit('dialog:close');
+        }
+      });
+    }
+
+    function deleteUser() {
+      state.disabled = true;
+      socket.emit(SOCKET_EVENTS.ADMIN_DELETE_USER, User.parse(adminStore.userInEdit), (success: boolean) => {
+        state.disabled = false;
+        if (success) {
+          context.emit('dialog:close');
+        }
+      });
     }
 
     return {
@@ -99,7 +115,7 @@ export default defineComponent({
       AVATAR_RULES,
       USER_ID_RULES,
       ADMIN_RULES,
-      newUser
+      submitChange
     };
   }
 });

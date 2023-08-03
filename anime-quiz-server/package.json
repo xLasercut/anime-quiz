@@ -20,6 +20,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.4",
     "env-cmd": "^10.1.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.0",

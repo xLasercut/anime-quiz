@@ -15,7 +15,11 @@ const LOG_REFERENCES = {
   UNAUTHORIZED_CLIENT: 'SERVER005',
   DATA_QUALITY_ERROR: 'SERVER006',
   FETCHED_USER_SONG_LIST: 'SERVER007',
-  FETCHED_USER_LIST: 'SERVER008'
+  FETCHED_USER_LIST: 'SERVER008',
+  ADMIN_ADD_USER: 'SERVER009',
+  ADMIN_DELETE_USER: 'SERVER010',
+  ADMIN_EDIT_USER: 'SERVER011',
+  UPDATE_USER_SETTINGS: 'SERVER012'
 };
 
 const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
@@ -50,6 +54,22 @@ const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
   [LOG_REFERENCES.FETCHED_USER_LIST]: {
     message: 'fetched user list',
     level: LOG_LEVEL.DEBUG
+  },
+  [LOG_REFERENCES.ADMIN_ADD_USER]: {
+    message: 'admin add user',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_EDIT_USER]: {
+    message: 'admin edit user',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_DELETE_USER]: {
+    message: 'admin delete user',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.UPDATE_USER_SETTINGS]: {
+    message: 'update user settings',
+    level: LOG_LEVEL.INFO
   }
 };
 

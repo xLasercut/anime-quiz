@@ -32,6 +32,11 @@ const DbUserSongList = z.object({
     .min(1)
     .refine((val) => isValidJson(val), { message: 'Invalid json string' })
     .transform((val) => JSON.parse(val))
+    .transform((vals: (string | null)[]) => {
+      return vals.filter((val) => {
+        return val;
+      });
+    })
     .pipe(z.array(SongId))
     .transform((val) => Array.from(new Set(val)))
 });

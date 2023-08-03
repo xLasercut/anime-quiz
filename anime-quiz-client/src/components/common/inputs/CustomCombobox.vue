@@ -1,9 +1,5 @@
 <template>
-  <v-combobox
-    :model-value="modelValue"
-    @update:model-value="$emit('update:model-value', $event || '')"
-    :custom-filter="customFilter"
-  ></v-combobox>
+  <v-combobox :model-value="modelValue" @update:model-value="$emit('update:model-value', $event || '')" :custom-filter="customFilter"></v-combobox>
 </template>
 
 <script lang="ts">

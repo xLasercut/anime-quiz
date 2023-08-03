@@ -1,9 +1,7 @@
 <template>
   <v-menu location="top" :open-on-hover="true" :open-delay="0" :close-delay="0">
     <template #activator="{ props }">
-      <v-chip :label="true" v-bind="props" size="small" color="primary">{{
-        song.animeName[0]
-      }}</v-chip>
+      <v-chip :label="true" v-bind="props" size="small" color="primary">{{ song.animeName[0] }}</v-chip>
     </template>
     <v-list density="compact">
       <v-list-item v-for="name in song.animeName" :title="name" density="compact"></v-list-item>

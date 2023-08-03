@@ -37,21 +37,13 @@ const DISCORD_ID_RULES = [
 
 const DISPLAY_NAME_RULES = [
   (v: string): boolean | string => !!v || 'Display name required',
-  (v: string): boolean | string =>
-    isValidDisplayName(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
-  (v: string): boolean | string =>
-    (v && v.length <= 20) || 'Display name must be under 20 characters'
+  (v: string): boolean | string => isValidDisplayName(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
+  (v: string): boolean | string => (v && v.length <= 20) || 'Display name must be under 20 characters'
 ];
 
-const AVATAR_RULES = [
-  (v: string): boolean | string => !!v || 'Avatar required',
-  (v: string): boolean | string => isValidAvatar(v) || 'Invalid Avatar'
-];
+const AVATAR_RULES = [(v: string): boolean | string => !!v || 'Avatar required', (v: string): boolean | string => isValidAvatar(v) || 'Invalid Avatar'];
 
-const USER_ID_RULES = [
-  (v: string): boolean | string => !!v || 'User ID required',
-  (v: string): boolean | string => isValidUserId(v) || 'Invalid User ID'
-];
+const USER_ID_RULES = [(v: string): boolean | string => !!v || 'User ID required', (v: string): boolean | string => isValidUserId(v) || 'Invalid User ID'];
 
 const ADMIN_RULES = [(v: boolean): boolean | string => isValidAdmin(v) || 'Invalid Admin'];
 

@@ -26,12 +26,20 @@ class Oidc {
   }
 
   public async getUserInfo(code: string): Promise<DiscordUserApiResponse> {
+    if (this._config.discordUserOverride) {
+      return {
+        id: this._config.discordUserOverride,
+        username: 'overrideuser'
+      };
+    }
+
     const accessToken = await this._getAccessToken(code);
     const response = await axios.get<DiscordUserApiResponse>(this._userInfoUrl, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
+
     return response.data;
   }
 

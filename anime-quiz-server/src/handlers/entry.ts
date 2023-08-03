@@ -5,8 +5,9 @@ import { LOG_REFERENCES } from '../app/logging/constants';
 import { UserHandler } from './user';
 import { SongHandler } from './song';
 import { DataHandler } from './data';
-import { HandlerDependencies } from '../interfaces';
+import { HandlerDependencies, ServerConfig } from '../interfaces';
 import { AdminUserHandler } from './admin-user';
+import { UnauthorizedError } from '../app/exceptions';
 
 class EntryPointHandler extends AbstractHandler {
   protected _handlers: AbstractHandler[];
@@ -35,18 +36,21 @@ class EntryPointHandler extends AbstractHandler {
       new DataHandler(socket, errHandler, dependencies)
     ];
     this._adminHandlers = [new AdminUserHandler(socket, errHandler, dependencies)];
+    this._socket.data.clientAuthTimer = setTimeout(
+      this._errHandler(() => {
+        this._checkClientAuth();
+      }),
+      this._config.clientAuthDelay
+    );
   }
 
   protected _setClientData(): void {
     this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
     this._emitter.updateStoreSongTitles(this._songDb.songTitles, this._socket.id);
-    this._emitter.updateStoreAnimeNames(this._songDb.animeNames, this._socket.id);
+    this._emitter.updateStoreAnimeNames(this._animeDb.animeNames, this._socket.id);
     this._emitter.updateStoreSongList(this._songDb.songList, this._socket.id);
-    this._emitter.updateStoreAnimeList(this._songDb.animeList, this._socket.id);
-    this._emitter.updateStoreUserSongList(
-      this._userDb.getUserSongList(this._socket.data.clientData.discordId),
-      this._socket.id
-    );
+    this._emitter.updateStoreAnimeList(this._animeDb.animeList, this._socket.id);
+    this._emitter.updateStoreUserSongList(this._userDb.getUserSongList(this._socket.data.clientData.discordId), this._socket.id);
   }
 
   protected _startHandler(): void {
@@ -57,6 +61,12 @@ class EntryPointHandler extends AbstractHandler {
       for (const handler of this._adminHandlers) {
         handler.start();
       }
+    }
+  }
+
+  protected _checkClientAuth() {
+    if (!this._socket.data.clientData.auth) {
+      throw new UnauthorizedError();
     }
   }
 }

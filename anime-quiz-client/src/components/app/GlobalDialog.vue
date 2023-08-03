@@ -7,13 +7,7 @@
             <span>{{ label }}</span>
           </v-col>
           <v-col cols="auto">
-            <v-btn
-              icon="mdi-close"
-              variant="text"
-              density="comfortable"
-              size="small"
-              @click="show = false"
-            ></v-btn>
+            <v-btn icon="mdi-close" variant="text" density="comfortable" size="small" @click="show = false"></v-btn>
           </v-col>
         </v-row>
       </v-card-title>

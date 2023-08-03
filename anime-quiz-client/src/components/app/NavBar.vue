@@ -6,9 +6,7 @@
     <v-spacer></v-spacer>
     <v-toolbar-items>
       <component :is="panelComponent()"></component>
-      <nav-btn icon="mdi-logout" color="error" @click="logout()" v-if="showLogout()">
-        Logout
-      </nav-btn>
+      <nav-btn icon="mdi-logout" color="error" @click="logout()" v-if="showLogout()"> Logout </nav-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>

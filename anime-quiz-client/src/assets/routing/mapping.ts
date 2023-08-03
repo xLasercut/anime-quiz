@@ -10,7 +10,7 @@ import SongListEdit from '@/views/SongListEdit.vue';
 import SongListEditPanel from '@/components/song-list-edit/SongListEditPanel.vue';
 import UserEdit from '@/views/UserEdit.vue';
 import UserEditPanel from '@/components/user-edit/UserEditPanel.vue';
-import NewUserDialog from '@/components/user-edit/NewUserDialog.vue';
+import UserEditDialog from '@/components/user-edit/UserEditDialog.vue';
 
 const PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -29,7 +29,7 @@ const VIEW_MAPPING: { [key: string]: Component } = {
 
 const DIALOG_MAPPINGS: { [key: string]: Component } = {
   [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings,
-  [DIALOG_ROUTES.NEW_USER]: NewUserDialog
+  [DIALOG_ROUTES.USER_EDIT]: UserEditDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

@@ -1,12 +1,7 @@
 import { z } from 'zod';
 import { User } from './user';
 
-const NotificationColor = z.union([
-  z.literal('error'),
-  z.literal('warning'),
-  z.literal('success'),
-  z.literal('info')
-]);
+const NotificationColor = z.union([z.literal('error'), z.literal('warning'), z.literal('success'), z.literal('info')]);
 
 const SystemNotification = z.object({
   color: NotificationColor,

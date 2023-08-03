@@ -32,12 +32,9 @@ export default defineComponent({
 
     let sendNotification: SendNotification;
     let openDialog: OpenDialog;
-    provide(
-      CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION,
-      (_sendNotification: SendNotification): void => {
-        sendNotification = _sendNotification;
-      }
-    );
+    provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: SendNotification): void => {
+      sendNotification = _sendNotification;
+    });
     provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: OpenDialog): void => {
       openDialog = _openDialog;
     });
@@ -45,12 +42,9 @@ export default defineComponent({
     provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
       openDialog(route, label);
     });
-    provide(
-      CLIENT_EVENTS.SYSTEM_NOTIFICATION,
-      (color: NotificationColorType, message: string): void => {
-        sendNotification(color, message);
-      }
-    );
+    provide(CLIENT_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColorType, message: string): void => {
+      sendNotification(color, message);
+    });
 
     function viewComponent(): Component {
       return VIEW_MAPPING[clientStore.view];

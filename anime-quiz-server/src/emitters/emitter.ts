@@ -1,14 +1,5 @@
 import { Server } from '../app/server';
-import {
-  AnimeNameType,
-  AnimeType,
-  ClientDataType,
-  SongIdType,
-  SongTitleType,
-  SongType,
-  SystemNotificationType,
-  UserType
-} from '../shared/models/types';
+import { AnimeNameType, AnimeType, ClientDataType, SongIdType, SongTitleType, SongType, SystemNotificationType, UserType } from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
 
 class Emitter {

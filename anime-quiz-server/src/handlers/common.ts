@@ -5,6 +5,7 @@ import { Socket, SocketEvent } from '../types';
 import { Emitter } from '../emitters/emitter';
 import { SongDb } from '../database/song';
 import { Oidc } from '../app/oidc';
+import { AnimeDb } from '../database/anime';
 
 abstract class AbstractHandler {
   protected _logger: Logger;
@@ -12,6 +13,7 @@ abstract class AbstractHandler {
   protected _userDb: UserDb;
   protected _emitter: Emitter;
   protected _songDb: SongDb;
+  protected _animeDb: AnimeDb;
   protected _oidc: Oidc;
   protected _socket: Socket;
   protected _errHandler: Function;
@@ -25,6 +27,7 @@ abstract class AbstractHandler {
     this._userDb = dependencies.userDb;
     this._emitter = dependencies.emitter;
     this._songDb = dependencies.songDb;
+    this._animeDb = dependencies.animeDb;
     this._oidc = dependencies.oidc;
   }
 

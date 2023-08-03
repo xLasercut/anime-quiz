@@ -1,12 +1,5 @@
 import { defineStore } from 'pinia';
-import {
-  AnimeNameType,
-  AnimeType,
-  SongTitleType,
-  SongType,
-  SongIdType,
-  UserType
-} from '@/assets/shared/models/types';
+import { AnimeNameType, AnimeType, SongTitleType, SongType, SongIdType, UserType } from '@/assets/shared/models/types';
 
 interface State {
   songList: SongType[];

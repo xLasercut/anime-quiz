@@ -2,13 +2,7 @@
   <v-snackbar location="top" :timeout="6000" :color="color" v-model="show">
     {{ message }}
     <template #actions>
-      <v-btn
-        icon="mdi-close"
-        @click="show = false"
-        variant="text"
-        density="comfortable"
-        size="small"
-      ></v-btn>
+      <v-btn icon="mdi-close" @click="show = false" variant="text" density="comfortable" size="small"></v-btn>
     </template>
   </v-snackbar>
 </template>
@@ -45,9 +39,7 @@ export default defineComponent({
       }
     }
 
-    const registerSendNotification = injectStrict<RegisterSendNotification>(
-      CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION
-    );
+    const registerSendNotification = injectStrict<RegisterSendNotification>(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION);
     registerSendNotification(sendNotification);
 
     return { ...toRefs(state) };
