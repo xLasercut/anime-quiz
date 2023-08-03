@@ -8,6 +8,7 @@ import { DataHandler } from './data';
 import { HandlerDependencies, ServerConfig } from '../interfaces';
 import { AdminUserHandler } from './admin-user';
 import { UnauthorizedError } from '../app/exceptions';
+import { AdminAnimeHandler } from './admin-anime';
 
 class EntryPointHandler extends AbstractHandler {
   protected _handlers: AbstractHandler[];
@@ -35,7 +36,7 @@ class EntryPointHandler extends AbstractHandler {
       new SongHandler(socket, errHandler, dependencies),
       new DataHandler(socket, errHandler, dependencies)
     ];
-    this._adminHandlers = [new AdminUserHandler(socket, errHandler, dependencies)];
+    this._adminHandlers = [new AdminUserHandler(socket, errHandler, dependencies), new AdminAnimeHandler(socket, errHandler, dependencies)];
     this._socket.data.clientAuthTimer = setTimeout(
       this._errHandler(() => {
         this._checkClientAuth();

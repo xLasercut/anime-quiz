@@ -65,46 +65,22 @@ export default defineComponent({
       disabled: false
     });
     const CHANGE_MAP = {
-      [DATABASE_EDIT_MODE.NEW]: newUser,
-      [DATABASE_EDIT_MODE.EDIT]: editUser,
-      [DATABASE_EDIT_MODE.DELETE]: deleteUser
+      [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_USER,
+      [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_USER,
+      [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_USER
     };
 
     function submitChange() {
       if (state.valid) {
-        const submit = CHANGE_MAP[adminStore.editMode];
-        submit();
+        state.disabled = true;
+        const event = CHANGE_MAP[adminStore.editMode];
+        socket.emit(event, User.parse(adminStore.userInEdit), (success: boolean) => {
+          state.disabled = false;
+          if (success) {
+            context.emit('dialog:close');
+          }
+        });
       }
-    }
-
-    function newUser() {
-      state.disabled = true;
-      socket.emit(SOCKET_EVENTS.ADMIN_NEW_USER, User.parse(adminStore.userInEdit), (success: boolean) => {
-        state.disabled = false;
-        if (success) {
-          context.emit('dialog:close');
-        }
-      });
-    }
-
-    function editUser() {
-      state.disabled = true;
-      socket.emit(SOCKET_EVENTS.ADMIN_EDIT_USER, User.parse(adminStore.userInEdit), (success: boolean) => {
-        state.disabled = false;
-        if (success) {
-          context.emit('dialog:close');
-        }
-      });
-    }
-
-    function deleteUser() {
-      state.disabled = true;
-      socket.emit(SOCKET_EVENTS.ADMIN_DELETE_USER, User.parse(adminStore.userInEdit), (success: boolean) => {
-        state.disabled = false;
-        if (success) {
-          context.emit('dialog:close');
-        }
-      });
     }
 
     return {

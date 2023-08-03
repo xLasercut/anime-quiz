@@ -7,6 +7,7 @@
     :headers="headers"
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
+    :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
     <template #item.avatar="{ item }">
       <game-avatar :avatar="item.raw.avatar"></game-avatar>
@@ -55,7 +56,7 @@ import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { injectStrict } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 
@@ -105,7 +106,7 @@ export default defineComponent({
       openDialog(DIALOG_ROUTES.USER_EDIT, 'Delete User');
     }
 
-    return { dataStore, filteredUserList, ...toRefs(state), editUser, deleteUser };
+    return { dataStore, filteredUserList, ...toRefs(state), editUser, deleteUser, CLIENT_CONSTANTS };
   }
 });
 </script>

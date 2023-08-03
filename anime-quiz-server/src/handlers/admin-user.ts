@@ -67,12 +67,6 @@ class AdminUserHandler extends AbstractHandler {
     }
   };
 
-  protected _validateIsAdmin(): void {
-    if (!this._socket.data.clientData.admin) {
-      throw new UnauthorizedError();
-    }
-  }
-
   protected _validateCanWriteToDb(): void {
     this._validateIsAdmin();
     this._userDb.validateDbNotLocked();

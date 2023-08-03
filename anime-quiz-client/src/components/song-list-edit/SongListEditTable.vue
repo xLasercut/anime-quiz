@@ -22,6 +22,7 @@
         :true-icon="checkboxIcon()"
         :color="checkboxColor()"
         :disabled="checkboxDisabled(item.raw.songId, isSelected(item))"
+        :false-icon="checkboxFalseIcon(checkboxDisabled(item.raw.songId, isSelected(item)))"
       ></v-checkbox>
     </template>
     <template #item.animeName="{ item }">
@@ -118,6 +119,13 @@ export default defineComponent({
         });
     }
 
+    function checkboxFalseIcon(disabled: boolean): string {
+      if (disabled) {
+        return 'mdi-checkbox-blank-off-outline';
+      }
+      return 'mdi-checkbox-blank-outline';
+    }
+
     function checkboxIcon(): string {
       if (state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
         return 'mdi-minus-box';
@@ -145,35 +153,21 @@ export default defineComponent({
     }
 
     const CHANGE_MAP = {
-      [SONG_LIST_EDIT_MODE.ADD]: addSongs,
-      [SONG_LIST_EDIT_MODE.REMOVE]: removeSongs
+      [SONG_LIST_EDIT_MODE.ADD]: SOCKET_EVENTS.ADD_USER_SONGS,
+      [SONG_LIST_EDIT_MODE.REMOVE]: SOCKET_EVENTS.REMOVE_USER_SONGS
     };
 
     function submitChange() {
       if (state.songsSelected.length > 0) {
-        const submit = CHANGE_MAP[state.editMode];
-        submit();
+        state.disabled = true;
+        const event = CHANGE_MAP[state.editMode];
+        socket.emit(event, state.songsSelected, (success: boolean) => {
+          state.disabled = false;
+          if (success) {
+            state.songsSelected = [];
+          }
+        });
       }
-    }
-
-    function addSongs(): void {
-      state.disabled = true;
-      socket.emit(SOCKET_EVENTS.ADD_USER_SONGS, state.songsSelected, (success: boolean) => {
-        state.disabled = false;
-        if (success) {
-          state.songsSelected = [];
-        }
-      });
-    }
-
-    function removeSongs(): void {
-      state.disabled = true;
-      socket.emit(SOCKET_EVENTS.REMOVE_USER_SONGS, state.songsSelected, (success: boolean) => {
-        state.disabled = false;
-        if (success) {
-          state.songsSelected = [];
-        }
-      });
     }
 
     return {
@@ -184,7 +178,8 @@ export default defineComponent({
       checkboxIcon,
       checkboxColor,
       checkboxDisabled,
-      submitChange
+      submitChange,
+      checkboxFalseIcon
     };
   }
 });

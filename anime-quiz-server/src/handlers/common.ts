@@ -6,6 +6,7 @@ import { Emitter } from '../emitters/emitter';
 import { SongDb } from '../database/song';
 import { Oidc } from '../app/oidc';
 import { AnimeDb } from '../database/anime';
+import { UnauthorizedError } from '../app/exceptions';
 
 abstract class AbstractHandler {
   protected _logger: Logger;
@@ -34,6 +35,12 @@ abstract class AbstractHandler {
   public start(): void {
     for (const [eventName, eventFunction] of Object.entries(this._events)) {
       this._socket.on(eventName, this._errHandler(eventFunction));
+    }
+  }
+
+  protected _validateIsAdmin(): void {
+    if (!this._socket.data.clientData.admin) {
+      throw new UnauthorizedError();
     }
   }
 }

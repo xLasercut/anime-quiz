@@ -6,7 +6,8 @@ const LOCAL_STORAGE_CONSTANTS = {
 };
 
 const CLIENT_CONSTANTS = {
-  SONG_LIST_EDIT_TABLE_HEIGHT: 'calc(100vh - 252px)'
+  SONG_LIST_EDIT_TABLE_HEIGHT: 'calc(100vh - 252px)',
+  ADMIN_TABLE_HEIGHT: 'calc(100vh - 202px)'
 };
 
 const SONG_LIST_EDIT_MODE = {

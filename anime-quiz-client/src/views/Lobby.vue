@@ -13,15 +13,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 import LobbyMenuCard from '@/components/lobby/LobbyMenuCard.vue';
 import { ROUTES } from '@/assets/routing/routes';
 import { useClientStore } from '@/plugins/store/client';
+import { useAdminStore } from '@/plugins/store/admin';
 
 export default defineComponent({
   components: { LobbyMenuCard },
   setup() {
     const clientStore = useClientStore();
+    const adminStore = useAdminStore();
 
     const state = reactive({
       cards: [
@@ -40,6 +42,14 @@ export default defineComponent({
           route: ROUTES.USER_SETTINGS,
           requireAdmin: false,
           icon: 'mdi-gamepad-variant'
+        },
+        {
+          color: 'error',
+          title: 'Anime Edit',
+          description: 'Edit Anime List',
+          route: ROUTES.ANIME_EDIT,
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
         },
         {
           color: 'error',
@@ -70,6 +80,10 @@ export default defineComponent({
       }
       return clientStore.clientData.admin;
     }
+
+    onMounted(() => {
+      adminStore.$reset();
+    });
 
     return { changeView, ...toRefs(state), filteredCards };
   }

@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
-import { UserType } from '@/assets/shared/models/types';
+import { AnimeType, UserType } from '@/assets/shared/models/types';
 import { generateId } from '@/assets/game-helpers';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
 interface State {
   userInEdit: UserType;
   editMode: string;
+  animeInEdit: AnimeType;
 }
 
 const useAdminStore = defineStore('admin', {
@@ -18,7 +19,11 @@ const useAdminStore = defineStore('admin', {
         admin: false,
         avatar: ''
       },
-      editMode: ''
+      editMode: '',
+      animeInEdit: {
+        animeId: '',
+        animeName: []
+      }
     };
   },
   actions: {
@@ -30,6 +35,12 @@ const useAdminStore = defineStore('admin', {
     },
     updateEditMode(editMode: string) {
       this.editMode = editMode;
+    },
+    generateNewAnimeId() {
+      this.animeInEdit.animeId = generateId('anime');
+    },
+    updateAnimeInEdit(anime: AnimeType) {
+      this.animeInEdit = Object.assign({}, anime);
     }
   },
   getters: {
