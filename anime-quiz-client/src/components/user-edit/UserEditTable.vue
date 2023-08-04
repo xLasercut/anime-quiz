@@ -18,14 +18,7 @@
     </template>
 
     <template #item.action="{ item }">
-      <v-row :dense="true">
-        <v-col cols="auto">
-          <table-action-btn icon="mdi-pencil" color="warning" @click="editUser(item.raw)"></table-action-btn>
-        </v-col>
-        <v-col cols="auto">
-          <table-action-btn icon="mdi-delete" color="error" @click="deleteUser(item.raw)"></table-action-btn>
-        </v-col>
-      </v-row>
+      <table-action @item:edit="editUser(item.raw)" @item:delete="deleteUser(item.raw)"></table-action>
     </template>
 
     <template #top>
@@ -52,16 +45,16 @@ import GameAvatar from '@/components/common/GameAvatar.vue';
 import UserEditTableFilters from '@/components/user-edit/UserEditTableFilters.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
-import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { injectStrict } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
+import TableAction from '@/components/common/tables/TableAction.vue';
 
 export default defineComponent({
-  components: { TableActionBtn, IconBtn, TablePagination, UserEditTableFilters, GameAvatar },
+  components: { TableAction, IconBtn, TablePagination, UserEditTableFilters, GameAvatar },
   setup() {
     const dataStore = useDataStore();
     const adminStore = useAdminStore();

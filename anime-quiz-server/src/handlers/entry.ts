@@ -9,6 +9,7 @@ import { HandlerDependencies, ServerConfig } from '../interfaces';
 import { AdminUserHandler } from './admin-user';
 import { UnauthorizedError } from '../app/exceptions';
 import { AdminAnimeHandler } from './admin-anime';
+import { AdminSongHandler } from './admin-song';
 
 class EntryPointHandler extends AbstractHandler {
   protected _handlers: AbstractHandler[];
@@ -36,7 +37,11 @@ class EntryPointHandler extends AbstractHandler {
       new SongHandler(socket, errHandler, dependencies),
       new DataHandler(socket, errHandler, dependencies)
     ];
-    this._adminHandlers = [new AdminUserHandler(socket, errHandler, dependencies), new AdminAnimeHandler(socket, errHandler, dependencies)];
+    this._adminHandlers = [
+      new AdminUserHandler(socket, errHandler, dependencies),
+      new AdminAnimeHandler(socket, errHandler, dependencies),
+      new AdminSongHandler(socket, errHandler, dependencies)
+    ];
     this._socket.data.clientAuthTimer = setTimeout(
       this._errHandler(() => {
         this._checkClientAuth();
@@ -52,6 +57,7 @@ class EntryPointHandler extends AbstractHandler {
     this._emitter.updateStoreSongList(this._songDb.getSongList(), this._socket.id);
     this._emitter.updateStoreAnimeList(this._animeDb.getAnimeList(), this._socket.id);
     this._emitter.updateStoreUserSongList(this._userDb.getUserSongList(this._socket.data.clientData.discordId), this._socket.id);
+    this._emitter.updateStoreEmojiList(this._emojiDb.getEmojiList(), this._socket.id);
   }
 
   protected _startHandler(): void {

@@ -15,6 +15,7 @@ import { SongDb } from './database/song';
 import { EntryPointHandler } from './handlers/entry';
 import { AnimeDb } from './database/anime';
 import { DatabaseLock } from './database/lock';
+import { EmojiDb } from './database/emoji';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -29,6 +30,7 @@ const dbLock = new DatabaseLock();
 const userDb = new UserDb(SERVER_CONFIG, logger);
 const songDb = new SongDb(SERVER_CONFIG, logger);
 const animeDb = new AnimeDb(SERVER_CONFIG, logger);
+const emojiDb = new EmojiDb(SERVER_CONFIG, logger);
 const handlerDependencies: HandlerDependencies = {
   logger: logger,
   config: SERVER_CONFIG,
@@ -37,7 +39,8 @@ const handlerDependencies: HandlerDependencies = {
   animeDb: animeDb,
   emitter: emitter,
   oidc: oidc,
-  dbLock: dbLock
+  dbLock: dbLock,
+  emojiDb: emojiDb
 };
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {

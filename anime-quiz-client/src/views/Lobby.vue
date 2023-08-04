@@ -53,6 +53,22 @@ export default defineComponent({
         },
         {
           color: 'error',
+          title: 'Song Edit',
+          description: 'Add/Edit/Delete songs',
+          route: ROUTES.SONG_EDIT,
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
+        },
+        {
+          color: 'error',
+          title: 'Emoji Edit',
+          description: 'Add/Edit/Delete emojis',
+          route: ROUTES.EMOJI_EDIT,
+          requireAdmin: true,
+          icon: 'mdi-database-edit'
+        },
+        {
+          color: 'error',
           title: 'User Edit',
           description: 'Add/Edit/Delete users',
           route: ROUTES.USER_EDIT,

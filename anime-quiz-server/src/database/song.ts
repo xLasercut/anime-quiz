@@ -2,13 +2,48 @@ import { AbstractDb } from './common';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logging/logger';
 import { DbSong, DbSongTitle } from '../models/song';
-import { AnimeIdType, SongTitleType, SongType } from '../shared/models/types';
+import { AnimeIdType, SongIdType, SongTitleType, SongType } from '../shared/models/types';
 import { Song, SongTitle } from '../shared/models/song';
 import { DbSongTitleType } from '../models/types';
+import { DataQualityError } from '../app/exceptions';
 
 class SongDb extends AbstractDb {
   constructor(config: ServerConfig, logger: Logger) {
     super(config.mainDbPath, logger);
+  }
+
+  public newSong(song: SongType) {
+    const statement = this._db.prepare(`
+      INSERT INTO songs 
+        (song_id, song_title, src, artist, type)
+      VALUES
+        (@songId, @songTitle, @src, @artist, @type)
+    `);
+    statement.run(song);
+    this.newSongAnime(song);
+  }
+
+  public editSong(song: SongType) {
+    const statement = this._db.prepare(`
+      UPDATE songs
+      SET
+        song_title = @songTitle,
+        src = @src,
+        artist = @artist,
+        type = @type
+      WHERE song_id = @songId
+    `);
+    statement.run(song);
+    this.deleteSongAnimeBySongId(song.songId);
+    this.newSongAnime(song);
+  }
+
+  public deleteSong(song: SongType) {
+    const statement = this._db.prepare(`
+      DELETE FROM songs WHERE song_id = @songId
+    `);
+    statement.run(song);
+    this.deleteSongAnimeBySongId(song.songId);
   }
 
   public deleteSongAnimeByAnimeId(animeId: AnimeIdType) {
@@ -16,6 +51,54 @@ class SongDb extends AbstractDb {
       DELETE FROM song_animes WHERE anime_id = ?
     `);
     statement.run(animeId);
+  }
+
+  public deleteSongAnimeBySongId(songId: SongIdType) {
+    const statement = this._db.prepare(`
+      DELETE FROM song_animes WHERE song_id = ?
+    `);
+    statement.run(songId);
+  }
+
+  public newSongAnime(song: SongType) {
+    const statement = this._db.prepare(`
+      INSERT INTO song_animes
+        (song_id, anime_id)
+      VALUES
+        (?,?)
+    `);
+    const insertMany = this._db.transaction(() => {
+      for (const animeId of song.animeId) {
+        statement.run(song.songId, animeId);
+      }
+    });
+    insertMany();
+  }
+
+  public validateSongExists(song: SongType) {
+    const statement = this._db.prepare(`
+      SELECT
+        song_id
+      FROM songs
+      WHERE song_id = @songId
+    `);
+    const response = statement.get(song);
+    if (!response) {
+      throw new DataQualityError('Song does not exists');
+    }
+  }
+
+  public validateSongNotExists(song: SongType) {
+    const statement = this._db.prepare(`
+      SELECT
+        song_id
+      FROM songs
+      WHERE song_id = @songId
+    `);
+    const response = statement.get(song);
+    if (response) {
+      throw new DataQualityError('Song already exists');
+    }
   }
 
   public getSongList(): SongType[] {

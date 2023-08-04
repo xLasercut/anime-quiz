@@ -22,10 +22,25 @@ const LOG_REFERENCES = {
   UPDATE_USER_SETTINGS: 'SERVER012',
   ADMIN_ADD_ANIME: 'SERVER013',
   ADMIN_EDIT_ANIME: 'SERVER014',
-  ADMIN_DELETE_ANIME: 'SERVER015'
+  ADMIN_DELETE_ANIME: 'SERVER015',
+  ADMIN_ADD_SONG: 'SERVER016',
+  ADMIN_EDIT_SONG: 'SERVER017',
+  ADMIN_DELETE_SONG: 'SERVER018'
 };
 
 const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
+  [LOG_REFERENCES.ADMIN_ADD_SONG]: {
+    message: 'admin add song',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_EDIT_SONG]: {
+    message: 'admin edit song',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_DELETE_SONG]: {
+    message: 'admin delete song',
+    level: LOG_LEVEL.INFO
+  },
   [LOG_REFERENCES.SERVER_START]: {
     message: 'server started',
     level: LOG_LEVEL.INFO

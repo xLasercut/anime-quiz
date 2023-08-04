@@ -5,6 +5,7 @@ import { SongDb } from './database/song';
 import { Oidc } from './app/oidc';
 import { AnimeDb } from './database/anime';
 import { DatabaseLock } from './database/lock';
+import { EmojiDb } from './database/emoji';
 
 interface LogTemplate {
   level: string;
@@ -20,6 +21,7 @@ interface HandlerDependencies {
   emitter: Emitter;
   oidc: Oidc;
   dbLock: DatabaseLock;
+  emojiDb: EmojiDb;
 }
 
 interface ServerConfig {

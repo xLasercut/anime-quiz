@@ -1,14 +1,14 @@
 <template>
   <v-card variant="flat">
-    <song-edit-table></song-edit-table>
+    <emoji-edit-table></emoji-edit-table>
   </v-card>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import SongEditTable from '@/components/song-edit/SongEditTable.vue';
+import EmojiEditTable from '@/components/emoji-edit/EmojiEditTable.vue';
 
 export default defineComponent({
-  components: { SongEditTable }
+  components: { EmojiEditTable }
 });
 </script>

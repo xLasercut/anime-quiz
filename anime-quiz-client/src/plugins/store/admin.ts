@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { AnimeType, UserType } from '@/assets/shared/models/types';
+import { AnimeType, SongType, UserType } from '@/assets/shared/models/types';
 import { generateId } from '@/assets/game-helpers';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
@@ -7,6 +7,7 @@ interface State {
   userInEdit: UserType;
   editMode: string;
   animeInEdit: AnimeType;
+  songInEdit: SongType;
 }
 
 const useAdminStore = defineStore('admin', {
@@ -23,6 +24,15 @@ const useAdminStore = defineStore('admin', {
       animeInEdit: {
         animeId: '',
         animeName: []
+      },
+      songInEdit: {
+        songId: '',
+        animeName: [],
+        animeId: [],
+        src: '',
+        songTitle: '',
+        artist: '',
+        type: 'OP'
       }
     };
   },
@@ -41,6 +51,12 @@ const useAdminStore = defineStore('admin', {
     },
     updateAnimeInEdit(anime: AnimeType) {
       this.animeInEdit = Object.assign({}, anime);
+    },
+    updateSongInEdit(song: SongType) {
+      this.songInEdit = Object.assign({}, song);
+    },
+    generateNewSongId() {
+      this.songInEdit.songId = generateId('song');
     }
   },
   getters: {

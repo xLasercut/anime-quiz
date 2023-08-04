@@ -18,14 +18,7 @@
     </template>
 
     <template #item.action="{ item }">
-      <v-row :dense="true">
-        <v-col cols="auto">
-          <table-action-btn icon="mdi-pencil" color="warning" @click="editAnime(item.raw)"></table-action-btn>
-        </v-col>
-        <v-col cols="auto">
-          <table-action-btn icon="mdi-delete" color="error" @click="deleteAnime(item.raw)"></table-action-btn>
-        </v-col>
-      </v-row>
+      <table-action @item:edit="editAnime(item.raw)" @item:delete="deleteAnime(item.raw)"></table-action>
     </template>
 
     <template #top>
@@ -49,13 +42,13 @@ import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
 import AnimeEditTableFilters from '@/components/anime-edit/AnimeEditTableFilters.vue';
 import { injectStrict, isMatchFilter } from '@/assets/game-helpers';
-import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
+import TableAction from '@/components/common/tables/TableAction.vue';
 
 export default defineComponent({
-  components: { TableActionBtn, AnimeEditTableFilters, TablePagination },
+  components: { TableAction, AnimeEditTableFilters, TablePagination },
   setup() {
     const dataStore = useDataStore();
     const adminStore = useAdminStore();

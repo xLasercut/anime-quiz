@@ -35,7 +35,7 @@ class AdminUserHandler extends AbstractHandler {
       const user = User.parse(_user);
       this._userDb.validateUserExists(user);
       this._userDb.deleteUser(user);
-      this._userDb.deleteAllUserSongs(user);
+      this._userDb.deleteUserSongsByUserId(user.userId);
       this._emitter.updateStoreUserList(this._userDb.getUserList());
       this._emitter.systemNotification(
         {

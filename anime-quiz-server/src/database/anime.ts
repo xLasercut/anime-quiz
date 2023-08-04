@@ -1,7 +1,7 @@
 import { AbstractDb } from './common';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logging/logger';
-import { AnimeNameType, AnimeType } from '../shared/models/types';
+import { AnimeIdType, AnimeNameType, AnimeType } from '../shared/models/types';
 import { DbAnime, DbAnimeName } from '../models/anime';
 import { Anime, AnimeName } from '../shared/models/anime';
 import { DataQualityError } from '../app/exceptions';
@@ -58,6 +58,19 @@ class AnimeDb extends AbstractDb {
     const response = statement.get(anime);
     if (!response) {
       throw new DataQualityError('Anime does not exists');
+    }
+  }
+
+  public validateAnimesExists(animeIds: AnimeIdType[]) {
+    const statement = this._db.prepare(`
+      SELECT
+        anime_id
+      FROM animes
+      WHERE anime_id IN (${this._questionString(animeIds.length)})
+    `);
+    const response = statement.all(animeIds);
+    if (response.length !== animeIds.length) {
+      throw new DataQualityError('Anime does not exist');
     }
   }
 

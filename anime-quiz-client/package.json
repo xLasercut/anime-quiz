@@ -16,7 +16,7 @@
     "socket.io-client": "^4.7.1",
     "uuid": "^9.0.0",
     "vue": "^3.2.0",
-    "vuetify": "^3.3.10",
+    "vuetify": "^3.3.11",
     "webfontloader": "^1.0.0",
     "zod": "^3.21.4"
   },

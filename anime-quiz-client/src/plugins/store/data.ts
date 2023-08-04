@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { AnimeNameType, AnimeType, SongTitleType, SongType, SongIdType, UserType } from '@/assets/shared/models/types';
+import { AnimeNameType, AnimeType, SongTitleType, SongType, SongIdType, UserType, AnimeIdType, EmojiType } from '@/assets/shared/models/types';
 
 interface State {
   songList: SongType[];
@@ -8,6 +8,12 @@ interface State {
   animeNames: AnimeNameType[];
   userSongList: SongIdType[];
   userList: UserType[];
+  emojiList: EmojiType[];
+}
+
+interface AnimeString {
+  animeId: AnimeIdType;
+  animeName: string;
 }
 
 const useDataStore = defineStore('data', {
@@ -18,7 +24,8 @@ const useDataStore = defineStore('data', {
       songTitles: [],
       animeNames: [],
       userSongList: [],
-      userList: []
+      userList: [],
+      emojiList: []
     };
   },
   actions: {
@@ -49,6 +56,19 @@ const useDataStore = defineStore('data', {
     },
     updateUserList(userList: UserType[]) {
       this.userList = userList;
+    },
+    updateEmojiList(emojiList: EmojiType[]) {
+      this.emojiList = emojiList;
+    }
+  },
+  getters: {
+    animeStringList(): AnimeString[] {
+      return this.animeList.map((anime) => {
+        return {
+          animeId: anime.animeId,
+          animeName: anime.animeName.join(',')
+        };
+      });
     }
   }
 });

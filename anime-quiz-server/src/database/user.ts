@@ -160,11 +160,18 @@ class UserDb extends AbstractDb {
     statement.run(user);
   }
 
-  public deleteAllUserSongs(user: UserType): void {
+  public deleteUserSongsByUserId(userId: UserIdType): void {
     const statement = this._db.prepare(`
-      DELETE FROM user_songs WHERE user_id = @userId
+      DELETE FROM user_songs WHERE user_id = ?
     `);
-    statement.run(user);
+    statement.run(userId);
+  }
+
+  public deleteUserSongsBySongId(songId: SongIdType) {
+    const statement = this._db.prepare(`
+      DELETE FROM user_songs WHERE song_id = ?
+    `);
+    statement.run(songId);
   }
 
   public editUser(user: UserType): void {

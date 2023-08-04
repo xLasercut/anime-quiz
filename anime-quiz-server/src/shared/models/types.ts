@@ -3,6 +3,7 @@ import { ClientData, NotificationColor, SystemNotification } from './client';
 import { Song, SongId, SongTitle, SongType } from './song';
 import { Anime, AnimeId, AnimeName } from './anime';
 import { Avatar, DiscordId, User, UserId } from './user';
+import { Emoji, EmojiId } from './emoji';
 
 export type ClientDataType = z.infer<typeof ClientData>;
 export type NotificationColorType = z.infer<typeof NotificationColor>;
@@ -18,3 +19,5 @@ export type SongIdType = z.infer<typeof SongId>;
 export type UserType = z.infer<typeof User>;
 export type UserIdType = z.infer<typeof UserId>;
 export type DiscordIdType = z.infer<typeof DiscordId>;
+export type EmojiType = z.infer<typeof Emoji>;
+export type EmojiIdType = z.infer<typeof EmojiId>;

@@ -4,6 +4,7 @@ import { SOCKET_EVENTS } from '../shared/events';
 class DataHandler extends AbstractHandler {
   protected _events = {
     [SOCKET_EVENTS.UPDATE_STORE_USER_LIST]: () => {
+      this._validateIsAdmin();
       this._emitter.updateStoreUserList(this._userDb.getUserList(), this._socket.id);
     },
     [SOCKET_EVENTS.UPDATE_STORE_SONG_TITLES]: () => {

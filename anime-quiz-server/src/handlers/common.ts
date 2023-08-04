@@ -8,6 +8,7 @@ import { Oidc } from '../app/oidc';
 import { AnimeDb } from '../database/anime';
 import { UnauthorizedError } from '../app/exceptions';
 import { DatabaseLock } from '../database/lock';
+import { EmojiDb } from '../database/emoji';
 
 abstract class AbstractHandler {
   protected _logger: Logger;
@@ -19,6 +20,7 @@ abstract class AbstractHandler {
   protected _dbLock: DatabaseLock;
   protected _oidc: Oidc;
   protected _socket: Socket;
+  protected _emojiDb: EmojiDb;
   protected _errHandler: Function;
   protected abstract _events: { [key: string]: SocketEvent };
 
@@ -33,6 +35,7 @@ abstract class AbstractHandler {
     this._animeDb = dependencies.animeDb;
     this._oidc = dependencies.oidc;
     this._dbLock = dependencies.dbLock;
+    this._emojiDb = dependencies.emojiDb;
   }
 
   public start(): void {

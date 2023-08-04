@@ -2,10 +2,11 @@ import { Socket } from 'socket.io-client';
 import { useDataStore } from '@/plugins/store/data';
 import { pinia } from '@/plugins/store';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
-import { AnimeNameType, AnimeType, SongIdType, SongTitleType, SongType, UserType } from '@/assets/shared/models/types';
+import { AnimeNameType, AnimeType, EmojiType, SongIdType, SongTitleType, SongType, UserType } from '@/assets/shared/models/types';
 import { Song, SongId, SongTitle } from '@/assets/shared/models/song';
 import { Anime, AnimeName } from '@/assets/shared/models/anime';
 import { User } from '@/assets/shared/models/user';
+import { Emoji } from '@/assets/shared/models/emoji';
 
 const dataStore = useDataStore(pinia);
 
@@ -38,6 +39,11 @@ function startDataStoreListeners(socket: Socket): void {
   socket.on(SOCKET_EVENTS.UPDATE_STORE_USER_LIST, (_userList: UserType[]) => {
     const userList = _userList.map((user) => User.parse(user));
     dataStore.updateUserList(userList);
+  });
+
+  socket.on(SOCKET_EVENTS.UPDATE_STORE_EMOJI_LIST, (_emojiList: EmojiType[]) => {
+    const emojiList = _emojiList.map((emoji) => Emoji.parse(emoji));
+    dataStore.updateEmojiList(emojiList);
   });
 }
 

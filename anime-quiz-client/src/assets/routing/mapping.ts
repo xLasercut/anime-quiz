@@ -15,6 +15,9 @@ import AnimeEdit from '@/views/AnimeEdit.vue';
 import AnimeEditPanel from '@/components/anime-edit/AnimeEditPanel.vue';
 import AnimeEditDialog from '@/components/anime-edit/AnimeEditDialog.vue';
 import SongEdit from '@/views/SongEdit.vue';
+import SongEditPanel from '@/components/song-edit/SongEditPanel.vue';
+import SongEditDialog from '@/components/song-edit/SongEditDialog.vue';
+import EmojiEdit from '@/views/EmojiEdit.vue';
 
 const PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -22,7 +25,7 @@ const PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.SONG_LIST_EDIT]: SongListEditPanel,
   [ROUTES.USER_EDIT]: UserEditPanel,
   [ROUTES.ANIME_EDIT]: AnimeEditPanel,
-  [ROUTES.SONG_EDIT]: SongListEditPanel
+  [ROUTES.SONG_EDIT]: SongEditPanel
 };
 
 const VIEW_MAPPING: { [key: string]: Component } = {
@@ -32,13 +35,15 @@ const VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.SONG_LIST_EDIT]: SongListEdit,
   [ROUTES.USER_EDIT]: UserEdit,
   [ROUTES.ANIME_EDIT]: AnimeEdit,
-  [ROUTES.SONG_EDIT]: SongEdit
+  [ROUTES.SONG_EDIT]: SongEdit,
+  [ROUTES.EMOJI_EDIT]: EmojiEdit
 };
 
 const DIALOG_MAPPINGS: { [key: string]: Component } = {
   [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings,
   [DIALOG_ROUTES.USER_EDIT]: UserEditDialog,
-  [DIALOG_ROUTES.ANIME_EDIT]: AnimeEditDialog
+  [DIALOG_ROUTES.ANIME_EDIT]: AnimeEditDialog,
+  [DIALOG_ROUTES.SONG_EDIT]: SongEditDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

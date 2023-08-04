@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { Admin, Avatar, DiscordId, DisplayName, UserId } from '@/assets/shared/models/user';
 import { AnimeId, AnimeName } from '@/assets/shared/models/anime';
+import { SongId, SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
 
 function _canParseValue(v: any, parser: any): boolean {
   try {
@@ -39,6 +40,26 @@ function isValidAnimeName(v: string[]): boolean {
   return _canParseValue(v, z.array(AnimeName));
 }
 
+function isValidSongId(v: string): boolean {
+  return _canParseValue(v, SongId);
+}
+
+function isValidSongTitle(v: string): boolean {
+  return _canParseValue(v, SongTitle);
+}
+
+function isValidSongSource(v: string): boolean {
+  return _canParseValue(v, SongSrc);
+}
+
+function isValidSongType(v: string): boolean {
+  return _canParseValue(v, SongType);
+}
+
+function isValidSongAnime(v: string[]): boolean {
+  return _canParseValue(v, z.array(AnimeId));
+}
+
 const DISCORD_ID_RULES = [
   (v: string): boolean | string => !!v || 'Discord ID required',
   (v: string): boolean | string => isValidDiscordId(v) || 'Invalid Discord ID'
@@ -63,4 +84,39 @@ const ANIME_NAME_RULES = [
   (v: string[]): boolean | string => isValidAnimeName(v) || 'Invalid anime name'
 ];
 
-export { DISCORD_ID_RULES, DISPLAY_NAME_RULES, AVATAR_RULES, USER_ID_RULES, ADMIN_RULES, ANIME_ID_RULES, ANIME_NAME_RULES };
+const SONG_ID_RULES = [(v: string): boolean | string => !!v || 'Song ID required', (v: string): boolean | string => isValidSongId(v) || 'Invalid Song ID'];
+
+const SONG_TITLE_RULES = [
+  (v: string): boolean | string => !!v || 'Song Title required',
+  (v: string): boolean | string => isValidSongTitle(v) || 'Invalid Song Title'
+];
+
+const SONG_SRC_RULES = [
+  (v: string): boolean | string => !!v || 'Song Source required',
+  (v: string): boolean | string => isValidSongSource(v) || 'Invalid Song Source'
+];
+
+const SONG_TYPE_RULES = [
+  (v: string): boolean | string => !!v || 'Song Type required',
+  (v: string): boolean | string => isValidSongType(v) || 'Invalid Type Source'
+];
+
+const SONG_ANIME_ID_RULES = [
+  (v: string[]): boolean | string => v.length > 0 || 'Anime required',
+  (v: string[]): boolean | string => isValidSongAnime(v) || 'Invalid anime'
+];
+
+export {
+  DISCORD_ID_RULES,
+  DISPLAY_NAME_RULES,
+  AVATAR_RULES,
+  USER_ID_RULES,
+  ADMIN_RULES,
+  ANIME_ID_RULES,
+  ANIME_NAME_RULES,
+  SONG_ID_RULES,
+  SONG_TITLE_RULES,
+  SONG_SRC_RULES,
+  SONG_TYPE_RULES,
+  SONG_ANIME_ID_RULES
+};
