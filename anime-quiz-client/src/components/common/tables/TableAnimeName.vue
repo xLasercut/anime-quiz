@@ -9,16 +9,14 @@
   </v-menu>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script setup lang="ts">
+import { PropType } from 'vue';
 import { SongType } from '@/assets/shared/models/types';
 
-export default defineComponent({
-  props: {
-    song: {
-      type: Object as PropType<SongType>,
-      required: true
-    }
+defineProps({
+  song: {
+    type: Object as PropType<SongType>,
+    required: true
   }
 });
 </script>

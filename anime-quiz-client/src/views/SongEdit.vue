@@ -4,11 +4,6 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts" name="SongEdit">
 import SongEditTable from '@/components/song-edit/SongEditTable.vue';
-
-export default defineComponent({
-  components: { SongEditTable }
-});
 </script>

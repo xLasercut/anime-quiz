@@ -10,11 +10,4 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import GameAvatar from '@/components/common/GameAvatar.vue';
-
-export default defineComponent({
-  components: { GameAvatar }
-});
-</script>
+<script setup lang="ts"></script>

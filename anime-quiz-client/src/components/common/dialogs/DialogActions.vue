@@ -9,18 +9,14 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 
-export default defineComponent({
-  components: { IconBtn },
-  props: {
-    disabled: {
-      type: Boolean,
-      default: (): boolean => {
-        return false;
-      }
+defineProps({
+  disabled: {
+    type: Boolean,
+    default: (): boolean => {
+      return false;
     }
   }
 });

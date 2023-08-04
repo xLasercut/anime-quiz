@@ -18,6 +18,8 @@ import SongEdit from '@/views/SongEdit.vue';
 import SongEditPanel from '@/components/song-edit/SongEditPanel.vue';
 import SongEditDialog from '@/components/song-edit/SongEditDialog.vue';
 import EmojiEdit from '@/views/EmojiEdit.vue';
+import EmojiEditPanel from '@/components/emoji-edit/EmojiEditPanel.vue';
+import EmojiEditDialog from '@/components/emoji-edit/EmojiEditDialog.vue';
 
 const PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -25,7 +27,8 @@ const PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.SONG_LIST_EDIT]: SongListEditPanel,
   [ROUTES.USER_EDIT]: UserEditPanel,
   [ROUTES.ANIME_EDIT]: AnimeEditPanel,
-  [ROUTES.SONG_EDIT]: SongEditPanel
+  [ROUTES.SONG_EDIT]: SongEditPanel,
+  [ROUTES.EMOJI_EDIT]: EmojiEditPanel
 };
 
 const VIEW_MAPPING: { [key: string]: Component } = {
@@ -43,7 +46,8 @@ const DIALOG_MAPPINGS: { [key: string]: Component } = {
   [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings,
   [DIALOG_ROUTES.USER_EDIT]: UserEditDialog,
   [DIALOG_ROUTES.ANIME_EDIT]: AnimeEditDialog,
-  [DIALOG_ROUTES.SONG_EDIT]: SongEditDialog
+  [DIALOG_ROUTES.SONG_EDIT]: SongEditDialog,
+  [DIALOG_ROUTES.EMOJI_EDIT]: EmojiEditDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

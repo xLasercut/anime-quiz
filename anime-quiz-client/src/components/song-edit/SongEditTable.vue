@@ -38,8 +38,8 @@
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { SongType } from '@/assets/shared/models/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
@@ -53,55 +53,46 @@ import { useAdminStore } from '@/plugins/store/admin';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 
-export default defineComponent({
-  components: { TableAction, SongListEditTableFilters, TablePagination, TableAnimeName },
-  setup() {
-    const dataStore = useDataStore();
-    const adminStore = useAdminStore();
-    const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
-    const state = reactive({
-      headers: [
-        { title: 'Anime', key: 'animeName', sortable: false },
-        { title: 'Title', key: 'songTitle', sortable: false },
-        { title: 'Artist', key: 'artist', sortable: false },
-        { title: 'Type', key: 'type', sortable: false },
-        { title: 'Source', key: 'src', sortable: false },
-        { title: 'Action', key: 'action', sortable: false }
-      ],
-      currentPage: 1,
-      itemsPerPage: 15,
-      filters: {
-        anime: '',
-        type: '',
-        title: '',
-        artist: ''
-      }
-    });
-
-    function editSong(song: SongType) {
-      adminStore.updateSongInEdit(song);
-      adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
-      openDialog(DIALOG_ROUTES.SONG_EDIT, 'Edit Song');
-    }
-
-    function deleteSong(song: SongType) {
-      adminStore.updateSongInEdit(song);
-      adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
-      openDialog(DIALOG_ROUTES.SONG_EDIT, 'Delete Song');
-    }
-
-    function filteredSongList(): SongType[] {
-      return dataStore.songList.filter((song) => {
-        return (
-          isMatchFilter(state.filters.anime, song.animeName.join(',')) &&
-          isMatchFilter(state.filters.title, song.songTitle) &&
-          isMatchFilter(state.filters.artist, song.artist) &&
-          isMatchFilter(state.filters.type, song.type)
-        );
-      });
-    }
-
-    return { ...toRefs(state), filteredSongList, CLIENT_CONSTANTS, editSong, deleteSong };
-  }
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const headers = [
+  { title: 'Anime', key: 'animeName', sortable: false },
+  { title: 'Title', key: 'songTitle', sortable: false },
+  { title: 'Artist', key: 'artist', sortable: false },
+  { title: 'Type', key: 'type', sortable: false },
+  { title: 'Source', key: 'src', sortable: false },
+  { title: 'Action', key: 'action', sortable: false }
+];
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+const filters = ref({
+  anime: '',
+  type: '',
+  title: '',
+  artist: ''
 });
+
+function editSong(song: SongType) {
+  adminStore.updateSongInEdit(song);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
+  openDialog(DIALOG_ROUTES.SONG_EDIT, 'Edit Song');
+}
+
+function deleteSong(song: SongType) {
+  adminStore.updateSongInEdit(song);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.SONG_EDIT, 'Delete Song');
+}
+
+function filteredSongList(): SongType[] {
+  return dataStore.songList.filter((song) => {
+    return (
+      isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
+      isMatchFilter(filters.value.title, song.songTitle) &&
+      isMatchFilter(filters.value.artist, song.artist) &&
+      isMatchFilter(filters.value.type, song.type)
+    );
+  });
+}
 </script>

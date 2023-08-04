@@ -1,25 +1,27 @@
 <template>
-  <custom-combobox
-    :model-value="modelValue"
-    @update:model-value="$emit('update:model-value', $event)"
-    :clearable="true"
-    variant="outlined"
-    density="compact"
-    hide-details
-  ></custom-combobox>
+  <v-col>
+    <custom-combobox
+      :model-value="modelValue"
+      @update:model-value="$emit('update:model-value', $event || '')"
+      :clearable="true"
+      variant="outlined"
+      density="compact"
+      hide-details
+      :items="items"
+      :label="label"
+    ></custom-combobox>
+  </v-col>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import CustomCombobox from '@/components/common/inputs/CustomCombobox.vue';
 
-export default defineComponent({
-  props: {
-    modelValue: {
-      required: true,
-      type: String
-    }
+defineProps({
+  modelValue: {
+    required: true,
+    type: String
   },
-  components: { CustomCombobox }
+  items: {},
+  label: {}
 });
 </script>

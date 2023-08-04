@@ -16,6 +16,7 @@
       item-value="animeId"
       :custom-filter="customFilter"
       :rules="SONG_ANIME_ID_RULES"
+      label="Anime"
     ></dialog-multi-autocomplete>
     <dialog-text-field
       label="Title"
@@ -29,7 +30,11 @@
       :rules="SONG_SRC_RULES"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
-    <dialog-text-field label="Artist" v-model.trim="adminStore.songInEdit.artist" :disabled="adminStore.deleteModeDisabled || disabled"></dialog-text-field>
+    <dialog-text-field
+      label="Artist"
+      v-model.trim="adminStore.songInEdit.artist"
+      :disabled="adminStore.deleteModeDisabled || disabled"
+    ></dialog-text-field>
     <dialog-select
       label="Type"
       v-model.trim="adminStore.songInEdit.type"
@@ -41,8 +46,8 @@
   </dialog-form>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
@@ -56,52 +61,33 @@ import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 
-export default defineComponent({
-  components: { DialogActions, DialogMultiAutocomplete, DialogSelect, DialogTextField, DialogForm },
-  setup(_props, context) {
-    const adminStore = useAdminStore();
-    const dataStore = useDataStore();
-    const state = reactive({
-      valid: false,
-      disabled: false,
-      songTypes: ['OP', 'ED', 'INSERT']
-    });
+const adminStore = useAdminStore();
+const dataStore = useDataStore();
+const valid = ref(false);
+const disabled = ref(false);
+const songTypes = ['OP', 'ED', 'INSERT'];
+const emit = defineEmits(['dialog:close']);
 
-    const CHANGE_MAP = {
-      [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_SONG,
-      [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_SONG,
-      [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_SONG
-    };
+const CHANGE_MAP = {
+  [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_SONG,
+  [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_SONG,
+  [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_SONG
+};
 
-    function submitChange() {
-      if (state.valid) {
-        state.disabled = true;
-        const event = CHANGE_MAP[adminStore.editMode];
-        socket.emit(event, adminStore.songInEdit, (success: boolean) => {
-          state.disabled = false;
-          if (success) {
-            context.emit('dialog:close');
-          }
-        });
+function submitChange() {
+  if (valid.value) {
+    disabled.value = true;
+    const event = CHANGE_MAP[adminStore.editMode];
+    socket.emit(event, adminStore.songInEdit, (success: boolean) => {
+      disabled.value = false;
+      if (success) {
+        emit('dialog:close');
       }
-    }
-
-    function customFilter(value: string, query: string) {
-      return isMatchFilter(query, value);
-    }
-
-    return {
-      ...toRefs(state),
-      submitChange,
-      adminStore,
-      SONG_ID_RULES,
-      SONG_TITLE_RULES,
-      SONG_SRC_RULES,
-      SONG_TYPE_RULES,
-      SONG_ANIME_ID_RULES,
-      dataStore,
-      customFilter
-    };
+    });
   }
-});
+}
+
+function customFilter(value: string, query: string) {
+  return isMatchFilter(query, value);
+}
 </script>

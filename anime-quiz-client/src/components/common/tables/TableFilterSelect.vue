@@ -1,14 +1,15 @@
 <template>
   <v-col>
-    <v-text-field
+    <v-select
+      :clearable="true"
       :model-value="modelValue"
       @update:model-value="$emit('update:model-value', $event || '')"
       variant="outlined"
       density="compact"
-      :clearable="true"
+      :items="items"
       hide-details
       :label="label"
-    ></v-text-field>
+    ></v-select>
   </v-col>
 </template>
 
@@ -17,8 +18,7 @@ defineProps({
   modelValue: {
     required: true
   },
-  label: {
-    type: String
-  }
+  items: {},
+  label: {}
 });
 </script>

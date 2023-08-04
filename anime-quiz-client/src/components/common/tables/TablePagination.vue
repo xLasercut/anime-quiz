@@ -24,30 +24,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-
-export default defineComponent({
-  props: {
-    currentPage: {
-      required: true,
-      type: Number
-    },
-    itemsPerPage: {
-      required: true,
-      type: Number
-    },
-    length: {
-      required: true,
-      type: Number
-    }
+<script setup lang="ts">
+defineProps({
+  currentPage: {
+    required: true,
+    type: Number
   },
-  setup() {
-    const state = reactive({
-      itemsPerPageSelections: [5, 10, 15, 20, 30]
-    });
-
-    return { ...toRefs(state) };
+  itemsPerPage: {
+    required: true,
+    type: Number
+  },
+  length: {
+    required: true,
+    type: Number
   }
 });
+
+const itemsPerPageSelections = [5, 10, 15, 20, 30];
 </script>

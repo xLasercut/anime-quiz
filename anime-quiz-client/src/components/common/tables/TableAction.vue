@@ -9,11 +9,6 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
-
-export default defineComponent({
-  components: { TableActionBtn }
-});
 </script>

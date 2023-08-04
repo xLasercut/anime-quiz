@@ -24,29 +24,17 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import { AVATARS } from '@/assets/shared/avatars';
 
-export default defineComponent({
-  props: {
-    avatarSize: {
-      type: String,
-      default: (): string => {
-        return '100';
-      }
+defineProps({
+  avatarSize: {
+    type: String,
+    default: (): string => {
+      return '100';
     }
-  },
-  components: { GameAvatar },
-  setup() {
-    const state = reactive({
-      avatars: Object.values(AVATARS)
-    });
-
-    return {
-      ...toRefs(state)
-    };
   }
 });
+const avatars = Object.values(AVATARS);
 </script>

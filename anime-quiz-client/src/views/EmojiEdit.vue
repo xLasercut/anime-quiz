@@ -4,11 +4,6 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import EmojiEditTable from '@/components/emoji-edit/EmojiEditTable.vue';
-
-export default defineComponent({
-  components: { EmojiEditTable }
-});
 </script>

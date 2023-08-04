@@ -23,7 +23,10 @@
 
     <template #top>
       <v-container :fluid="true">
-        <anime-edit-table-filters v-model:anime-id.trim="filters.animeId" v-model:anime-name.trim="filters.animeName"></anime-edit-table-filters>
+        <anime-edit-table-filters
+          v-model:anime-id.trim="filters.animeId"
+          v-model:anime-name.trim="filters.animeName"
+        ></anime-edit-table-filters>
       </v-container>
     </template>
 
@@ -33,8 +36,8 @@
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { AnimeType } from '@/assets/shared/models/types';
 import { useAdminStore } from '@/plugins/store/admin';
@@ -47,46 +50,36 @@ import { CLIENT_EVENTS } from '@/assets/events';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import TableAction from '@/components/common/tables/TableAction.vue';
 
-export default defineComponent({
-  components: { TableAction, AnimeEditTableFilters, TablePagination },
-  setup() {
-    const dataStore = useDataStore();
-    const adminStore = useAdminStore();
-    const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
-
-    const state = reactive({
-      headers: [
-        { title: 'Anime ID', key: 'animeId', sortable: false },
-        { title: 'Anime Names', key: 'animeName', sortable: false },
-        { title: 'Action', key: 'action', sortable: false }
-      ],
-      filters: {
-        animeId: '',
-        animeName: ''
-      },
-      currentPage: 1,
-      itemsPerPage: 15
-    });
-
-    function filteredAnimeList(): AnimeType[] {
-      return dataStore.animeList.filter((anime) => {
-        return anime.animeId.includes(state.filters.animeId) && isMatchFilter(state.filters.animeName, anime.animeName.join(','));
-      });
-    }
-
-    function editAnime(anime: AnimeType) {
-      adminStore.updateAnimeInEdit(anime);
-      adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
-      openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Edit Anime');
-    }
-
-    function deleteAnime(anime: AnimeType) {
-      adminStore.updateAnimeInEdit(anime);
-      adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
-      openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Delete Anime');
-    }
-
-    return { filteredAnimeList, ...toRefs(state), CLIENT_CONSTANTS, editAnime, deleteAnime };
-  }
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const headers = [
+  { title: 'Anime ID', key: 'animeId', sortable: false },
+  { title: 'Anime Names', key: 'animeName', sortable: false },
+  { title: 'Action', key: 'action', sortable: false }
+];
+const filters = ref({
+  animeId: '',
+  animeName: ''
 });
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+
+function filteredAnimeList(): AnimeType[] {
+  return dataStore.animeList.filter((anime) => {
+    return anime.animeId.includes(filters.value.animeId) && isMatchFilter(filters.value.animeName, anime.animeName.join(','));
+  });
+}
+
+function editAnime(anime: AnimeType) {
+  adminStore.updateAnimeInEdit(anime);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
+  openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Edit Anime');
+}
+
+function deleteAnime(anime: AnimeType) {
+  adminStore.updateAnimeInEdit(anime);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Delete Anime');
+}
 </script>

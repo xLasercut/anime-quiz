@@ -17,8 +17,8 @@
   </dialog-form>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
@@ -29,35 +29,27 @@ import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 
-export default defineComponent({
-  components: { DialogActions, DialogMultiCombobox, DialogTextField, DialogForm },
-  setup(_props, context) {
-    const adminStore = useAdminStore();
-    const state = reactive({
-      valid: false,
-      disabled: false
-    });
+const adminStore = useAdminStore();
+const valid = ref(false);
+const disabled = ref(false);
+const emit = defineEmits(['dialog:close']);
 
-    const CHANGE_MAP = {
-      [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_ANIME,
-      [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_ANIME,
-      [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_ANIME
-    };
+const CHANGE_MAP = {
+  [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_ANIME,
+  [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_ANIME,
+  [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_ANIME
+};
 
-    function submitChange() {
-      if (state.valid) {
-        state.disabled = true;
-        const event = CHANGE_MAP[adminStore.editMode];
-        socket.emit(event, adminStore.animeInEdit, (success: boolean) => {
-          state.disabled = false;
-          if (success) {
-            context.emit('dialog:close');
-          }
-        });
+function submitChange() {
+  if (valid.value) {
+    disabled.value = true;
+    const event = CHANGE_MAP[adminStore.editMode];
+    socket.emit(event, adminStore.animeInEdit, (success: boolean) => {
+      disabled.value = false;
+      if (success) {
+        emit('dialog:close');
       }
-    }
-
-    return { submitChange, ...toRefs(state), adminStore, ANIME_ID_RULES, ANIME_NAME_RULES };
+    });
   }
-});
+}
 </script>

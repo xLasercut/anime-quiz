@@ -26,7 +26,12 @@
       :rules="AVATAR_RULES"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></user-settings-avatar-select>
-    <dialog-radio label="Admin" v-model="adminStore.userInEdit.admin" :rules="ADMIN_RULES" :disabled="adminStore.deleteModeDisabled || disabled">
+    <dialog-radio
+      label="Admin"
+      v-model="adminStore.userInEdit.admin"
+      :rules="ADMIN_RULES"
+      :disabled="adminStore.deleteModeDisabled || disabled"
+    >
       <v-radio label="True" :value="true"></v-radio>
       <v-radio label="False" :value="false"></v-radio>
     </dialog-radio>
@@ -34,12 +39,11 @@
   </dialog-form>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import UserSettingsAvatarSelect from '@/components/common/dialogs/DialogAvatarSelect.vue';
-import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogRadio from '@/components/common/dialogs/DialogRadio.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import { ADMIN_RULES, AVATAR_RULES, DISCORD_ID_RULES, DISPLAY_NAME_RULES, USER_ID_RULES } from '@/assets/form-rules';
@@ -49,50 +53,27 @@ import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { User } from '@/assets/shared/models/user';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
-export default defineComponent({
-  components: {
-    DialogActions,
-    DialogRadio,
-    DialogSelect,
-    UserSettingsAvatarSelect,
-    DialogTextField,
-    DialogForm
-  },
-  setup(_props, context) {
-    const adminStore = useAdminStore();
-    const state = reactive({
-      valid: false,
-      disabled: false
-    });
-    const CHANGE_MAP = {
-      [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_USER,
-      [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_USER,
-      [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_USER
-    };
+const adminStore = useAdminStore();
+const valid = ref(false);
+const disabled = ref(false);
+const emit = defineEmits(['dialog:close']);
 
-    function submitChange() {
-      if (state.valid) {
-        state.disabled = true;
-        const event = CHANGE_MAP[adminStore.editMode];
-        socket.emit(event, User.parse(adminStore.userInEdit), (success: boolean) => {
-          state.disabled = false;
-          if (success) {
-            context.emit('dialog:close');
-          }
-        });
+const CHANGE_MAP = {
+  [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_USER,
+  [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_USER,
+  [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_USER
+};
+
+function submitChange() {
+  if (valid.value) {
+    disabled.value = true;
+    const event = CHANGE_MAP[adminStore.editMode];
+    socket.emit(event, User.parse(adminStore.userInEdit), (success: boolean) => {
+      disabled.value = false;
+      if (success) {
+        emit('dialog:close');
       }
-    }
-
-    return {
-      ...toRefs(state),
-      adminStore,
-      DISCORD_ID_RULES,
-      DISPLAY_NAME_RULES,
-      AVATAR_RULES,
-      USER_ID_RULES,
-      ADMIN_RULES,
-      submitChange
-    };
+    });
   }
-});
+}
 </script>

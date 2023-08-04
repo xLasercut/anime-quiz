@@ -41,7 +41,11 @@
           v-model:artist.trim="filters.artist"
           v-model:type.trim="filters.type"
         ></song-list-edit-table-filters>
-        <song-list-edit-table-actions :disabled="disabled" v-model="editMode" @submit:change="submitChange()"></song-list-edit-table-actions>
+        <song-list-edit-table-actions
+          :disabled="disabled"
+          v-model="editMode"
+          @submit:change="submitChange()"
+        ></song-list-edit-table-actions>
       </v-container>
     </template>
 
@@ -51,8 +55,8 @@
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs, watch } from 'vue';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { SongIdType, SongType } from '@/assets/shared/models/types';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
@@ -64,123 +68,99 @@ import SongListEditTableActions from '@/components/song-list-edit/SongListEditTa
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 
-export default defineComponent({
-  components: {
-    SongListEditTableActions,
-    SongListEditTableFilters,
-    TablePagination,
-    TableAnimeName
-  },
-  setup() {
-    const dataStore = useDataStore();
-    const state = reactive({
-      headers: [
-        { title: 'Anime', key: 'animeName', sortable: false },
-        { title: 'Title', key: 'songTitle', sortable: false },
-        { title: 'Artist', key: 'artist', sortable: false },
-        { title: 'Type', key: 'type', sortable: false },
-        { title: 'Source', key: 'src', sortable: false }
-      ],
-      currentPage: 1,
-      itemsPerPage: 15,
-      songsSelected: [],
-      filters: {
-        anime: '',
-        type: '',
-        title: '',
-        artist: ''
-      },
-      editMode: SONG_LIST_EDIT_MODE.NONE,
-      disabled: false
-    });
-
-    watch(
-      () => state.editMode,
-      () => {
-        state.songsSelected = [];
-      }
-    );
-
-    function filteredSongs(): SongType[] {
-      return dataStore.songList
-        .filter((song) => {
-          if (state.editMode !== SONG_LIST_EDIT_MODE.REMOVE) {
-            return true;
-          }
-          return dataStore.userSongList.includes(song.songId);
-        })
-        .filter((song) => {
-          return (
-            isMatchFilter(state.filters.anime, song.animeName.join(',')) &&
-            isMatchFilter(state.filters.title, song.songTitle) &&
-            isMatchFilter(state.filters.artist, song.artist) &&
-            isMatchFilter(state.filters.type, song.type)
-          );
-        });
-    }
-
-    function checkboxFalseIcon(disabled: boolean): string {
-      if (disabled) {
-        return 'mdi-checkbox-blank-off-outline';
-      }
-      return 'mdi-checkbox-blank-outline';
-    }
-
-    function checkboxIcon(): string {
-      if (state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
-        return 'mdi-minus-box';
-      }
-      return 'mdi-checkbox-marked';
-    }
-
-    function checkboxColor(): string {
-      if (state.editMode === SONG_LIST_EDIT_MODE.REMOVE) {
-        return 'error';
-      }
-      return 'success';
-    }
-
-    function checkboxDisabled(songId: SongIdType, isSelected: boolean): boolean {
-      if (state.disabled) {
-        return true;
-      }
-
-      if (state.songsSelected.length >= 50 && !isSelected) {
-        return true;
-      }
-
-      return state.editMode === SONG_LIST_EDIT_MODE.ADD && dataStore.userSongList.includes(songId);
-    }
-
-    const CHANGE_MAP = {
-      [SONG_LIST_EDIT_MODE.ADD]: SOCKET_EVENTS.ADD_USER_SONGS,
-      [SONG_LIST_EDIT_MODE.REMOVE]: SOCKET_EVENTS.REMOVE_USER_SONGS
-    };
-
-    function submitChange() {
-      if (state.songsSelected.length > 0) {
-        state.disabled = true;
-        const event = CHANGE_MAP[state.editMode];
-        socket.emit(event, state.songsSelected, (success: boolean) => {
-          state.disabled = false;
-          if (success) {
-            state.songsSelected = [];
-          }
-        });
-      }
-    }
-
-    return {
-      ...toRefs(state),
-      filteredSongs,
-      CLIENT_CONSTANTS,
-      SONG_LIST_EDIT_MODE,
-      checkboxIcon,
-      checkboxColor,
-      checkboxDisabled,
-      submitChange,
-      checkboxFalseIcon
-    };
-  }
+const dataStore = useDataStore();
+const headers = [
+  { title: 'Anime', key: 'animeName', sortable: false },
+  { title: 'Title', key: 'songTitle', sortable: false },
+  { title: 'Artist', key: 'artist', sortable: false },
+  { title: 'Type', key: 'type', sortable: false },
+  { title: 'Source', key: 'src', sortable: false }
+];
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+const songsSelected = ref([]);
+const filters = ref({
+  anime: '',
+  type: '',
+  title: '',
+  artist: ''
 });
+const editMode = ref(SONG_LIST_EDIT_MODE.NONE);
+const disabled = ref(false);
+
+watch(
+  () => editMode.value,
+  () => {
+    songsSelected.value = [];
+  }
+);
+
+function filteredSongs(): SongType[] {
+  return dataStore.songList
+    .filter((song) => {
+      if (editMode.value !== SONG_LIST_EDIT_MODE.REMOVE) {
+        return true;
+      }
+      return dataStore.userSongList.includes(song.songId);
+    })
+    .filter((song) => {
+      return (
+        isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
+        isMatchFilter(filters.value.title, song.songTitle) &&
+        isMatchFilter(filters.value.artist, song.artist) &&
+        isMatchFilter(filters.value.type, song.type)
+      );
+    });
+}
+
+function checkboxFalseIcon(disabled: boolean): string {
+  if (disabled) {
+    return 'mdi-checkbox-blank-off-outline';
+  }
+  return 'mdi-checkbox-blank-outline';
+}
+
+function checkboxIcon(): string {
+  if (editMode.value === SONG_LIST_EDIT_MODE.REMOVE) {
+    return 'mdi-minus-box';
+  }
+  return 'mdi-checkbox-marked';
+}
+
+function checkboxColor(): string {
+  if (editMode.value === SONG_LIST_EDIT_MODE.REMOVE) {
+    return 'error';
+  }
+  return 'success';
+}
+
+function checkboxDisabled(songId: SongIdType, isSelected: boolean): boolean {
+  if (disabled.value) {
+    return true;
+  }
+
+  if (songsSelected.value.length >= 50 && !isSelected) {
+    return true;
+  }
+
+  return editMode.value === SONG_LIST_EDIT_MODE.ADD && dataStore.userSongList.includes(songId);
+}
+
+const CHANGE_MAP = {
+  [SONG_LIST_EDIT_MODE.ADD]: SOCKET_EVENTS.ADD_USER_SONGS,
+  [SONG_LIST_EDIT_MODE.REMOVE]: SOCKET_EVENTS.REMOVE_USER_SONGS
+};
+
+function submitChange() {
+  if (songsSelected.value.length > 0) {
+    disabled.value = true;
+    const event = CHANGE_MAP[editMode.value];
+    socket.emit(event, songsSelected.value, (success: boolean) => {
+      disabled.value = false;
+      if (success) {
+        songsSelected.value = [];
+      }
+    });
+  }
+}
 </script>

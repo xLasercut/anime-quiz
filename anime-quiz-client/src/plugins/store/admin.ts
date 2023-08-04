@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { AnimeType, SongType, UserType } from '@/assets/shared/models/types';
+import { AnimeType, EmojiType, SongType, UserType } from '@/assets/shared/models/types';
 import { generateId } from '@/assets/game-helpers';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
@@ -8,6 +8,7 @@ interface State {
   editMode: string;
   animeInEdit: AnimeType;
   songInEdit: SongType;
+  emojiInEdit: EmojiType;
 }
 
 const useAdminStore = defineStore('admin', {
@@ -33,6 +34,12 @@ const useAdminStore = defineStore('admin', {
         songTitle: '',
         artist: '',
         type: 'OP'
+      },
+      emojiInEdit: {
+        emojiId: '',
+        command: '',
+        src: '',
+        type: 'img'
       }
     };
   },
@@ -57,6 +64,12 @@ const useAdminStore = defineStore('admin', {
     },
     generateNewSongId() {
       this.songInEdit.songId = generateId('song');
+    },
+    updateEmojiInEdit(emoji: EmojiType) {
+      this.emojiInEdit = Object.assign({}, emoji);
+    },
+    generateNewEmojiId() {
+      this.emojiInEdit.emojiId = generateId('emoji');
     }
   },
   getters: {

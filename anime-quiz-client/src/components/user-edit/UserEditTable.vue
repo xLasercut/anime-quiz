@@ -37,14 +37,13 @@
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { UserType } from '@/assets/shared/models/types';
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import UserEditTableFilters from '@/components/user-edit/UserEditTableFilters.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
-import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { injectStrict } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
@@ -53,53 +52,44 @@ import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 import TableAction from '@/components/common/tables/TableAction.vue';
 
-export default defineComponent({
-  components: { TableAction, IconBtn, TablePagination, UserEditTableFilters, GameAvatar },
-  setup() {
-    const dataStore = useDataStore();
-    const adminStore = useAdminStore();
-    const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
-    const state = reactive({
-      headers: [
-        { title: 'Discord ID', key: 'discordId', sortable: false },
-        { title: 'User ID', key: 'userId', sortable: false },
-        { title: 'Display Name', key: 'displayName', sortable: false },
-        { title: 'Avatar', key: 'avatar', sortable: false },
-        { title: 'Admin', key: 'admin', sortable: false },
-        { title: 'Action', key: 'action', sortable: false }
-      ],
-      filters: {
-        discordId: '',
-        userId: '',
-        displayName: ''
-      },
-      currentPage: 1,
-      itemsPerPage: 15
-    });
-
-    function filteredUserList(): UserType[] {
-      return dataStore.userList.filter((user) => {
-        return (
-          user.discordId.includes(state.filters.discordId) &&
-          user.userId.includes(state.filters.userId) &&
-          user.displayName.toLowerCase().includes(state.filters.displayName.toLowerCase())
-        );
-      });
-    }
-
-    function editUser(user: UserType) {
-      adminStore.updateUserInEdit(user);
-      adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
-      openDialog(DIALOG_ROUTES.USER_EDIT, 'Edit User');
-    }
-
-    function deleteUser(user: UserType) {
-      adminStore.updateUserInEdit(user);
-      adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
-      openDialog(DIALOG_ROUTES.USER_EDIT, 'Delete User');
-    }
-
-    return { dataStore, filteredUserList, ...toRefs(state), editUser, deleteUser, CLIENT_CONSTANTS };
-  }
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const headers = [
+  { title: 'Discord ID', key: 'discordId', sortable: false },
+  { title: 'User ID', key: 'userId', sortable: false },
+  { title: 'Display Name', key: 'displayName', sortable: false },
+  { title: 'Avatar', key: 'avatar', sortable: false },
+  { title: 'Admin', key: 'admin', sortable: false },
+  { title: 'Action', key: 'action', sortable: false }
+];
+const filters = ref({
+  discordId: '',
+  userId: '',
+  displayName: ''
 });
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+
+function filteredUserList(): UserType[] {
+  return dataStore.userList.filter((user) => {
+    return (
+      user.discordId.includes(filters.value.discordId) &&
+      user.userId.includes(filters.value.userId) &&
+      user.displayName.toLowerCase().includes(filters.value.displayName.toLowerCase())
+    );
+  });
+}
+
+function editUser(user: UserType) {
+  adminStore.updateUserInEdit(user);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
+  openDialog(DIALOG_ROUTES.USER_EDIT, 'Edit User');
+}
+
+function deleteUser(user: UserType) {
+  adminStore.updateUserInEdit(user);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.USER_EDIT, 'Delete User');
+}
 </script>

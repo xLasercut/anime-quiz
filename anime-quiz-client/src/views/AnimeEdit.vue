@@ -4,11 +4,6 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import AnimeEditTable from '@/components/anime-edit/AnimeEditTable.vue';
-
-export default defineComponent({
-  components: { AnimeEditTable }
-});
 </script>

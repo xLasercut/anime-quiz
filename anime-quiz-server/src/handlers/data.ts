@@ -21,6 +21,9 @@ class DataHandler extends AbstractHandler {
     },
     [SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST]: () => {
       this._emitter.updateStoreUserSongList(this._userDb.getUserSongList(this._socket.data.clientData.discordId), this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_EMOJI_LIST]: () => {
+      this._emitter.updateStoreEmojiList(this._emojiDb.getEmojiList(), this._socket.id);
     }
   };
 }
