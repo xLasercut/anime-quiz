@@ -28,4 +28,8 @@ const DbSong = z.object({
     .transform((val) => Array.from(new Set(val)))
 });
 
-export { DbSong };
+const DbSongTitle = z.object({
+  song_title: SongTitle
+});
+
+export { DbSong, DbSongTitle };

@@ -47,10 +47,10 @@ class EntryPointHandler extends AbstractHandler {
 
   protected _setClientData(): void {
     this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
-    this._emitter.updateStoreSongTitles(this._songDb.songTitles, this._socket.id);
-    this._emitter.updateStoreAnimeNames(this._animeDb.animeNames, this._socket.id);
-    this._emitter.updateStoreSongList(this._songDb.songList, this._socket.id);
-    this._emitter.updateStoreAnimeList(this._animeDb.animeList, this._socket.id);
+    this._emitter.updateStoreSongTitles(this._songDb.getSongTitles(), this._socket.id);
+    this._emitter.updateStoreAnimeNames(this._animeDb.getAnimeNames(), this._socket.id);
+    this._emitter.updateStoreSongList(this._songDb.getSongList(), this._socket.id);
+    this._emitter.updateStoreAnimeList(this._animeDb.getAnimeList(), this._socket.id);
     this._emitter.updateStoreUserSongList(this._userDb.getUserSongList(this._socket.data.clientData.discordId), this._socket.id);
   }
 

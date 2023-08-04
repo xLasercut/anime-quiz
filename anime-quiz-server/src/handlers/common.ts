@@ -7,6 +7,7 @@ import { SongDb } from '../database/song';
 import { Oidc } from '../app/oidc';
 import { AnimeDb } from '../database/anime';
 import { UnauthorizedError } from '../app/exceptions';
+import { DatabaseLock } from '../database/lock';
 
 abstract class AbstractHandler {
   protected _logger: Logger;
@@ -15,6 +16,7 @@ abstract class AbstractHandler {
   protected _emitter: Emitter;
   protected _songDb: SongDb;
   protected _animeDb: AnimeDb;
+  protected _dbLock: DatabaseLock;
   protected _oidc: Oidc;
   protected _socket: Socket;
   protected _errHandler: Function;
@@ -30,6 +32,7 @@ abstract class AbstractHandler {
     this._songDb = dependencies.songDb;
     this._animeDb = dependencies.animeDb;
     this._oidc = dependencies.oidc;
+    this._dbLock = dependencies.dbLock;
   }
 
   public start(): void {

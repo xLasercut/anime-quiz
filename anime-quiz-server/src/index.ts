@@ -14,6 +14,7 @@ import { newSocketErrorHandler } from './app/exceptions';
 import { SongDb } from './database/song';
 import { EntryPointHandler } from './handlers/entry';
 import { AnimeDb } from './database/anime';
+import { DatabaseLock } from './database/lock';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -24,6 +25,7 @@ const io = new Server(httpServer, {
 const oidc = new Oidc(SERVER_CONFIG);
 const logger = new Logger(SERVER_CONFIG);
 const emitter = new Emitter(io);
+const dbLock = new DatabaseLock();
 const userDb = new UserDb(SERVER_CONFIG, logger);
 const songDb = new SongDb(SERVER_CONFIG, logger);
 const animeDb = new AnimeDb(SERVER_CONFIG, logger);
@@ -34,7 +36,8 @@ const handlerDependencies: HandlerDependencies = {
   songDb: songDb,
   animeDb: animeDb,
   emitter: emitter,
-  oidc: oidc
+  oidc: oidc,
+  dbLock: dbLock
 };
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {

@@ -19,7 +19,10 @@ const LOG_REFERENCES = {
   ADMIN_ADD_USER: 'SERVER009',
   ADMIN_DELETE_USER: 'SERVER010',
   ADMIN_EDIT_USER: 'SERVER011',
-  UPDATE_USER_SETTINGS: 'SERVER012'
+  UPDATE_USER_SETTINGS: 'SERVER012',
+  ADMIN_ADD_ANIME: 'SERVER013',
+  ADMIN_EDIT_ANIME: 'SERVER014',
+  ADMIN_DELETE_ANIME: 'SERVER015'
 };
 
 const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
@@ -69,6 +72,18 @@ const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
   },
   [LOG_REFERENCES.UPDATE_USER_SETTINGS]: {
     message: 'update user settings',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_ADD_ANIME]: {
+    message: 'admin add anime',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_EDIT_ANIME]: {
+    message: 'admin edit anime',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_DELETE_ANIME]: {
+    message: 'admin delete anime',
     level: LOG_LEVEL.INFO
   }
 };

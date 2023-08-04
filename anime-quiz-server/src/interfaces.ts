@@ -4,6 +4,7 @@ import { Emitter } from './emitters/emitter';
 import { SongDb } from './database/song';
 import { Oidc } from './app/oidc';
 import { AnimeDb } from './database/anime';
+import { DatabaseLock } from './database/lock';
 
 interface LogTemplate {
   level: string;
@@ -18,6 +19,7 @@ interface HandlerDependencies {
   animeDb: AnimeDb;
   emitter: Emitter;
   oidc: Oidc;
+  dbLock: DatabaseLock;
 }
 
 interface ServerConfig {

@@ -14,12 +14,16 @@ import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { useAdminStore } from '@/plugins/store/admin';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { useDataStore } from '@/plugins/store/data';
+import { socket } from '@/plugins/socket';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
 
 export default defineComponent({
   components: { NavBtn },
   setup() {
     const clientStore = useClientStore();
     const adminStore = useAdminStore();
+    const dataStore = useDataStore();
     const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
 
     function back() {
@@ -36,7 +40,12 @@ export default defineComponent({
       openDialog(DIALOG_ROUTES.ANIME_EDIT, 'New Anime');
     }
 
-    function reload() {}
+    function reload() {
+      dataStore.updateAnimeNames([]);
+      dataStore.updateAnimeList([]);
+      socket.emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_NAMES);
+      socket.emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_LIST);
+    }
 
     return { back, newAnime, reload };
   }

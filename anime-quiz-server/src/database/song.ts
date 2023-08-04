@@ -1,33 +1,24 @@
 import { AbstractDb } from './common';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logging/logger';
-import { DbSong } from '../models/song';
-import { SongTitleType, SongType } from '../shared/models/types';
+import { DbSong, DbSongTitle } from '../models/song';
+import { AnimeIdType, SongTitleType, SongType } from '../shared/models/types';
 import { Song, SongTitle } from '../shared/models/song';
+import { DbSongTitleType } from '../models/types';
 
 class SongDb extends AbstractDb {
-  protected _songList: SongType[] = [];
-  protected _songTitles: SongTitleType[] = [];
-
   constructor(config: ServerConfig, logger: Logger) {
     super(config.mainDbPath, logger);
-    this.reloadCache();
   }
 
-  public get songList(): SongType[] {
-    return this._songList;
+  public deleteSongAnimeByAnimeId(animeId: AnimeIdType) {
+    const statement = this._db.prepare(`
+      DELETE FROM song_animes WHERE anime_id = ?
+    `);
+    statement.run(animeId);
   }
 
-  public get songTitles(): SongTitleType[] {
-    return this._songTitles;
-  }
-
-  public reloadCache(): void {
-    this._songList = this._getSongList();
-    this._songTitles = this._getSongTitles();
-  }
-
-  protected _getSongList(): SongType[] {
+  public getSongList(): SongType[] {
     const statement = this._db.prepare(`
       SELECT
         songs.song_id,
@@ -59,8 +50,14 @@ class SongDb extends AbstractDb {
       });
   }
 
-  protected _getSongTitles(): SongTitleType[] {
-    return Array.from(new Set(this._songList.map((song) => SongTitle.parse(song.songTitle))));
+  public getSongTitles(): SongTitleType[] {
+    const statement = this._db.prepare(`
+      SELECT
+        song_title
+      FROM songs
+    `);
+    const response = statement.all();
+    return Array.from(new Set(response.map((item) => DbSongTitle.parse(item).song_title)));
   }
 }
 

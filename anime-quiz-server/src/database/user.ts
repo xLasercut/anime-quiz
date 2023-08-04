@@ -9,11 +9,8 @@ import { LOG_REFERENCES } from '../app/logging/constants';
 import { User } from '../shared/models/user';
 
 class UserDb extends AbstractDb {
-  protected _allowedUsers: DiscordIdType[] = [];
-
   constructor(config: ServerConfig, logger: Logger) {
     super(config.userDbPath, logger);
-    this.reloadCache();
   }
 
   public getUserList(): UserType[] {
@@ -63,10 +60,6 @@ class UserDb extends AbstractDb {
     return dbUserSongList.song_id;
   }
 
-  public reloadCache() {
-    this._allowedUsers = this._getAllowedUsers();
-  }
-
   public getUserInfo(discordId: DiscordIdType): DbUserType {
     const statement = this._db.prepare(`
       SELECT 
@@ -90,7 +83,14 @@ class UserDb extends AbstractDb {
   }
 
   public validateAllowedUser(discordId: DiscordIdType): void {
-    if (!this._allowedUsers.includes(discordId)) {
+    const statement = this._db.prepare(`
+      SELECT
+        *
+      FROM users
+      WHERE discord_id = ?
+    `);
+    const response = statement.get(discordId);
+    if (!response) {
       throw new UnauthorizedError();
     }
   }
@@ -183,36 +183,24 @@ class UserDb extends AbstractDb {
     const statement = this._db.prepare(`
       INSERT INTO user_songs (user_id, song_id) VALUES (?,?)
     `);
-    const insertMany = this._db.transaction((_songIds: SongIdType[]) => {
-      for (const songId of _songIds) {
+    const insertMany = this._db.transaction(() => {
+      for (const songId of songIds) {
         statement.run(userId, songId);
       }
     });
-    insertMany(songIds);
+    insertMany();
   }
 
   public deleteUserSongs(songIds: SongIdType[], userId: UserIdType): void {
     const statement = this._db.prepare(`
       DELETE FROM user_songs WHERE user_id = ? AND song_id = ?
     `);
-    const deleteMany = this._db.transaction((_songIds: SongIdType[]) => {
-      for (const songId of _songIds) {
+    const deleteMany = this._db.transaction(() => {
+      for (const songId of songIds) {
         statement.run(userId, songId);
       }
     });
-    deleteMany(songIds);
-  }
-
-  protected _getAllowedUsers(): string[] {
-    const statement = this._db.prepare(`
-      SELECT
-        discord_id
-      FROM users
-    `);
-    const response = statement.all();
-    return response.map((item) => {
-      return DbAllowedUser.parse(item).discord_id;
-    });
+    deleteMany();
   }
 }
 

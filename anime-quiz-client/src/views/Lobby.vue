@@ -46,7 +46,7 @@ export default defineComponent({
         {
           color: 'error',
           title: 'Anime Edit',
-          description: 'Edit Anime List',
+          description: 'Add/Edit/Delete animes',
           route: ROUTES.ANIME_EDIT,
           requireAdmin: true,
           icon: 'mdi-database-edit'
@@ -54,7 +54,7 @@ export default defineComponent({
         {
           color: 'error',
           title: 'User Edit',
-          description: 'Add/Delete users',
+          description: 'Add/Edit/Delete users',
           route: ROUTES.USER_EDIT,
           requireAdmin: true,
           icon: 'mdi-database-edit'

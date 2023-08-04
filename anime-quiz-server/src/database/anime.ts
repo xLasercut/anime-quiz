@@ -2,32 +2,66 @@ import { AbstractDb } from './common';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logging/logger';
 import { AnimeNameType, AnimeType } from '../shared/models/types';
-import { DbAnime } from '../models/anime';
+import { DbAnime, DbAnimeName } from '../models/anime';
 import { Anime, AnimeName } from '../shared/models/anime';
+import { DataQualityError } from '../app/exceptions';
 
 class AnimeDb extends AbstractDb {
-  protected _animeList: AnimeType[] = [];
-  protected _animeNames: AnimeNameType[] = [];
-
   constructor(config: ServerConfig, logger: Logger) {
     super(config.mainDbPath, logger);
-    this.reloadCache();
   }
 
-  public reloadCache() {
-    this._animeList = this._getAnimeList();
-    this._animeNames = this._getAnimeNames();
+  public newAnime(anime: AnimeType) {
+    const statement = this._db.prepare(`
+        INSERT INTO animes (anime_id, anime_name) VALUES (?,?)
+    `);
+    const insertMany = this._db.transaction(() => {
+      for (const animeName of anime.animeName) {
+        statement.run(anime.animeId, animeName);
+      }
+    });
+    insertMany();
   }
 
-  public get animeList(): AnimeType[] {
-    return this._animeList;
+  public editAnime(anime: AnimeType) {
+    this.deleteAnime(anime);
+    this.newAnime(anime);
   }
 
-  public get animeNames(): AnimeNameType[] {
-    return this._animeNames;
+  public deleteAnime(anime: AnimeType) {
+    const statement = this._db.prepare(`
+      DELETE FROM animes where anime_id = @animeId
+    `);
+    statement.run(anime);
   }
 
-  protected _getAnimeList(): AnimeType[] {
+  public validateAnimeNotExists(anime: AnimeType) {
+    const statement = this._db.prepare(`
+      SELECT
+        anime_id
+      FROM animes
+      WHERE anime_id = @animeId
+    `);
+    const response = statement.get(anime);
+    if (response) {
+      throw new DataQualityError('Anime already exists');
+    }
+  }
+
+  public validateAnimeExists(anime: AnimeType) {
+    const statement = this._db.prepare(`
+      SELECT
+        anime_id
+      FROM animes
+      WHERE anime_id = @animeId
+    `);
+    const response = statement.get(anime);
+    if (!response) {
+      throw new DataQualityError('Anime does not exists');
+    }
+  }
+
+  public getAnimeList(): AnimeType[] {
     const statement = this._db.prepare(`
       SELECT
         anime_id,
@@ -47,13 +81,14 @@ class AnimeDb extends AbstractDb {
       });
   }
 
-  protected _getAnimeNames(): AnimeNameType[] {
-    let animeNames: AnimeNameType[] = [];
-    for (const anime of this._animeList) {
-      animeNames = animeNames.concat(anime.animeName);
-    }
-
-    return Array.from(new Set(animeNames.map((name) => AnimeName.parse(name))));
+  public getAnimeNames(): AnimeNameType[] {
+    const statement = this._db.prepare(`
+      SELECT
+        anime_name
+      FROM animes
+    `);
+    const response = statement.all();
+    return Array.from(new Set(response.map((item) => DbAnimeName.parse(item).anime_name)));
   }
 }
 

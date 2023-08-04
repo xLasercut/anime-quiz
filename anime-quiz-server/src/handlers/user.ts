@@ -40,7 +40,7 @@ class UserHandler extends AbstractHandler {
   };
 
   protected _validateCanWriteToDb(): void {
-    this._userDb.validateDbNotLocked();
+    this._dbLock.validateNotLocked();
     this._userDb.validateAllowedUser(this._socket.data.clientData.discordId);
   }
 }

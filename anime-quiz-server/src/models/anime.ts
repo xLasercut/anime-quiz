@@ -13,4 +13,8 @@ const DbAnime = z.object({
   anime_id: AnimeId
 });
 
-export { DbAnime };
+const DbAnimeName = z.object({
+  anime_name: AnimeName
+});
+
+export { DbAnime, DbAnimeName };

@@ -69,7 +69,7 @@ class AdminUserHandler extends AbstractHandler {
 
   protected _validateCanWriteToDb(): void {
     this._validateIsAdmin();
-    this._userDb.validateDbNotLocked();
+    this._dbLock.validateNotLocked();
   }
 }
 
