@@ -13,7 +13,9 @@ const STATEMENTS = {
   INSERT_EMOJI: 'INSERT_EMOJI',
   EDIT_EMOJI: 'EDIT_EMOJI',
   DELETE_EMOJI: 'DELETE_EMOJI',
-  SELECT_EMOJI_BY_ID: 'SELECT_EMOJI_BY_ID'
+  SELECT_EMOJI_BY_ID: 'SELECT_EMOJI_BY_ID',
+  SELECT_EMOJI_BY_ID_OR_COMMAND: 'SELECT_EMOJI_BY_ID_OR_COMMAND',
+  SELECT_EMOJI_BY_COMMAND: 'SELECT_EMOJI_BY_COMMAND'
 };
 
 const RAW_STATEMENTS = {
@@ -45,6 +47,18 @@ const RAW_STATEMENTS = {
       *
     FROM emojis
     WHERE emoji_id = @emojiId
+  `,
+  [STATEMENTS.SELECT_EMOJI_BY_ID_OR_COMMAND]: `
+    SELECT
+      *
+    FROM emojis
+    WHERE emoji_id = @emojiId OR command = @command
+  `,
+  [STATEMENTS.SELECT_EMOJI_BY_COMMAND]: `
+    SELECT
+      *
+    FROM emojis
+    WHERE command = @command AND emojiId != @emojiId
   `
 };
 
@@ -101,10 +115,18 @@ class EmojiDb extends ServerDb<EmojiType> {
   }
 
   public validateRecordNotExists(record: EmojiType) {
-    const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_ID);
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_ID_OR_COMMAND);
     const response = statement.get(record);
     if (response) {
       throw new DataQualityError('Emoji already exist');
+    }
+  }
+
+  public validateCommandNotExists(record: EmojiType) {
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_COMMAND)
+    const response = statement.get(record)
+    if (response) {
+      throw new DataQualityError('Command already exist');
     }
   }
 

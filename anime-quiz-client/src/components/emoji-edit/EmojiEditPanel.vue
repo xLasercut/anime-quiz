@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import { useClientStore } from '@/plugins/store/client';
-import { ROUTES } from '@/assets/routing/routes';
+import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useDataStore } from '@/plugins/store/data';
@@ -15,13 +15,24 @@ import { useAdminStore } from '@/plugins/store/admin';
 import { injectStrict } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
+import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
 const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
 
-function newEmoji() {}
+function newEmoji() {
+  adminStore.updateEmojiInEdit({
+    emojiId: '',
+    command: '',
+    src: '',
+    type: 'img'
+  });
+  adminStore.generateNewEmojiId();
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.NEW);
+  openDialog(DIALOG_ROUTES.EMOJI_EDIT, 'New Emoji');
+}
 
 function reload() {
   dataStore.updateEmojiList([]);

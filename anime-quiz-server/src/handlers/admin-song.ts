@@ -18,7 +18,7 @@ class AdminSongHandler extends ServerHandler {
       this._songDb.newRecord(song);
       this._emitter.updateStoreSongList();
       this._emitter.updateStoreSongTitles();
-      this._emitter.systemNotification({ color: 'success', message: `Added song ${song.songTitle}` });
+      this._emitter.systemNotification({ color: 'success', message: `Added song ${song.songTitle}` }, this._socket.id);
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_EDIT_SONG]: (_song: SongType, callback: Function) => {
@@ -33,7 +33,7 @@ class AdminSongHandler extends ServerHandler {
       this._songDb.editRecord(song);
       this._emitter.updateStoreSongList();
       this._emitter.updateStoreSongTitles();
-      this._emitter.systemNotification({ color: 'success', message: `Edited song ${song.songTitle}` });
+      this._emitter.systemNotification({ color: 'success', message: `Edited song ${song.songTitle}` }, this._socket.id);
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_DELETE_SONG]: (_song: SongType, callback: Function) => {
@@ -47,7 +47,7 @@ class AdminSongHandler extends ServerHandler {
       this._songDb.deleteRecord(song);
       this._emitter.updateStoreSongList();
       this._emitter.updateStoreSongTitles();
-      this._emitter.systemNotification({ color: 'success', message: `Deleted song ${song.songTitle}` });
+      this._emitter.systemNotification({ color: 'success', message: `Deleted song ${song.songTitle}` }, this._socket.id);
       callback(true);
     }
   };

@@ -25,10 +25,25 @@ const LOG_REFERENCES = {
   ADMIN_DELETE_ANIME: 'SERVER015',
   ADMIN_ADD_SONG: 'SERVER016',
   ADMIN_EDIT_SONG: 'SERVER017',
-  ADMIN_DELETE_SONG: 'SERVER018'
+  ADMIN_DELETE_SONG: 'SERVER018',
+  ADMIN_ADD_EMOJI: 'SERVER019',
+  ADMIN_DELETE_EMOJI: 'SERVER020',
+  ADMIN_EDIT_EMOJI: 'SERVER021'
 };
 
 const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
+  [LOG_REFERENCES.ADMIN_ADD_EMOJI]: {
+    message: 'admin add emoji',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_EDIT_EMOJI]: {
+    message: 'admin edit emoji',
+    level: LOG_LEVEL.INFO
+  },
+  [LOG_REFERENCES.ADMIN_DELETE_EMOJI]: {
+    message: 'admin delete emoji',
+    level: LOG_LEVEL.INFO
+  },
   [LOG_REFERENCES.ADMIN_ADD_SONG]: {
     message: 'admin add song',
     level: LOG_LEVEL.INFO

@@ -45,11 +45,32 @@ import { useAdminStore } from '@/plugins/store/admin';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import GameEmoji from '@/components/common/GameEmoji.vue';
+import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { socket } from '@/plugins/socket';
 
 const adminStore = useAdminStore();
 const valid = ref(false);
 const disabled = ref(false);
 const emojiTypes = ['dec', 'img'];
+const emit = defineEmits(['dialog:close']);
 
-function submitChange() {}
+const CHANGE_MAP = {
+  [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_EMOJI,
+  [DATABASE_EDIT_MODE.EDIT]: SOCKET_EVENTS.ADMIN_EDIT_EMOJI,
+  [DATABASE_EDIT_MODE.DELETE]: SOCKET_EVENTS.ADMIN_DELETE_EMOJI
+};
+
+function submitChange() {
+  if (valid.value) {
+    disabled.value = true;
+    const event = CHANGE_MAP[adminStore.editMode];
+    socket.emit(event, adminStore.emojiInEdit, (success: boolean) => {
+      disabled.value = false;
+      if (success) {
+        emit('dialog:close');
+      }
+    });
+  }
+}
 </script>

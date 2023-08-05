@@ -17,7 +17,13 @@ class AdminAnimeHandler extends ServerHandler {
       this._animeDb.newRecord(anime);
       this._emitter.updateStoreAnimeList();
       this._emitter.updateStoreAnimeNames();
-      this._emitter.systemNotification({ color: 'success', message: `Added anime ${anime.animeName[0]}` });
+      this._emitter.systemNotification(
+        {
+          color: 'success',
+          message: `Added anime ${anime.animeName[0]}`
+        },
+        this._socket.id
+      );
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_EDIT_ANIME]: (_anime: AnimeType, callback: Function) => {
@@ -33,7 +39,13 @@ class AdminAnimeHandler extends ServerHandler {
       this._emitter.updateStoreAnimeNames();
       this._emitter.updateStoreSongList();
       this._emitter.updateStoreSongTitles();
-      this._emitter.systemNotification({ color: 'success', message: `Edited anime ${anime.animeName[0]}` });
+      this._emitter.systemNotification(
+        {
+          color: 'success',
+          message: `Edited anime ${anime.animeName[0]}`
+        },
+        this._socket.id
+      );
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_DELETE_ANIME]: (_anime: AnimeType, callback: Function) => {
@@ -49,7 +61,13 @@ class AdminAnimeHandler extends ServerHandler {
       this._emitter.updateStoreAnimeNames();
       this._emitter.updateStoreSongList();
       this._emitter.updateStoreSongTitles();
-      this._emitter.systemNotification({ color: 'success', message: `Deleted anime ${anime.animeName[0]}` });
+      this._emitter.systemNotification(
+        {
+          color: 'success',
+          message: `Deleted anime ${anime.animeName[0]}`
+        },
+        this._socket.id
+      );
       callback(true);
     }
   };

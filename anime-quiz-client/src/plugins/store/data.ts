@@ -45,7 +45,8 @@ const useDataStore = defineStore('data', {
 
         if (animeA === animeB) {
           return 0;
-        } else if (animeA > animeB) {
+        }
+        if (animeA > animeB) {
           return 1;
         }
         return -1;
@@ -67,7 +68,15 @@ const useDataStore = defineStore('data', {
       this.userList = userList;
     },
     updateEmojiList(emojiList: EmojiType[]) {
-      this.emojiList = emojiList;
+      this.emojiList = emojiList.sort((a, b) => {
+        if (a.command === b.command) {
+          return 0;
+        }
+        if (a.command > b.command) {
+          return 1;
+        }
+        return -1;
+      });
     }
   },
   getters: {
