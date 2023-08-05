@@ -1,5 +1,5 @@
-import { ClientDataType } from '../shared/models/types';
-import { DbUserType } from '../models/types';
+import {ClientDataType, SongIdType} from '../shared/models/types';
+import {DbUserSongType, DbUserType} from '../models/types';
 import { ClientData } from '../shared/models/client';
 
 class SocketData {
@@ -37,6 +37,13 @@ class SocketData {
       host: false,
       auth: true
     });
+  }
+
+  public generateDbUserSongs(songIds: SongIdType[]): DbUserSongType {
+    return {
+      user_id: this._clientData.userId,
+      song_id: songIds
+    }
   }
 }
 

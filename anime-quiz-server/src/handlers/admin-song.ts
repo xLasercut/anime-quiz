@@ -1,23 +1,23 @@
-import { AbstractHandler } from './common';
+import { ServerHandler } from './common';
 import { SOCKET_EVENTS } from '../shared/events';
 import { SongType } from '../shared/models/types';
 import { Song } from '../shared/models/song';
 import { LOG_REFERENCES } from '../app/logging/constants';
 
-class AdminSongHandler extends AbstractHandler {
+class AdminSongHandler extends ServerHandler {
   protected _events = {
     [SOCKET_EVENTS.ADMIN_NEW_SONG]: (_song: SongType, callback: Function) => {
       this._logger.writeLog(LOG_REFERENCES.ADMIN_ADD_SONG, {
         clientData: this._socket.data.clientData,
         request: _song
       });
-      this._validateCanWriteToDb();
+      this._validateCanWriteDbAdmin();
       const song = Song.parse(_song);
-      this._songDb.validateSongNotExists(song);
+      this._songDb.validateRecordNotExists(song);
       this._animeDb.validateAnimesExists(song.animeId);
-      this._songDb.newSong(song);
-      this._emitter.updateStoreSongList(this._songDb.getSongList());
-      this._emitter.updateStoreSongTitles(this._songDb.getSongTitles());
+      this._songDb.newRecord(song);
+      this._emitter.updateStoreSongList();
+      this._emitter.updateStoreSongTitles();
       this._emitter.systemNotification({ color: 'success', message: `Added song ${song.songTitle}` });
       callback(true);
     },
@@ -26,13 +26,13 @@ class AdminSongHandler extends AbstractHandler {
         clientData: this._socket.data.clientData,
         request: _song
       });
-      this._validateCanWriteToDb();
+      this._validateCanWriteDbAdmin();
       const song = Song.parse(_song);
-      this._songDb.validateSongExists(song);
+      this._songDb.validateRecordExists(song);
       this._animeDb.validateAnimesExists(song.animeId);
-      this._songDb.editSong(song);
-      this._emitter.updateStoreSongList(this._songDb.getSongList());
-      this._emitter.updateStoreSongTitles(this._songDb.getSongTitles());
+      this._songDb.editRecord(song);
+      this._emitter.updateStoreSongList();
+      this._emitter.updateStoreSongTitles();
       this._emitter.systemNotification({ color: 'success', message: `Edited song ${song.songTitle}` });
       callback(true);
     },
@@ -41,22 +41,16 @@ class AdminSongHandler extends AbstractHandler {
         clientData: this._socket.data.clientData,
         request: _song
       });
-      this._validateCanWriteToDb();
+      this._validateCanWriteDbAdmin();
       const song = Song.parse(_song);
-      this._songDb.validateSongExists(song);
-      this._songDb.deleteSong(song);
-      this._userDb.deleteUserSongsBySongId(song.songId);
-      this._emitter.updateStoreSongList(this._songDb.getSongList());
-      this._emitter.updateStoreSongTitles(this._songDb.getSongTitles());
+      this._songDb.validateRecordExists(song);
+      this._songDb.deleteRecord(song);
+      this._emitter.updateStoreSongList();
+      this._emitter.updateStoreSongTitles();
       this._emitter.systemNotification({ color: 'success', message: `Deleted song ${song.songTitle}` });
       callback(true);
     }
   };
-
-  protected _validateCanWriteToDb() {
-    this._validateIsAdmin();
-    this._dbLock.validateNotLocked();
-  }
 }
 
 export { AdminSongHandler };

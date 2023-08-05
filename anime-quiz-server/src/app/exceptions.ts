@@ -86,11 +86,10 @@ function _handleCallback(callback: any): void {
 }
 
 function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter): Function {
-  return function (func: Function) {
+  return function (this: any, func: Function) {
     return (...args: any[]) => {
       const callback = args[args.length - 1];
       try {
-        // @ts-ignore
         const ret = func.apply(this, args);
         if (ret && typeof ret.catch === 'function') {
           // async handler

@@ -7,16 +7,32 @@ import {
   SongIdType,
   SongTitleType,
   SongType,
-  SystemNotificationType,
+  SystemNotificationType, UserIdType,
   UserType
 } from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
+import { EmitterDependencies } from '../interfaces';
+import { UserDb } from '../database/user';
+import { SongDb } from '../database/song';
+import { EmojiDb } from '../database/emoji';
+import { AnimeDb } from '../database/anime';
+import { UserSongDb } from '../database/user-song';
 
 class Emitter {
   protected _io: Server;
+  protected _userDb: UserDb;
+  protected _songDb: SongDb;
+  protected _emojiDb: EmojiDb;
+  protected _animeDb: AnimeDb;
+  protected _userSongDb: UserSongDb;
 
-  constructor(io: Server) {
+  constructor(io: Server, dependencies: EmitterDependencies) {
     this._io = io;
+    this._userDb = dependencies.userDb;
+    this._songDb = dependencies.songDb;
+    this._emojiDb = dependencies.emojiDb;
+    this._animeDb = dependencies.animeDb;
+    this._userSongDb = dependencies.userSongDb;
   }
 
   public systemNotification(notification: SystemNotificationType, sid?: string) {
@@ -27,32 +43,32 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_CLIENT_DATA, clientData);
   }
 
-  public updateStoreSongList(songList: SongType[], sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_SONG_LIST, songList);
+  public updateStoreSongList(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_SONG_LIST, this._songDb.songList);
   }
 
-  public updateStoreAnimeNames(animeNames: AnimeNameType[], sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_NAMES, animeNames);
+  public updateStoreAnimeNames(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_NAMES, this._animeDb.animeNames);
   }
 
-  public updateStoreSongTitles(songTitles: SongTitleType[], sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_SONG_TITLES, songTitles);
+  public updateStoreSongTitles(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_SONG_TITLES, this._songDb.songTitles);
   }
 
-  public updateStoreAnimeList(animeList: AnimeType[], sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_LIST, animeList);
+  public updateStoreAnimeList(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_LIST, this._animeDb.animeList);
   }
 
-  public updateStoreUserSongList(userSongList: SongIdType[], sid: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST, userSongList);
+  public updateStoreUserSongList(userId: UserIdType, sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST, this._userSongDb.getUserSongList(userId));
   }
 
-  public updateStoreEmojiList(emojiList: EmojiType[], sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_EMOJI_LIST, emojiList);
+  public updateStoreEmojiList(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_EMOJI_LIST, this._emojiDb.emojiList);
   }
 
-  public updateStoreUserList(userList: UserType[], sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_LIST, userList);
+  public updateStoreUserList(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_LIST, this._userDb.getUserList());
   }
 
   protected _client(sid?: string) {

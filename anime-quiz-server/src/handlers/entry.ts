@@ -1,19 +1,19 @@
-import { AbstractHandler } from './common';
+import { ServerHandler } from './common';
 import { Socket } from '../types';
 import { SOCKET_EVENTS } from '../shared/events';
 import { LOG_REFERENCES } from '../app/logging/constants';
 import { UserHandler } from './user';
-import { SongHandler } from './song';
 import { DataHandler } from './data';
-import { HandlerDependencies, ServerConfig } from '../interfaces';
+import { HandlerDependencies } from '../interfaces';
 import { AdminUserHandler } from './admin-user';
 import { UnauthorizedError } from '../app/exceptions';
 import { AdminAnimeHandler } from './admin-anime';
 import { AdminSongHandler } from './admin-song';
+import { AdminEmojiHandler } from './admin-emoji';
 
-class EntryPointHandler extends AbstractHandler {
-  protected _handlers: AbstractHandler[];
-  protected _adminHandlers: AbstractHandler[];
+class EntryPointHandler extends ServerHandler {
+  protected _handlers: ServerHandler[];
+  protected _adminHandlers: ServerHandler[];
   protected _events = {
     [SOCKET_EVENTS.AUTHORIZE_USER]: async (code: string, callback: Function) => {
       const discordUser = await this._oidc.getUserInfo(code);
@@ -32,15 +32,12 @@ class EntryPointHandler extends AbstractHandler {
 
   constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
     super(socket, errHandler, dependencies);
-    this._handlers = [
-      new UserHandler(socket, errHandler, dependencies),
-      new SongHandler(socket, errHandler, dependencies),
-      new DataHandler(socket, errHandler, dependencies)
-    ];
+    this._handlers = [new UserHandler(socket, errHandler, dependencies), new DataHandler(socket, errHandler, dependencies)];
     this._adminHandlers = [
       new AdminUserHandler(socket, errHandler, dependencies),
       new AdminAnimeHandler(socket, errHandler, dependencies),
-      new AdminSongHandler(socket, errHandler, dependencies)
+      new AdminSongHandler(socket, errHandler, dependencies),
+      new AdminEmojiHandler(socket, errHandler, dependencies)
     ];
     this._socket.data.clientAuthTimer = setTimeout(
       this._errHandler(() => {
@@ -52,12 +49,12 @@ class EntryPointHandler extends AbstractHandler {
 
   protected _setClientData(): void {
     this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
-    this._emitter.updateStoreSongTitles(this._songDb.getSongTitles(), this._socket.id);
-    this._emitter.updateStoreAnimeNames(this._animeDb.getAnimeNames(), this._socket.id);
-    this._emitter.updateStoreSongList(this._songDb.getSongList(), this._socket.id);
-    this._emitter.updateStoreAnimeList(this._animeDb.getAnimeList(), this._socket.id);
-    this._emitter.updateStoreUserSongList(this._userDb.getUserSongList(this._socket.data.clientData.discordId), this._socket.id);
-    this._emitter.updateStoreEmojiList(this._emojiDb.getEmojiList(), this._socket.id);
+    this._emitter.updateStoreSongTitles(this._socket.id);
+    this._emitter.updateStoreAnimeNames(this._socket.id);
+    this._emitter.updateStoreSongList(this._socket.id);
+    this._emitter.updateStoreAnimeList(this._socket.id);
+    this._emitter.updateStoreUserSongList(this._socket.data.clientData.userId, this._socket.id);
+    this._emitter.updateStoreEmojiList(this._socket.id);
   }
 
   protected _startHandler(): void {

@@ -9,8 +9,9 @@ import { AnimeDb } from '../database/anime';
 import { UnauthorizedError } from '../app/exceptions';
 import { DatabaseLock } from '../database/lock';
 import { EmojiDb } from '../database/emoji';
+import { UserSongDb } from '../database/user-song';
 
-abstract class AbstractHandler {
+abstract class ServerHandler {
   protected _logger: Logger;
   protected _config: ServerConfig;
   protected _userDb: UserDb;
@@ -22,6 +23,7 @@ abstract class AbstractHandler {
   protected _socket: Socket;
   protected _emojiDb: EmojiDb;
   protected _errHandler: Function;
+  protected _userSongDb: UserSongDb;
   protected abstract _events: { [key: string]: SocketEvent };
 
   protected constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
@@ -36,12 +38,24 @@ abstract class AbstractHandler {
     this._oidc = dependencies.oidc;
     this._dbLock = dependencies.dbLock;
     this._emojiDb = dependencies.emojiDb;
+    this._userSongDb = dependencies.userSongDb;
   }
 
   public start(): void {
     for (const [eventName, eventFunction] of Object.entries(this._events)) {
       this._socket.on(eventName, this._errHandler(eventFunction));
     }
+  }
+
+  protected _validateCanWriteDbNonAdmin() {
+    this._dbLock.validateNotLocked();
+    this._userDb.validateAllowedUser(this._socket.data.clientData.discordId);
+  }
+
+  protected _validateCanWriteDbAdmin() {
+    this._dbLock.validateNotLocked();
+    this._userDb.validateAllowedUser(this._socket.data.clientData.discordId);
+    this._validateIsAdmin();
   }
 
   protected _validateIsAdmin(): void {
@@ -51,4 +65,4 @@ abstract class AbstractHandler {
   }
 }
 
-export { AbstractHandler };
+export { ServerHandler };

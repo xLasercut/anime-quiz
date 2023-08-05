@@ -1,24 +1,89 @@
-import { AbstractDb } from './common';
+import { ServerDb, userDbConnection } from './common';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logging/logger';
-import { DbAllowedUser, DbUser, DbUserSongList } from '../models/user';
+import { DbUser } from '../models/user';
 import { DbUserType } from '../models/types';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
-import { ClientDataType, DiscordIdType, SongIdType, UserIdType, UserType } from '../shared/models/types';
+import { ClientDataType, DiscordIdType, UserIdType, UserType } from '../shared/models/types';
 import { LOG_REFERENCES } from '../app/logging/constants';
 import { User } from '../shared/models/user';
+import { Database as SqliteDb } from 'better-sqlite3';
+import { StatementFactory } from './statement';
 
-class UserDb extends AbstractDb {
+const STATEMENTS = {
+  SELECT_ALL_USER: 'SELECT_ALL_USER',
+  INSERT_USER: 'INSERT_USER',
+  EDIT_USER: 'EDIT_USER',
+  DELETE_USER: 'DELETE_USER',
+  SELECT_USER_BY_ANY_IDS: 'SELECT_USER_BY_ANY_IDS',
+  DELETE_USER_SONGS_BY_USER_ID: 'DELETE_USER_SONGS_BY_USER_ID',
+  EDIT_USER_SETTINGS: 'EDIT_USER_SETTINGS',
+  SELECT_USER_BY_DISCORD_ID: 'SELECT_USER_BY_DISCORD_ID'
+};
+
+const RAW_STATEMENTS = {
+  [STATEMENTS.SELECT_ALL_USER]: `
+    SELECT
+      *
+    FROM users
+  `,
+  [STATEMENTS.INSERT_USER]: `
+    INSERT INTO users 
+      (discord_id, user_id, display_name, avatar, admin) 
+    VALUES 
+      (@discordId, @userId, @displayName, @avatar, ?)
+  `,
+  [STATEMENTS.EDIT_USER]: `
+    UPDATE users
+    SET
+      display_name = @displayName,
+      avatar = @avatar,
+      admin = ?
+    WHERE discord_id = @discordId AND user_id = @userId
+  `,
+  [STATEMENTS.DELETE_USER]: `
+    DELETE FROM users 
+    WHERE discord_id = @discordId AND user_id = @userId
+  `,
+  [STATEMENTS.SELECT_USER_BY_ANY_IDS]: `
+    SELECT
+      *
+    FROM users
+    WHERE user_id = @userId OR discord_id = @discordId
+  `,
+  [STATEMENTS.DELETE_USER_SONGS_BY_USER_ID]: `
+    DELETE FROM user_songs 
+    WHERE user_id = @userId
+  `,
+  [STATEMENTS.EDIT_USER_SETTINGS]: `
+    UPDATE users
+    SET
+      display_name = @displayName,
+      avatar = @avatar
+    WHERE user_id = ?
+  `,
+  [STATEMENTS.SELECT_USER_BY_DISCORD_ID]: `
+    SELECT 
+      *
+    FROM users 
+    WHERE discord_id = ?
+  `
+};
+
+class UserDb extends ServerDb<UserType> {
+  protected _db: SqliteDb;
+  protected _factory: StatementFactory;
+  protected _allowedUsers: DiscordIdType[] = [];
+
   constructor(config: ServerConfig, logger: Logger) {
-    super(config.userDbPath, logger);
+    super(config, logger);
+    this._db = userDbConnection(null, config);
+    this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
+    this.reloadCache();
   }
 
   public getUserList(): UserType[] {
-    const statement = this._db.prepare(`
-      SELECT
-        *
-      FROM users
-    `);
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_USER);
     const response = statement.all();
     this._logger.writeLog(LOG_REFERENCES.FETCHED_USER_LIST, { response: response });
     const dbUserList = response.map((item) => DbUser.parse(item));
@@ -34,180 +99,73 @@ class UserDb extends AbstractDb {
     });
   }
 
-  public getUserSongList(discordId: DiscordIdType): SongIdType[] {
-    const statement = this._db.prepare(`
-      SELECT
-        discord_id,
-        users.user_id,
-        display_name,
-        avatar,
-        admin,
-        json_group_array(song_id) AS song_id
-      FROM users
-        LEFT JOIN user_songs
-        ON users.user_id = user_songs.user_id
-      WHERE discord_id = ?
-      GROUP BY users.user_id
-    `);
-    const response = statement.get(discordId);
-    this._logger.writeLog(LOG_REFERENCES.FETCHED_USER_SONG_LIST, {
-      response: response
-    });
-    if (!response) {
-      return [];
-    }
-    const dbUserSongList = DbUserSongList.parse(response);
-    return dbUserSongList.song_id;
-  }
-
   public getUserInfo(discordId: DiscordIdType): DbUserType {
-    const statement = this._db.prepare(`
-      SELECT 
-        *
-      FROM users 
-      WHERE discord_id = ?
-    `);
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_BY_DISCORD_ID);
     const response = statement.get(discordId);
     return DbUser.parse(response);
   }
 
-  public updateUserSettings(clientData: ClientDataType, discordId: DiscordIdType): void {
-    const statement = this._db.prepare(`
-      UPDATE users
-      SET
-        display_name = @displayName,
-        avatar = @avatar
-      WHERE discord_id = ?
-    `);
-    statement.run(discordId, clientData);
+  public updateUserSettings(clientData: ClientDataType, userId: UserIdType): void {
+    const statement = this._factory.getStatement(STATEMENTS.EDIT_USER_SETTINGS);
+    statement.run(userId, clientData);
   }
 
   public validateAllowedUser(discordId: DiscordIdType): void {
-    const statement = this._db.prepare(`
-      SELECT
-        *
-      FROM users
-      WHERE discord_id = ?
-    `);
-    const response = statement.get(discordId);
-    if (!response) {
+    if (!this._allowedUsers.includes(discordId)) {
       throw new UnauthorizedError();
     }
   }
 
-  public validateUserNotExists(user: UserType): void {
-    const statement = this._db.prepare(`
-      SELECT
-        *
-      FROM users
-      WHERE user_id = @userId OR discord_id = @discordId
-    `);
+  public validateRecordNotExists(user: UserType): void {
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_BY_ANY_IDS);
     const response = statement.get(user);
     if (response) {
       throw new DataQualityError('User already exists');
     }
   }
 
-  public validateUserExists(user: UserType): void {
-    const statement = this._db.prepare(`
-      SELECT
-        *
-      FROM users
-      WHERE user_id = @userId OR discord_id = @discordId
-    `);
-    const response = statement.get(user);
+  public validateRecordExists(record: UserType): void {
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_BY_ANY_IDS);
+    const response = statement.get(record);
     if (!response) {
       throw new DataQualityError('User does not exist');
     }
   }
 
-  public validateUserSongsNotExists(songIds: SongIdType[], userId: UserIdType): void {
-    if (songIds.length > 50) {
-      throw new DataQualityError('Cannot add more thn 50 songs at a time');
-    }
-
-    const statement = this._db.prepare(`
-      SELECT
-        user_id,
-        song_id
-      FROM user_songs
-      WHERE user_id = ? AND
-            song_id IN (${this._questionString(songIds.length)})
-    `);
-    const response = statement.all(userId, songIds);
-    if (response.length > 0) {
-      throw new DataQualityError('Songs already exists in list');
-    }
+  public newRecord(record: UserType) {
+    const statement = this._factory.getStatement(STATEMENTS.INSERT_USER);
+    statement.run(record.admin ? 1 : 0, record);
+    this.reloadCache();
   }
 
-  public validateUserSongsExists(songIds: SongIdType[], userId: UserIdType): void {
-    if (songIds.length > 50) {
-      throw new DataQualityError('Cannot remove more thn 50 songs at a time');
-    }
+  public deleteRecord(record: UserType) {
+    const deleteUserStatement = this._factory.getStatement(STATEMENTS.DELETE_USER);
+    deleteUserStatement.run(record);
+    const deleteUserSongStatement = this._factory.getStatement(STATEMENTS.DELETE_USER_SONGS_BY_USER_ID);
+    deleteUserSongStatement.run(record);
+    this.reloadCache();
   }
 
-  public newUser(user: UserType): void {
-    const statement = this._db.prepare(`
-      INSERT INTO users (discord_id, user_id, display_name, avatar, admin) VALUES (@discordId,@userId,@displayName,@avatar,?)
-    `);
-    statement.run(user.admin ? 1 : 0, user);
+  public editRecord(record: UserType) {
+    const statement = this._factory.getStatement(STATEMENTS.EDIT_USER);
+    statement.run(record.admin ? 1 : 0, record);
+    this.reloadCache();
   }
 
-  public deleteUser(user: UserType): void {
-    const statement = this._db.prepare(`
-      DELETE FROM users WHERE discord_id = @discordId AND user_id = @userId
-    `);
-    statement.run(user);
+  protected _getAllowedUsers(): DiscordIdType[] {
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_USER);
+    const response = statement.all();
+    return response.map((item: any) => DbUser.parse(item).discord_id);
   }
 
-  public deleteUserSongsByUserId(userId: UserIdType): void {
-    const statement = this._db.prepare(`
-      DELETE FROM user_songs WHERE user_id = ?
-    `);
-    statement.run(userId);
+  public reloadDb() {
+    this._db = userDbConnection(this._db, this._config);
+    this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
+    this.reloadCache();
   }
 
-  public deleteUserSongsBySongId(songId: SongIdType) {
-    const statement = this._db.prepare(`
-      DELETE FROM user_songs WHERE song_id = ?
-    `);
-    statement.run(songId);
-  }
-
-  public editUser(user: UserType): void {
-    const statement = this._db.prepare(`
-      UPDATE users
-      SET
-        display_name = @displayName,
-        avatar = @avatar,
-        admin = ?
-      WHERE discord_id = @discordId AND user_id = @userId
-    `);
-    statement.run(user.admin ? 1 : 0, user);
-  }
-
-  public addUserSongs(songIds: SongIdType[], userId: UserIdType): void {
-    const statement = this._db.prepare(`
-      INSERT INTO user_songs (user_id, song_id) VALUES (?,?)
-    `);
-    const insertMany = this._db.transaction(() => {
-      for (const songId of songIds) {
-        statement.run(userId, songId);
-      }
-    });
-    insertMany();
-  }
-
-  public deleteUserSongs(songIds: SongIdType[], userId: UserIdType): void {
-    const statement = this._db.prepare(`
-      DELETE FROM user_songs WHERE user_id = ? AND song_id = ?
-    `);
-    const deleteMany = this._db.transaction(() => {
-      for (const songId of songIds) {
-        statement.run(userId, songId);
-      }
-    });
-    deleteMany();
+  public reloadCache() {
+    this._allowedUsers = this._getAllowedUsers();
   }
 }
 

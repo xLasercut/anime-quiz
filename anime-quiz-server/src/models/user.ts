@@ -16,10 +16,6 @@ const DbUser = z.object({
   avatar: Avatar
 });
 
-const DbAllowedUser = z.object({
-  discord_id: z.string().trim().min(1)
-});
-
 const DbUserSongList = z.object({
   user_id: UserId,
   discord_id: DiscordId,
@@ -41,4 +37,9 @@ const DbUserSongList = z.object({
     .transform((val) => Array.from(new Set(val)))
 });
 
-export { DbUser, DbAllowedUser, DbUserSongList };
+const DbUserSong = z.object({
+  user_id: UserId,
+  song_id: z.array(SongId)
+});
+
+export { DbUser, DbUserSongList, DbUserSong };

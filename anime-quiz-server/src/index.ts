@@ -3,7 +3,7 @@ import { Oidc } from './app/oidc';
 import { Logger } from './app/logging/logger';
 import { SERVER_CONFIG } from './app/config';
 import { LOG_REFERENCES } from './app/logging/constants';
-import { HandlerDependencies } from './interfaces';
+import { EmitterDependencies, HandlerDependencies } from './interfaces';
 import { Server } from './app/server';
 import { UserDb } from './database/user';
 import { Socket } from './types';
@@ -16,6 +16,7 @@ import { EntryPointHandler } from './handlers/entry';
 import { AnimeDb } from './database/anime';
 import { DatabaseLock } from './database/lock';
 import { EmojiDb } from './database/emoji';
+import { UserSongDb } from './database/user-song';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -25,12 +26,21 @@ const io = new Server(httpServer, {
 });
 const oidc = new Oidc(SERVER_CONFIG);
 const logger = new Logger(SERVER_CONFIG);
-const emitter = new Emitter(io);
+
 const dbLock = new DatabaseLock();
 const userDb = new UserDb(SERVER_CONFIG, logger);
 const songDb = new SongDb(SERVER_CONFIG, logger);
-const animeDb = new AnimeDb(SERVER_CONFIG, logger);
+const animeDb = new AnimeDb(SERVER_CONFIG, logger, songDb);
 const emojiDb = new EmojiDb(SERVER_CONFIG, logger);
+const userSongDb = new UserSongDb(SERVER_CONFIG, logger);
+const emitterDependencies: EmitterDependencies = {
+  userDb: userDb,
+  animeDb: animeDb,
+  songDb: songDb,
+  emojiDb: emojiDb,
+  userSongDb: userSongDb
+};
+const emitter = new Emitter(io, emitterDependencies);
 const handlerDependencies: HandlerDependencies = {
   logger: logger,
   config: SERVER_CONFIG,
@@ -40,7 +50,8 @@ const handlerDependencies: HandlerDependencies = {
   emitter: emitter,
   oidc: oidc,
   dbLock: dbLock,
-  emojiDb: emojiDb
+  emojiDb: emojiDb,
+  userSongDb: userSongDb
 };
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
