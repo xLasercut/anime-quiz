@@ -58,7 +58,7 @@ const RAW_STATEMENTS = {
     SELECT
       *
     FROM emojis
-    WHERE command = @command AND emojiId != @emojiId
+    WHERE command = @command AND emoji_id != @emojiId
   `
 };
 
