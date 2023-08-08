@@ -1,7 +1,7 @@
 import winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
-import { LogTemplate, ServerConfig } from '../../interfaces';
-import { LOG_LEVEL, LOG_TEMPLATES } from './constants';
+import { ServerConfig } from '../../interfaces';
+import { LOG_LEVEL, LOG_TEMPLATES, LogReferenceType, LogTemplate } from './constants';
 
 const { combine, timestamp, json } = winston.format;
 
@@ -34,7 +34,7 @@ class Logger {
     });
   }
 
-  public writeLog(logReference: string, logArgs: object = {}): void {
+  public writeLog(logReference: LogReferenceType, logArgs: object = {}): void {
     const template = this._getTemplate(logReference);
     const logMsg = {
       ['logReference']: logReference,
@@ -57,7 +57,7 @@ class Logger {
     }
   }
 
-  protected _getTemplate(logReference: string): LogTemplate {
+  protected _getTemplate(logReference: LogReferenceType): LogTemplate {
     if (logReference in LOG_TEMPLATES) {
       return LOG_TEMPLATES[logReference];
     }

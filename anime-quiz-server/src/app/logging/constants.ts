@@ -1,11 +1,9 @@
-import { LogTemplate } from '../../interfaces';
-
 const LOG_LEVEL = {
   INFO: 'INFO',
   WARN: 'WARN',
   ERROR: 'ERROR',
   DEBUG: 'DEBUG'
-};
+} as const;
 
 const LOG_REFERENCES = {
   SERVER_START: 'SERVER001',
@@ -29,9 +27,17 @@ const LOG_REFERENCES = {
   ADMIN_ADD_EMOJI: 'SERVER019',
   ADMIN_DELETE_EMOJI: 'SERVER020',
   ADMIN_EDIT_EMOJI: 'SERVER021'
-};
+} as const;
 
-const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
+type LogLevelType = (typeof LOG_LEVEL)[keyof typeof LOG_LEVEL];
+type LogReferenceType = (typeof LOG_REFERENCES)[keyof typeof LOG_REFERENCES];
+
+interface LogTemplate {
+  message: string;
+  level: LogLevelType;
+}
+
+const LOG_TEMPLATES: Record<LogReferenceType, LogTemplate> = {
   [LOG_REFERENCES.ADMIN_ADD_EMOJI]: {
     message: 'admin add emoji',
     level: LOG_LEVEL.INFO
@@ -118,4 +124,4 @@ const LOG_TEMPLATES: { [key: string]: LogTemplate } = {
   }
 };
 
-export { LOG_TEMPLATES, LOG_LEVEL, LOG_REFERENCES };
+export { LOG_TEMPLATES, LOG_LEVEL, LOG_REFERENCES, LogReferenceType, LogTemplate };

@@ -62,6 +62,10 @@ io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   entryHandler.start();
 });
 
+io.of('/').adapter.on('create-room', (room) => {
+  console.log(room)
+})
+
 httpServer.listen(SERVER_CONFIG.serverPort, async () => {
   logger.writeLog(LOG_REFERENCES.SERVER_START, {
     port: SERVER_CONFIG.serverPort,

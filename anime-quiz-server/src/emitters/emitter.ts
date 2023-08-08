@@ -1,15 +1,5 @@
 import { Server } from '../app/server';
-import {
-  AnimeNameType,
-  AnimeType,
-  ClientDataType,
-  EmojiType,
-  SongIdType,
-  SongTitleType,
-  SongType,
-  SystemNotificationType, UserIdType,
-  UserType
-} from '../shared/models/types';
+import { ClientDataType, SystemNotificationType, UserIdType } from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
 import { EmitterDependencies } from '../interfaces';
 import { UserDb } from '../database/user';

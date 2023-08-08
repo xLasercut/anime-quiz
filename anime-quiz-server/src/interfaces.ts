@@ -6,19 +6,14 @@ import { Oidc } from './app/oidc';
 import { AnimeDb } from './database/anime';
 import { DatabaseLock } from './database/lock';
 import { EmojiDb } from './database/emoji';
-import {UserSongDb} from "./database/user-song";
-
-interface LogTemplate {
-  level: string;
-  message: string;
-}
+import { UserSongDb } from './database/user-song';
 
 interface EmitterDependencies {
   userDb: UserDb;
   songDb: SongDb;
   animeDb: AnimeDb;
   emojiDb: EmojiDb;
-  userSongDb: UserSongDb
+  userSongDb: UserSongDb;
 }
 
 interface HandlerDependencies {
@@ -31,7 +26,7 @@ interface HandlerDependencies {
   oidc: Oidc;
   dbLock: DatabaseLock;
   emojiDb: EmojiDb;
-  userSongDb: UserSongDb
+  userSongDb: UserSongDb;
 }
 
 interface ServerConfig {
@@ -53,4 +48,4 @@ interface ServerConfig {
   discordUserOverride: string;
 }
 
-export { LogTemplate, HandlerDependencies, ServerConfig, EmitterDependencies };
+export { HandlerDependencies, ServerConfig, EmitterDependencies };
