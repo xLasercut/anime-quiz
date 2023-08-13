@@ -7,6 +7,8 @@ import { AnimeDb } from './database/anime';
 import { DatabaseLock } from './database/lock';
 import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
+import { Server } from './app/server';
+import { GameRooms } from './game-state/room';
 
 interface EmitterDependencies {
   userDb: UserDb;
@@ -14,9 +16,11 @@ interface EmitterDependencies {
   animeDb: AnimeDb;
   emojiDb: EmojiDb;
   userSongDb: UserSongDb;
+  gameRooms: GameRooms;
 }
 
 interface HandlerDependencies {
+  io: Server;
   logger: Logger;
   config: ServerConfig;
   userDb: UserDb;
@@ -27,6 +31,7 @@ interface HandlerDependencies {
   dbLock: DatabaseLock;
   emojiDb: EmojiDb;
   userSongDb: UserSongDb;
+  gameRooms: GameRooms;
 }
 
 interface ServerConfig {

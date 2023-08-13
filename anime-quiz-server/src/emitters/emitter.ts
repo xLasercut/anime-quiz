@@ -7,6 +7,7 @@ import { SongDb } from '../database/song';
 import { EmojiDb } from '../database/emoji';
 import { AnimeDb } from '../database/anime';
 import { UserSongDb } from '../database/user-song';
+import { GameRooms } from '../game-state/room';
 
 class Emitter {
   protected _io: Server;
@@ -15,6 +16,7 @@ class Emitter {
   protected _emojiDb: EmojiDb;
   protected _animeDb: AnimeDb;
   protected _userSongDb: UserSongDb;
+  protected _gameRooms: GameRooms;
 
   constructor(io: Server, dependencies: EmitterDependencies) {
     this._io = io;
@@ -23,6 +25,11 @@ class Emitter {
     this._emojiDb = dependencies.emojiDb;
     this._animeDb = dependencies.animeDb;
     this._userSongDb = dependencies.userSongDb;
+    this._gameRooms = dependencies.gameRooms;
+  }
+
+  public updateRoomList(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_ROOM_LIST, this._gameRooms.getRoomList());
   }
 
   public systemNotification(notification: SystemNotificationType, sid?: string) {

@@ -1,0 +1,3 @@
+const GAME_ROOM_PREFIX = 'ANIME_MUSIC_QUIZ';
+
+export { GAME_ROOM_PREFIX };

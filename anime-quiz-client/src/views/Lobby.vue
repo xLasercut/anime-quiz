@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
+import { onMounted, ref } from 'vue';
 import LobbyMenuCard from '@/components/lobby/LobbyMenuCard.vue';
 import { ROUTES } from '@/assets/routing/routes';
 import { useClientStore } from '@/plugins/store/client';
@@ -23,6 +23,14 @@ const clientStore = useClientStore();
 const adminStore = useAdminStore();
 
 const cards = ref([
+  {
+    color: 'success',
+    title: 'Game Room',
+    description: 'Play anime music quiz',
+    route: ROUTES.GAME_ROOMS,
+    requireAdmin: false,
+    icon: 'mdi-gamepad-variant'
+  },
   {
     color: 'primary',
     title: 'Song List',

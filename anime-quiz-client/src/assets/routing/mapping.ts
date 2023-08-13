@@ -20,6 +20,9 @@ import SongEditDialog from '@/components/song-edit/SongEditDialog.vue';
 import EmojiEdit from '@/views/EmojiEdit.vue';
 import EmojiEditPanel from '@/components/emoji-edit/EmojiEditPanel.vue';
 import EmojiEditDialog from '@/components/emoji-edit/EmojiEditDialog.vue';
+import GameRoomsPanel from '@/components/game-rooms/GameRoomsPanel.vue';
+import GameRooms from '@/views/GameRooms.vue';
+import GameRoomsNewRoomDialog from '@/components/game-rooms/GameRoomsNewRoomDialog.vue';
 
 const PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -28,7 +31,8 @@ const PANEL_MAPPING: { [key: string]: Component } = {
   [ROUTES.USER_EDIT]: UserEditPanel,
   [ROUTES.ANIME_EDIT]: AnimeEditPanel,
   [ROUTES.SONG_EDIT]: SongEditPanel,
-  [ROUTES.EMOJI_EDIT]: EmojiEditPanel
+  [ROUTES.EMOJI_EDIT]: EmojiEditPanel,
+  [ROUTES.GAME_ROOMS]: GameRoomsPanel
 };
 
 const VIEW_MAPPING: { [key: string]: Component } = {
@@ -39,7 +43,8 @@ const VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.USER_EDIT]: UserEdit,
   [ROUTES.ANIME_EDIT]: AnimeEdit,
   [ROUTES.SONG_EDIT]: SongEdit,
-  [ROUTES.EMOJI_EDIT]: EmojiEdit
+  [ROUTES.EMOJI_EDIT]: EmojiEdit,
+  [ROUTES.GAME_ROOMS]: GameRooms
 };
 
 const DIALOG_MAPPINGS: { [key: string]: Component } = {
@@ -47,7 +52,8 @@ const DIALOG_MAPPINGS: { [key: string]: Component } = {
   [DIALOG_ROUTES.USER_EDIT]: UserEditDialog,
   [DIALOG_ROUTES.ANIME_EDIT]: AnimeEditDialog,
   [DIALOG_ROUTES.SONG_EDIT]: SongEditDialog,
-  [DIALOG_ROUTES.EMOJI_EDIT]: EmojiEditDialog
+  [DIALOG_ROUTES.EMOJI_EDIT]: EmojiEditDialog,
+  [DIALOG_ROUTES.NEW_GAME_ROOM]: GameRoomsNewRoomDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

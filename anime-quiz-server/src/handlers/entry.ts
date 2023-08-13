@@ -10,6 +10,7 @@ import { UnauthorizedError } from '../app/exceptions';
 import { AdminAnimeHandler } from './admin-anime';
 import { AdminSongHandler } from './admin-song';
 import { AdminEmojiHandler } from './admin-emoji';
+import { GameRoomsHandler } from './game-rooms';
 
 class EntryPointHandler extends ServerHandler {
   protected _handlers: ServerHandler[];
@@ -32,7 +33,11 @@ class EntryPointHandler extends ServerHandler {
 
   constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
     super(socket, errHandler, dependencies);
-    this._handlers = [new UserHandler(socket, errHandler, dependencies), new DataHandler(socket, errHandler, dependencies)];
+    this._handlers = [
+      new UserHandler(socket, errHandler, dependencies),
+      new DataHandler(socket, errHandler, dependencies),
+      new GameRoomsHandler(socket, errHandler, dependencies)
+    ];
     this._adminHandlers = [
       new AdminUserHandler(socket, errHandler, dependencies),
       new AdminAnimeHandler(socket, errHandler, dependencies),

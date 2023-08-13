@@ -10,6 +10,9 @@ import { UnauthorizedError } from '../app/exceptions';
 import { DatabaseLock } from '../database/lock';
 import { EmojiDb } from '../database/emoji';
 import { UserSongDb } from '../database/user-song';
+import { Server } from '../app/server';
+import { SocketEventNameType } from '../shared/types';
+import { GameRooms } from '../game-state/room';
 
 abstract class ServerHandler {
   protected _logger: Logger;
@@ -24,7 +27,9 @@ abstract class ServerHandler {
   protected _emojiDb: EmojiDb;
   protected _errHandler: Function;
   protected _userSongDb: UserSongDb;
-  protected abstract _events: { [key: string]: SocketEvent };
+  protected _io: Server;
+  protected _gameRooms: GameRooms;
+  protected abstract _events: Record<SocketEventNameType, SocketEvent>;
 
   protected constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
     this._socket = socket;
@@ -39,6 +44,8 @@ abstract class ServerHandler {
     this._dbLock = dependencies.dbLock;
     this._emojiDb = dependencies.emojiDb;
     this._userSongDb = dependencies.userSongDb;
+    this._io = dependencies.io;
+    this._gameRooms = dependencies.gameRooms;
   }
 
   public start(): void {

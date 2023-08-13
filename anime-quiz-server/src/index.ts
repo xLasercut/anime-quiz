@@ -17,6 +17,7 @@ import { AnimeDb } from './database/anime';
 import { DatabaseLock } from './database/lock';
 import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
+import { GameRooms } from './game-state/room';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -33,12 +34,14 @@ const songDb = new SongDb(SERVER_CONFIG, logger);
 const animeDb = new AnimeDb(SERVER_CONFIG, logger, songDb);
 const emojiDb = new EmojiDb(SERVER_CONFIG, logger);
 const userSongDb = new UserSongDb(SERVER_CONFIG, logger);
+const gameRooms = new GameRooms(io, logger);
 const emitterDependencies: EmitterDependencies = {
   userDb: userDb,
   animeDb: animeDb,
   songDb: songDb,
   emojiDb: emojiDb,
-  userSongDb: userSongDb
+  userSongDb: userSongDb,
+  gameRooms: gameRooms
 };
 const emitter = new Emitter(io, emitterDependencies);
 const handlerDependencies: HandlerDependencies = {
@@ -51,7 +54,9 @@ const handlerDependencies: HandlerDependencies = {
   oidc: oidc,
   dbLock: dbLock,
   emojiDb: emojiDb,
-  userSongDb: userSongDb
+  userSongDb: userSongDb,
+  io: io,
+  gameRooms: gameRooms
 };
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
@@ -62,8 +67,20 @@ io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   entryHandler.start();
 });
 
-io.of('/').adapter.on('create-room', (room) => {
-  console.log(room)
+io.of('/').adapter.on('create-room', (roomId: string) => {
+
+});
+
+io.of('/').adapter.on('delete-room', (roomId: string, sid: string) => {
+
+})
+
+io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
+
+})
+
+io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
+
 })
 
 httpServer.listen(SERVER_CONFIG.serverPort, async () => {
