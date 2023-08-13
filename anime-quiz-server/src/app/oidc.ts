@@ -1,5 +1,6 @@
 import { ServerConfig } from '../interfaces';
 import axios from 'axios';
+import { Logger } from './logger';
 
 interface DiscordTokenApiResponse {
   token_type: string;
@@ -18,15 +19,20 @@ interface DiscordUserApiResponse {
 
 class Oidc {
   protected _config: ServerConfig;
+  protected _logger: Logger;
   protected _tokenUrl: string = 'https://discord.com/api/oauth2/token';
   protected _userInfoUrl: string = 'https://discord.com/api/users/@me';
 
-  constructor(config: ServerConfig) {
+  constructor(config: ServerConfig, logger: Logger) {
     this._config = config;
+    this._logger = logger;
   }
 
   public async getUserInfo(code: string): Promise<DiscordUserApiResponse> {
     if (this._config.discordUserOverride) {
+      this._logger.debug('user override', {
+        id: this._config.discordUserOverride
+      });
       return {
         id: this._config.discordUserOverride,
         username: 'overrideuser'
@@ -38,6 +44,9 @@ class Oidc {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
+    });
+    this._logger.info('fetched discord user info', {
+      response: response.data
     });
 
     return response.data;

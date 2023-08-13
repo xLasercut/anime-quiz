@@ -6,6 +6,7 @@ class Logger {
 
   constructor(config: ServerConfig) {
     this._logger = pino({
+      level: config.logLevel,
       nestedKey: 'data',
       timestamp: pino.stdTimeFunctions.isoTime,
       formatters: {

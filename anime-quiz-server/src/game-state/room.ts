@@ -4,6 +4,7 @@ import { GameRoomId } from '../shared/models/game';
 import { ZodError } from 'zod';
 import { GameRoom } from './interfaces';
 import { Logger } from '../app/logger';
+import { DataQualityError } from '../app/exceptions';
 
 class GameRooms {
   protected _io: Server;
@@ -29,6 +30,18 @@ class GameRooms {
       }
     }
     return roomList;
+  }
+
+  public validateRoomNotExists(roomId: GameRoomIdType) {
+    if (roomId in this._rooms) {
+      throw new DataQualityError('Room already exists');
+    }
+  }
+
+  public newRoom(roomId: GameRoomIdType) {
+    this._rooms[roomId] = {
+      id: roomId
+    };
   }
 }
 

@@ -8,7 +8,7 @@ import { Socket } from './types';
 import { SocketData } from './app/socket-data';
 import { SOCKET_EVENTS } from './shared/events';
 import { Emitter } from './emitters/emitter';
-import { newSocketErrorHandler } from './app/exceptions';
+import { newIoErrorHandler, newSocketErrorHandler } from './app/exceptions';
 import { SongDb } from './database/song';
 import { EntryPointHandler } from './handlers/entry';
 import { AnimeDb } from './database/anime';
@@ -17,6 +17,7 @@ import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
 import { GameRooms } from './game-state/room';
 import { Logger } from './app/logger';
+import { GameRoomId } from './shared/models/game';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -24,8 +25,8 @@ const io = new Server(httpServer, {
     origin: SERVER_CONFIG.corsConfig
   }
 });
-const oidc = new Oidc(SERVER_CONFIG);
 const logger = new Logger(SERVER_CONFIG);
+const oidc = new Oidc(SERVER_CONFIG, logger);
 
 const dbLock = new DatabaseLock();
 const userDb = new UserDb(SERVER_CONFIG, logger);
@@ -58,6 +59,8 @@ const handlerDependencies: HandlerDependencies = {
   gameRooms: gameRooms
 };
 
+const ioErrHandler = newIoErrorHandler(logger);
+
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   logger.info('client connected', { id: socket.id });
   const socketErrHandler = newSocketErrorHandler(logger, socket, emitter);
@@ -66,13 +69,16 @@ io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   entryHandler.start();
 });
 
-io.of('/').adapter.on('create-room', (roomId: string) => {});
+io.of('/').adapter.on('create-room', ioErrHandler((_roomId: string) => {
+  const roomId = GameRoomId.parse(_roomId);
+  gameRooms.newRoom(roomId);
+}));
 
-io.of('/').adapter.on('delete-room', (roomId: string, sid: string) => {});
+io.of('/').adapter.on('delete-room', ioErrHandler((roomId: string, sid: string) => {}));
 
-io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {});
+io.of('/').adapter.on('join-room', ioErrHandler((roomId: string, sid: string) => {}));
 
-io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {});
+io.of('/').adapter.on('leave-room', ioErrHandler((roomId: string, sid: string) => {}));
 
 httpServer.listen(SERVER_CONFIG.serverPort, () => {
   logger.info('server started', { port: SERVER_CONFIG.serverPort, corsConfig: SERVER_CONFIG.corsConfig });

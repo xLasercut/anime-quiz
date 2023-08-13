@@ -83,6 +83,15 @@ function _handleCallback(callback: any): void {
   }
 }
 
+function _handleIoError(logger: Logger, e: any) {
+  if (e instanceof ZodError) {
+    logger.warn('data quality error', { err: e });
+    return;
+  }
+
+  logger.error('internal server error', { err: e });
+}
+
 function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter): Function {
   return function (this: any, func: Function) {
     return (...args: any[]) => {
@@ -105,4 +114,26 @@ function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter)
   };
 }
 
-export { newSocketErrorHandler, DatabaseLockedError, UnauthorizedError, DataQualityError };
+function newIoErrorHandler(logger: Logger): Function {
+  return function (this: any, func: Function) {
+    return (...args: any[]) => {
+      const callback = args[args.length - 1];
+      try {
+        const ret = func.apply(this, args);
+        if (ret && typeof ret.catch === 'function') {
+          // async handler
+          ret.catch((e: any) => {
+            _handleIoError(logger, e);
+            _handleCallback(callback);
+          });
+        }
+      } catch (e: any) {
+        // sync handler
+        _handleIoError(logger, e);
+        _handleCallback(callback);
+      }
+    };
+  };
+}
+
+export { newSocketErrorHandler, DatabaseLockedError, UnauthorizedError, DataQualityError, newIoErrorHandler };
