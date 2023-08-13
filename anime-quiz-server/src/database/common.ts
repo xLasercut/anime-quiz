@@ -1,6 +1,6 @@
 import Database, { Database as SqliteDb } from 'better-sqlite3';
-import { Logger } from '../app/logging/logger';
 import { ServerConfig } from '../interfaces';
+import { Logger } from '../app/logger';
 
 function _databaseConnection(currentDb: SqliteDb | null, filepath: string): SqliteDb {
   if (currentDb) {
@@ -17,26 +17,6 @@ function mainDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
 
 function userDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
   return _databaseConnection(currentDb, config.userDbPath);
-}
-
-abstract class AbstractDb {
-  protected _db: SqliteDb;
-  protected _filepath: string;
-  protected _logger: Logger;
-
-  protected constructor(filepath: string, logger: Logger) {
-    this._filepath = filepath;
-    this._logger = logger;
-    this._db = _databaseConnection(null, this._filepath);
-  }
-
-  public reloadDb(): void {
-    this._db = _databaseConnection(this._db, this._filepath);
-  }
-
-  protected _questionString(size: number): string {
-    return new Array(size).fill('?').join(',');
-  }
 }
 
 abstract class ServerDb<RecordType> {
@@ -67,4 +47,4 @@ abstract class ServerDb<RecordType> {
   }
 }
 
-export { AbstractDb, ServerDb, mainDbConnection, userDbConnection };
+export { ServerDb, mainDbConnection, userDbConnection };

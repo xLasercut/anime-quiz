@@ -2,12 +2,11 @@ import { ServerHandler } from './common';
 import { SOCKET_EVENTS } from '../shared/events';
 import { UserType } from '../shared/models/types';
 import { User } from '../shared/models/user';
-import { LOG_REFERENCES } from '../app/logging/constants';
 
 class AdminUserHandler extends ServerHandler {
   protected _events = {
     [SOCKET_EVENTS.ADMIN_NEW_USER]: (_user: UserType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_ADD_USER, {
+      this._logger.info('admin add user', {
         clientData: this._socket.data.clientData,
         request: _user
       });
@@ -26,7 +25,7 @@ class AdminUserHandler extends ServerHandler {
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_DELETE_USER]: (_user: UserType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_DELETE_USER, {
+      this._logger.info('admin delete user', {
         clientData: this._socket.data.clientData,
         request: _user
       });
@@ -45,7 +44,7 @@ class AdminUserHandler extends ServerHandler {
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_EDIT_USER]: (_user: UserType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_EDIT_USER, {
+      this._logger.info('admin edit user', {
         clientData: this._socket.data.clientData,
         request: _user
       });

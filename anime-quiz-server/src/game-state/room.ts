@@ -1,9 +1,9 @@
 import { Server } from '../app/server';
-import { Logger } from '../app/logging/logger';
 import { GameRoomIdType } from '../shared/models/types';
 import { GameRoomId } from '../shared/models/game';
 import { ZodError } from 'zod';
 import { GameRoom } from './interfaces';
+import { Logger } from '../app/logger';
 
 class GameRooms {
   protected _io: Server;

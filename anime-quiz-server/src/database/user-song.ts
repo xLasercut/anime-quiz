@@ -1,13 +1,12 @@
 import { ServerDb, userDbConnection } from './common';
 import { DbUserSongType } from '../models/types';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logging/logger';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
 import { SongIdType, UserIdType } from '../shared/models/types';
-import { LOG_REFERENCES } from '../app/logging/constants';
 import { DbUserSongList } from '../models/user';
+import { Logger } from '../app/logger';
 
 const STATEMENTS = {
   INSERT_USER_SONGS: 'INSERT_USER_SONGS',
@@ -101,8 +100,9 @@ class UserSongDb extends ServerDb<DbUserSongType> {
   public getUserSongList(userId: UserIdType): SongIdType[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_SONGS_BY_USER_ID);
     const response = statement.get(userId);
-    this._logger.writeLog(LOG_REFERENCES.FETCHED_USER_SONG_LIST, {
-      response: response
+    this._logger.debug('fetched user song list', {
+      response: response,
+      userId: userId
     });
     if (!response) {
       return [];

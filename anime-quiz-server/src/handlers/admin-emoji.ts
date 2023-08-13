@@ -1,13 +1,12 @@
 import { ServerHandler } from './common';
 import { SOCKET_EVENTS } from '../shared/events';
 import { EmojiType } from '../shared/models/types';
-import { LOG_REFERENCES } from '../app/logging/constants';
 import { Emoji } from '../shared/models/emoji';
 
 class AdminEmojiHandler extends ServerHandler {
   protected _events = {
     [SOCKET_EVENTS.ADMIN_NEW_EMOJI]: (_emoji: EmojiType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_ADD_EMOJI, {
+      this._logger.info('admin add emoji', {
         clientData: this._socket.data.clientData,
         request: _emoji
       });
@@ -20,7 +19,7 @@ class AdminEmojiHandler extends ServerHandler {
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_EDIT_EMOJI]: (_emoji: EmojiType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_EDIT_EMOJI, {
+      this._logger.info('admin edit emoji', {
         clientData: this._socket.data.clientData,
         request: _emoji
       });
@@ -34,7 +33,7 @@ class AdminEmojiHandler extends ServerHandler {
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_DELETE_EMOJI]: (_emoji: EmojiType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_DELETE_EMOJI, {
+      this._logger.info('admin delete emoji', {
         clientData: this._socket.data.clientData,
         request: _emoji
       });

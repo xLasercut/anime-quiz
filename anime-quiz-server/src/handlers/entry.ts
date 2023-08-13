@@ -1,7 +1,6 @@
 import { ServerHandler } from './common';
 import { Socket } from '../types';
 import { SOCKET_EVENTS } from '../shared/events';
-import { LOG_REFERENCES } from '../app/logging/constants';
 import { UserHandler } from './user';
 import { DataHandler } from './data';
 import { HandlerDependencies } from '../interfaces';
@@ -17,6 +16,10 @@ class EntryPointHandler extends ServerHandler {
   protected _adminHandlers: ServerHandler[];
   protected _events = {
     [SOCKET_EVENTS.AUTHORIZE_USER]: async (code: string, callback: Function) => {
+      this._logger.info('authenticating client', {
+        id: this._socket.id,
+        code: code
+      });
       const discordUser = await this._oidc.getUserInfo(code);
       this._userDb.validateAllowedUser(discordUser.id);
       const dbUser = this._userDb.getUserInfo(discordUser.id);
@@ -26,7 +29,7 @@ class EntryPointHandler extends ServerHandler {
       callback(true);
     },
     [SOCKET_EVENTS.DISCONNECT]: () => {
-      this._logger.writeLog(LOG_REFERENCES.CLIENT_DISCONNECTED, { id: this._socket.id });
+      this._logger.info('client disconnected', { id: this._socket.id });
       clearTimeout(this._socket.data.clientAuthTimer);
     }
   };

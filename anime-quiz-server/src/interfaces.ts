@@ -1,4 +1,3 @@
-import { Logger } from './app/logging/logger';
 import { UserDb } from './database/user';
 import { Emitter } from './emitters/emitter';
 import { SongDb } from './database/song';
@@ -9,6 +8,7 @@ import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
 import { Server } from './app/server';
 import { GameRooms } from './game-state/room';
+import { Logger } from './app/logger';
 
 interface EmitterDependencies {
   userDb: UserDb;

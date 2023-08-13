@@ -1,8 +1,7 @@
-import { Logger } from './logging/logger';
-import { LOG_REFERENCES } from './logging/constants';
 import { Socket } from '../types';
 import { Emitter } from '../emitters/emitter';
 import { ZodError } from 'zod';
+import { Logger } from './logger';
 
 class DatabaseLockedError extends Error {
   constructor(message: string) {
@@ -24,9 +23,10 @@ class DataQualityError extends Error {
 
 function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e: any) {
   if (e instanceof UnauthorizedError) {
-    logger.writeLog(LOG_REFERENCES.UNAUTHORIZED_CLIENT, {
+    logger.warn('unauthorized client', {
       id: socket.id,
-      clientData: socket.data.clientData
+      clientData: socket.data.clientData,
+      err: e
     });
     emitter.systemNotification(
       {
@@ -40,10 +40,10 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e:
   }
 
   if (e instanceof ZodError) {
-    logger.writeLog(LOG_REFERENCES.DATA_QUALITY_ERROR, {
+    logger.warn('data quality error', {
       id: socket.id,
       clientData: socket.data.clientData,
-      stack: e.stack
+      err: e
     });
     const firstIssue = e.issues[0];
     const fields = firstIssue.path.join(', ');
@@ -59,10 +59,10 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e:
   }
 
   if (e instanceof DataQualityError) {
-    logger.writeLog(LOG_REFERENCES.DATA_QUALITY_ERROR, {
+    logger.warn('data quality error', {
       id: socket.id,
       clientData: socket.data.clientData,
-      stack: e.stack
+      err: e
     });
     emitter.systemNotification(
       {
@@ -74,9 +74,7 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e:
     return;
   }
 
-  logger.writeLog(LOG_REFERENCES.INTERNAL_SERVER_ERROR, {
-    stack: e.stack
-  });
+  logger.error('internal server error', { err: e });
 }
 
 function _handleCallback(callback: any): void {

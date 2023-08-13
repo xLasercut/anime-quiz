@@ -1,6 +1,6 @@
 import { mainDbConnection, ServerDb, userDbConnection } from './common';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logging/logger';
+
 import { DbSong, DbSongTitle } from '../models/song';
 import { SongTitleType, SongType } from '../shared/models/types';
 import { Song } from '../shared/models/song';
@@ -8,6 +8,7 @@ import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DbSongType } from '../models/types';
+import { Logger } from '../app/logger';
 
 const STATEMENTS = {
   SELECT_ALL_SONG: 'SELECT_ALL_SONG',
@@ -128,8 +129,8 @@ class SongDb extends ServerDb<SongType> {
   public deleteRecord(record: SongType) {
     const deleteSongStatement = this._mainFactory.getStatement(STATEMENTS.DELETE_SONG);
     deleteSongStatement.run(record);
-    const deleteUserSongStatement = this._userFactory.getStatement(STATEMENTS.DELETE_USER_SONGS_BY_SONG_ID)
-    deleteUserSongStatement.run(record)
+    const deleteUserSongStatement = this._userFactory.getStatement(STATEMENTS.DELETE_USER_SONGS_BY_SONG_ID);
+    deleteUserSongStatement.run(record);
     this._deleteSongAnime(record);
     this.reloadCache();
   }

@@ -4,6 +4,9 @@ import { SOCKET_EVENTS } from '../shared/events';
 class DataHandler extends ServerHandler {
   protected _events = {
     [SOCKET_EVENTS.UPDATE_STORE_USER_LIST]: () => {
+      this._logger.info('update store user list', {
+        clientData: this._socket.data.clientData
+      });
       this._validateIsAdmin();
       this._emitter.updateStoreUserList(this._socket.id);
     },

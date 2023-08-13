@@ -5,13 +5,13 @@
       v-model.trim="adminStore.animeInEdit.animeId"
       append-icon="mdi-refresh"
       @click:append="adminStore.generateNewAnimeId()"
-      :rules="ANIME_ID_RULES"
+      :rules="animeIdRules"
       :disabled="adminStore.editModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-multi-combobox
       v-model="adminStore.animeInEdit.animeName"
       :disabled="adminStore.deleteModeDisabled || disabled"
-      :rules="ANIME_NAME_RULES"
+      :rules="animeNameRules"
     ></dialog-multi-combobox>
     <dialog-actions @dialog:close="$emit('dialog:close')" :disabled="disabled"></dialog-actions>
   </dialog-form>
@@ -22,17 +22,28 @@ import { ref } from 'vue';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
-import { ANIME_ID_RULES, ANIME_NAME_RULES } from '@/assets/form-rules';
 import DialogMultiCombobox from '@/components/common/dialogs/DialogMultiCombobox.vue';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
+import { canParseValue } from '@/assets/game-helpers';
+import { AnimeId, AnimeName } from '@/assets/shared/models/anime';
+import { z } from 'zod';
 
 const adminStore = useAdminStore();
 const valid = ref(false);
 const disabled = ref(false);
 const emit = defineEmits(['dialog:close']);
+
+const animeIdRules = [
+  (v: string): boolean | string => !!v || 'Anime ID required',
+  (v: string): boolean | string => canParseValue(v, AnimeId) || 'Invalid Anime ID'
+];
+const animeNameRules = [
+  (v: string[]): boolean | string => v.length > 0 || 'Anime name required',
+  (v: string[]): boolean | string => canParseValue(v, z.array(AnimeName)) || 'Invalid anime name'
+];
 
 const CHANGE_MAP = {
   [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_ANIME,

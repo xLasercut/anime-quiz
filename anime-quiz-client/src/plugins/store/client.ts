@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
-import { ROUTES } from '@/assets/routing/routes';
+import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { getDefaultVolume } from '@/assets/game-helpers';
 import { ClientDataType } from '@/assets/shared/models/types';
+import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
 
 interface State {
-  view: string;
-  dialogView: string;
+  view: ClientRoute;
+  dialogView: ClientDialogRoute;
   volume: number;
   clientData: ClientDataType;
 }
@@ -14,7 +15,7 @@ const useClientStore = defineStore('client', {
   state: (): State => {
     return {
       view: ROUTES.LOGIN,
-      dialogView: '',
+      dialogView: DIALOG_ROUTES.LOGIN_SETTINGS,
       volume: getDefaultVolume(),
       clientData: {
         admin: false,
@@ -31,10 +32,10 @@ const useClientStore = defineStore('client', {
     updateClientData(clientData: ClientDataType) {
       this.clientData = clientData;
     },
-    changeView(view: string) {
+    changeView(view: ClientRoute) {
       this.view = view;
     },
-    changeDialogView(view: string) {
+    changeDialogView(view: ClientDialogRoute) {
       this.dialogView = view;
     }
   }

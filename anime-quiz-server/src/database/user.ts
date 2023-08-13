@@ -1,14 +1,13 @@
 import { ServerDb, userDbConnection } from './common';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logging/logger';
 import { DbUser } from '../models/user';
 import { DbUserType } from '../models/types';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
 import { ClientDataType, DiscordIdType, UserIdType, UserType } from '../shared/models/types';
-import { LOG_REFERENCES } from '../app/logging/constants';
 import { User } from '../shared/models/user';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
+import { Logger } from '../app/logger';
 
 const STATEMENTS = {
   SELECT_ALL_USER: 'SELECT_ALL_USER',
@@ -85,7 +84,7 @@ class UserDb extends ServerDb<UserType> {
   public getUserList(): UserType[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_USER);
     const response = statement.all();
-    this._logger.writeLog(LOG_REFERENCES.FETCHED_USER_LIST, { response: response });
+    this._logger.debug('fetched user list', { response: response });
     const dbUserList = response.map((item) => DbUser.parse(item));
     return dbUserList.map((dbUser): UserType => {
       const user: UserType = {
@@ -102,6 +101,7 @@ class UserDb extends ServerDb<UserType> {
   public getUserInfo(discordId: DiscordIdType): DbUserType {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_BY_DISCORD_ID);
     const response = statement.get(discordId);
+    this._logger.debug('fetched user info', { response: response, discordId: discordId });
     return DbUser.parse(response);
   }
 

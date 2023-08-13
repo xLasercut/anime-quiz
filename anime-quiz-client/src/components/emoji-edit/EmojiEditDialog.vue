@@ -5,19 +5,19 @@
       v-model.trim="adminStore.emojiInEdit.emojiId"
       append-icon="mdi-refresh"
       @click:append="adminStore.generateNewEmojiId()"
-      :rules="EMOJI_ID_RULES"
+      :rules="emojiIdRules"
       :disabled="adminStore.editModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
       label="Command"
       v-model.trim="adminStore.emojiInEdit.command"
-      :rules="EMOJI_COMMAND_RULES"
+      :rules="emojiCommandRules"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
       label="Src"
       v-model.trim="adminStore.emojiInEdit.src"
-      :rules="EMOJI_SRC_RULES"
+      :rules="emojiSrcRules"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-select
@@ -25,7 +25,7 @@
       v-model="adminStore.emojiInEdit.type"
       :disabled="adminStore.deleteModeDisabled || disabled"
       :items="emojiTypes"
-      :rules="EMOJI_TYPE_RULES"
+      :rules="emojiTypeRules"
     ></dialog-select>
     <v-row :dense="true">
       <v-col cols="auto">
@@ -39,7 +39,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
-import { EMOJI_COMMAND_RULES, EMOJI_ID_RULES, EMOJI_SRC_RULES, EMOJI_TYPE_RULES } from '@/assets/form-rules';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
@@ -48,12 +47,31 @@ import GameEmoji from '@/components/common/GameEmoji.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
+import { canParseValue } from '@/assets/game-helpers';
+import { EmojiCommand, EmojiId, EmojiSrc, EmojiType } from '@/assets/shared/models/emoji';
 
 const adminStore = useAdminStore();
 const valid = ref(false);
 const disabled = ref(false);
 const emojiTypes = ['dec', 'img'];
 const emit = defineEmits(['dialog:close']);
+
+const emojiIdRules = [
+  (v: string): boolean | string => !!v || 'Emoji ID required',
+  (v: string): boolean | string => canParseValue(v, EmojiId) || 'Invalid Emoji ID'
+];
+const emojiCommandRules = [
+  (v: string): boolean | string => !!v || 'Emoji Command required',
+  (v: string): boolean | string => canParseValue(v, EmojiCommand) || 'Invalid Emoji Command'
+];
+const emojiTypeRules = [
+  (v: string): boolean | string => !!v || 'Emoji Type required',
+  (v: string): boolean | string => canParseValue(v, EmojiType) || 'Invalid Emoji Type'
+];
+const emojiSrcRules = [
+  (v: string): boolean | string => !!v || 'Emoji Source required',
+  (v: string): boolean | string => canParseValue(v, EmojiSrc) || 'Invalid Emoji Source'
+];
 
 const CHANGE_MAP = {
   [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_EMOJI,

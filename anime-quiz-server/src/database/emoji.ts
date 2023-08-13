@@ -1,12 +1,12 @@
 import { mainDbConnection, ServerDb } from './common';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logging/logger';
 import { EmojiType } from '../shared/models/types';
 import { DbEmoji } from '../models/emoji';
 import { Emoji } from '../shared/models/emoji';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
+import { Logger } from '../app/logger';
 
 const STATEMENTS = {
   SELECT_ALL_EMOJI: 'SELECT_ALL_EMOJI',
@@ -123,8 +123,8 @@ class EmojiDb extends ServerDb<EmojiType> {
   }
 
   public validateCommandNotExists(record: EmojiType) {
-    const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_COMMAND)
-    const response = statement.get(record)
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_COMMAND);
+    const response = statement.get(record);
     if (response) {
       throw new DataQualityError('Command already exist');
     }

@@ -5,7 +5,7 @@
       v-model.trim="adminStore.songInEdit.songId"
       append-icon="mdi-refresh"
       @click:append="adminStore.generateNewSongId()"
-      :rules="SONG_ID_RULES"
+      :rules="songIdRules"
       :disabled="adminStore.editModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-multi-autocomplete
@@ -15,19 +15,19 @@
       item-title="animeName"
       item-value="animeId"
       :custom-filter="customFilter"
-      :rules="SONG_ANIME_ID_RULES"
+      :rules="songAnimeIdRules"
       label="Anime"
     ></dialog-multi-autocomplete>
     <dialog-text-field
       label="Title"
       v-model.trim="adminStore.songInEdit.songTitle"
-      :rules="SONG_TITLE_RULES"
+      :rules="songTitleRules"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
       label="Src"
       v-model.trim="adminStore.songInEdit.src"
-      :rules="SONG_SRC_RULES"
+      :rules="songSrcRules"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
@@ -40,7 +40,7 @@
       v-model.trim="adminStore.songInEdit.type"
       :disabled="adminStore.deleteModeDisabled || disabled"
       :items="songTypes"
-      :rules="SONG_TYPE_RULES"
+      :rules="songTypeRules"
     ></dialog-select>
     <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
   </dialog-form>
@@ -51,15 +51,17 @@ import { ref } from 'vue';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
-import { SONG_ANIME_ID_RULES, SONG_ID_RULES, SONG_SRC_RULES, SONG_TITLE_RULES, SONG_TYPE_RULES } from '@/assets/form-rules';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogMultiAutocomplete from '@/components/common/dialogs/DialogMultiAutocomplete.vue';
 import { useDataStore } from '@/plugins/store/data';
-import { isMatchFilter } from '@/assets/game-helpers';
+import { canParseValue, isMatchFilter } from '@/assets/game-helpers';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
+import { SongId, SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
+import { z } from 'zod';
+import { AnimeId } from '@/assets/shared/models/anime';
 
 const adminStore = useAdminStore();
 const dataStore = useDataStore();
@@ -67,6 +69,27 @@ const valid = ref(false);
 const disabled = ref(false);
 const songTypes = ['OP', 'ED', 'INSERT'];
 const emit = defineEmits(['dialog:close']);
+
+const songIdRules = [
+  (v: string): boolean | string => !!v || 'Song ID required',
+  (v: string): boolean | string => canParseValue(v, SongId) || 'Invalid Song ID'
+];
+const songTitleRules = [
+  (v: string): boolean | string => !!v || 'Song Title required',
+  (v: string): boolean | string => canParseValue(v, SongTitle) || 'Invalid Song Title'
+];
+const songSrcRules = [
+  (v: string): boolean | string => !!v || 'Song Source required',
+  (v: string): boolean | string => canParseValue(v, SongSrc) || 'Invalid Song Source'
+];
+const songTypeRules = [
+  (v: string): boolean | string => !!v || 'Song Type required',
+  (v: string): boolean | string => canParseValue(v, SongType) || 'Invalid Type Source'
+];
+const songAnimeIdRules = [
+  (v: string[]): boolean | string => v.length > 0 || 'Anime required',
+  (v: string[]): boolean | string => canParseValue(v, z.array(AnimeId)) || 'Invalid anime'
+];
 
 const CHANGE_MAP = {
   [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_SONG,

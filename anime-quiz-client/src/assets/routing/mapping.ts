@@ -23,19 +23,25 @@ import EmojiEditDialog from '@/components/emoji-edit/EmojiEditDialog.vue';
 import GameRoomsPanel from '@/components/game-rooms/GameRoomsPanel.vue';
 import GameRooms from '@/views/GameRooms.vue';
 import GameRoomsNewRoomDialog from '@/components/game-rooms/GameRoomsNewRoomDialog.vue';
+import MainGame from '@/views/MainGame.vue';
+import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
+import MainGamePanel from '@/components/main-game/MainGamePanel.vue';
+import LobbyPanel from '@/components/lobby/LobbyPanel.vue';
 
-const PANEL_MAPPING: { [key: string]: Component } = {
+const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: LoginPanel,
+  [ROUTES.LOBBY]: LobbyPanel,
   [ROUTES.USER_SETTINGS]: UserSettingsPanel,
   [ROUTES.SONG_LIST_EDIT]: SongListEditPanel,
   [ROUTES.USER_EDIT]: UserEditPanel,
   [ROUTES.ANIME_EDIT]: AnimeEditPanel,
   [ROUTES.SONG_EDIT]: SongEditPanel,
   [ROUTES.EMOJI_EDIT]: EmojiEditPanel,
-  [ROUTES.GAME_ROOMS]: GameRoomsPanel
+  [ROUTES.GAME_ROOMS]: GameRoomsPanel,
+  [ROUTES.MAIN_GAME]: MainGamePanel
 };
 
-const VIEW_MAPPING: { [key: string]: Component } = {
+const VIEW_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: Login,
   [ROUTES.LOBBY]: Lobby,
   [ROUTES.USER_SETTINGS]: UserSettings,
@@ -44,10 +50,11 @@ const VIEW_MAPPING: { [key: string]: Component } = {
   [ROUTES.ANIME_EDIT]: AnimeEdit,
   [ROUTES.SONG_EDIT]: SongEdit,
   [ROUTES.EMOJI_EDIT]: EmojiEdit,
-  [ROUTES.GAME_ROOMS]: GameRooms
+  [ROUTES.GAME_ROOMS]: GameRooms,
+  [ROUTES.MAIN_GAME]: MainGame
 };
 
-const DIALOG_MAPPINGS: { [key: string]: Component } = {
+const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
   [DIALOG_ROUTES.LOGIN_SETTINGS]: LoginSettings,
   [DIALOG_ROUTES.USER_EDIT]: UserEditDialog,
   [DIALOG_ROUTES.ANIME_EDIT]: AnimeEditDialog,

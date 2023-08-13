@@ -1,5 +1,5 @@
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { inject, InjectionKey } from 'vue';
+import { inject } from 'vue';
 import { v4 as uuid4 } from 'uuid';
 
 function getDefaultVolume(): number {
@@ -52,4 +52,13 @@ function generateId(prefix: string): string {
   return `${prefix}-${uuid4()}`;
 }
 
-export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter, debounce, generateId };
+function canParseValue(v: any, parser: any): boolean {
+  try {
+    parser.parse(v);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter, debounce, generateId, canParseValue };

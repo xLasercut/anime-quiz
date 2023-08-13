@@ -2,12 +2,11 @@ import { ServerHandler } from './common';
 import { SOCKET_EVENTS } from '../shared/events';
 import { SongType } from '../shared/models/types';
 import { Song } from '../shared/models/song';
-import { LOG_REFERENCES } from '../app/logging/constants';
 
 class AdminSongHandler extends ServerHandler {
   protected _events = {
     [SOCKET_EVENTS.ADMIN_NEW_SONG]: (_song: SongType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_ADD_SONG, {
+      this._logger.info('admin add song', {
         clientData: this._socket.data.clientData,
         request: _song
       });
@@ -22,7 +21,7 @@ class AdminSongHandler extends ServerHandler {
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_EDIT_SONG]: (_song: SongType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_EDIT_SONG, {
+      this._logger.info('admin edit song', {
         clientData: this._socket.data.clientData,
         request: _song
       });
@@ -37,7 +36,7 @@ class AdminSongHandler extends ServerHandler {
       callback(true);
     },
     [SOCKET_EVENTS.ADMIN_DELETE_SONG]: (_song: SongType, callback: Function) => {
-      this._logger.writeLog(LOG_REFERENCES.ADMIN_DELETE_SONG, {
+      this._logger.info('admin delete song', {
         clientData: this._socket.data.clientData,
         request: _song
       });

@@ -1,4 +1,3 @@
-import { Logger } from '../app/logging/logger';
 import { HandlerDependencies, ServerConfig } from '../interfaces';
 import { UserDb } from '../database/user';
 import { Socket, SocketEvent } from '../types';
@@ -13,6 +12,7 @@ import { UserSongDb } from '../database/user-song';
 import { Server } from '../app/server';
 import { SocketEventNameType } from '../shared/types';
 import { GameRooms } from '../game-state/room';
+import { Logger } from '../app/logger';
 
 abstract class ServerHandler {
   protected _logger: Logger;

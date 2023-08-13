@@ -1,8 +1,6 @@
 import { createServer } from 'http';
 import { Oidc } from './app/oidc';
-import { Logger } from './app/logging/logger';
 import { SERVER_CONFIG } from './app/config';
-import { LOG_REFERENCES } from './app/logging/constants';
 import { EmitterDependencies, HandlerDependencies } from './interfaces';
 import { Server } from './app/server';
 import { UserDb } from './database/user';
@@ -18,6 +16,7 @@ import { DatabaseLock } from './database/lock';
 import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
 import { GameRooms } from './game-state/room';
+import { Logger } from './app/logger';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -60,32 +59,21 @@ const handlerDependencies: HandlerDependencies = {
 };
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
-  logger.writeLog(LOG_REFERENCES.CLIENT_CONNECTED, { id: socket.id });
+  logger.info('client connected', { id: socket.id });
   const socketErrHandler = newSocketErrorHandler(logger, socket, emitter);
   socket.data = new SocketData();
   const entryHandler = new EntryPointHandler(socket, socketErrHandler, handlerDependencies);
   entryHandler.start();
 });
 
-io.of('/').adapter.on('create-room', (roomId: string) => {
+io.of('/').adapter.on('create-room', (roomId: string) => {});
 
-});
+io.of('/').adapter.on('delete-room', (roomId: string, sid: string) => {});
 
-io.of('/').adapter.on('delete-room', (roomId: string, sid: string) => {
+io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {});
 
-})
+io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {});
 
-io.of('/').adapter.on('join-room', (roomId: string, sid: string) => {
-
-})
-
-io.of('/').adapter.on('leave-room', (roomId: string, sid: string) => {
-
-})
-
-httpServer.listen(SERVER_CONFIG.serverPort, async () => {
-  logger.writeLog(LOG_REFERENCES.SERVER_START, {
-    port: SERVER_CONFIG.serverPort,
-    corsConfig: SERVER_CONFIG.corsConfig
-  });
+httpServer.listen(SERVER_CONFIG.serverPort, () => {
+  logger.info('server started', { port: SERVER_CONFIG.serverPort, corsConfig: SERVER_CONFIG.corsConfig });
 });

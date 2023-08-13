@@ -1,6 +1,5 @@
 import { mainDbConnection, ServerDb } from './common';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logging/logger';
 import { AnimeIdType, AnimeNameType, AnimeType } from '../shared/models/types';
 import { DbAnime, DbAnimeName } from '../models/anime';
 import { Anime } from '../shared/models/anime';
@@ -8,6 +7,7 @@ import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { SongDb } from './song';
+import { Logger } from '../app/logger';
 
 const STATEMENTS = {
   INSERT_ANIME: 'INSERT_ANIME',
