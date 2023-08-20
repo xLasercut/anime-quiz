@@ -25,6 +25,10 @@ import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { GameRoomIdType } from '@/assets/shared/models/types';
 import { GameRoomId } from '@/assets/shared/models/game';
+import { useClientStore } from '@/plugins/store/client';
+import { ROUTES } from '@/assets/routing/routes';
+
+const clientStore = useClientStore();
 
 const roomList = ref<GameRoomIdType[]>([]);
 
@@ -33,7 +37,7 @@ socket.on(SOCKET_EVENTS.UPDATE_ROOM_LIST, (_roomList: GameRoomIdType[]) => {
 });
 
 onMounted(() => {
-  socket.emit(SOCKET_EVENTS.LEAVE_ALL_ROOMS)
+  socket.emit(SOCKET_EVENTS.LEAVE_ALL_ROOMS);
   socket.emit(SOCKET_EVENTS.GET_ROOM_LIST);
 });
 
@@ -41,5 +45,11 @@ onUnmounted(() => {
   socket.off(SOCKET_EVENTS.UPDATE_ROOM_LIST);
 });
 
-function joinRoom(roomId: GameRoomIdType) {}
+function joinRoom(roomId: GameRoomIdType) {
+  socket.emit(SOCKET_EVENTS.JOIN_GAME_ROOM, roomId, (success: boolean) => {
+    if (success) {
+      clientStore.changeView(ROUTES.MAIN_GAME);
+    }
+  });
+}
 </script>

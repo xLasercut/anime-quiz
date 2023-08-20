@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { CLIENT_CONSTANTS } from '@/assets/constants';
 import MainGameChatInput from '@/components/main-game/main-game-chat/MainGameChatInput.vue';
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onUnmounted, ref } from 'vue';
 import { GameChatType } from '@/assets/shared/models/types';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
@@ -24,25 +24,23 @@ import MainGameChatMessage from '@/components/main-game/main-game-chat/MainGameC
 
 const messages = ref<GameChatType[]>([]);
 
-onMounted(() => {
-  socket.on(SOCKET_EVENTS.UPDATE_GAME_CHAT, (_chat: GameChatType) => {
-    const chat = GameChat.parse(_chat);
-    if (messages.value.length > 100) {
-      messages.value.splice(0, 1);
+socket.on(SOCKET_EVENTS.UPDATE_GAME_CHAT, (_chat: GameChatType) => {
+  const chat = GameChat.parse(_chat);
+  if (messages.value.length > 100) {
+    messages.value.splice(0, 1);
+  }
+
+  if (messages.value.length > 0 && chat.userId === messages.value[messages.value.length - 1].userId) {
+    chat.repeat = true;
+  }
+
+  messages.value.push(chat);
+
+  nextTick(() => {
+    const element = document.querySelector('.chat-message-container');
+    if (element) {
+      element.scrollTop = element.scrollHeight - element.clientHeight;
     }
-
-    if (messages.value.length > 0 && chat.userId === messages.value[messages.value.length - 1].userId) {
-      chat.repeat = true;
-    }
-
-    messages.value.push(chat);
-
-    nextTick(() => {
-      const element = document.querySelector('.chat-message-container');
-      if (element) {
-        element.scrollTop = element.scrollHeight - element.clientHeight;
-      }
-    });
   });
 });
 

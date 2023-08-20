@@ -28,7 +28,7 @@ const DISCORD_ID_RULES = [
 
 const DISPLAY_NAME_RULES = [
   (v: string): boolean | string => !!v || 'Display name required',
-  (v: string): boolean | string => isValidDisplayName(v) || 'Display name can only contain: 0-9, A-Z, a-z and space',
+  (v: string): boolean | string => isValidDisplayName(v) || 'Display name can only contain: 0-9, A-Z, a-z, space and -',
   (v: string): boolean | string => (v && v.length <= 20) || 'Display name must be under 20 characters'
 ];
 

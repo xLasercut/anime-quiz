@@ -36,6 +36,10 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, this._chatSerialiser.generateUserMsg(socket, message));
   }
 
+  public updateGameChatSys(message: string, sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, this._chatSerialiser.generateSystemMsg(message))
+  }
+
   public updateRoomList(sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_ROOM_LIST, this._gameRooms.getRoomList());
   }

@@ -9,7 +9,7 @@ const DisplayName = z
   .string()
   .trim()
   .min(1)
-  .regex(/^[A-Za-z0-9 ]+$/);
+  .regex(/^[A-Za-z0-9 -]+$/);
 
 const UserId = z
   .string()

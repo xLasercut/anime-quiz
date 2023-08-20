@@ -1,6 +1,7 @@
 import { Logger } from '../app/logger';
 import { AvatarType, DisplayNameType, GameChatType, UserIdType } from '../shared/models/types';
 import { Socket } from '../types';
+import { AVATARS } from '../shared/avatars';
 
 const SANITIZE_MAP: Record<string, string> = {
   '&': '&amp;',
@@ -26,6 +27,10 @@ class GameChatSerialiser {
       socket.data.clientData.userId,
       msg
     );
+  }
+
+  public generateSystemMsg(msg: string): GameChatType {
+    return this._generateChatMsg('Eva Unit-01', false, AVATARS.EVA_UNIT_1, 'user-00000000-0000-0000-0000-000000000000', msg);
   }
 
   protected _generateChatMsg(

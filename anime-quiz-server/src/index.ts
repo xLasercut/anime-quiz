@@ -97,9 +97,16 @@ io.of('/').adapter.on(
 io.of('/').adapter.on(
   'join-room',
   ioErrHandler((_roomId: string, sid: string) => {
+    const socket = io.sockets.sockets.get(sid);
+    logger.info('joined room', {
+      clientData: socket?.data.clientData,
+      roomId: _roomId,
+      sid: sid
+    });
     const roomId = parseGameRoomId(_roomId);
     if (roomId) {
       gameRooms.addPlayer(roomId, sid);
+      emitter.updateGameChatSys(`${socket?.data.clientData.displayName} joined the room`, roomId);
     }
   })
 );
@@ -107,9 +114,16 @@ io.of('/').adapter.on(
 io.of('/').adapter.on(
   'leave-room',
   ioErrHandler((_roomId: string, sid: string) => {
+    const socket = io.sockets.sockets.get(sid);
+    logger.info('left room', {
+      clientData: socket?.data.clientData,
+      roomId: _roomId,
+      sid: sid
+    });
     const roomId = parseGameRoomId(_roomId);
     if (roomId) {
       gameRooms.deletePlayer(roomId, sid);
+      emitter.updateGameChatSys(`${socket?.data.clientData.displayName} left the room`, roomId);
     }
   })
 );
