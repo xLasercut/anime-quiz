@@ -18,6 +18,8 @@ import { UserSongDb } from './database/user-song';
 import { GameRooms } from './game-state/room';
 import { Logger } from './app/logger';
 import { GameRoomId } from './shared/models/game';
+import { GameRoomIdType } from './shared/models/types';
+import { GameChatSerialiser } from './game-state/chat';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -41,7 +43,8 @@ const emitterDependencies: EmitterDependencies = {
   songDb: songDb,
   emojiDb: emojiDb,
   userSongDb: userSongDb,
-  gameRooms: gameRooms
+  gameRooms: gameRooms,
+  chatSerialiser: new GameChatSerialiser(logger)
 };
 const emitter = new Emitter(io, emitterDependencies);
 const handlerDependencies: HandlerDependencies = {
@@ -64,22 +67,61 @@ const ioErrHandler = newIoErrorHandler(logger);
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   logger.info('client connected', { id: socket.id });
   const socketErrHandler = newSocketErrorHandler(logger, socket, emitter);
-  socket.data = new SocketData();
+  socket.data = new SocketData(socket, logger);
   const entryHandler = new EntryPointHandler(socket, socketErrHandler, handlerDependencies);
   entryHandler.start();
 });
 
-io.of('/').adapter.on('create-room', ioErrHandler((_roomId: string) => {
-  const roomId = GameRoomId.parse(_roomId);
-  gameRooms.newRoom(roomId);
-}));
+io.of('/').adapter.on(
+  'create-room',
+  ioErrHandler((_roomId: string) => {
+    const roomId = parseGameRoomId(_roomId);
+    if (roomId) {
+      gameRooms.newRoom(roomId);
+      emitter.updateRoomList();
+    }
+  })
+);
 
-io.of('/').adapter.on('delete-room', ioErrHandler((roomId: string, sid: string) => {}));
+io.of('/').adapter.on(
+  'delete-room',
+  ioErrHandler((_roomId: string) => {
+    const roomId = parseGameRoomId(_roomId);
+    if (roomId) {
+      gameRooms.deleteRoom(roomId);
+      emitter.updateRoomList();
+    }
+  })
+);
 
-io.of('/').adapter.on('join-room', ioErrHandler((roomId: string, sid: string) => {}));
+io.of('/').adapter.on(
+  'join-room',
+  ioErrHandler((_roomId: string, sid: string) => {
+    const roomId = parseGameRoomId(_roomId);
+    if (roomId) {
+      gameRooms.addPlayer(roomId, sid);
+    }
+  })
+);
 
-io.of('/').adapter.on('leave-room', ioErrHandler((roomId: string, sid: string) => {}));
+io.of('/').adapter.on(
+  'leave-room',
+  ioErrHandler((_roomId: string, sid: string) => {
+    const roomId = parseGameRoomId(_roomId);
+    if (roomId) {
+      gameRooms.deletePlayer(roomId, sid);
+    }
+  })
+);
 
 httpServer.listen(SERVER_CONFIG.serverPort, () => {
   logger.info('server started', { port: SERVER_CONFIG.serverPort, corsConfig: SERVER_CONFIG.corsConfig });
 });
+
+function parseGameRoomId(roomId: string): false | GameRoomIdType {
+  try {
+    return GameRoomId.parse(roomId);
+  } catch {
+    return false;
+  }
+}

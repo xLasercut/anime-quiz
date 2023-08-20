@@ -1,22 +1,28 @@
 <template>
-  <v-img :src="emoji.src" v-if="emoji.type === 'img'" aspect-ratio="1"></v-img>
-  <span v-else class="normal-emoji">{{ emoji.src }}</span>
+  <v-img :src="emoji.src" v-if="emoji.type === 'img'" aspect-ratio="1" :width="size"></v-img>
+  <span v-else :style="spanStyles">{{ emoji.src }}</span>
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
+import { computed, PropType } from 'vue';
 import { EmojiType } from '@/assets/shared/models/types';
 
-defineProps({
+const props = defineProps({
   emoji: {
     required: true,
     type: Object as PropType<EmojiType>
+  },
+  size: {
+    type: String,
+    default: (): string => {
+      return '20pt';
+    }
   }
 });
-</script>
 
-<style scoped>
-.normal-emoji {
-  font-size: 20pt;
-}
-</style>
+const spanStyles = computed(() => {
+  return {
+    'font-size': props.size
+  };
+});
+</script>

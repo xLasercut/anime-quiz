@@ -14,7 +14,12 @@ import { canParseValue, generateId } from '@/assets/game-helpers';
 import { GameRoomId } from '@/assets/shared/models/game';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { useClientStore } from '@/plugins/store/client';
+import { ROUTES } from '@/assets/routing/routes';
 
+const emit = defineEmits(['dialog:close'])
+
+const clientStore = useClientStore();
 const disabled = ref(false);
 const valid = ref(false);
 const roomIdPrefix = generateId('amq');
@@ -33,7 +38,11 @@ function submitChange() {
   if (valid.value) {
     disabled.value = true;
     socket.emit(SOCKET_EVENTS.NEW_GAME_ROOM, roomId(roomName.value), (success: boolean) => {
-      disabled.value = false
+      disabled.value = false;
+      if (success) {
+        emit('dialog:close')
+        clientStore.changeView(ROUTES.MAIN_GAME);
+      }
     });
   }
 }

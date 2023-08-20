@@ -5,6 +5,13 @@ import { GameRoomId } from '../shared/models/game';
 
 class GameRoomsHandler extends ServerHandler {
   protected _events = {
+    [SOCKET_EVENTS.LEAVE_ALL_ROOMS]: () => {
+      for (const roomId of Array.from(this._socket.rooms)) {
+        if (roomId !== this._socket.id) {
+          this._socket.leave(roomId)
+        }
+      }
+    },
     [SOCKET_EVENTS.GET_ROOM_LIST]: () => {
       this._emitter.updateRoomList(this._socket.id);
     },

@@ -18,6 +18,9 @@ import LobbyMenuCard from '@/components/lobby/LobbyMenuCard.vue';
 import { ROUTES } from '@/assets/routing/routes';
 import { useClientStore } from '@/plugins/store/client';
 import { useAdminStore } from '@/plugins/store/admin';
+import { socket } from '@/plugins/socket';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { ClientRoute } from '@/assets/routing/types';
 
 const clientStore = useClientStore();
 const adminStore = useAdminStore();
@@ -81,7 +84,7 @@ const cards = ref([
   }
 ]);
 
-function changeView(route: string) {
+function changeView(route: ClientRoute) {
   clientStore.changeView(route);
 }
 
@@ -101,6 +104,7 @@ function showCard(requireAdmin: boolean): boolean {
 }
 
 onMounted(() => {
+  socket.emit(SOCKET_EVENTS.LEAVE_ALL_ROOMS);
   adminStore.$reset();
 });
 </script>

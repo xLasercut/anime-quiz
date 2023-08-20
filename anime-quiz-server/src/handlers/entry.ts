@@ -10,6 +10,7 @@ import { AdminAnimeHandler } from './admin-anime';
 import { AdminSongHandler } from './admin-song';
 import { AdminEmojiHandler } from './admin-emoji';
 import { GameRoomsHandler } from './game-rooms';
+import { ChatHandler } from './chat';
 
 class EntryPointHandler extends ServerHandler {
   protected _handlers: ServerHandler[];
@@ -39,7 +40,8 @@ class EntryPointHandler extends ServerHandler {
     this._handlers = [
       new UserHandler(socket, errHandler, dependencies),
       new DataHandler(socket, errHandler, dependencies),
-      new GameRoomsHandler(socket, errHandler, dependencies)
+      new GameRoomsHandler(socket, errHandler, dependencies),
+      new ChatHandler(socket, errHandler, dependencies)
     ];
     this._adminHandlers = [
       new AdminUserHandler(socket, errHandler, dependencies),

@@ -38,10 +38,28 @@ class GameRooms {
     }
   }
 
+  public validateRoomExists(roomId: GameRoomIdType) {
+    if (!(roomId in this._rooms)) {
+      throw new DataQualityError('Room does not exists');
+    }
+  }
+
   public newRoom(roomId: GameRoomIdType) {
     this._rooms[roomId] = {
-      id: roomId
+      sids: new Set()
     };
+  }
+
+  public deleteRoom(roomId: GameRoomIdType) {
+    delete this._rooms[roomId];
+  }
+
+  public addPlayer(roomId: GameRoomIdType, sid: string) {
+    this._rooms[roomId].sids.add(sid);
+  }
+
+  public deletePlayer(roomId: GameRoomIdType, sid: string) {
+    this._rooms[roomId].sids.delete(sid);
   }
 }
 

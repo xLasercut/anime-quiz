@@ -1,7 +1,5 @@
-import { GameRoomIdType } from '../shared/models/types';
-
 interface GameRoom {
-  id: GameRoomIdType;
+  sids: Set<string>
 }
 
 export { GameRoom };

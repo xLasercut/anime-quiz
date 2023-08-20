@@ -9,6 +9,7 @@ import { UserSongDb } from './database/user-song';
 import { Server } from './app/server';
 import { GameRooms } from './game-state/room';
 import { Logger } from './app/logger';
+import {GameChatSerialiser} from "./game-state/chat";
 
 interface EmitterDependencies {
   userDb: UserDb;
@@ -17,6 +18,7 @@ interface EmitterDependencies {
   emojiDb: EmojiDb;
   userSongDb: UserSongDb;
   gameRooms: GameRooms;
+  chatSerialiser: GameChatSerialiser
 }
 
 interface HandlerDependencies {

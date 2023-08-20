@@ -33,6 +33,7 @@ socket.on(SOCKET_EVENTS.UPDATE_ROOM_LIST, (_roomList: GameRoomIdType[]) => {
 });
 
 onMounted(() => {
+  socket.emit(SOCKET_EVENTS.LEAVE_ALL_ROOMS)
   socket.emit(SOCKET_EVENTS.GET_ROOM_LIST);
 });
 
