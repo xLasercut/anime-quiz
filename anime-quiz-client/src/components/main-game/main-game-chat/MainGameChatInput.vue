@@ -88,6 +88,8 @@ watch(
 
 function addEmoji(command: EmojiCommandType) {
   message.value = message.value.replace(EMOJI_CHAT_FORMAT, `:${command}:`);
+  emojiChoicesOldLength.value = 0;
+  showEmojiSelect.value = false;
   document.getElementById('chat-input')?.focus();
 }
 
