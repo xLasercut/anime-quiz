@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {Admin, Avatar, DisplayName, UserId} from './user';
+import { Admin, Avatar, DisplayName, UserId } from './user';
 
 const GameRoomId = z
   .string()

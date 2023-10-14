@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ClientData, NotificationColor, SystemNotification } from './client';
+import { ClientData, ClientLoginAuth, NotificationColor, SystemNotification } from './client';
 import { Song, SongId, SongTitle, SongType } from './song';
 import { Anime, AnimeId, AnimeName } from './anime';
 import { Avatar, DiscordId, DisplayName, User, UserId } from './user';
@@ -28,3 +28,4 @@ export type EmojiTypeType = z.infer<typeof EmojiType>;
 export type GameRoomIdType = z.infer<typeof GameRoomId>;
 export type GameChatType = z.infer<typeof GameChat>;
 export type GameChatTextType = z.infer<typeof GameChatText>;
+export type ClientLoginAuthType = z.infer<typeof ClientLoginAuth>;

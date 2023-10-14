@@ -1,4 +1,4 @@
-import { mainDbConnection, ServerDb } from './common';
+import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
 import { ServerConfig } from '../interfaces';
 import { EmojiType } from '../shared/models/types';
 import { DbEmoji } from '../models/emoji';
@@ -67,8 +67,8 @@ class EmojiDb extends ServerDb<EmojiType> {
   protected _factory: StatementFactory;
   protected _emojiList: EmojiType[] = [];
 
-  constructor(config: ServerConfig, logger: Logger) {
-    super(config, logger);
+  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+    super(config, logger, state);
     this._db = mainDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
     this.reloadCache();
@@ -104,6 +104,7 @@ class EmojiDb extends ServerDb<EmojiType> {
 
   public reloadCache() {
     this._emojiList = this._getEmojiList();
+    this._state.updateState();
   }
 
   public validateRecordExists(record: EmojiType) {

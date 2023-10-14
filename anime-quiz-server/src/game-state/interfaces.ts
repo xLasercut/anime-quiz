@@ -1,5 +1,5 @@
 interface GameRoom {
-  sids: Set<string>
+  sids: Set<string>;
 }
 
 export { GameRoom };

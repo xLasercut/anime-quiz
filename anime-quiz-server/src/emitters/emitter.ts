@@ -10,6 +10,7 @@ import { UserSongDb } from '../database/user-song';
 import { GameRooms } from '../game-state/room';
 import { Socket } from '../types';
 import { GameChatSerialiser } from '../game-state/chat';
+import { DatabaseDataState } from '../database/common';
 
 class Emitter {
   protected _io: Server;
@@ -20,6 +21,7 @@ class Emitter {
   protected _userSongDb: UserSongDb;
   protected _gameRooms: GameRooms;
   protected _chatSerialiser: GameChatSerialiser;
+  protected _dbDataState: DatabaseDataState;
 
   constructor(io: Server, dependencies: EmitterDependencies) {
     this._io = io;
@@ -30,6 +32,7 @@ class Emitter {
     this._userSongDb = dependencies.userSongDb;
     this._gameRooms = dependencies.gameRooms;
     this._chatSerialiser = dependencies.chatSerialiser;
+    this._dbDataState = dependencies.dbDataState;
   }
 
   public updateGameChat(socket: Socket, message: string, sid: string) {
@@ -37,7 +40,7 @@ class Emitter {
   }
 
   public updateGameChatSys(message: string, sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, this._chatSerialiser.generateSystemMsg(message))
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, this._chatSerialiser.generateSystemMsg(message));
   }
 
   public updateRoomList(sid?: string) {
@@ -78,6 +81,10 @@ class Emitter {
 
   public updateStoreUserList(sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_LIST, this._userDb.getUserList());
+  }
+
+  public updateStoreDataVersion(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_DATA_VERSION, this._dbDataState.dataVersion);
   }
 
   protected _client(sid?: string) {

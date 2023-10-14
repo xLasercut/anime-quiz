@@ -1,4 +1,4 @@
-import { ServerDb, userDbConnection } from './common';
+import { DatabaseDataState, ServerDb, userDbConnection } from './common';
 import { ServerConfig } from '../interfaces';
 import { DbUser } from '../models/user';
 import { DbUserType } from '../models/types';
@@ -74,8 +74,8 @@ class UserDb extends ServerDb<UserType> {
   protected _factory: StatementFactory;
   protected _allowedUsers: DiscordIdType[] = [];
 
-  constructor(config: ServerConfig, logger: Logger) {
-    super(config, logger);
+  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+    super(config, logger, state);
     this._db = userDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
     this.reloadCache();
@@ -166,6 +166,7 @@ class UserDb extends ServerDb<UserType> {
 
   public reloadCache() {
     this._allowedUsers = this._getAllowedUsers();
+    this._state.updateState();
   }
 }
 

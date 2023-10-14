@@ -31,8 +31,11 @@ import { injectStrict } from '@/assets/game-helpers';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { SendNotification } from '@/assets/types';
 import { getAuthorizeUrl } from '@/assets/authorization';
+import { ClientLoginAuthType } from '@/assets/shared/models/types';
+import { useDataStore } from '@/plugins/store/data';
 
 const clientStore = useClientStore();
+const dataStore = useDataStore();
 const sendNotification = injectStrict<SendNotification>(CLIENT_EVENTS.SYSTEM_NOTIFICATION);
 const disabled = ref(false);
 
@@ -58,8 +61,12 @@ function authorizeUser() {
 
   if (code && returnedState === localStorage[LOCAL_STORAGE_CONSTANTS.OAUTH_STATE]) {
     disabled.value = true;
+    const clientLoginAuth: ClientLoginAuthType = {
+      code: code,
+      dataVersion: dataStore.dataVersion
+    };
     socket.connect();
-    socket.emit(SOCKET_EVENTS.AUTHORIZE_USER, code, (auth: boolean) => {
+    socket.emit(SOCKET_EVENTS.AUTHORIZE_USER, clientLoginAuth, (auth: boolean) => {
       disabled.value = false;
       if (auth) {
         clientStore.changeView(ROUTES.LOBBY);

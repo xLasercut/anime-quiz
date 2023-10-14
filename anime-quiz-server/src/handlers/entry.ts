@@ -11,21 +11,24 @@ import { AdminSongHandler } from './admin-song';
 import { AdminEmojiHandler } from './admin-emoji';
 import { GameRoomsHandler } from './game-rooms';
 import { ChatHandler } from './chat';
+import { ClientLoginAuthType } from '../shared/models/types';
+import { ClientLoginAuth } from '../shared/models/client';
 
 class EntryPointHandler extends ServerHandler {
   protected _handlers: ServerHandler[];
   protected _adminHandlers: ServerHandler[];
   protected _events = {
-    [SOCKET_EVENTS.AUTHORIZE_USER]: async (code: string, callback: Function) => {
+    [SOCKET_EVENTS.AUTHORIZE_USER]: async (_clientLoginAuth: ClientLoginAuthType, callback: Function) => {
       this._logger.info('authenticating client', {
         id: this._socket.id,
-        code: code
+        clientLoginAuth: _clientLoginAuth
       });
-      const discordUser = await this._oidc.getUserInfo(code);
+      const clientLoginAuth = ClientLoginAuth.parse(_clientLoginAuth);
+      const discordUser = await this._oidc.getUserInfo(clientLoginAuth.code);
       this._userDb.validateAllowedUser(discordUser.id);
       const dbUser = this._userDb.getUserInfo(discordUser.id);
       this._socket.data.initClientData(dbUser);
-      this._setClientData();
+      this._setClientData(clientLoginAuth.dataVersion);
       this._startHandler();
       callback(true);
     },
@@ -57,14 +60,17 @@ class EntryPointHandler extends ServerHandler {
     );
   }
 
-  protected _setClientData(): void {
+  protected _setClientData(dataVersion: string): void {
     this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
-    this._emitter.updateStoreSongTitles(this._socket.id);
-    this._emitter.updateStoreAnimeNames(this._socket.id);
-    this._emitter.updateStoreSongList(this._socket.id);
-    this._emitter.updateStoreAnimeList(this._socket.id);
     this._emitter.updateStoreUserSongList(this._socket.data.clientData.userId, this._socket.id);
-    this._emitter.updateStoreEmojiList(this._socket.id);
+    if (this._dbDataState.dataVersion !== dataVersion) {
+      this._emitter.updateStoreSongTitles(this._socket.id);
+      this._emitter.updateStoreAnimeNames(this._socket.id);
+      this._emitter.updateStoreSongList(this._socket.id);
+      this._emitter.updateStoreAnimeList(this._socket.id);
+      this._emitter.updateStoreEmojiList(this._socket.id);
+      this._emitter.updateStoreDataVersion(this._socket.id);
+    }
   }
 
   protected _startHandler(): void {

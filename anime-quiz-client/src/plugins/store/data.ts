@@ -9,6 +9,7 @@ import {
   AnimeIdType,
   EmojiType
 } from '@/assets/shared/models/types';
+import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 
 interface State {
   songList: SongType[];
@@ -18,6 +19,7 @@ interface State {
   userSongList: SongIdType[];
   userList: UserType[];
   emojiList: EmojiType[];
+  dataVersion: string;
 }
 
 interface AnimeString {
@@ -28,13 +30,14 @@ interface AnimeString {
 const useDataStore = defineStore('data', {
   state: (): State => {
     return {
-      songList: [],
-      animeList: [],
-      songTitles: [],
-      animeNames: [],
+      songList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.SONG_LIST] || '[]'),
+      animeList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.ANIME_LIST] || '[]'),
+      songTitles: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.SONG_TITLES] || '[]'),
+      animeNames: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.ANIME_NAMES] || '[]'),
       userSongList: [],
       userList: [],
-      emojiList: []
+      emojiList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.EMOJI_LIST] || '[]'),
+      dataVersion: localStorage[LOCAL_STORAGE_CONSTANTS.DATA_VERSION] || ''
     };
   },
   actions: {
@@ -77,6 +80,9 @@ const useDataStore = defineStore('data', {
         }
         return -1;
       });
+    },
+    updateDataVersion(dataVersion: string) {
+      this.dataVersion = dataVersion;
     }
   },
   getters: {

@@ -1,4 +1,4 @@
-import { ServerDb, userDbConnection } from './common';
+import { DatabaseDataState, ServerDb, userDbConnection } from './common';
 import { DbUserSongType } from '../models/types';
 import { ServerConfig } from '../interfaces';
 import { Database as SqliteDb } from 'better-sqlite3';
@@ -44,8 +44,8 @@ class UserSongDb extends ServerDb<DbUserSongType> {
   protected _db: SqliteDb;
   protected _factory: StatementFactory;
 
-  constructor(config: ServerConfig, logger: Logger) {
-    super(config, logger);
+  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+    super(config, logger, state);
     this._db = userDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
   }

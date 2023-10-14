@@ -16,4 +16,9 @@ const ClientData = z.intersection(
   })
 );
 
-export { ClientData, NotificationColor, SystemNotification };
+const ClientLoginAuth = z.object({
+  code: z.string(),
+  dataVersion: z.string()
+});
+
+export { ClientData, NotificationColor, SystemNotification, ClientLoginAuth };

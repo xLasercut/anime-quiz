@@ -20,6 +20,7 @@ import { Logger } from './app/logger';
 import { GameRoomId } from './shared/models/game';
 import { GameRoomIdType } from './shared/models/types';
 import { GameChatSerialiser } from './game-state/chat';
+import { DatabaseDataState } from './database/common';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -31,11 +32,12 @@ const logger = new Logger(SERVER_CONFIG);
 const oidc = new Oidc(SERVER_CONFIG, logger);
 
 const dbLock = new DatabaseLock();
-const userDb = new UserDb(SERVER_CONFIG, logger);
-const songDb = new SongDb(SERVER_CONFIG, logger);
-const animeDb = new AnimeDb(SERVER_CONFIG, logger, songDb);
-const emojiDb = new EmojiDb(SERVER_CONFIG, logger);
-const userSongDb = new UserSongDb(SERVER_CONFIG, logger);
+const dbDataState = new DatabaseDataState();
+const userDb = new UserDb(SERVER_CONFIG, logger, dbDataState);
+const songDb = new SongDb(SERVER_CONFIG, logger, dbDataState);
+const animeDb = new AnimeDb(SERVER_CONFIG, logger, songDb, dbDataState);
+const emojiDb = new EmojiDb(SERVER_CONFIG, logger, dbDataState);
+const userSongDb = new UserSongDb(SERVER_CONFIG, logger, dbDataState);
 const gameRooms = new GameRooms(io, logger);
 const emitterDependencies: EmitterDependencies = {
   userDb: userDb,
@@ -44,12 +46,14 @@ const emitterDependencies: EmitterDependencies = {
   emojiDb: emojiDb,
   userSongDb: userSongDb,
   gameRooms: gameRooms,
-  chatSerialiser: new GameChatSerialiser(logger)
+  chatSerialiser: new GameChatSerialiser(logger),
+  dbDataState: dbDataState
 };
 const emitter = new Emitter(io, emitterDependencies);
 const handlerDependencies: HandlerDependencies = {
   logger: logger,
   config: SERVER_CONFIG,
+  dbDataState: dbDataState,
   userDb: userDb,
   songDb: songDb,
   animeDb: animeDb,

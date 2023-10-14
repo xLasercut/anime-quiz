@@ -17,7 +17,7 @@ import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 
-const emit = defineEmits(['dialog:close'])
+const emit = defineEmits(['dialog:close']);
 
 const clientStore = useClientStore();
 const disabled = ref(false);
@@ -40,7 +40,7 @@ function submitChange() {
     socket.emit(SOCKET_EVENTS.NEW_GAME_ROOM, roomId(roomName.value), (success: boolean) => {
       disabled.value = false;
       if (success) {
-        emit('dialog:close')
+        emit('dialog:close');
         clientStore.changeView(ROUTES.MAIN_GAME);
       }
     });

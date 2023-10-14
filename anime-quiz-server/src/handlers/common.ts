@@ -13,6 +13,7 @@ import { Server } from '../app/server';
 import { SocketEventNameType } from '../shared/types';
 import { GameRooms } from '../game-state/room';
 import { Logger } from '../app/logger';
+import { DatabaseDataState } from '../database/common';
 
 abstract class ServerHandler {
   protected _logger: Logger;
@@ -29,6 +30,7 @@ abstract class ServerHandler {
   protected _userSongDb: UserSongDb;
   protected _io: Server;
   protected _gameRooms: GameRooms;
+  protected _dbDataState: DatabaseDataState;
   protected abstract _events: Record<SocketEventNameType, SocketEvent>;
 
   protected constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
@@ -46,6 +48,7 @@ abstract class ServerHandler {
     this._userSongDb = dependencies.userSongDb;
     this._io = dependencies.io;
     this._gameRooms = dependencies.gameRooms;
+    this._dbDataState = dependencies.dbDataState;
   }
 
   public start(): void {

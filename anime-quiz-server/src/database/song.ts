@@ -1,4 +1,4 @@
-import { mainDbConnection, ServerDb, userDbConnection } from './common';
+import { DatabaseDataState, mainDbConnection, ServerDb, userDbConnection } from './common';
 import { ServerConfig } from '../interfaces';
 
 import { DbSong, DbSongTitle } from '../models/song';
@@ -94,8 +94,8 @@ class SongDb extends ServerDb<SongType> {
   protected _songList: SongType[] = [];
   protected _songTitles: SongTitleType[] = [];
 
-  constructor(config: ServerConfig, logger: Logger) {
-    super(config, logger);
+  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+    super(config, logger, state);
     this._mainDb = mainDbConnection(null, config);
     this._userDb = userDbConnection(null, config);
     this._mainFactory = new StatementFactory(this._mainDb, MAIN_RAW_STATEMENTS);
@@ -204,6 +204,7 @@ class SongDb extends ServerDb<SongType> {
   public reloadCache() {
     this._songList = this._getSongList();
     this._songTitles = this._getSongTitles();
+    this._state.updateState();
   }
 }
 

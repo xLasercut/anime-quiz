@@ -1,6 +1,7 @@
 import Database, { Database as SqliteDb } from 'better-sqlite3';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logger';
+import { v4 } from 'uuid';
 
 function _databaseConnection(currentDb: SqliteDb | null, filepath: string): SqliteDb {
   if (currentDb) {
@@ -19,13 +20,31 @@ function userDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
   return _databaseConnection(currentDb, config.userDbPath);
 }
 
+class DatabaseDataState {
+  protected _dataVersion: string;
+
+  constructor() {
+    this._dataVersion = `${v4()}`;
+  }
+
+  public get dataVersion(): string {
+    return this._dataVersion;
+  }
+
+  public updateState(): void {
+    this._dataVersion = `${v4()}`;
+  }
+}
+
 abstract class ServerDb<RecordType> {
   protected _config: ServerConfig;
   protected _logger: Logger;
+  protected _state: DatabaseDataState;
 
-  protected constructor(config: ServerConfig, logger: Logger) {
+  protected constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
     this._config = config;
     this._logger = logger;
+    this._state = state;
   }
 
   public abstract newRecord(record: RecordType): void;
@@ -47,4 +66,4 @@ abstract class ServerDb<RecordType> {
   }
 }
 
-export { ServerDb, mainDbConnection, userDbConnection };
+export { ServerDb, mainDbConnection, userDbConnection, DatabaseDataState };

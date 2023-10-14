@@ -1,4 +1,4 @@
-import { mainDbConnection, ServerDb } from './common';
+import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
 import { ServerConfig } from '../interfaces';
 import { AnimeIdType, AnimeNameType, AnimeType } from '../shared/models/types';
 import { DbAnime, DbAnimeName } from '../models/anime';
@@ -59,8 +59,8 @@ class AnimeDb extends ServerDb<AnimeType> {
   protected _animeList: AnimeType[] = [];
   protected _animeNames: AnimeNameType[] = [];
 
-  constructor(config: ServerConfig, logger: Logger, songDb: SongDb) {
-    super(config, logger);
+  constructor(config: ServerConfig, logger: Logger, songDb: SongDb, state: DatabaseDataState) {
+    super(config, logger, state);
     this._songDb = songDb;
     this._db = mainDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
@@ -161,6 +161,7 @@ class AnimeDb extends ServerDb<AnimeType> {
   public reloadCache() {
     this._animeList = this._getAnimeList();
     this._animeNames = this._getAnimeNames();
+    this._state.updateState();
   }
 }
 
