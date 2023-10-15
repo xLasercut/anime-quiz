@@ -1,4 +1,5 @@
 <template>
+  <nav-btn icon="mdi-cog" color="primary">Settings</nav-btn>
   <nav-btn icon="mdi-backspace-reverse-outline" color="warning" @click="back()">Back</nav-btn>
 </template>
 

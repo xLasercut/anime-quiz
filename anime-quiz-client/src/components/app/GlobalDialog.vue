@@ -20,11 +20,11 @@
 
 <script lang="ts">
 import { CLIENT_EVENTS } from '@/assets/events';
-import { Component, defineComponent, reactive, toRefs } from 'vue';
+import { Component, defineComponent, inject, reactive, toRefs } from 'vue';
 import { DIALOG_MAPPINGS } from '@/assets/routing/mapping';
 import { useClientStore } from '@/plugins/store/client';
 import { RegisterOpenDialog } from '@/assets/types';
-import { injectStrict } from '@/assets/game-helpers';
+import { ClientDialogRoute } from '@/assets/routing/types';
 
 export default defineComponent({
   setup() {
@@ -38,13 +38,13 @@ export default defineComponent({
       return DIALOG_MAPPINGS[clientStore.dialogView];
     }
 
-    function openDialog(dialog: string, label: string): void {
+    function openDialog(dialog: ClientDialogRoute, label: string): void {
       clientStore.changeDialogView(dialog);
       state.label = label;
       state.show = true;
     }
 
-    const registerOpenDialog = injectStrict<RegisterOpenDialog>(CLIENT_EVENTS.REGISTER_OPEN_DIALOG);
+    const registerOpenDialog = inject(CLIENT_EVENTS.REGISTER_OPEN_DIALOG) as RegisterOpenDialog;
     registerOpenDialog(openDialog);
 
     return {

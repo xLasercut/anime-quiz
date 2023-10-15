@@ -37,14 +37,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { AnimeType } from '@/assets/shared/models/types';
 import { useAdminStore } from '@/plugins/store/admin';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
 import AnimeEditTableFilters from '@/components/anime-edit/AnimeEditTableFilters.vue';
-import { injectStrict, isMatchFilter } from '@/assets/game-helpers';
+import { isMatchFilter } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
@@ -52,7 +52,7 @@ import TableAction from '@/components/common/tables/TableAction.vue';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 const headers = [
   { title: 'Anime ID', key: 'animeId', sortable: false },
   { title: 'Anime Names', key: 'animeName', sortable: false },

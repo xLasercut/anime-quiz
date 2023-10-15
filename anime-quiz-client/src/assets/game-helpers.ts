@@ -1,5 +1,4 @@
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { inject } from 'vue';
 import { v4 as uuid4 } from 'uuid';
 
 function getDefaultVolume(): number {
@@ -19,14 +18,6 @@ function getDefaultTheme(): string {
     return 'dark';
   }
   return 'light';
-}
-
-function injectStrict<T>(key: string): T {
-  const resolved = inject<T>(key);
-  if (!resolved) {
-    throw new Error(`Could not resolve ${key}`);
-  }
-  return resolved;
 }
 
 function isMatchFilter(queryText: string | null, itemText: string | null): boolean {
@@ -61,4 +52,4 @@ function canParseValue(v: any, parser: any): boolean {
   }
 }
 
-export { getDefaultVolume, getDefaultTheme, injectStrict, isMatchFilter, debounce, generateId, canParseValue };
+export { getDefaultVolume, getDefaultTheme, isMatchFilter, debounce, generateId, canParseValue };

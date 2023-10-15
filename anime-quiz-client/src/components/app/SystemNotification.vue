@@ -8,11 +8,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, inject, reactive, toRefs } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { NotificationColorType } from '@/assets/shared/models/types';
 import { RegisterSendNotification } from '@/assets/types';
-import { injectStrict } from '@/assets/game-helpers';
 
 export default defineComponent({
   setup() {
@@ -39,7 +38,7 @@ export default defineComponent({
       }
     }
 
-    const registerSendNotification = injectStrict<RegisterSendNotification>(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION);
+    const registerSendNotification = inject(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION) as RegisterSendNotification;
     registerSendNotification(sendNotification);
 
     return { ...toRefs(state) };

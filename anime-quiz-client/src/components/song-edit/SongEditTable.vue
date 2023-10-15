@@ -39,14 +39,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { SongType } from '@/assets/shared/models/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
-import { injectStrict, isMatchFilter } from '@/assets/game-helpers';
+import { isMatchFilter } from '@/assets/game-helpers';
 import TableAction from '@/components/common/tables/TableAction.vue';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
@@ -55,7 +55,7 @@ import { CLIENT_EVENTS } from '@/assets/events';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 const headers = [
   { title: 'Anime', key: 'animeName', sortable: false },
   { title: 'Title', key: 'songTitle', sortable: false },

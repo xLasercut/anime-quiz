@@ -8,7 +8,6 @@
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import { useClientStore } from '@/plugins/store/client';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
-import { injectStrict } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { useAdminStore } from '@/plugins/store/admin';
@@ -16,11 +15,12 @@ import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { useDataStore } from '@/plugins/store/data';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { inject } from 'vue';
 
 const clientStore = useClientStore();
 const adminStore = useAdminStore();
 const dataStore = useDataStore();
-const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 
 function back() {
   clientStore.changeView(ROUTES.LOBBY);

@@ -27,6 +27,7 @@ import MainGame from '@/views/MainGame.vue';
 import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
 import MainGamePanel from '@/components/main-game/MainGamePanel.vue';
 import LobbyPanel from '@/components/lobby/LobbyPanel.vue';
+import MainGameSettingsDialog from '@/components/main-game/MainGameSettingsDialog.vue';
 
 const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -60,7 +61,8 @@ const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
   [DIALOG_ROUTES.ANIME_EDIT]: AnimeEditDialog,
   [DIALOG_ROUTES.SONG_EDIT]: SongEditDialog,
   [DIALOG_ROUTES.EMOJI_EDIT]: EmojiEditDialog,
-  [DIALOG_ROUTES.NEW_GAME_ROOM]: GameRoomsNewRoomDialog
+  [DIALOG_ROUTES.NEW_GAME_ROOM]: GameRoomsNewRoomDialog,
+  [DIALOG_ROUTES.MAIN_GAME_SETTINGS]: MainGameSettingsDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

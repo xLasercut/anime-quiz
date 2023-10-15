@@ -38,13 +38,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { UserType } from '@/assets/shared/models/types';
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import UserEditTableFilters from '@/components/user-edit/UserEditTableFilters.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
-import { injectStrict } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
@@ -54,7 +53,7 @@ import TableAction from '@/components/common/tables/TableAction.vue';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 const headers = [
   { title: 'Discord ID', key: 'discordId', sortable: false },
   { title: 'User ID', key: 'userId', sortable: false },

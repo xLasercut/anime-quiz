@@ -12,15 +12,15 @@ import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useDataStore } from '@/plugins/store/data';
 import { useAdminStore } from '@/plugins/store/admin';
-import { injectStrict } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { inject } from 'vue';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 
 function newSong() {
   adminStore.updateSongInEdit({

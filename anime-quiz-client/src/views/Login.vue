@@ -20,14 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { injectStrict } from '@/assets/game-helpers';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { SendNotification } from '@/assets/types';
 import { getAuthorizeUrl } from '@/assets/authorization';
@@ -36,7 +35,7 @@ import { useDataStore } from '@/plugins/store/data';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
-const sendNotification = injectStrict<SendNotification>(CLIENT_EVENTS.SYSTEM_NOTIFICATION);
+const sendNotification = inject(CLIENT_EVENTS.SYSTEM_NOTIFICATION) as SendNotification;
 const disabled = ref(false);
 
 function login() {

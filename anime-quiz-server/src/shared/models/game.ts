@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { Admin, Avatar, DisplayName, UserId } from './user';
+import { GAME_MODES } from '../game-modes';
 
 const GameRoomId = z
   .string()
@@ -18,4 +19,26 @@ const GameChat = z.object({
   text: GameChatText
 });
 
-export { GameRoomId, GameChat, GameChatText };
+const GameRoomSettingSongCount = z.number().gte(1).lte(100);
+const GameRoomSettingsGuessTime = z.number().gte(5).lte(120);
+const GameRoomSettingsGameMode = z
+  .string()
+  .trim()
+  .refine(
+    (val) => {
+      return Object.values(GAME_MODES).includes(val);
+    },
+    {
+      message: 'Invalid game mode'
+    }
+  );
+
+const GameRoomSettings = z.object({
+  songCount: GameRoomSettingSongCount,
+  guessTime: GameRoomSettingsGuessTime,
+  duplicate: z.boolean(),
+  players: z.array(UserId),
+  gameMode: GameRoomSettingsGameMode
+});
+
+export { GameRoomId, GameChat, GameChatText, GameRoomSettings };

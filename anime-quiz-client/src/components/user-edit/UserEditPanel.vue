@@ -11,16 +11,16 @@ import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useDataStore } from '@/plugins/store/data';
-import { injectStrict } from '@/assets/game-helpers';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
 import { useAdminStore } from '@/plugins/store/admin';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { inject } from 'vue';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = injectStrict<OpenDialog>(CLIENT_EVENTS.OPEN_DIALOG);
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 
 function back() {
   clientStore.changeView(ROUTES.LOBBY);
