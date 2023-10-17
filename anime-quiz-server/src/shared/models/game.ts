@@ -37,7 +37,6 @@ const GameRoomSettings = z.object({
   songCount: GameRoomSettingSongCount,
   guessTime: GameRoomSettingsGuessTime,
   duplicate: z.boolean(),
-  players: z.array(UserId),
   gameMode: GameRoomSettingsGameMode
 });
 
