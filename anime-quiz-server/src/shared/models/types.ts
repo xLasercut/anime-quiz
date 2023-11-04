@@ -4,7 +4,15 @@ import { Song, SongId, SongTitle, SongType } from './song';
 import { Anime, AnimeId, AnimeName } from './anime';
 import { Avatar, DiscordId, DisplayName, User, UserId } from './user';
 import { Emoji, EmojiCommand, EmojiId, EmojiType } from './emoji';
-import { GameChat, GameChatText, GameRoomId, GameRoomSettings } from './game';
+import {
+  GameChat,
+  GameChatText,
+  GameRoomId,
+  GameRoomSettings,
+  GameRoomSettingSongCount,
+  GameRoomSettingsGuessTime,
+  GameRoomSettingsGameMode
+} from './game';
 
 export type ClientDataType = z.infer<typeof ClientData>;
 export type NotificationColorType = z.infer<typeof NotificationColor>;
@@ -30,3 +38,6 @@ export type GameChatType = z.infer<typeof GameChat>;
 export type GameChatTextType = z.infer<typeof GameChatText>;
 export type ClientLoginAuthType = z.infer<typeof ClientLoginAuth>;
 export type GameRoomSettingsType = z.infer<typeof GameRoomSettings>;
+export type GameRoomSettingSongCountType = z.infer<typeof GameRoomSettingSongCount>;
+export type GameRoomSettingsGuessTimeType = z.infer<typeof GameRoomSettingsGuessTime>;
+export type GameRoomSettingsGameModeType = z.infer<typeof GameRoomSettingsGameMode>;

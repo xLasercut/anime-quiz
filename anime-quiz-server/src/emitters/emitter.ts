@@ -1,5 +1,5 @@
 import { Server } from '../app/server';
-import { ClientDataType, SystemNotificationType, UserIdType } from '../shared/models/types';
+import { ClientDataType, GameRoomSettingsType, SystemNotificationType, UserIdType } from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
 import { EmitterDependencies } from '../interfaces';
 import { UserDb } from '../database/user';
@@ -85,6 +85,10 @@ class Emitter {
 
   public updateStoreDataVersion(sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_DATA_VERSION, this._dbDataState.dataVersion);
+  }
+
+  public updateGameRoomSettings(settings: GameRoomSettingsType, sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_CLIENT_GAME_ROOM_SETTINGS, settings);
   }
 
   protected _client(sid?: string) {

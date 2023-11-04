@@ -1,8 +1,8 @@
-import {GameRoomSettingsType} from "../shared/models/types";
+import { GameSettings } from './settings';
 
 interface GameRoom {
   sids: Set<string>;
-  settings: GameRoomSettingsType
+  settings: GameSettings;
 }
 
 export { GameRoom };

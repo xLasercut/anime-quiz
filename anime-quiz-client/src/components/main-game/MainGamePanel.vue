@@ -10,11 +10,14 @@ import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
+import { socket } from '@/plugins/socket';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
 
 const clientStore = useClientStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 
 function openSettings() {
+  socket.emit(SOCKET_EVENTS.GET_GAME_ROOM_SETTINGS);
   openDialog(DIALOG_ROUTES.MAIN_GAME_SETTINGS, 'Game Settings');
 }
 

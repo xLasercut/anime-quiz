@@ -1,7 +1,7 @@
 import { ServerHandler } from './common';
 import { SOCKET_EVENTS } from '../shared/events';
-import { GameRoomIdType } from '../shared/models/types';
-import { GameRoomId } from '../shared/models/game';
+import { GameRoomIdType, GameRoomSettingsType } from '../shared/models/types';
+import { GameRoomId, GameRoomSettings } from '../shared/models/game';
 
 class GameRoomsHandler extends ServerHandler {
   protected _events = {
@@ -34,6 +34,26 @@ class GameRoomsHandler extends ServerHandler {
       this._gameRooms.validateRoomExists(roomId);
       this._socket.join(roomId);
       callback(true);
+    },
+    [SOCKET_EVENTS.GET_GAME_ROOM_SETTINGS]: () => {
+      this._logger.info('getting room settings', {
+        clientData: this._socket.data.clientData
+      });
+      const socketId = this._socket.id;
+      const roomId = this._gameRooms.getPlayerRoomId(socketId);
+      this._emitter.updateGameRoomSettings(this._gameRooms.getRoom(roomId).settings.dict, socketId);
+    },
+    [SOCKET_EVENTS.UPDATE_SERVER_GAME_ROOM_SETTINGS]: (_settings: GameRoomSettingsType) => {
+      this._logger.info('updating game room settings', {
+        clientData: this._socket.data.clientData,
+        request: _settings
+      });
+      const settings = GameRoomSettings.parse(_settings);
+      const socketId = this._socket.id;
+      const roomId = this._gameRooms.getPlayerRoomId(socketId);
+      this._gameRooms.getRoom(roomId).settings.update(settings);
+      this._emitter.updateGameRoomSettings(this._gameRooms.getRoom(roomId).settings.dict, roomId);
+      this._emitter.updateGameChatSys('Settings updated', roomId);
     }
   };
 }

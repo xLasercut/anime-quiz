@@ -1,11 +1,11 @@
 import { Server } from '../app/server';
-import { GameRoomIdType, GameRoomSettingsType } from '../shared/models/types';
+import { GameRoomIdType } from '../shared/models/types';
 import { GameRoomId } from '../shared/models/game';
 import { ZodError } from 'zod';
 import { GameRoom } from './interfaces';
 import { Logger } from '../app/logger';
-import { DataQualityError } from '../app/exceptions';
-import { GAME_MODES } from '../shared/game-modes';
+import { DataQualityError, UnauthorizedError } from '../app/exceptions';
+import { GameSettings } from './settings';
 
 class GameRooms {
   protected _io: Server;
@@ -15,6 +15,22 @@ class GameRooms {
   constructor(io: Server, logger: Logger) {
     this._io = io;
     this._logger = logger;
+  }
+
+  public getRoom(roomId: string): GameRoom {
+    if (!(roomId in this._rooms)) {
+      throw new UnauthorizedError();
+    }
+    return this._rooms[roomId];
+  }
+
+  public getPlayerRoomId(sid: string): string {
+    for (const roomId in this._rooms) {
+      if (this._rooms[roomId].sids.has(sid)) {
+        return roomId;
+      }
+    }
+    throw new UnauthorizedError();
   }
 
   public getRoomList(): GameRoomIdType[] {
@@ -33,10 +49,6 @@ class GameRooms {
     return roomList;
   }
 
-  public getRoomSettings(roomId: GameRoomIdType): GameRoomSettingsType {
-    return this._rooms[roomId].settings;
-  }
-
   public validateRoomNotExists(roomId: GameRoomIdType) {
     if (roomId in this._rooms) {
       throw new DataQualityError('Room already exists');
@@ -52,12 +64,7 @@ class GameRooms {
   public newRoom(roomId: GameRoomIdType) {
     this._rooms[roomId] = {
       sids: new Set(),
-      settings: {
-        songCount: 20,
-        guessTime: 30,
-        duplicate: false,
-        gameMode: GAME_MODES.NORMAL
-      }
+      settings: new GameSettings()
     };
   }
 

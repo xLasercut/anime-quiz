@@ -40,4 +40,4 @@ const GameRoomSettings = z.object({
   gameMode: GameRoomSettingsGameMode
 });
 
-export { GameRoomId, GameChat, GameChatText, GameRoomSettings };
+export { GameRoomId, GameChat, GameChatText, GameRoomSettings, GameRoomSettingSongCount, GameRoomSettingsGuessTime, GameRoomSettingsGameMode };
