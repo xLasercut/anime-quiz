@@ -24,6 +24,7 @@ import { OpenDialog, SendNotification } from '@/assets/types';
 import GlobalDialog from '@/components/app/GlobalDialog.vue';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
+import {ClientDialogRoute} from "@/assets/routing/types";
 
 const clientStore = useClientStore();
 
@@ -36,7 +37,7 @@ provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: OpenDialog): void => {
   openDialog = _openDialog;
 });
 
-provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
+provide(CLIENT_EVENTS.OPEN_DIALOG, (route: ClientDialogRoute, label: string): void => {
   openDialog(route, label);
 });
 provide(CLIENT_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColorType, message: string): void => {

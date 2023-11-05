@@ -1,11 +1,12 @@
 import { Server } from '../app/server';
-import { GameRoomIdType } from '../shared/models/types';
+import { GamePlayerType, GameRoomIdType } from '../shared/models/types';
 import { GameRoomId } from '../shared/models/game';
 import { ZodError } from 'zod';
 import { GameRoom } from './interfaces';
 import { Logger } from '../app/logger';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
 import { GameSettings } from './settings';
+import { Socket } from '../types';
 
 class GameRooms {
   protected _io: Server;
@@ -22,15 +23,6 @@ class GameRooms {
       throw new UnauthorizedError();
     }
     return this._rooms[roomId];
-  }
-
-  public getPlayerRoomId(sid: string): string {
-    for (const roomId in this._rooms) {
-      if (this._rooms[roomId].sids.has(sid)) {
-        return roomId;
-      }
-    }
-    throw new UnauthorizedError();
   }
 
   public getRoomList(): GameRoomIdType[] {
@@ -61,9 +53,16 @@ class GameRooms {
     }
   }
 
+  public getPlayerList(roomId: GameRoomIdType): GamePlayerType[] {
+    const socketIds = this._io.sockets.adapter.rooms.get(roomId) || new Set();
+    return Array.from(socketIds).map((socketId) => {
+      const socket = this._io.sockets.sockets.get(socketId) as Socket;
+      return socket.data.playerData;
+    });
+  }
+
   public newRoom(roomId: GameRoomIdType) {
     this._rooms[roomId] = {
-      sids: new Set(),
       settings: new GameSettings()
     };
   }
@@ -72,12 +71,15 @@ class GameRooms {
     delete this._rooms[roomId];
   }
 
-  public addPlayer(roomId: GameRoomIdType, sid: string) {
-    this._rooms[roomId].sids.add(sid);
-  }
-
-  public deletePlayer(roomId: GameRoomIdType, sid: string) {
-    this._rooms[roomId].sids.delete(sid);
+  public setNewHost(roomId: GameRoomIdType): Socket | undefined {
+    const socketIds = this._io.sockets.adapter.rooms.get(roomId) || new Set();
+    if (socketIds.size > 0) {
+      const hostSocketId = Array.from(socketIds)[0];
+      const hostSocket = this._io.sockets.sockets.get(hostSocketId) as Socket;
+      hostSocket.data.setHost(true);
+      return hostSocket;
+    }
+    return undefined;
   }
 }
 

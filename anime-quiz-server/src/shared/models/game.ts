@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { Admin, Avatar, DisplayName, UserId } from './user';
+import { Admin, Avatar, DisplayName, User, UserId } from './user';
 import { GAME_MODES } from '../game-modes';
+import {ClientData} from "./client";
 
 const GameRoomId = z
   .string()
@@ -40,4 +41,30 @@ const GameRoomSettings = z.object({
   gameMode: GameRoomSettingsGameMode
 });
 
-export { GameRoomId, GameChat, GameChatText, GameRoomSettings, GameRoomSettingSongCount, GameRoomSettingsGuessTime, GameRoomSettingsGameMode };
+const GameGuess = z.object({
+  anime: z.string().trim(),
+  title: z.string().trim()
+});
+
+const GameScore = z.number()
+
+const GamePlayer = z.intersection(
+  ClientData,
+  z.object({
+    guess: GameGuess,
+    score: GameScore
+  })
+);
+
+export {
+  GameRoomId,
+  GameChat,
+  GameChatText,
+  GameRoomSettings,
+  GameRoomSettingSongCount,
+  GameRoomSettingsGuessTime,
+  GameRoomSettingsGameMode,
+  GameGuess,
+  GameScore,
+  GamePlayer
+};

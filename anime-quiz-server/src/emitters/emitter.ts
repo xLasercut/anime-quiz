@@ -91,6 +91,10 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_CLIENT_GAME_ROOM_SETTINGS, settings);
   }
 
+  public updateStorePlayerList(roomId: string) {
+    this._client(roomId).emit(SOCKET_EVENTS.UPDATE_STORE_PLAYER_LIST, this._gameRooms.getPlayerList(roomId));
+  }
+
   protected _client(sid?: string) {
     if (sid) {
       return this._io.to(sid).compress(true);

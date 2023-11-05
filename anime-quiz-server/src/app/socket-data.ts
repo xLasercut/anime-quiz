@@ -1,10 +1,9 @@
-import { ClientDataType, GameRoomIdType, SongIdType } from '../shared/models/types';
+import { ClientDataType, GameGuessType, GamePlayerType, GameRoomIdType, GameScoreType, SongIdType } from '../shared/models/types';
 import { DbUserSongType, DbUserType } from '../models/types';
 import { ClientData } from '../shared/models/client';
 import { Socket } from '../types';
 import { GameRoomId } from '../shared/models/game';
 import { Logger } from './logger';
-import { all } from 'axios';
 import { UnauthorizedError } from './exceptions';
 
 class SocketData {
@@ -12,6 +11,8 @@ class SocketData {
   protected _logger: Logger;
   protected _socket: Socket;
   public clientAuthTimer?: NodeJS.Timeout;
+  protected _gameGuess: GameGuessType;
+  protected _score: GameScoreType;
 
   constructor(socket: Socket, logger: Logger) {
     this._logger = logger;
@@ -25,10 +26,23 @@ class SocketData {
       host: false,
       auth: false
     };
+    this._gameGuess = {
+      anime: '',
+      title: ''
+    };
+    this._score = 0;
   }
 
   public get clientData(): ClientDataType {
     return this._clientData;
+  }
+
+  public get playerData(): GamePlayerType {
+    return {
+      ...this._clientData,
+      guess: this._gameGuess,
+      score: this._score
+    };
   }
 
   public get currentGameRoom(): GameRoomIdType {
@@ -73,6 +87,10 @@ class SocketData {
       user_id: this._clientData.userId,
       song_id: songIds
     };
+  }
+
+  public setHost(host: boolean) {
+    this._clientData.host = host;
   }
 }
 

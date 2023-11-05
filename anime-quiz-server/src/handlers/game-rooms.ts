@@ -22,6 +22,8 @@ class GameRoomsHandler extends ServerHandler {
       });
       const roomId = GameRoomId.parse(_roomId);
       this._gameRooms.validateRoomNotExists(roomId);
+      this._socket.data.setHost(true);
+      this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
       this._socket.join(roomId);
       callback(true);
     },
@@ -40,7 +42,7 @@ class GameRoomsHandler extends ServerHandler {
         clientData: this._socket.data.clientData
       });
       const socketId = this._socket.id;
-      const roomId = this._gameRooms.getPlayerRoomId(socketId);
+      const roomId = this._socket.data.currentGameRoom;
       this._emitter.updateGameRoomSettings(this._gameRooms.getRoom(roomId).settings.dict, socketId);
     },
     [SOCKET_EVENTS.UPDATE_SERVER_GAME_ROOM_SETTINGS]: (_settings: GameRoomSettingsType) => {
@@ -49,8 +51,7 @@ class GameRoomsHandler extends ServerHandler {
         request: _settings
       });
       const settings = GameRoomSettings.parse(_settings);
-      const socketId = this._socket.id;
-      const roomId = this._gameRooms.getPlayerRoomId(socketId);
+      const roomId = this._socket.data.currentGameRoom;
       this._gameRooms.getRoom(roomId).settings.update(settings);
       this._emitter.updateGameRoomSettings(this._gameRooms.getRoom(roomId).settings.dict, roomId);
       this._emitter.updateGameChatSys('Settings updated', roomId);
