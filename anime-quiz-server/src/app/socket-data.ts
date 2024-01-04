@@ -1,4 +1,12 @@
-import { ClientDataType, GameGuessType, GamePlayerType, GameRoomIdType, GameScoreType, SongIdType } from '../shared/models/types';
+import {
+  ClientDataType,
+  GameGuessType,
+  GamePlayerType,
+  GameRoomIdType,
+  GameScoreType,
+  NotificationColorType,
+  SongIdType
+} from '../shared/models/types';
 import { DbUserSongType, DbUserType } from '../models/types';
 import { ClientData } from '../shared/models/client';
 import { Socket } from '../types';
@@ -13,6 +21,9 @@ class SocketData {
   public clientAuthTimer?: NodeJS.Timeout;
   protected _gameGuess: GameGuessType;
   protected _score: GameScoreType;
+  protected _songLoaded: boolean;
+  protected _pendingScore: number;
+  protected _scoreColor: NotificationColorType;
 
   constructor(socket: Socket, logger: Logger) {
     this._logger = logger;
@@ -31,6 +42,9 @@ class SocketData {
       title: ''
     };
     this._score = 0;
+    this._songLoaded = false;
+    this._pendingScore = 0;
+    this._scoreColor = 'error';
   }
 
   public get clientData(): ClientDataType {
@@ -41,8 +55,25 @@ class SocketData {
     return {
       ...this._clientData,
       guess: this._gameGuess,
-      score: this._score
+      score: this._score,
+      scoreColor: this._scoreColor
     };
+  }
+
+  public get songLoaded(): boolean {
+    return this._songLoaded;
+  }
+
+  public set songLoaded(songLoaded: boolean) {
+    this._songLoaded = songLoaded;
+  }
+
+  public set gameGuess(gameGuess: GameGuessType) {
+    this._gameGuess = gameGuess;
+  }
+
+  public set pendingScore(pendingScore: number) {
+    this._pendingScore = pendingScore;
   }
 
   public get currentGameRoom(): GameRoomIdType {
@@ -63,6 +94,10 @@ class SocketData {
     }
 
     return gameRooms[0];
+  }
+
+  public resetScore(): void {
+    this._score = 0;
   }
 
   public updateUserSettings(clientData: ClientDataType): void {
@@ -91,6 +126,33 @@ class SocketData {
 
   public setHost(host: boolean) {
     this._clientData.host = host;
+  }
+
+  public updateScore() {
+    this._score += this._pendingScore;
+    this._scoreColor = this._getScoreColor();
+  }
+
+  public newRound() {
+    this._songLoaded = false;
+    this._pendingScore = 0;
+    this._scoreColor = 'error';
+    this._gameGuess = {
+      anime: '',
+      title: ''
+    };
+  }
+
+  protected _getScoreColor(): NotificationColorType {
+    if (this._pendingScore >= 2) {
+      return 'success';
+    }
+
+    if (this._pendingScore >= 1) {
+      return 'warning';
+    }
+
+    return 'error';
   }
 }
 

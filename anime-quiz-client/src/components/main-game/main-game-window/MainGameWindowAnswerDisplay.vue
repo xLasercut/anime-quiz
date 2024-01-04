@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-row no-gutters justify="center">
         <v-col cols="5" sm="3" md="2">
-          <v-sheet class="count-container"> 0 / 0</v-sheet>
+          <v-sheet class="count-container"> {{ gameStore.currentSongCount }} / {{ gameStore.maxSongCount }}</v-sheet>
         </v-col>
       </v-row>
       <v-row no-gutters justify="center">
@@ -17,10 +17,18 @@
 
 <script setup lang="ts">
 import MainAnswerAnswerDisplay from '@/components/main-game/main-game-window/main-game-window-answer-display/MainAnswerAnswerDisplay.vue';
-import { ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import MainAnswerQuestionDisplay from '@/components/main-game/main-game-window/main-game-window-answer-display/MainAnswerQuestionDisplay.vue';
+import { useGameStore } from '@/plugins/store/game';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { socket } from '@/plugins/socket';
 
+const gameStore = useGameStore();
 const show = ref(false);
+
+socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
+  show.value = false;
+});
 
 function answerDisplay() {
   if (show.value) {
@@ -28,6 +36,10 @@ function answerDisplay() {
   }
   return MainAnswerQuestionDisplay;
 }
+
+onUnmounted(() => {
+  socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
+});
 </script>
 
 <style scoped>

@@ -35,6 +35,26 @@ class Emitter {
     this._dbDataState = dependencies.dbDataState;
   }
 
+  public gameShowGuess(sid: string){
+    this._client(sid).emit(SOCKET_EVENTS.GAME_SHOW_GUESS)
+  }
+
+  public gameStartCountdown(sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.GAME_START_COUNTDOWN)
+  }
+
+  public gameStartLoad(sid: string, startPosition: number, guessTime: number) {
+    this._client(sid).emit(SOCKET_EVENTS.GAME_START_LOAD, startPosition, guessTime)
+  }
+
+  public gameNewRound(sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.GAME_NEW_ROUND);
+  }
+
+  public updateStoreGameState(sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_GAME_STATE, this._gameRooms.getRoom(sid).state.dict);
+  }
+
   public updateGameChat(socket: Socket, message: string, sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, this._chatSerialiser.generateUserMsg(socket, message));
   }

@@ -26,6 +26,13 @@ class GameRooms {
     return this._rooms[roomId];
   }
 
+  public resetScore(roomId: string): void {
+    const socketIds = this._io.sockets.adapter.rooms.get(roomId) || new Set();
+    for (const socketId of Array.from(socketIds)) {
+      this._io.sockets.sockets.get(socketId)?.data.resetScore();
+    }
+  }
+
   public getRoomList(): GameRoomIdType[] {
     const roomList: GameRoomIdType[] = [];
 
@@ -65,11 +72,12 @@ class GameRooms {
   public newRoom(roomId: GameRoomIdType) {
     this._rooms[roomId] = {
       settings: new GameSettings(),
-      state: new GameState()
+      state: new GameState(this._io, roomId)
     };
   }
 
   public deleteRoom(roomId: GameRoomIdType) {
+    this._rooms[roomId].state.stopGame();
     delete this._rooms[roomId];
   }
 

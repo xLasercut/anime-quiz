@@ -28,7 +28,7 @@
             </v-row>
           </div>
         </template>
-        <v-sheet class="player-guess">
+        <v-sheet class="player-guess" :color="player.scoreColor">
           {{ playerGuess(player) }}
         </v-sheet>
       </v-menu>

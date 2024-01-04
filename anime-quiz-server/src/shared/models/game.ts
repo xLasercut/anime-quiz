@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { Admin, Avatar, DisplayName, User, UserId } from './user';
 import { GAME_MODES } from '../game-modes';
-import {ClientData} from "./client";
+import {ClientData, NotificationColor} from './client';
+import { Song } from './song';
 
 const GameRoomId = z
   .string()
@@ -46,15 +47,23 @@ const GameGuess = z.object({
   title: z.string().trim()
 });
 
-const GameScore = z.number()
+const GameScore = z.number();
 
 const GamePlayer = z.intersection(
   ClientData,
   z.object({
     guess: GameGuess,
-    score: GameScore
+    score: GameScore,
+    scoreColor: NotificationColor
   })
 );
+
+const GameRoomState = z.object({
+  currentSong: Song,
+  currentSongCount: z.number(),
+  maxSongCount: z.number(),
+  playing: z.boolean()
+});
 
 export {
   GameRoomId,
@@ -66,5 +75,6 @@ export {
   GameRoomSettingsGameMode,
   GameGuess,
   GameScore,
-  GamePlayer
+  GamePlayer,
+  GameRoomState
 };
