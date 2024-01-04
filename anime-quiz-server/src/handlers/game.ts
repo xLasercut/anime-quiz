@@ -36,6 +36,10 @@ class GameHandler extends ServerHandler {
       });
       await this._newRound(roomId, roomSettings);
     },
+    [SOCKET_EVENTS.STOP_GAME]: () => {
+      const roomId = this._socket.data.currentGameRoom;
+      this._stopGame(roomId);
+    },
     [SOCKET_EVENTS.GAME_SONG_LOADED]: () => {
       this._socket.data.songLoaded = true;
     },
@@ -44,6 +48,7 @@ class GameHandler extends ServerHandler {
       const roomId = this._socket.data.currentGameRoom;
       this._socket.data.gameGuess = gameGuess;
       this._socket.data.pendingScore = this._gameRooms.getRoom(roomId).state.calculateScore(gameGuess);
+      this._emitter.updateStoreGameGuess(gameGuess, this._socket.id);
     }
   };
 
@@ -72,6 +77,7 @@ class GameHandler extends ServerHandler {
   protected _stopGame(roomId: GameRoomIdType) {
     this._gameRooms.getRoom(roomId).state.stopGame();
     this._emitter.updateStoreGameState(roomId);
+    this._emitter.stopGame(roomId);
   }
 }
 

@@ -30,6 +30,10 @@ socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
   show.value = false;
 });
 
+socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
+  show.value = true;
+});
+
 function answerDisplay() {
   if (show.value) {
     return MainAnswerAnswerDisplay;
@@ -39,6 +43,7 @@ function answerDisplay() {
 
 onUnmounted(() => {
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
+  socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);
 });
 </script>
 

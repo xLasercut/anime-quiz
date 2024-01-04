@@ -21,6 +21,12 @@ class DataQualityError extends Error {
   }
 }
 
+class SongListEmptyError extends Error {
+  constructor() {
+    super('song list empty');
+  }
+}
+
 function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e: any) {
   if (e instanceof UnauthorizedError) {
     logger.warn('unauthorized client', {
@@ -71,6 +77,11 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e:
       },
       socket.id
     );
+    return;
+  }
+
+  if (e instanceof SongListEmptyError) {
+    emitter.updateGameChatSys('Empty song list', socket.data.currentGameRoom);
     return;
   }
 
@@ -136,4 +147,4 @@ function newIoErrorHandler(logger: Logger): Function {
   };
 }
 
-export { newSocketErrorHandler, DatabaseLockedError, UnauthorizedError, DataQualityError, newIoErrorHandler };
+export { newSocketErrorHandler, DatabaseLockedError, UnauthorizedError, DataQualityError, newIoErrorHandler, SongListEmptyError };

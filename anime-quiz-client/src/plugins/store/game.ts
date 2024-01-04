@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { GamePlayerType, GameRoomStateType, SongType } from '@/assets/shared/models/types';
+import { GameGuessType, GamePlayerType, GameRoomStateType, SongType } from '@/assets/shared/models/types';
 
 interface State {
   playerList: GamePlayerType[];
@@ -7,6 +7,7 @@ interface State {
   playing: boolean;
   currentSongCount: number;
   maxSongCount: number;
+  gameGuess: GameGuessType;
 }
 
 const useGameStore = defineStore('game', {
@@ -24,7 +25,11 @@ const useGameStore = defineStore('game', {
       },
       playing: false,
       currentSongCount: 0,
-      maxSongCount: 0
+      maxSongCount: 0,
+      gameGuess: {
+        anime: '',
+        title: ''
+      }
     };
   },
   actions: {
@@ -36,6 +41,9 @@ const useGameStore = defineStore('game', {
       this.currentSongCount = gameState.currentSongCount;
       this.maxSongCount = gameState.maxSongCount;
       this.playing = gameState.playing;
+    },
+    updateGameGuess(gameGuess: GameGuessType) {
+      this.gameGuess = gameGuess;
     }
   }
 });

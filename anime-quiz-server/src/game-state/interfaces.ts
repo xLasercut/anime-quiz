@@ -1,9 +1,9 @@
 import { GameSettings } from './settings';
-import {GameState} from "./state";
+import { GameState } from './state';
 
 interface GameRoom {
   settings: GameSettings;
-  state: GameState
+  state: GameState;
 }
 
 export { GameRoom };

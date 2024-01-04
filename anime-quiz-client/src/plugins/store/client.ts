@@ -37,6 +37,9 @@ const useClientStore = defineStore('client', {
     },
     changeDialogView(view: ClientDialogRoute) {
       this.dialogView = view;
+    },
+    updateVolume(volume: number) {
+      this.volume = volume;
     }
   }
 });

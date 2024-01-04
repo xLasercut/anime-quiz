@@ -1,5 +1,18 @@
 <template>
-  <nav-btn icon="mdi-play" color="success" @click="startGame()">Start</nav-btn>
+  <div class="volume-slider-container">
+    <v-slider
+      :min="0"
+      :max="100"
+      :hide-details="true"
+      prepend-icon="mdi-volume-medium"
+      density="compact"
+      thumb-size="15"
+      :model-value="clientStore.volume"
+      @update:model-value="updateVolume($event)"
+    ></v-slider>
+  </div>
+  <nav-btn icon="mdi-stop" color="error" @click="stopGame()" v-if="showStopBtn()">Stop</nav-btn>
+  <nav-btn icon="mdi-play" color="success" @click="startGame()" v-if="showStartBtn()">Start</nav-btn>
   <nav-btn icon="mdi-cog" color="primary" @click="openSettings()">Settings</nav-btn>
   <nav-btn icon="mdi-backspace-reverse-outline" color="warning" @click="back()">Back</nav-btn>
 </template>
@@ -13,8 +26,11 @@ import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { useGameStore } from '@/plugins/store/game';
+import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 
 const clientStore = useClientStore();
+const gameStore = useGameStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 
 function openSettings() {
@@ -29,4 +45,28 @@ function back() {
 function startGame() {
   socket.emit(SOCKET_EVENTS.START_GAME);
 }
+
+function stopGame() {
+  socket.emit(SOCKET_EVENTS.STOP_GAME);
+}
+
+function showStartBtn(): boolean {
+  return (clientStore.clientData.host || clientStore.clientData.admin) && !gameStore.playing;
+}
+
+function showStopBtn(): boolean {
+  return (clientStore.clientData.host || clientStore.clientData.admin) && gameStore.playing;
+}
+
+function updateVolume(val: number) {
+  localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = val;
+  clientStore.updateVolume(val);
+}
 </script>
+
+<style scoped>
+.volume-slider-container {
+  width: 150px;
+  padding-top: 4px;
+}
+</style>

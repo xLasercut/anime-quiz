@@ -1,5 +1,5 @@
 import { Server } from '../app/server';
-import { ClientDataType, GameRoomSettingsType, SystemNotificationType, UserIdType } from '../shared/models/types';
+import { ClientDataType, GameGuessType, GameRoomSettingsType, SystemNotificationType, UserIdType } from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
 import { EmitterDependencies } from '../interfaces';
 import { UserDb } from '../database/user';
@@ -35,20 +35,24 @@ class Emitter {
     this._dbDataState = dependencies.dbDataState;
   }
 
-  public gameShowGuess(sid: string){
-    this._client(sid).emit(SOCKET_EVENTS.GAME_SHOW_GUESS)
+  public gameShowGuess(sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.GAME_SHOW_GUESS);
   }
 
   public gameStartCountdown(sid: string) {
-    this._client(sid).emit(SOCKET_EVENTS.GAME_START_COUNTDOWN)
+    this._client(sid).emit(SOCKET_EVENTS.GAME_START_COUNTDOWN);
   }
 
   public gameStartLoad(sid: string, startPosition: number, guessTime: number) {
-    this._client(sid).emit(SOCKET_EVENTS.GAME_START_LOAD, startPosition, guessTime)
+    this._client(sid).emit(SOCKET_EVENTS.GAME_START_LOAD, startPosition, guessTime);
   }
 
   public gameNewRound(sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.GAME_NEW_ROUND);
+  }
+
+  public stopGame(sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.STOP_GAME);
   }
 
   public updateStoreGameState(sid: string) {
@@ -113,6 +117,10 @@ class Emitter {
 
   public updateStorePlayerList(roomId: string) {
     this._client(roomId).emit(SOCKET_EVENTS.UPDATE_STORE_PLAYER_LIST, this._gameRooms.getPlayerList(roomId));
+  }
+
+  public updateStoreGameGuess(guess: GameGuessType, sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_GAME_GUESS, guess);
   }
 
   protected _client(sid?: string) {

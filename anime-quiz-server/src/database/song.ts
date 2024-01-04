@@ -2,7 +2,7 @@ import { DatabaseDataState, mainDbConnection, ServerDb, userDbConnection } from 
 import { ServerConfig } from '../interfaces';
 
 import { DbSong, DbSongTitle } from '../models/song';
-import {SongIdType, SongTitleType, SongType} from '../shared/models/types';
+import { SongIdType, SongTitleType, SongType } from '../shared/models/types';
 import { Song } from '../shared/models/song';
 import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
@@ -113,8 +113,8 @@ class SongDb extends ServerDb<SongType> {
 
   public getSongListByIds(songIds: SongIdType[]): SongType[] {
     return this._songList.filter((song) => {
-      return songIds.includes(song.songId)
-    })
+      return songIds.includes(song.songId);
+    });
   }
 
   public newRecord(record: SongType) {

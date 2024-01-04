@@ -3,7 +3,7 @@
     class="main-player"
     :currentTime="currentTime"
     :muted="muted"
-    :volume="100"
+    :volume="clientStore.volume"
     ref="player"
     :style="styles()"
     @vmDurationChange="updateDuration"
@@ -16,15 +16,15 @@
     </Video>
     <Youtube :video-id="videoId()" v-if="isYoutube()"></Youtube>
   </Player>
-  {{ currentTime }} - {{ duration }}
 </template>
 
 <script setup lang="ts">
-import { Player, Youtube, Video } from '@vime/vue-next';
+import { Player, Video, Youtube } from '@vime/vue-next';
 import { useGameStore } from '@/plugins/store/game';
 import { onUnmounted, ref } from 'vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
+import { useClientStore } from '@/plugins/store/client';
 
 let loadingInterval: NodeJS.Timeout;
 
@@ -38,6 +38,7 @@ const startPosition = ref(0);
 const guessTime = ref(0);
 
 const gameStore = useGameStore();
+const clientStore = useClientStore();
 
 function isYoutube() {
   return gameStore.currentSong.src.includes('youtube');
@@ -66,12 +67,11 @@ function updateCurrentTime(val: any) {
 function styles() {
   if (show.value) {
     return {
-      position: 'relative'
+      opacity: '1'
     };
   }
   return {
-    ['max-width']: '0px',
-    width: '0px'
+    opacity: '0'
   };
 }
 
@@ -110,15 +110,28 @@ socket.on(SOCKET_EVENTS.GAME_START_LOAD, (_startPosition: number, _guessTime: nu
 });
 
 socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, () => {
+  console.log('starting countdown');
   clearInterval(loadingInterval);
   muted.value = false;
   player.value.play();
+});
+
+socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
+  console.log('time is up');
+  show.value = true;
+});
+
+socket.on(SOCKET_EVENTS.STOP_GAME, () => {
+  clearInterval(loadingInterval);
+  player.value.pause();
 });
 
 onUnmounted(() => {
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
   socket.off(SOCKET_EVENTS.GAME_START_LOAD);
   socket.off(SOCKET_EVENTS.GAME_START_COUNTDOWN);
+  socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);
+  socket.off(SOCKET_EVENTS.STOP_GAME);
   clearInterval(loadingInterval);
 });
 </script>

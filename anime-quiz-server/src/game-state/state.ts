@@ -2,6 +2,7 @@ import { GameGuessType, GameRoomIdType, GameRoomStateType, SongType } from '../s
 import { Server } from '../app/server';
 import { clearInterval, clearTimeout } from 'node:timers';
 import { Socket } from '../types';
+import { SongListEmptyError } from '../app/exceptions';
 
 class GameState {
   protected _currentSong: SongType = {
@@ -37,6 +38,9 @@ class GameState {
   }
 
   public newGame(songList: SongType[]) {
+    if (songList.length <= 0) {
+      throw new SongListEmptyError();
+    }
     this._gameSongList = songList;
     this._maxSongCount = songList.length;
     this._currentSongCount = 0;

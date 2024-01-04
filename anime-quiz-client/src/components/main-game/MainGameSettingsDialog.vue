@@ -1,7 +1,7 @@
 <template>
   <dialog-form v-model="valid" @submit.prevent="submitChange()">
     <dialog-slider
-      :disabled="disabled"
+      :disabled="settingsDisabled()"
       label="Song Count"
       v-model="settings.songCount"
       :min="1"
@@ -9,25 +9,25 @@
       :rules="songCountRules"
     ></dialog-slider>
     <dialog-slider
-      :disabled="disabled"
+      :disabled="settingsDisabled()"
       label="Guess Time"
       v-model="settings.guessTime"
       :min="5"
       :max="120"
       :rules="guessTimeRules"
     ></dialog-slider>
-    <dialog-radio :disabled="disabled" label="Duplicate" v-model="settings.duplicate" :rules="duplicateRules">
+    <dialog-radio :disabled="settingsDisabled()" label="Duplicate" v-model="settings.duplicate" :rules="duplicateRules">
       <v-radio label="True" :value="true"></v-radio>
       <v-radio label="False" :value="false"></v-radio>
     </dialog-radio>
     <dialog-select
-      :disabled="disabled"
+      :disabled="settingsDisabled()"
       label="Game Mode"
       v-model="settings.gameMode"
       :items="gameModeItems"
       :rules="gameModeRules"
     ></dialog-select>
-    <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
+    <dialog-actions :disabled="settingsDisabled()" @dialog:close="$emit('dialog:close')"></dialog-actions>
   </dialog-form>
 </template>
 
@@ -50,6 +50,11 @@ import {
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { canParseValue } from '@/assets/game-helpers';
 import { z } from 'zod';
+import { useClientStore } from '@/plugins/store/client';
+import { useGameStore } from '@/plugins/store/game';
+
+const clientStore = useClientStore();
+const gameStore = useGameStore();
 
 const emit = defineEmits(['dialog:close']);
 
@@ -90,5 +95,9 @@ function submitChange() {
     socket.emit(SOCKET_EVENTS.UPDATE_SERVER_GAME_ROOM_SETTINGS, settings.value);
     emit('dialog:close');
   }
+}
+
+function settingsDisabled(): boolean {
+  return disabled.value || (!clientStore.clientData.host && !clientStore.clientData.admin) || gameStore.playing;
 }
 </script>

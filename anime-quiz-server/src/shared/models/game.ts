@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { Admin, Avatar, DisplayName, User, UserId } from './user';
 import { GAME_MODES } from '../game-modes';
-import {ClientData, NotificationColor} from './client';
+import { ClientData, NotificationColor } from './client';
 import { Song } from './song';
 
 const GameRoomId = z
