@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@mdi/font": "7.2.96",
+    "@vime/core": "^5.4.1",
+    "@vime/vue-next": "^5.4.1",
     "axios": "^1.6.4",
     "install": "^0.13.0",
     "pinia": "^2.1.7",

@@ -13,6 +13,7 @@ import { GameRoomsHandler } from './game-rooms';
 import { ChatHandler } from './chat';
 import { ClientLoginAuthType } from '../shared/models/types';
 import { ClientLoginAuth } from '../shared/models/client';
+import { GameHandler } from './game';
 
 class EntryPointHandler extends ServerHandler {
   protected _handlers: ServerHandler[];
@@ -44,7 +45,8 @@ class EntryPointHandler extends ServerHandler {
       new UserHandler(socket, errHandler, dependencies),
       new DataHandler(socket, errHandler, dependencies),
       new GameRoomsHandler(socket, errHandler, dependencies),
-      new ChatHandler(socket, errHandler, dependencies)
+      new ChatHandler(socket, errHandler, dependencies),
+      new GameHandler(socket, errHandler, dependencies)
     ];
     this._adminHandlers = [
       new AdminUserHandler(socket, errHandler, dependencies),

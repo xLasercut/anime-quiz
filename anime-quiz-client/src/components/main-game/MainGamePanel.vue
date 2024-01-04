@@ -1,4 +1,5 @@
 <template>
+  <nav-btn icon="mdi-play" color="success" @click="startGame()">Start</nav-btn>
   <nav-btn icon="mdi-cog" color="primary" @click="openSettings()">Settings</nav-btn>
   <nav-btn icon="mdi-backspace-reverse-outline" color="warning" @click="back()">Back</nav-btn>
 </template>
@@ -23,5 +24,9 @@ function openSettings() {
 
 function back() {
   clientStore.changeView(ROUTES.GAME_ROOMS);
+}
+
+function startGame() {
+  socket.emit(SOCKET_EVENTS.START_GAME);
 }
 </script>

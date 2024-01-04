@@ -1,14 +1,24 @@
 import { defineStore } from 'pinia';
-import { GamePlayerType } from '@/assets/shared/models/types';
+import { GamePlayerType, SongType } from '@/assets/shared/models/types';
 
 interface State {
   playerList: GamePlayerType[];
+  currentSong: SongType;
 }
 
 const useGameStore = defineStore('game', {
   state: (): State => {
     return {
-      playerList: []
+      playerList: [],
+      currentSong: {
+        songId: '',
+        src: '',
+        type: 'OP',
+        songTitle: '',
+        artist: '',
+        animeName: [],
+        animeId: []
+      }
     };
   },
   actions: {

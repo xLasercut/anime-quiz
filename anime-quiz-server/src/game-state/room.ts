@@ -7,6 +7,7 @@ import { Logger } from '../app/logger';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
 import { GameSettings } from './settings';
 import { Socket } from '../types';
+import { GameState } from './state';
 
 class GameRooms {
   protected _io: Server;
@@ -63,7 +64,8 @@ class GameRooms {
 
   public newRoom(roomId: GameRoomIdType) {
     this._rooms[roomId] = {
-      settings: new GameSettings()
+      settings: new GameSettings(),
+      state: new GameState()
     };
   }
 

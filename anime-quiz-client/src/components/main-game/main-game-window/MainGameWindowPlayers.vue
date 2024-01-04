@@ -26,9 +26,6 @@
                 {{ player.score }}
               </v-sheet>
             </v-row>
-            <v-row justify="center">
-              <v-btn @click="showGuess = !showGuess">test</v-btn>
-            </v-row>
           </div>
         </template>
         <v-sheet class="player-guess">
