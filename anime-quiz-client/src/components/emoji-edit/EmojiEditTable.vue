@@ -10,11 +10,11 @@
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
     <template #item.src="{ item }">
-      <game-emoji width="25pt" :emoji="item.raw"></game-emoji>
+      <game-emoji width="25pt" :emoji="item"></game-emoji>
     </template>
 
     <template #item.action="{ item }">
-      <table-action @item:edit="editEmoji(item.raw)" @item:delete="deleteEmoji(item.raw)"></table-action>
+      <table-action @item:edit="editEmoji(item)" @item:delete="deleteEmoji(item)"></table-action>
     </template>
 
     <template #top>

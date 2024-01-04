@@ -10,15 +10,15 @@
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
     <template #item.avatar="{ item }">
-      <game-avatar :avatar="item.raw.avatar"></game-avatar>
+      <game-avatar :avatar="item.avatar"></game-avatar>
     </template>
 
     <template #item.admin="{ item }">
-      {{ item.raw.admin }}
+      {{ item.admin }}
     </template>
 
     <template #item.action="{ item }">
-      <table-action @item:edit="editUser(item.raw)" @item:delete="deleteUser(item.raw)"></table-action>
+      <table-action @item:edit="editUser(item)" @item:delete="deleteUser(item)"></table-action>
     </template>
 
     <template #top>

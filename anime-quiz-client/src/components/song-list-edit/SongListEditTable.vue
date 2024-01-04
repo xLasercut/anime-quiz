@@ -12,25 +12,25 @@
     v-model="songsSelected"
     item-value="songId"
   >
-    <template #column.data-table-select></template>
+    <template #header.data-table-select></template>
     <template #item.data-table-select="{ isSelected, toggleSelect, item }">
       <v-checkbox
-        :model-value="isSelected(item)"
-        @update:model-value="toggleSelect(item)"
+        :model-value="isSelected({ value: item.songId })"
+        @update:model-value="toggleSelect({ value: item.songId })"
         density="compact"
         hide-details
         :true-icon="checkboxIcon()"
         :color="checkboxColor()"
-        :disabled="checkboxDisabled(item.raw.songId, isSelected(item))"
-        :false-icon="checkboxFalseIcon(checkboxDisabled(item.raw.songId, isSelected(item)))"
+        :disabled="checkboxDisabled(item.songId, isSelected({ value: item.songId }))"
+        :false-icon="checkboxFalseIcon(checkboxDisabled(item.songId, isSelected({ value: item.songId })))"
       ></v-checkbox>
     </template>
     <template #item.animeName="{ item }">
-      <table-anime-name :song="item.raw"></table-anime-name>
+      <table-anime-name :song="item"></table-anime-name>
     </template>
 
     <template #item.src="{ item }">
-      <a :href="item.raw.src" target="_blank">View</a>
+      <a :href="item.src" target="_blank">View</a>
     </template>
 
     <template #top>

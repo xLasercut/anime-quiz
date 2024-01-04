@@ -10,15 +10,15 @@
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
     <template #item.animeName="{ item }">
-      <table-anime-name :song="item.raw"></table-anime-name>
+      <table-anime-name :song="item"></table-anime-name>
     </template>
 
     <template #item.src="{ item }">
-      <a :href="item.raw.src" target="_blank">View</a>
+      <a :href="item.src" target="_blank">View</a>
     </template>
 
     <template #item.action="{ item }">
-      <table-action @item:edit="editSong(item.raw)" @item:delete="deleteSong(item.raw)"></table-action>
+      <table-action @item:edit="editSong(item)" @item:delete="deleteSong(item)"></table-action>
     </template>
 
     <template #top>

@@ -11,14 +11,14 @@
   >
     <template #item.animeName="{ item }">
       <v-row :dense="true">
-        <v-col v-for="name in item.raw.animeName" cols="auto">
+        <v-col v-for="name in item.animeName" cols="auto">
           <v-chip color="primary" size="small" :label="true">{{ name }}</v-chip>
         </v-col>
       </v-row>
     </template>
 
     <template #item.action="{ item }">
-      <table-action @item:edit="editAnime(item.raw)" @item:delete="deleteAnime(item.raw)"></table-action>
+      <table-action @item:edit="editAnime(item)" @item:delete="deleteAnime(item)"></table-action>
     </template>
 
     <template #top>
