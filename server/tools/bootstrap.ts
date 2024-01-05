@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import * as Database from 'better-sqlite3';
 import { SERVER_CONFIG } from '../src/app/config';
 
 const db = new Database(SERVER_CONFIG.userDbPath);

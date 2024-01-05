@@ -1,6 +1,6 @@
 {
   "name": "anime-quiz-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
   "main": "index.js",
   "scripts": {
