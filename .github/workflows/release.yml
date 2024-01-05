@@ -24,8 +24,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd client
+          pushd client
           pnpm install
+          popd
+          pushd server
+          pnpm install
+          popd
 
       - name: Build Client
         run: |
