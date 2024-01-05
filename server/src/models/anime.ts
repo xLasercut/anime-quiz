@@ -1,33 +1,20 @@
-import { AbstractModel } from './abstract';
-import { IAnime, IAnimeRaw } from '../shared/interfaces';
-import { animeRawSchema, animeSchema } from '../schemas/anime';
-import { v4 } from 'uuid';
+import { z } from 'zod';
+import { AnimeId, AnimeName } from '../shared/models/anime';
+import { isValidJson } from './common';
 
-class AnimeRaw extends AbstractModel<IAnimeRaw> {
-  constructor(anime: IAnimeRaw) {
-    super(animeRawSchema, anime);
-  }
+const DbAnime = z.object({
+  anime_name: z
+    .string()
+    .trim()
+    .min(1)
+    .refine((val) => isValidJson(val), { message: 'Invalid json string' })
+    .transform((val) => JSON.parse(val))
+    .pipe(z.array(AnimeName)),
+  anime_id: AnimeId
+});
 
-  public toAnime(): Anime {
-    const anime: IAnime = {
-      anime_id: this._result.value.anime_id,
-      anime_name: this._jsonParseList(this._result.value.anime_name)
-    };
-    return new Anime(anime);
-  }
-}
+const DbAnimeName = z.object({
+  anime_name: AnimeName
+});
 
-class NewAnime extends AbstractModel<IAnime> {
-  constructor(_anime: IAnime) {
-    const { anime_id, ...rest } = _anime;
-    super(animeSchema, { anime_id: `anime-${v4()}`, ...rest });
-  }
-}
-
-class Anime extends AbstractModel<IAnime> {
-  constructor(anime: IAnime) {
-    super(animeSchema, anime);
-  }
-}
-
-export { Anime, NewAnime, AnimeRaw };
+export { DbAnime, DbAnimeName };

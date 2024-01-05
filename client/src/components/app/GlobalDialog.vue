@@ -18,39 +18,29 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
-import { CLIENT_EVENTS } from '@/assets/events';
-import { Component, defineComponent, inject, reactive, toRefs } from 'vue';
-import { DIALOG_MAPPINGS } from '@/assets/routing/mapping';
-import { useClientStore } from '@/plugins/store/client';
-import { RegisterOpenDialog } from '@/assets/types';
-import { ClientDialogRoute } from '@/assets/routing/types';
+<script setup lang="ts">
+import {CLIENT_EVENTS} from '@/assets/events';
+import {inject, ref} from 'vue';
+import {DIALOG_MAPPINGS} from '@/assets/routing/mapping';
+import {useClientStore} from '@/plugins/store/client';
+import {RegisterOpenDialog} from '@/assets/types';
+import {ClientDialogRoute} from '@/assets/routing/types';
 
-export default defineComponent({
-  setup() {
-    const clientStore = useClientStore();
-    const state = reactive({
-      label: '',
-      show: false
-    });
+const label = ref('')
+const show = ref(false)
 
-    function dialogComponent(): Component {
-      return DIALOG_MAPPINGS[clientStore.dialogView];
-    }
+const clientStore = useClientStore();
 
-    function openDialog(dialog: ClientDialogRoute, label: string): void {
-      clientStore.changeDialogView(dialog);
-      state.label = label;
-      state.show = true;
-    }
+function dialogComponent() {
+  return DIALOG_MAPPINGS[clientStore.dialogView];
+}
 
-    const registerOpenDialog = inject(CLIENT_EVENTS.REGISTER_OPEN_DIALOG) as RegisterOpenDialog;
-    registerOpenDialog(openDialog);
+function openDialog(_dialog: ClientDialogRoute, _label: string): void {
+  clientStore.changeDialogView(_dialog);
+  label.value = _label;
+  show.value = true;
+}
 
-    return {
-      ...toRefs(state),
-      dialogComponent
-    };
-  }
-});
+const registerOpenDialog = inject(CLIENT_EVENTS.REGISTER_OPEN_DIALOG) as RegisterOpenDialog;
+registerOpenDialog(openDialog);
 </script>

@@ -7,41 +7,34 @@
   </v-snackbar>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from 'vue';
-import { CLIENT_EVENTS } from '@/assets/events';
-import { NotificationColorType } from '@/assets/shared/models/types';
-import { RegisterSendNotification } from '@/assets/types';
+<script setup lang="ts">
+import {inject, ref} from 'vue';
+import {CLIENT_EVENTS} from '@/assets/events';
+import {NotificationColorType} from '@/assets/shared/models/types';
+import {RegisterSendNotification} from '@/assets/types';
 
-export default defineComponent({
-  setup() {
-    const state = reactive({
-      message: '',
-      show: false,
-      color: 'error'
-    });
+const message = ref('')
+const show = ref(false)
+const color = ref<NotificationColorType>('error')
 
-    function _showNotification(color: NotificationColorType, message: string): void {
-      state.color = color;
-      state.message = message;
-      state.show = true;
-    }
 
-    function sendNotification(color: NotificationColorType, message: string): void {
-      if (state.show) {
-        state.show = false;
-        setTimeout((): void => {
-          _showNotification(color, message);
-        }, 100);
-      } else {
-        _showNotification(color, message);
-      }
-    }
+function _showNotification(_color: NotificationColorType, _message: string): void {
+  color.value = _color;
+  message.value = _message;
+  show.value = true;
+}
 
-    const registerSendNotification = inject(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION) as RegisterSendNotification;
-    registerSendNotification(sendNotification);
-
-    return { ...toRefs(state) };
+function sendNotification(color: NotificationColorType, message: string): void {
+  if (show.value) {
+    show.value = false;
+    setTimeout((): void => {
+      _showNotification(color, message);
+    }, 100);
+  } else {
+    _showNotification(color, message);
   }
-});
+}
+
+const registerSendNotification = inject(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION) as RegisterSendNotification;
+registerSendNotification(sendNotification);
 </script>

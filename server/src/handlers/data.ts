@@ -1,68 +1,34 @@
-import { AbstractHandler } from './abstract';
-import { Logger } from '../app/logging/logger';
-import { ISocket } from '../types';
-import { SHARED_EVENTS } from '../shared/events';
-import { SongDbEmitter } from '../emitters/song';
-import { EmojiDbEmitter } from '../emitters/emoji';
-import { UserDbEmitter } from '../emitters/user';
-import { UserDb } from '../database/user';
-import { SongDb } from '../database/song';
-import { EmojiDb } from '../database/emoji';
-import { Server } from '../app/server';
+import { ServerHandler } from './common';
+import { SOCKET_EVENTS } from '../shared/events';
 
-class DataHandler extends AbstractHandler {
-  protected _songDbEmitter: SongDbEmitter;
-  protected _emojiDbEmitter: EmojiDbEmitter;
-  protected _userDbEmitter: UserDbEmitter;
-
-  constructor(io: Server, logger: Logger, userDb: UserDb, songDb: SongDb, emojiDb: EmojiDb) {
-    super(logger);
-    this._songDbEmitter = new SongDbEmitter(io, songDb);
-    this._emojiDbEmitter = new EmojiDbEmitter(io, emojiDb);
-    this._userDbEmitter = new UserDbEmitter(io, userDb);
-  }
-
-  public start(socket: ISocket, errorHandler: Function) {
-    socket.on(SHARED_EVENTS.GET_ANIME_LIST, () => {
-      try {
-        this._songDbEmitter.updateAnimeList(socket.id);
-      } catch (e) {
-        errorHandler(e);
-      }
-    });
-
-    socket.on(SHARED_EVENTS.GET_SONG_LIST, () => {
-      try {
-        this._songDbEmitter.updateSongList(socket.id);
-      } catch (e) {
-        errorHandler(e);
-      }
-    });
-
-    socket.on(SHARED_EVENTS.GET_SONG_TITLE_LIST, () => {
-      try {
-        this._songDbEmitter.updateSongTitleList(socket.id);
-      } catch (e) {
-        errorHandler(e);
-      }
-    });
-
-    socket.on(SHARED_EVENTS.GET_EMOJI_LIST, () => {
-      try {
-        this._emojiDbEmitter.updateEmojiList(socket.id);
-      } catch (e) {
-        errorHandler(e);
-      }
-    });
-
-    socket.on(SHARED_EVENTS.GET_USER_LISTS, () => {
-      try {
-        this._userDbEmitter.updateUserLists(socket.id);
-      } catch (e) {
-        errorHandler(e);
-      }
-    });
-  }
+class DataHandler extends ServerHandler {
+  protected _events = {
+    [SOCKET_EVENTS.UPDATE_STORE_USER_LIST]: () => {
+      this._logger.info('update store user list', {
+        clientData: this._socket.data.clientData
+      });
+      this._validateIsAdmin();
+      this._emitter.updateStoreUserList(this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_SONG_TITLES]: () => {
+      this._emitter.updateStoreSongTitles(this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_SONG_LIST]: () => {
+      this._emitter.updateStoreSongList(this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_ANIME_LIST]: () => {
+      this._emitter.updateStoreAnimeList(this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_ANIME_NAMES]: () => {
+      this._emitter.updateStoreAnimeNames(this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST]: () => {
+      this._emitter.updateStoreUserSongList(this._socket.data.clientData.userId, this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_EMOJI_LIST]: () => {
+      this._emitter.updateStoreEmojiList(this._socket.id);
+    }
+  };
 }
 
 export { DataHandler };
