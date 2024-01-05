@@ -22,6 +22,7 @@ class GameState {
   protected _timer?: NodeJS.Timeout;
   protected _io: Server;
   protected _roomId: GameRoomIdType;
+  protected _songOverride?: SongType;
 
   constructor(io: Server, roomId: GameRoomIdType) {
     this._io = io;
@@ -46,6 +47,7 @@ class GameState {
     this._currentSongCount = 0;
     this._currentSong = this._getCurrentSong();
     this._playing = true;
+    this._songOverride = undefined;
   }
 
   public stopGame() {
@@ -55,8 +57,7 @@ class GameState {
   }
 
   public newRound() {
-    const socketIds = this._io.sockets.adapter.rooms.get(this._roomId) || new Set();
-    for (const socketId of Array.from(socketIds)) {
+    for (const socketId of this._io.getSocketIds(this._roomId)) {
       this._io.sockets.sockets.get(socketId)?.data.newRound();
     }
   }
@@ -108,8 +109,7 @@ class GameState {
   }
 
   protected _playerLoaded(): boolean {
-    const socketIds = this._io.sockets.adapter.rooms.get(this._roomId) || new Set();
-    for (const socketId of Array.from(socketIds)) {
+    for (const socketId of this._io.getSocketIds(this._roomId)) {
       const socket = this._io.sockets.sockets.get(socketId) as Socket;
       if (!socket.data.songLoaded) {
         return false;
@@ -119,6 +119,9 @@ class GameState {
   }
 
   protected _getCurrentSong(): SongType {
+    if (this._songOverride) {
+      return this._songOverride;
+    }
     return (
       this._gameSongList[this._currentSongCount] || {
         songId: '',
@@ -141,14 +144,23 @@ class GameState {
   }
 
   public updateScore() {
-    const socketIds = this._io.sockets.adapter.rooms.get(this._roomId) || new Set();
-    for (const socketId of Array.from(socketIds)) {
+    for (const socketId of this._io.getSocketIds(this._roomId)) {
       this._io.sockets.sockets.get(socketId)?.data.updateScore();
     }
   }
 
   public isLastSong(): boolean {
     return this._currentSongCount >= this._gameSongList.length - 1;
+  }
+
+  public resetScore(): void {
+    for (const socketId of this._io.getSocketIds(this._roomId)) {
+      this._io.sockets.sockets.get(socketId)?.data.resetScore();
+    }
+  }
+
+  public set songOverride(song: SongType | undefined) {
+    this._songOverride = song;
   }
 }
 

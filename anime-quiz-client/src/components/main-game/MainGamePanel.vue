@@ -1,8 +1,10 @@
 <template>
+  <nav-btn color="primary" icon="mdi-playlist-music" @click="openSongPicker()" v-if="clientStore.clientData.admin"> Song </nav-btn>
   <div class="volume-slider-container">
     <v-slider
       :min="0"
       :max="100"
+      :step="1"
       :hide-details="true"
       prepend-icon="mdi-volume-medium"
       density="compact"
@@ -36,6 +38,10 @@ const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 function openSettings() {
   socket.emit(SOCKET_EVENTS.GET_GAME_ROOM_SETTINGS);
   openDialog(DIALOG_ROUTES.MAIN_GAME_SETTINGS, 'Game Settings');
+}
+
+function openSongPicker() {
+  openDialog(DIALOG_ROUTES.MAIN_GAME_SONG_PICKER, 'Song Picker');
 }
 
 function back() {

@@ -4,12 +4,15 @@ import { GameRoomSettingsType, UserIdType } from '../shared/models/types';
 import { NormalGameListGenerator } from './game-list-generators/normal';
 import { SongDb } from '../database/song';
 import { GameListGenerator } from './game-list-generators/common';
+import { BalancedPlusGameListGenerator } from './game-list-generators/balanced-plus';
+import { BalancedGameListGenerator } from './game-list-generators/balanced';
+import { ShiritoriGameListGenerator } from './game-list-generators/shiritori';
 
 const _GENERATOR_MAP = {
-  [GAME_MODES.NORMAL]: NormalGameListGenerator
-  // [GAME_MODES.BALANCED_PLUS]: BalancedPlusGameListGenerator,
-  // [GAME_MODES.BALANCED]: BalancedGameListGenerator,
-  // [GAME_MODES.SHIRITORI]: ShiritoriGameListGenerator
+  [GAME_MODES.NORMAL]: NormalGameListGenerator,
+  [GAME_MODES.BALANCED_PLUS]: BalancedPlusGameListGenerator,
+  [GAME_MODES.BALANCED]: BalancedGameListGenerator,
+  [GAME_MODES.SHIRITORI]: ShiritoriGameListGenerator
 };
 
 class GameListGeneratorFactory {

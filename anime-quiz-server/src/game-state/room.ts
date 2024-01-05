@@ -26,13 +26,6 @@ class GameRooms {
     return this._rooms[roomId];
   }
 
-  public resetScore(roomId: string): void {
-    const socketIds = this._io.sockets.adapter.rooms.get(roomId) || new Set();
-    for (const socketId of Array.from(socketIds)) {
-      this._io.sockets.sockets.get(socketId)?.data.resetScore();
-    }
-  }
-
   public getRoomList(): GameRoomIdType[] {
     const roomList: GameRoomIdType[] = [];
 
@@ -62,8 +55,7 @@ class GameRooms {
   }
 
   public getPlayerList(roomId: GameRoomIdType): GamePlayerType[] {
-    const socketIds = this._io.sockets.adapter.rooms.get(roomId) || new Set();
-    return Array.from(socketIds).map((socketId) => {
+    return this._io.getSocketIds(roomId).map((socketId) => {
       const socket = this._io.sockets.sockets.get(socketId) as Socket;
       return socket.data.playerData;
     });
@@ -82,9 +74,9 @@ class GameRooms {
   }
 
   public setNewHost(roomId: GameRoomIdType): Socket | undefined {
-    const socketIds = this._io.sockets.adapter.rooms.get(roomId) || new Set();
-    if (socketIds.size > 0) {
-      const hostSocketId = Array.from(socketIds)[0];
+    const socketIds = this._io.getSocketIds(roomId);
+    if (socketIds.length > 0) {
+      const hostSocketId = socketIds[0];
       const hostSocket = this._io.sockets.sockets.get(hostSocketId) as Socket;
       hostSocket.data.setHost(true);
       return hostSocket;

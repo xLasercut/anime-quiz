@@ -69,6 +69,19 @@ abstract class GameListGenerator {
   protected _isDupeSong(song: SongType): boolean {
     return this._dupeSongIds.has(song.songId);
   }
+
+  protected _getSongsByUserId(userId: UserIdType): SongType[] {
+    const songIds = this._userSongDb.getUserSongList(userId);
+    return this._shuffleSongList(this._songDb.getSongListByIds(songIds));
+  }
+
+  protected _getSongsByUserIds(userIds: UserIdType[]): SongType[] {
+    let songIds: SongIdType[] = [];
+    for (const userId of userIds) {
+      songIds = songIds.concat(this._userSongDb.getUserSongList(userId));
+    }
+    return this._shuffleSongList(this._songDb.getSongListByIds(Array.from(new Set(songIds))));
+  }
 }
 
 export { GameListGenerator };
