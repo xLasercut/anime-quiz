@@ -121,7 +121,7 @@ class AnimeDb extends ServerDb<AnimeType> {
 
   public validateAnimesExists(animeIds: AnimeIdType[]) {
     const statement = this._db.prepare(`
-      SELECT
+      SELECT DISTINCT
         anime_id
       FROM animes
       WHERE anime_id IN (${this._questionString(animeIds.length)})
