@@ -15,6 +15,7 @@ import { ClientLoginAuthType } from '../shared/models/types';
 import { ClientLoginAuth } from '../shared/models/client';
 import { GameHandler } from './game';
 import { AdminGameHandler } from './admin-game';
+import { AdminGeneralHandler } from './admin-general';
 
 class EntryPointHandler extends ServerHandler {
   protected _handlers: ServerHandler[];
@@ -54,7 +55,8 @@ class EntryPointHandler extends ServerHandler {
       new AdminAnimeHandler(socket, errHandler, dependencies),
       new AdminSongHandler(socket, errHandler, dependencies),
       new AdminEmojiHandler(socket, errHandler, dependencies),
-      new AdminGameHandler(socket, errHandler, dependencies)
+      new AdminGameHandler(socket, errHandler, dependencies),
+      new AdminGeneralHandler(socket, errHandler, dependencies)
     ];
     this._socket.data.clientAuthTimer = setTimeout(
       this._errHandler(() => {

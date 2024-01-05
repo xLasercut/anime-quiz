@@ -14,6 +14,9 @@
             <icon-btn icon="mdi-login" color="success" @click="login()" :disabled="disabled"> login via discord </icon-btn>
           </v-col>
         </v-row>
+        <v-row :dense="true">
+          <v-col cols="auto"> Client Version: {{ CLIENT_VERSION }} </v-col>
+        </v-row>
       </v-container>
     </v-card-text>
   </v-card>
@@ -26,7 +29,7 @@ import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
-import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { CLIENT_VERSION, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { SendNotification } from '@/assets/types';
 import { getAuthorizeUrl } from '@/assets/authorization';

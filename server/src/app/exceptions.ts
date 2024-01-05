@@ -85,6 +85,17 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e:
     return;
   }
 
+  if (e instanceof DatabaseLockedError) {
+    emitter.systemNotification(
+      {
+        color: 'error',
+        message: e.message
+      },
+      socket.id
+    );
+    return;
+  }
+
   logger.error('internal server error', { err: e });
 }
 

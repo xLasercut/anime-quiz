@@ -16,7 +16,7 @@ const useGameStore = defineStore('game', {
       playerList: [],
       currentSong: {
         songId: '',
-        src: 'https://v.animethemes.moe/MahoutsukaiNoYome-OP1-Lyrics.webm',
+        src: '',
         type: 'OP',
         songTitle: '',
         artist: '',

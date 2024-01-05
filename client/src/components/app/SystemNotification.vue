@@ -8,15 +8,14 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
-import {CLIENT_EVENTS} from '@/assets/events';
-import {NotificationColorType} from '@/assets/shared/models/types';
-import {RegisterSendNotification} from '@/assets/types';
+import { inject, ref } from 'vue';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { NotificationColorType } from '@/assets/shared/models/types';
+import { RegisterSendNotification } from '@/assets/types';
 
-const message = ref('')
-const show = ref(false)
-const color = ref<NotificationColorType>('error')
-
+const message = ref('');
+const show = ref(false);
+const color = ref<NotificationColorType>('error');
 
 function _showNotification(_color: NotificationColorType, _message: string): void {
   color.value = _color;

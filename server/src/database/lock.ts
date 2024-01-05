@@ -16,6 +16,12 @@ class DatabaseLock {
       throw new DatabaseLockedError('Database locked pending server upgrade');
     }
   }
+
+  public validateLocked(): void {
+    if (!this._locked) {
+      throw new DatabaseLockedError('Database is not locked');
+    }
+  }
 }
 
 export { DatabaseLock };

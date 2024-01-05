@@ -19,15 +19,15 @@
 </template>
 
 <script setup lang="ts">
-import {CLIENT_EVENTS} from '@/assets/events';
-import {inject, ref} from 'vue';
-import {DIALOG_MAPPINGS} from '@/assets/routing/mapping';
-import {useClientStore} from '@/plugins/store/client';
-import {RegisterOpenDialog} from '@/assets/types';
-import {ClientDialogRoute} from '@/assets/routing/types';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { inject, ref } from 'vue';
+import { DIALOG_MAPPINGS } from '@/assets/routing/mapping';
+import { useClientStore } from '@/plugins/store/client';
+import { RegisterOpenDialog } from '@/assets/types';
+import { ClientDialogRoute } from '@/assets/routing/types';
 
-const label = ref('')
-const show = ref(false)
+const label = ref('');
+const show = ref(false);
 
 const clientStore = useClientStore();
 

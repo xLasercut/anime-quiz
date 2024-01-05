@@ -1,8 +1,8 @@
-import {Component} from 'vue';
+import { Component } from 'vue';
 import Login from '@/views/Login.vue';
 import Lobby from '@/views/Lobby.vue';
 import LoginPanel from '@/components/login/LoginPanel.vue';
-import {DIALOG_ROUTES, ROUTES} from '@/assets/routing/routes';
+import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import LoginSettings from '@/components/login/LoginSettings.vue';
 import UserSettings from '@/views/UserSettings.vue';
 import UserSettingsPanel from '@/components/user-settings/UserSettingsPanel.vue';
@@ -24,12 +24,12 @@ import GameRoomsPanel from '@/components/game-rooms/GameRoomsPanel.vue';
 import GameRooms from '@/views/GameRooms.vue';
 import GameRoomsNewRoomDialog from '@/components/game-rooms/GameRoomsNewRoomDialog.vue';
 import MainGame from '@/views/MainGame.vue';
-import {ClientDialogRoute, ClientRoute} from '@/assets/routing/types';
+import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
 import MainGamePanel from '@/components/main-game/MainGamePanel.vue';
 import LobbyPanel from '@/components/lobby/LobbyPanel.vue';
 import MainGameSettingsDialog from '@/components/main-game/MainGameSettingsDialog.vue';
 import MainGameSongPickerDialog from '@/components/main-game/MainGameSongPickerDialog.vue';
-import AdminDialog from "@/components/app/AdminDialog.vue";
+import AdminDialog from '@/components/app/AdminDialog.vue';
 
 const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -69,4 +69,4 @@ const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
   [DIALOG_ROUTES.ADMIN_PANEL]: AdminDialog
 };
 
-export {VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS};
+export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };
