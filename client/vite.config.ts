@@ -8,14 +8,8 @@ import {fileURLToPath, URL} from 'node:url'
 
 // https://vitejs.dev/config/
 
-let basePath = '/'
-
-if (process.env.NODE_ENV === 'production') {
-  basePath = '/anime-quiz/'
-}
-
 export default defineConfig({
-  base: basePath,
+  base: '/anime-quiz/',
   plugins: [
     vue({
       template: {transformAssetUrls}

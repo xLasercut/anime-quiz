@@ -16,7 +16,7 @@ const SERVER_CONFIG: ServerConfig = {
   clientAuthDelay: 2000,
   dbBackupSchedule: process.env.DB_BACKUP_SCHEDULE || '0 2 * * *',
   dbBackupCount: parseInt(process.env.DB_BACKUP_COUNT || '5'),
-  redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080',
+  redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080/anime-quiz/',
   discordClientId: process.env.DISCORD_CLIENT_ID || '',
   discordClientSecret: process.env.DISCORD_CLIENT_SECRET || '',
   logLevel: process.env.LOG_LEVEL || 'info',

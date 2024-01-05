@@ -57,7 +57,7 @@ function authorizeUser() {
 
   if (code && returnedState !== localStorage[LOCAL_STORAGE_CONSTANTS.OAUTH_STATE]) {
     console.error('State mismatch');
-    window.location.href = '/';
+    window.location.href = '/anime-quiz/';
     return;
   }
 

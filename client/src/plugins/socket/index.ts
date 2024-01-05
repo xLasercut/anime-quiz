@@ -13,7 +13,7 @@ startDataStoreListeners(socket);
 startGameStoreListeners(socket);
 
 socket.on(SOCKET_EVENTS.DISCONNECT, () => {
-  window.location.href = '/';
+  window.location.href = '/anime-quiz/';
 });
 
 export { socket };
