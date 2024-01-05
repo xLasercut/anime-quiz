@@ -14,11 +14,17 @@
 </template>
 
 <script setup lang="ts">
+import { PropType } from 'vue';
+
 defineProps({
   modelValue: {
     required: true
   },
-  items: {},
-  label: {}
+  items: {
+    type: Object as PropType<any[]>
+  },
+  label: {
+    type: String
+  }
 });
 </script>

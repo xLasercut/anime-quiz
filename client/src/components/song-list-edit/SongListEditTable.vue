@@ -15,14 +15,14 @@
     <template #header.data-table-select></template>
     <template #item.data-table-select="{ isSelected, toggleSelect, item }">
       <v-checkbox
-        :model-value="isSelected({ value: item.songId })"
-        @update:model-value="toggleSelect({ value: item.songId })"
+        :model-value="isSelected({ value: item.songId, selectable: true })"
+        @update:model-value="toggleSelect({ value: item.songId, selectable: true })"
         density="compact"
         hide-details
         :true-icon="checkboxIcon()"
         :color="checkboxColor()"
-        :disabled="checkboxDisabled(item.songId, isSelected({ value: item.songId }))"
-        :false-icon="checkboxFalseIcon(checkboxDisabled(item.songId, isSelected({ value: item.songId })))"
+        :disabled="checkboxDisabled(item.songId, isSelected({ value: item.songId, selectable: true }))"
+        :false-icon="checkboxFalseIcon(checkboxDisabled(item.songId, isSelected({ value: item.songId, selectable: true })))"
       ></v-checkbox>
     </template>
     <template #item.animeName="{ item }">
