@@ -5,18 +5,18 @@
         <template #item="{ item, props }">
           <v-list-item @click="props.onClick">
             <template #prepend>
-              <game-avatar :size="avatarSize" :avatar="item.title"></game-avatar>
+              <game-avatar :size="avatarSize" :avatar="item.raw"></game-avatar>
             </template>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
+            <v-list-item-title v-text="item.raw"></v-list-item-title>
           </v-list-item>
         </template>
 
         <template #selection="{ item }">
           <v-list-item>
             <template #prepend>
-              <game-avatar :size="avatarSize" :avatar="item.title"></game-avatar>
+              <game-avatar :size="avatarSize" :avatar="item.raw"></game-avatar>
             </template>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
+            <v-list-item-title v-text="item.raw"></v-list-item-title>
           </v-list-item>
         </template>
       </v-select>

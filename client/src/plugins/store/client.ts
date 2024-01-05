@@ -24,7 +24,8 @@ const useClientStore = defineStore('client', {
         displayName: '',
         userId: '',
         auth: false,
-        avatar: ''
+        avatar: '',
+        socketId: ''
       }
     };
   },
