@@ -1,6 +1,9 @@
 {
   "name": "anime-quiz-client",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
+  "author": "xLasercut",
+  "license": "MIT",
   "scripts": {
     "dev": "vite --port 8080",
     "build": "vue-tsc --noEmit && vite build",
@@ -33,5 +36,13 @@
     "vite": "^4.5.1",
     "vite-plugin-vuetify": "^1.0.2",
     "vue-tsc": "^1.8.27"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xLasercut/anime-quiz/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xLasercut/anime-quiz.git"
+  },
+  "homepage": "https://github.com/xLasercut/anime-quiz#readme"
 }

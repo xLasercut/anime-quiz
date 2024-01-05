@@ -1,13 +1,14 @@
 {
   "name": "anime-quiz-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
   "main": "index.js",
   "scripts": {
     "dev": "env-cmd -f ./config.env nodemon src/index.ts",
     "build": "rm -rf ./dist && tsc -b",
     "bootstrap": "ts-node tools/bootstrap.ts",
-    "format": "prettier 'src/**/*.ts' --write"
+    "format": "prettier 'src/**/*.ts' --write",
+    "start": "node dist/index.js"
   },
   "author": "xLasercut",
   "license": "MIT",
@@ -28,5 +29,13 @@
     "nodemon": "^3.0.2",
     "prettier": "^3.1.1",
     "ts-node": "^10.9.2"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xLasercut/anime-quiz/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xLasercut/anime-quiz.git"
+  },
+  "homepage": "https://github.com/xLasercut/anime-quiz#readme"
 }
