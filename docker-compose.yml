@@ -6,8 +6,6 @@ services:
     build:
       context: './server/'
       dockerfile: 'Dockerfile'
-    ports:
-      - 3000:3000
     volumes:
       - ./server/data/:/home/aq_server/data
       - ./server/log/:/home/aq_server/log

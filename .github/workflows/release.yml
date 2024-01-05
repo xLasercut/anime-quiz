@@ -35,8 +35,8 @@ jobs:
         run: |
           cd client
           touch .env
-          echo VITE_DISCORD_CLIENT_ID=${{ env.VITE_DISCORD_CLIENT_ID }} >> .env
-          echo VITE_REDIRECT_URL=${{ env.VITE_REDIRECT_URL }} >> .env
+          echo VITE_DISCORD_CLIENT_ID=${{ secrets.VITE_DISCORD_CLIENT_ID }} >> .env
+          echo VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} >> .env
           export VITE_CLIENT_VERSION=$(git rev-parse --short "$GITHUB_SHA")
           echo VITE_CLIENT_VERSION=${{ env.VITE_CLIENT_VERSION }} >> .env
           pnpm run build
