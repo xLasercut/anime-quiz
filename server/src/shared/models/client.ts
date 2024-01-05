@@ -8,11 +8,14 @@ const SystemNotification = z.object({
   message: z.string().trim().min(1)
 });
 
+const SocketId = z.string().trim().min(1);
+
 const ClientData = z.intersection(
   User,
   z.object({
     host: z.boolean(),
-    auth: z.boolean()
+    auth: z.boolean(),
+    socketId: SocketId
   })
 );
 
@@ -21,4 +24,4 @@ const ClientLoginAuth = z.object({
   dataVersion: z.string()
 });
 
-export { ClientData, NotificationColor, SystemNotification, ClientLoginAuth };
+export { ClientData, NotificationColor, SystemNotification, ClientLoginAuth, SocketId };

@@ -1,7 +1,8 @@
 import { ServerHandler } from './common';
 import { SOCKET_EVENTS } from '../shared/events';
-import { SongType } from '../shared/models/types';
+import { SocketIdType, SongType } from '../shared/models/types';
 import { Song } from '../shared/models/song';
+import { SocketId } from '../shared/models/client';
 
 class AdminGameHandler extends ServerHandler {
   protected _events = {
@@ -21,6 +22,22 @@ class AdminGameHandler extends ServerHandler {
         },
         this._socket.id
       );
+    },
+    [SOCKET_EVENTS.ADMIN_GAME_KICK_PLAYER]: (_socketId: SocketIdType) => {
+      this._logger.info('game kick player', {
+        request: _socketId,
+        clientData: this._socket.data.clientData
+      });
+      this._validateIsAdmin();
+      const socketId = SocketId.parse(_socketId);
+      this._emitter.systemNotification(
+        {
+          color: 'error',
+          message: 'You have been kicked'
+        },
+        socketId
+      );
+      this._io.sockets.sockets.get(socketId)?.disconnect();
     }
   };
 }

@@ -35,7 +35,8 @@ class SocketData {
       admin: false,
       avatar: '',
       host: false,
-      auth: false
+      auth: false,
+      socketId: ''
     };
     this._gameGuess = {
       anime: '',
@@ -113,7 +114,8 @@ class SocketData {
       admin: dbUser.admin,
       avatar: dbUser.avatar,
       host: false,
-      auth: true
+      auth: true,
+      socketId: this._socket.id
     });
   }
 

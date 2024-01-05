@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ClientData, ClientLoginAuth, NotificationColor, SystemNotification } from './client';
+import { ClientData, ClientLoginAuth, NotificationColor, SocketId, SystemNotification } from './client';
 import { Song, SongId, SongTitle, SongType } from './song';
 import { Anime, AnimeId, AnimeName } from './anime';
 import { Avatar, DiscordId, DisplayName, User, UserId } from './user';
@@ -7,15 +7,15 @@ import { Emoji, EmojiCommand, EmojiId, EmojiType } from './emoji';
 import {
   GameChat,
   GameChatText,
+  GameGuess,
+  GamePlayer,
   GameRoomId,
   GameRoomSettings,
-  GameRoomSettingSongCount,
-  GameRoomSettingsGuessTime,
   GameRoomSettingsGameMode,
-  GameGuess,
-  GameScore,
-  GamePlayer,
-  GameRoomState
+  GameRoomSettingsGuessTime,
+  GameRoomSettingSongCount,
+  GameRoomState,
+  GameScore
 } from './game';
 
 export type ClientDataType = z.infer<typeof ClientData>;
@@ -49,3 +49,4 @@ export type GameGuessType = z.infer<typeof GameGuess>;
 export type GameScoreType = z.infer<typeof GameScore>;
 export type GamePlayerType = z.infer<typeof GamePlayer>;
 export type GameRoomStateType = z.infer<typeof GameRoomState>;
+export type SocketIdType = z.infer<typeof SocketId>;
