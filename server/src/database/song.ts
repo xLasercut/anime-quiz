@@ -196,7 +196,17 @@ class SongDb extends ServerDb<SongType> {
   protected _getSongTitles(): SongTitleType[] {
     const statement = this._mainFactory.getStatement(STATEMENTS.SELECT_ALL_SONG_TITLES);
     const response = statement.all();
-    return Array.from(new Set(response.map((item) => DbSongTitle.parse(item).song_title)));
+    const existingSongTitles: Set<SongTitleType> = new Set();
+    const songTitles: SongTitleType[] = [];
+    for (const item of response) {
+      const parsedSongTitle = DbSongTitle.parse(item).song_title;
+      if (existingSongTitles.has(parsedSongTitle.toLowerCase())) {
+        continue;
+      }
+      existingSongTitles.add(parsedSongTitle.toLowerCase());
+      songTitles.push(parsedSongTitle);
+    }
+    return songTitles;
   }
 
   public reloadDb() {

@@ -27,8 +27,10 @@ import { GameRoomIdType } from '@/assets/shared/models/types';
 import { GameRoomId } from '@/assets/shared/models/game';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
+import { useGameStore } from '@/plugins/store/game';
 
 const clientStore = useClientStore();
+const gameStore = useGameStore();
 
 const roomList = ref<GameRoomIdType[]>([]);
 
@@ -39,6 +41,7 @@ socket.on(SOCKET_EVENTS.UPDATE_ROOM_LIST, (_roomList: GameRoomIdType[]) => {
 onMounted(() => {
   socket.emit(SOCKET_EVENTS.LEAVE_ALL_ROOMS);
   socket.emit(SOCKET_EVENTS.GET_ROOM_LIST);
+  gameStore.$reset();
 });
 
 onUnmounted(() => {

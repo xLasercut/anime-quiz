@@ -3,7 +3,7 @@
     class="main-player"
     :currentTime="currentTime"
     :muted="muted"
-    :volume="clientStore.volume"
+    :volume="volume"
     ref="player"
     :style="styles()"
     @vmDurationChange="updateDuration"
@@ -11,22 +11,25 @@
     @vmPlaybackReady="playbackReady = true"
     @vmSeeked="playerReady()"
   >
-    <Video v-if="!isYoutube()">
+    <Video v-if="!isYoutube() && !disabled">
       <source :data-src="gameStore.currentSong.src" />
     </Video>
-    <Youtube :video-id="videoId()" v-if="isYoutube()"></Youtube>
+    <Youtube :video-id="videoId()" v-if="isYoutube() && !disabled"></Youtube>
   </Player>
 </template>
 
 <script setup lang="ts">
 import { Player, Video, Youtube } from '@vime/vue-next';
 import { useGameStore } from '@/plugins/store/game';
-import { onUnmounted, ref } from 'vue';
+import { onUnmounted, ref, watch } from 'vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
 
 let loadingInterval: NodeJS.Timeout;
+
+const gameStore = useGameStore();
+const clientStore = useClientStore();
 
 const player = ref<any>(null);
 const muted = ref(false);
@@ -36,9 +39,15 @@ const duration = ref(0);
 const playbackReady = ref(false);
 const startPosition = ref(0);
 const guessTime = ref(0);
+const disabled = ref(false);
+const volume = ref(clientStore.volume);
 
-const gameStore = useGameStore();
-const clientStore = useClientStore();
+watch(
+  () => clientStore.volume,
+  (val: number) => {
+    volume.value = val;
+  }
+);
 
 function isYoutube() {
   return gameStore.currentSong.src.includes('youtube');
@@ -52,6 +61,7 @@ function videoId(): string {
 function playerReady(): void {
   player.value.pause();
   muted.value = false;
+  volume.value = clientStore.volume;
   socket.emit(SOCKET_EVENTS.GAME_SONG_LOADED);
   console.log('starting position updated');
 }
@@ -98,12 +108,16 @@ function load() {
 }
 
 socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
+  clearInterval(loadingInterval);
+  disabled.value = true;
   show.value = false;
   playbackReady.value = false;
   duration.value = -1;
 });
 
 socket.on(SOCKET_EVENTS.GAME_START_LOAD, (_startPosition: number, _guessTime: number) => {
+  clearInterval(loadingInterval);
+  disabled.value = false;
   startPosition.value = _startPosition;
   guessTime.value = _guessTime;
   load();
@@ -112,18 +126,22 @@ socket.on(SOCKET_EVENTS.GAME_START_LOAD, (_startPosition: number, _guessTime: nu
 socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, () => {
   console.log('starting countdown');
   clearInterval(loadingInterval);
+  disabled.value = false;
   muted.value = false;
   player.value.play();
 });
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
   console.log('time is up');
+  clearInterval(loadingInterval);
   show.value = true;
+  disabled.value = false;
 });
 
 socket.on(SOCKET_EVENTS.STOP_GAME, () => {
   clearInterval(loadingInterval);
   player.value.pause();
+  disabled.value = false;
 });
 
 onUnmounted(() => {

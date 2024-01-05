@@ -149,7 +149,17 @@ class AnimeDb extends ServerDb<AnimeType> {
   protected _getAnimeNames(): AnimeNameType[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_ANIME_NAME);
     const response = statement.all();
-    return Array.from(new Set(response.map((item) => DbAnimeName.parse(item).anime_name)));
+    const existingAnimeNames: Set<AnimeNameType> = new Set();
+    const animeNames: AnimeNameType[] = [];
+    for (const item of response) {
+      const parsedName = DbAnimeName.parse(item).anime_name;
+      if (existingAnimeNames.has(parsedName.toLowerCase())) {
+        continue;
+      }
+      existingAnimeNames.add(parsedName.toLowerCase());
+      animeNames.push(parsedName);
+    }
+    return animeNames;
   }
 
   public reloadDb() {

@@ -51,7 +51,7 @@ onUnmounted(() => {
 
 <style scoped>
 .chat-message-container {
-  height: calc(100vh - 280px);
+  height: calc(100vh - 285px);
   overflow: auto;
   word-wrap: break-word;
 }
