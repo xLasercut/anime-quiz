@@ -1,44 +1,60 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
+import { createVuetify, ThemeDefinition } from 'vuetify';
+import { getDefaultTheme } from '@/assets/game-helpers';
 
-Vue.use(Vuetify);
+const nordDark: ThemeDefinition = {
+  dark: true,
+  colors: {
+    background: '#4c566a',
+    'on-background': '#eceff4',
+    surface: '#2e3440',
+    'on-surface': '#eceff4',
+    primary: '#81a1c1',
+    'on-primary': '#2e3440',
+    secondary: '#5e81ac',
+    'on-secondary': '#2e3440',
+    error: '#bf616a',
+    'on-error': '#2e3440',
+    info: '#b48ead',
+    'on-info': '#2e3440',
+    success: '#a3be8c',
+    'on-success': '#2e3440',
+    warning: '#ebcb8b',
+    'on-warning': '#2e3440',
+    'on-surface-variant': '#81a1c1'
+  }
+};
 
-export default new Vuetify({
+const nordLight: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#eceff4',
+    'on-background': '#2e3440',
+    surface: '#d8dee9',
+    'on-surface': '#2e3440',
+    primary: '#81a1c1',
+    'on-primary': '#2e3440',
+    secondary: '#5e81ac',
+    'on-secondary': '#2e3440',
+    error: '#bf616a',
+    'on-error': '#2e3440',
+    info: '#b48ead',
+    'on-info': '#2e3440',
+    success: '#a3be8c',
+    'on-success': '#2e3440',
+    warning: '#d89f47',
+    'on-warning': '#2e3440',
+    'on-surface-variant': '#81a1c1'
+  }
+};
+
+export default createVuetify({
   theme: {
-    options: {
-      customProperties: true
-    },
+    defaultTheme: getDefaultTheme(),
     themes: {
-      light: {
-        primary: '#81a1c1',
-        secondary: '#5e81ac',
-        accent: '#8fbcbb',
-        error: '#bf616a',
-        info: '#b48ead',
-        success: '#a3be8c',
-        warning: '#ebcb8b',
-        background: {
-          base: '#ffffff',
-          darken1: '#e5e9f0',
-          darken2: '#d8dee9',
-          darken3: '#d8dee9'
-        }
-      },
-      dark: {
-        background: {
-          base: '#4c566a',
-          darken1: '#434c5e',
-          darken2: '#3b4252',
-          darken3: '#2e3440'
-        },
-        primary: '#81a1c1',
-        secondary: '#5e81ac',
-        accent: '#8fbcbb',
-        error: '#bf616a',
-        info: '#b48ead',
-        success: '#a3be8c',
-        warning: '#ebcb8b'
-      }
+      dark: nordDark,
+      light: nordLight
     }
   }
 });

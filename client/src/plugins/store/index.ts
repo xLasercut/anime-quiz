@@ -1,19 +1,5 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { client } from './client';
-import { data } from './data';
-import { game } from './game';
-import { admin } from './admin';
+import { createPinia } from 'pinia';
 
-Vue.use(Vuex);
+const pinia = createPinia();
 
-const store = new Vuex.Store({
-  modules: {
-    client,
-    data,
-    game,
-    admin
-  }
-});
-
-export { store };
+export { pinia };

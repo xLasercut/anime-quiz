@@ -1,9 +1,8 @@
 <template>
-  <v-card flat>
-    <v-card-title>
+  <v-card variant="flat" :title="title">
+    <template #prepend>
       <v-icon :color="color" left large>{{ icon }}</v-icon>
-      <span>{{ title }}</span>
-    </v-card-title>
+    </template>
     <v-card-text>
       {{ description }}
     </v-card-text>
@@ -18,29 +17,26 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import IconBtn from '../shared/buttons/IconBtn.vue';
+<script setup lang="ts">
+import IconBtn from '@/components/common/buttons/IconBtn.vue';
 
-export default defineComponent({
-  components: { IconBtn },
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
-    },
-    color: {
-      type: String,
-      required: true
-    },
-    icon: {
-      type: String,
-      required: true
-    }
+defineProps({
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  color: {
+    type: String,
+    required: true
+  },
+  icon: {
+    type: String,
+    required: true
   }
 });
+defineEmits(['click']);
 </script>

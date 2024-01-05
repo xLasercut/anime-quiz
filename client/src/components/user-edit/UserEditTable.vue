@@ -1,104 +1,94 @@
 <template>
   <v-data-table
-    dense
-    disable-sort
-    fixed-header
-    disable-filtering
-    hide-default-footer
-    :height="CLIENT_CONSTANTS.TABLE_HEIGHT"
+    density="compact"
+    :fixed-header="true"
+    :fixed-footer="true"
+    :items="filteredUserList()"
     :headers="headers"
-    :items="filteredUserLists()"
+    v-model:page="currentPage"
     :items-per-page="itemsPerPage"
-    :page="currentPage"
+    :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
-    <template #top>
-      <v-container fluid>
-        <user-edit-table-filter
-          :user-id-filter.sync="userIdFilter"
-          :username-filter.sync="usernameFilter"
-        ></user-edit-table-filter>
-      </v-container>
+    <template #item.avatar="{ item }">
+      <game-avatar :avatar="item.avatar"></game-avatar>
+    </template>
+
+    <template #item.admin="{ item }">
+      {{ item.admin }}
     </template>
 
     <template #item.action="{ item }">
-      <v-icon color="warning" @click="editUser(item)">mdi-pencil</v-icon>
-      <v-icon color="error" @click="deleteUser(item)">mdi-delete</v-icon>
+      <table-action @item:edit="editUser(item)" @item:delete="deleteUser(item)"></table-action>
     </template>
 
-    <template #footer="{ props }">
-      <table-pagination
-        :current-page="props.pagination.page"
-        @input="currentPage = $event"
-        :length="props.pagination.pageCount"
-        :items-per-page.sync="itemsPerPage"
-      ></table-pagination>
+    <template #top>
+      <v-container :fluid="true">
+        <user-edit-table-filters
+          v-model:discord-id.trim="filters.discordId"
+          v-model:user-id.trim="filters.userId"
+          v-model:display-name.trim="filters.displayName"
+        ></user-edit-table-filters>
+      </v-container>
+    </template>
+
+    <template #bottom="{ pageCount }">
+      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
     </template>
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
-import TablePagination from '../shared/TablePagination.vue';
-import { CLIENT_CONSTANTS } from '../../assets/constants';
-import { IUserSongs } from '../../assets/shared/interfaces';
-import { store } from '../../plugins/store';
-import { MUTATIONS } from '../../plugins/store/mutations';
-import { CLIENT_EVENTS } from '../../assets/events';
-import { DIALOG_ROUTES } from '../../plugins/routing/routes';
-import UserEditTableFilter from './UserEditTableFilter.vue';
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+import { useDataStore } from '@/plugins/store/data';
+import { UserType } from '@/assets/shared/models/types';
+import GameAvatar from '@/components/common/GameAvatar.vue';
+import UserEditTableFilters from '@/components/user-edit/UserEditTableFilters.vue';
+import TablePagination from '@/components/common/tables/TablePagination.vue';
+import { OpenDialog } from '@/assets/types';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
+import { DIALOG_ROUTES } from '@/assets/routing/routes';
+import { useAdminStore } from '@/plugins/store/admin';
+import TableAction from '@/components/common/tables/TableAction.vue';
 
-export default defineComponent({
-  components: { TablePagination, UserEditTableFilter },
-  setup() {
-    const state = reactive({
-      headers: [
-        { text: 'User ID', value: 'user_id' },
-        { text: 'Username', value: 'username' },
-        { text: 'Action', value: 'action' }
-      ],
-      itemsPerPage: 10,
-      currentPage: 0,
-      userIdFilter: '',
-      usernameFilter: ''
-    });
-
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
-
-    function filteredUserLists(): IUserSongs[] {
-      return store.getters.userLists.filter((userSong: IUserSongs) => {
-        return (
-          userSong.user_id.toLowerCase().includes(state.userIdFilter.toLowerCase()) &&
-          userSong.username.toLowerCase().includes(state.usernameFilter.toLowerCase())
-        );
-      });
-    }
-
-    function updateStore(user: IUserSongs): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_USER_NAME, user.username);
-      store.commit(MUTATIONS.ADMIN_UPDATE_USER_ID, user.user_id);
-    }
-
-    function editUser(user: IUserSongs): void {
-      if (openDialog) {
-        updateStore(user);
-        openDialog(DIALOG_ROUTES.EDIT_USER_DIALOG, 'Edit User');
-      }
-    }
-
-    function deleteUser(user: IUserSongs): void {
-      if (openDialog) {
-        updateStore(user);
-        openDialog(DIALOG_ROUTES.DELETE_USER_DIALOG, 'Delete User');
-      }
-    }
-
-    return {
-      ...toRefs(state),
-      CLIENT_CONSTANTS,
-      filteredUserLists,
-      editUser,
-      deleteUser
-    };
-  }
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const headers = [
+  { title: 'Discord ID', key: 'discordId', sortable: false },
+  { title: 'User ID', key: 'userId', sortable: false },
+  { title: 'Display Name', key: 'displayName', sortable: false },
+  { title: 'Avatar', key: 'avatar', sortable: false },
+  { title: 'Admin', key: 'admin', sortable: false },
+  { title: 'Action', key: 'action', sortable: false }
+];
+const filters = ref({
+  discordId: '',
+  userId: '',
+  displayName: ''
 });
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+
+function filteredUserList(): UserType[] {
+  return dataStore.userList.filter((user) => {
+    return (
+      user.discordId.includes(filters.value.discordId) &&
+      user.userId.includes(filters.value.userId) &&
+      user.displayName.toLowerCase().includes(filters.value.displayName.toLowerCase())
+    );
+  });
+}
+
+function editUser(user: UserType) {
+  adminStore.updateUserInEdit(user);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
+  openDialog(DIALOG_ROUTES.USER_EDIT, 'Edit User');
+}
+
+function deleteUser(user: UserType) {
+  adminStore.updateUserInEdit(user);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.USER_EDIT, 'Delete User');
+}
 </script>

@@ -1,18 +1,17 @@
 <template>
-  <v-snackbar top :timeout="6000" :color="color" v-model="show">
+  <v-snackbar location="top" :timeout="6000" :color="color" v-model="show">
     {{ message }}
-    <template #action>
-      <v-btn depressed icon @click="show = false">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
+    <template #actions>
+      <v-btn icon="mdi-close" @click="show = false" variant="text" density="comfortable" size="small"></v-btn>
     </template>
   </v-snackbar>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
-import { CLIENT_EVENTS } from '../../assets/events';
-import { INotificationColor } from '../../assets/shared/interfaces';
+import { defineComponent, inject, reactive, toRefs } from 'vue';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { NotificationColorType } from '@/assets/shared/models/types';
+import { RegisterSendNotification } from '@/assets/types';
 
 export default defineComponent({
   setup() {
@@ -22,13 +21,13 @@ export default defineComponent({
       color: 'error'
     });
 
-    function _showNotification(color: INotificationColor, message: string): void {
+    function _showNotification(color: NotificationColorType, message: string): void {
       state.color = color;
       state.message = message;
       state.show = true;
     }
 
-    function sendNotification(color: INotificationColor, message: string): void {
+    function sendNotification(color: NotificationColorType, message: string): void {
       if (state.show) {
         state.show = false;
         setTimeout((): void => {
@@ -39,14 +38,10 @@ export default defineComponent({
       }
     }
 
-    const registerSendNotification = inject<Function>(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION);
-    if (registerSendNotification) {
-      registerSendNotification(sendNotification);
-    }
+    const registerSendNotification = inject(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION) as RegisterSendNotification;
+    registerSendNotification(sendNotification);
 
-    return {
-      ...toRefs(state)
-    };
+    return { ...toRefs(state) };
   }
 });
 </script>

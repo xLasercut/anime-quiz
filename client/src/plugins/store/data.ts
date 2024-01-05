@@ -1,135 +1,100 @@
-import { DataStoreState, RootStoreState } from '../../assets/interfaces';
-import { Module } from 'vuex';
-import { MUTATIONS } from './mutations';
-import { IAnime, IEmoji, ISong, IUserSongs } from '../../assets/shared/interfaces';
+import { defineStore } from 'pinia';
+import {
+  AnimeNameType,
+  AnimeType,
+  SongTitleType,
+  SongType,
+  SongIdType,
+  UserType,
+  AnimeIdType,
+  EmojiType
+} from '@/assets/shared/models/types';
+import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 
-const DEFAULT_STATE: DataStoreState = {
-  songList: [],
-  animeList: [],
-  songTitleList: [],
-  userLists: [],
-  emojiList: []
-};
+interface State {
+  songList: SongType[];
+  animeList: AnimeType[];
+  songTitles: SongTitleType[];
+  animeNames: AnimeNameType[];
+  userSongList: SongIdType[];
+  userList: UserType[];
+  emojiList: EmojiType[];
+  dataVersion: string;
+}
 
-const data: Module<DataStoreState, RootStoreState> = {
-  state: Object.assign({}, DEFAULT_STATE),
-  mutations: {
-    [MUTATIONS.SOCKET_UPDATE_SONG_LIST]: (state: DataStoreState, songList: ISong[]) => {
-      state.songList = songList;
-    },
-    [MUTATIONS.SOCKET_UPDATE_ANIME_LIST]: (state: DataStoreState, animeList: IAnime[]) => {
-      state.animeList = animeList;
-    },
-    [MUTATIONS.SOCKET_UPDATE_SONG_TITLE_LIST]: (state: DataStoreState, titleList: string[]) => {
-      state.songTitleList = titleList;
-    },
-    [MUTATIONS.SOCKET_UPDATE_USER_LISTS]: (state: DataStoreState, userLists: IUserSongs[]) => {
-      state.userLists = userLists;
-    },
-    [MUTATIONS.SOCKET_UPDATE_EMOJI_LIST]: (state: DataStoreState, emojiList: IEmoji[]) => {
-      state.emojiList = emojiList;
-    },
-    [MUTATIONS.RESET_STORE_STATE]: (state: DataStoreState) => {
-      Object.assign(state, DEFAULT_STATE);
-    }
+interface AnimeString {
+  animeId: AnimeIdType;
+  animeName: string;
+}
+
+const useDataStore = defineStore('data', {
+  state: (): State => {
+    return {
+      songList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.SONG_LIST] || '[]'),
+      animeList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.ANIME_LIST] || '[]'),
+      songTitles: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.SONG_TITLES] || '[]'),
+      animeNames: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.ANIME_NAMES] || '[]'),
+      userSongList: [],
+      userList: [],
+      emojiList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.EMOJI_LIST] || '[]'),
+      dataVersion: localStorage[LOCAL_STORAGE_CONSTANTS.DATA_VERSION] || ''
+    };
   },
-  getters: {
-    userList:
-      (state: DataStoreState): Function =>
-      (userId: string): string[] => {
-        if (!userId) {
-          return [];
-        }
-        const filteredList = state.userLists.filter((userList) => {
-          return userList.user_id === userId;
-        });
-        if (filteredList.length > 0) {
-          return filteredList[0].song_id;
-        }
-        return [];
-      },
-    userPlaylist:
-      (state: DataStoreState): Function =>
-      (userId: string): ISong[] => {
-        if (!userId) {
-          return [];
-        }
-        const filteredList = state.userLists.filter((userList) => {
-          return userList.user_id === userId;
-        });
-        if (filteredList.length > 0) {
-          const userSongIds = filteredList[0].song_id;
-          return state.songList.filter((song) => {
-            return userSongIds.includes(song.song_id);
-          });
-        }
-        return [];
-      },
-    songList: (state: DataStoreState): ISong[] => {
-      return [...state.songList].sort((a, b) => {
-        const animeA = a.anime_name[0];
-        const animeB = b.anime_name[0];
+  actions: {
+    updateSongList(songList: SongType[]) {
+      this.songList = songList.sort((a, b) => {
+        const animeA = a.animeName[0];
+        const animeB = b.animeName[0];
 
         if (animeA === animeB) {
           return 0;
-        } else if (animeA > animeB) {
+        }
+        if (animeA > animeB) {
           return 1;
         }
         return -1;
       });
     },
-    animeList: (state: DataStoreState): string[] => {
-      const animeList: Set<string> = new Set();
-      for (const anime of state.animeList) {
-        for (const animeName of anime.anime_name) {
-          animeList.add(animeName);
-        }
-      }
-      return Array.from(animeList).sort();
+    updateAnimeList(animeList: AnimeType[]) {
+      this.animeList = animeList;
     },
-    songTitleList: (state: DataStoreState): string[] => {
-      return [...state.songTitleList].sort();
+    updateSongTitles(songTitles: SongTitleType[]) {
+      this.songTitles = songTitles.sort();
     },
-    adminAnimeList: (state: DataStoreState): IAnime[] => {
-      return [...state.animeList].sort((a, b) => {
-        const nameA = a.anime_name;
-        const nameB = b.anime_name;
-
-        if (nameA === nameB) {
+    updateAnimeNames(animeNames: AnimeNameType[]) {
+      this.animeNames = animeNames.sort();
+    },
+    updateUserSongList(userSongList: SongIdType[]) {
+      this.userSongList = userSongList;
+    },
+    updateUserList(userList: UserType[]) {
+      this.userList = userList;
+    },
+    updateEmojiList(emojiList: EmojiType[]) {
+      this.emojiList = emojiList.sort((a, b) => {
+        if (a.command === b.command) {
           return 0;
-        } else if (nameA > nameB) {
+        }
+        if (a.command > b.command) {
           return 1;
         }
         return -1;
       });
     },
-    emojiList: (state: DataStoreState): IEmoji[] => {
-      return [...state.emojiList].sort((a, b) => {
-        const commandA = a.command;
-        const commandB = b.command;
-
-        if (commandA === commandB) {
-          return 0;
-        } else if (commandA > commandB) {
-          return 1;
-        }
-        return -1;
-      });
-    },
-    userLists: (state: DataStoreState): IUserSongs[] => {
-      return [...state.userLists].sort((a, b) => {
-        const nameA = a.username;
-        const nameB = b.username;
-
-        if (nameA === nameB) {
-          return 0;
-        } else if (nameA > nameB) {
-          return 1;
-        }
-        return -1;
+    updateDataVersion(dataVersion: string) {
+      this.dataVersion = dataVersion;
+    }
+  },
+  getters: {
+    animeStringList(): AnimeString[] {
+      return this.animeList.map((anime) => {
+        return {
+          animeId: anime.animeId,
+          animeName: anime.animeName.join(',')
+        };
       });
     }
   }
-};
+});
 
-export { data };
+export { useDataStore };

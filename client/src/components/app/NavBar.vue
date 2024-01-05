@@ -1,70 +1,51 @@
 <template>
-  <v-app-bar app flat height="40" min-height="40">
+  <v-toolbar height="40" :flat="true" color="surface">
     <v-toolbar-items>
       <nav-btn icon="mdi-theme-light-dark" @click="changeTheme()">Theme</nav-btn>
-      <nav-btn icon="mdi-shield" v-if="$store.state.client.admin" @click="adminDialog()">
-        Admin
-      </nav-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
-    <component :is="panelComponent()"></component>
     <v-toolbar-items>
-      <nav-btn icon="mdi-logout" @click="logOut()" color="error" v-if="showLogout()">
-        Logout
-      </nav-btn>
+      <component :is="panelComponent()"></component>
+      <nav-btn icon="mdi-logout" color="error" @click="logout()" v-if="showLogout()"> Logout </nav-btn>
     </v-toolbar-items>
-  </v-app-bar>
+  </v-toolbar>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted } from '@vue/composition-api';
-import NavBtn from '@/components/shared/buttons/NavBtn.vue';
-import { socket } from '../../plugins/socket';
-import { store } from '../../plugins/store';
-import { MUTATIONS } from '../../plugins/store/mutations';
-import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes';
-import { panelComponent } from '../../plugins/routing/mapping';
-import { LOCAL_STORAGE_CONSTANTS } from '../../assets/constants';
-import { CLIENT_EVENTS } from '../../assets/events';
+import { Component, defineComponent } from 'vue';
+import { useTheme } from 'vuetify';
+import { PANEL_MAPPING } from '@/assets/routing/mapping';
+import { useClientStore } from '@/plugins/store/client';
+import NavBtn from '@/components/common/buttons/NavBtn.vue';
+import DefaultPanel from '@/components/app/DefaultPanel.vue';
+import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { ROUTES } from '@/assets/routing/routes';
+import { socket } from '@/plugins/socket';
 
 export default defineComponent({
   components: { NavBtn },
-  setup(_props, context) {
-    const vuetify = context.root.$vuetify;
+  setup: function () {
+    const theme = useTheme();
+    const clientStore = useClientStore();
+
+    function panelComponent(): Component {
+      return PANEL_MAPPING[clientStore.view] || DefaultPanel;
+    }
 
     function changeTheme(): void {
-      vuetify.theme.dark = !vuetify.theme.dark;
-      localStorage[LOCAL_STORAGE_CONSTANTS.DARK_THEME] = vuetify.theme.dark;
+      theme.global.name.value = theme.global.name.value === 'dark' ? 'light' : 'dark';
+      localStorage[LOCAL_STORAGE_CONSTANTS.DARK_THEME] = theme.global.name.value === 'dark';
     }
 
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
-
-    function adminDialog(): void {
-      if (openDialog) {
-        openDialog(DIALOG_ROUTES.ADMIN, 'Admin');
-      }
-    }
-
-    function logOut(): void {
+    function logout(): void {
       socket.disconnect();
-      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOGIN);
     }
 
     function showLogout(): boolean {
-      return store.state.client.view !== ROUTES.LOGIN;
+      return clientStore.view !== ROUTES.LOGIN;
     }
 
-    onMounted(() => {
-      vuetify.theme.dark = localStorage[LOCAL_STORAGE_CONSTANTS.DARK_THEME] === 'true';
-    });
-
-    return {
-      changeTheme,
-      panelComponent,
-      logOut,
-      showLogout,
-      adminDialog
-    };
+    return { changeTheme, panelComponent, logout, showLogout };
   }
 });
 </script>

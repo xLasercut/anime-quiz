@@ -1,31 +1,22 @@
-import { DEC, IMG } from './shared/constants/emoji-types';
-import { ED, INSERT, OP } from './shared/constants/song-types';
-
-const CLIENT_CONSTANTS = {
-  PAGE_HEIGHT: 'calc(100vh - 67px)',
-  TABLE_HEIGHT: 'calc(100vh - 202px)',
-  SONG_LIST_TABLE_HEIGHT: 'calc(100vh - 252px)',
-  CHAT_MAX_WIDTH: '300'
-};
-
 const LOCAL_STORAGE_CONSTANTS = {
   DARK_THEME: 'DARK_THEME',
   GAME_SERVER: 'GAME_SERVER',
-  AQ_USERNAME: 'AQ_USERNAME',
-  AQ_AVATAR: 'AQ_AVATAR',
-  AQ_VOLUME: 'AQ_VOLUME'
+  AQ_VOLUME: 'AQ_VOLUME',
+  OAUTH_STATE: 'OAUTH_STATE',
+  DATA_VERSION: 'DATA_VERSION',
+  SONG_LIST: 'SONG_LIST',
+  ANIME_LIST: 'ANIME_LIST',
+  ANIME_NAMES: 'ANIME_NAMES',
+  SONG_TITLES: 'SONG_TITLES',
+  EMOJI_LIST: 'EMOJI_LIST'
 };
 
-const SONG_TYPES = [
-  { text: 'OP', value: OP },
-  { text: 'ED', value: ED },
-  { text: 'INSERT', value: INSERT }
-];
-
-const EMOJI_TYPES = [
-  { text: 'IMG', value: IMG },
-  { text: 'DEC', value: DEC }
-];
+const CLIENT_CONSTANTS = {
+  SONG_LIST_EDIT_TABLE_HEIGHT: 'calc(100vh - 262px)',
+  ADMIN_TABLE_HEIGHT: 'calc(100vh - 202px)',
+  PAGE_HEIGHT: 'calc(100vh - 72px)',
+  GAME_SONG_PICKER_TABLE_HEIGHT: '500px'
+};
 
 const SONG_LIST_EDIT_MODE = {
   ADD: 'add',
@@ -33,4 +24,10 @@ const SONG_LIST_EDIT_MODE = {
   NONE: 'none'
 };
 
-export { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, SONG_TYPES, EMOJI_TYPES, SONG_LIST_EDIT_MODE };
+const DATABASE_EDIT_MODE = {
+  NEW: 'new',
+  EDIT: 'edit',
+  DELETE: 'delete'
+};
+
+export { LOCAL_STORAGE_CONSTANTS, CLIENT_CONSTANTS, SONG_LIST_EDIT_MODE, DATABASE_EDIT_MODE };

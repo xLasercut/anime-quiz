@@ -1,21 +1,9 @@
 <template>
-  <v-main>
-    <v-card flat>
-      <song-edit-table></song-edit-table>
-    </v-card>
-  </v-main>
+  <v-card variant="flat">
+    <song-edit-table></song-edit-table>
+  </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { socket } from '../plugins/socket';
-import { SHARED_EVENTS } from '../assets/shared/events';
-import SongEditTable from '../components/song-edit/SongEditTable.vue';
-
-export default defineComponent({
-  components: { SongEditTable },
-  setup() {
-    socket.emit(SHARED_EVENTS.JOIN_SONG_EDIT);
-  }
-});
+<script setup lang="ts" name="SongEdit">
+import SongEditTable from '@/components/song-edit/SongEditTable.vue';
 </script>

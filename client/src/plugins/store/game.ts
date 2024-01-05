@@ -1,45 +1,51 @@
-import { GameStoreState, RootStoreState } from '../../assets/interfaces';
-import { Module } from 'vuex';
-import { MUTATIONS } from './mutations';
-import { IGamePlayer, IGameState } from '../../assets/shared/interfaces';
-import { OP } from '../../assets/shared/constants/song-types';
+import { defineStore } from 'pinia';
+import { GameGuessType, GamePlayerType, GameRoomStateType, SongType } from '@/assets/shared/models/types';
 
-const DEFAULT_STATE: GameStoreState = {
-  players: [],
-  currentSong: {
-    song_id: '',
-    anime_id: [],
-    anime_name: [],
-    song_title: '',
-    artist: '',
-    src: '',
-    type: OP
+interface State {
+  playerList: GamePlayerType[];
+  currentSong: SongType;
+  playing: boolean;
+  currentSongCount: number;
+  maxSongCount: number;
+  gameGuess: GameGuessType;
+}
+
+const useGameStore = defineStore('game', {
+  state: (): State => {
+    return {
+      playerList: [],
+      currentSong: {
+        songId: '',
+        src: 'https://v.animethemes.moe/MahoutsukaiNoYome-OP1-Lyrics.webm',
+        type: 'OP',
+        songTitle: '',
+        artist: '',
+        animeName: [],
+        animeId: []
+      },
+      playing: false,
+      currentSongCount: 0,
+      maxSongCount: 0,
+      gameGuess: {
+        anime: '',
+        title: ''
+      }
+    };
   },
-  currentSongCount: 0,
-  maxSongCount: 0,
-  playing: false,
-  disableSettings: false
-};
-
-const game: Module<GameStoreState, RootStoreState> = {
-  state: Object.assign({}, DEFAULT_STATE),
-  mutations: {
-    [MUTATIONS.SOCKET_UPDATE_GAME_PLAYERS]: (state: GameStoreState, players: IGamePlayer[]) => {
-      state.players = players;
+  actions: {
+    updatePlayerList(playerList: GamePlayerType[]) {
+      this.playerList = playerList;
     },
-    [MUTATIONS.SOCKET_UPDATE_GAME_STATE]: (state: GameStoreState, gameState: IGameState) => {
-      state.currentSong = gameState.currentSong;
-      state.playing = gameState.playing;
-      state.maxSongCount = gameState.maxSongCount;
-      state.currentSongCount = gameState.currentSongCount;
+    updateGameState(gameState: GameRoomStateType) {
+      this.currentSong = gameState.currentSong;
+      this.currentSongCount = gameState.currentSongCount;
+      this.maxSongCount = gameState.maxSongCount;
+      this.playing = gameState.playing;
     },
-    [MUTATIONS.RESET_STORE_STATE]: (state: GameStoreState) => {
-      Object.assign(state, DEFAULT_STATE);
-    },
-    [MUTATIONS.EDIT_DISABLE_GAME_SETTINGS]: (state: GameStoreState, disabled: boolean) => {
-      state.disableSettings = disabled;
+    updateGameGuess(gameGuess: GameGuessType) {
+      this.gameGuess = gameGuess;
     }
   }
-};
+});
 
-export { game };
+export { useGameStore };

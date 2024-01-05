@@ -1,29 +1,16 @@
 <template>
   <v-data-table
-    dense
-    disable-sort
-    fixed-header
-    disable-filtering
-    hide-default-footer
-    :height="CLIENT_CONSTANTS.TABLE_HEIGHT"
-    :headers="headers"
+    density="compact"
+    :fixed-header="true"
+    :fixed-footer="true"
     :items="filteredSongList()"
+    :headers="headers"
+    v-model:page="currentPage"
     :items-per-page="itemsPerPage"
-    :page="currentPage"
+    :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
-    <template #top>
-      <v-container fluid>
-        <song-edit-table-filter
-          :song-id-filter.sync="songIdFilter"
-          :song-type-filter.sync="songTypeFilter"
-          :anime-filter.sync="animeFilter"
-          :song-title-filter.sync="songTitleFilter"
-        ></song-edit-table-filter>
-      </v-container>
-    </template>
-
-    <template #item.anime_name="{ item }">
-      <aq-anime-name :song="item"></aq-anime-name>
+    <template #item.animeName="{ item }">
+      <table-anime-name :song="item"></table-anime-name>
     </template>
 
     <template #item.src="{ item }">
@@ -31,99 +18,81 @@
     </template>
 
     <template #item.action="{ item }">
-      <v-icon color="warning" @click="editSong(item)">mdi-pencil</v-icon>
-      <v-icon color="error" @click="deleteSong(item)">mdi-delete</v-icon>
+      <table-action @item:edit="editSong(item)" @item:delete="deleteSong(item)"></table-action>
     </template>
 
-    <template #footer="{ props }">
-      <table-pagination
-        :current-page="props.pagination.page"
-        @input="currentPage = $event"
-        :length="props.pagination.pageCount"
-        :items-per-page.sync="itemsPerPage"
-      ></table-pagination>
+    <template #top>
+      <v-container :fluid="true">
+        <song-list-edit-table-filters
+          v-model:anime.trim="filters.anime"
+          v-model:title.trim="filters.title"
+          v-model:artist.trim="filters.artist"
+          v-model:type.trim="filters.type"
+        ></song-list-edit-table-filters>
+      </v-container>
+    </template>
+
+    <template #bottom="{ pageCount }">
+      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
     </template>
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
-import TablePagination from '../shared/TablePagination.vue';
-import { CLIENT_CONSTANTS } from '../../assets/constants';
-import { ISong } from '../../assets/shared/interfaces';
-import { store } from '../../plugins/store';
-import { MUTATIONS } from '../../plugins/store/mutations';
-import { CLIENT_EVENTS } from '../../assets/events';
-import { DIALOG_ROUTES } from '../../plugins/routing/routes';
-import SongEditTableFilter from './SongEditTableFilter.vue';
-import { shouldDisplayResult } from '../../assets/game-helper';
-import AqAnimeName from '../shared/AqAnimeName.vue';
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+import { useDataStore } from '@/plugins/store/data';
+import { SongType } from '@/assets/shared/models/types';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
+import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
+import TablePagination from '@/components/common/tables/TablePagination.vue';
+import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
+import { isMatchFilter } from '@/assets/game-helpers';
+import TableAction from '@/components/common/tables/TableAction.vue';
+import { DIALOG_ROUTES } from '@/assets/routing/routes';
+import { useAdminStore } from '@/plugins/store/admin';
+import { OpenDialog } from '@/assets/types';
+import { CLIENT_EVENTS } from '@/assets/events';
 
-export default defineComponent({
-  components: { AqAnimeName, SongEditTableFilter, TablePagination },
-  setup() {
-    const state = reactive({
-      headers: [
-        { text: 'Song ID', value: 'song_id' },
-        { text: 'Anime', value: 'anime_name' },
-        { text: 'Title', value: 'song_title' },
-        { text: 'Artist', value: 'artist' },
-        { text: 'Source', value: 'src' },
-        { text: 'Type', value: 'type' },
-        { text: 'Action', value: 'action' }
-      ],
-      itemsPerPage: 10,
-      currentPage: 0,
-      animeFilter: '',
-      songTypeFilter: '',
-      songTitleFilter: '',
-      songIdFilter: ''
-    });
-
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
-
-    function filteredSongList(): ISong[] {
-      return store.getters.songList.filter((song: ISong) => {
-        return (
-          shouldDisplayResult(state.animeFilter, song.anime_name.join(',')) &&
-          shouldDisplayResult(state.songTitleFilter, song.song_title) &&
-          song.type.toLowerCase().includes(state.songTypeFilter.toLowerCase()) &&
-          song.song_id.toLowerCase().includes(state.songIdFilter.toLowerCase())
-        );
-      });
-    }
-
-    function updateStore(song: ISong): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_NAME, song.anime_name);
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_ID, song.anime_id);
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ID, song.song_id);
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TITLE, song.song_title);
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ARTIST, song.artist);
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_SRC, song.src);
-      store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, song.type);
-    }
-
-    function editSong(song: ISong): void {
-      if (openDialog) {
-        updateStore(song);
-        openDialog(DIALOG_ROUTES.EDIT_SONG_DIALOG, 'Edit Song');
-      }
-    }
-
-    function deleteSong(song: ISong): void {
-      if (openDialog) {
-        updateStore(song);
-        openDialog(DIALOG_ROUTES.DELETE_SONG_DIALOG, 'Delete Song');
-      }
-    }
-
-    return {
-      ...toRefs(state),
-      CLIENT_CONSTANTS,
-      filteredSongList,
-      editSong,
-      deleteSong
-    };
-  }
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const headers = [
+  { title: 'Anime', key: 'animeName', sortable: false },
+  { title: 'Title', key: 'songTitle', sortable: false },
+  { title: 'Artist', key: 'artist', sortable: false },
+  { title: 'Type', key: 'type', sortable: false },
+  { title: 'Source', key: 'src', sortable: false },
+  { title: 'Action', key: 'action', sortable: false }
+];
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+const filters = ref({
+  anime: '',
+  type: '',
+  title: '',
+  artist: ''
 });
+
+function editSong(song: SongType) {
+  adminStore.updateSongInEdit(song);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
+  openDialog(DIALOG_ROUTES.SONG_EDIT, 'Edit Song');
+}
+
+function deleteSong(song: SongType) {
+  adminStore.updateSongInEdit(song);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.SONG_EDIT, 'Delete Song');
+}
+
+function filteredSongList(): SongType[] {
+  return dataStore.songList.filter((song) => {
+    return (
+      isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
+      isMatchFilter(filters.value.title, song.songTitle) &&
+      isMatchFilter(filters.value.artist, song.artist) &&
+      isMatchFilter(filters.value.type, song.type)
+    );
+  });
+}
 </script>

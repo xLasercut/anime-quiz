@@ -1,107 +1,66 @@
 <template>
   <v-app>
     <nav-bar></nav-bar>
-    <v-container fluid>
-      <component :is="viewComponent()"></component>
+    <v-container :fluid="true">
+      <v-main>
+        <component :is="viewComponent()"></component>
+      </v-main>
     </v-container>
     <system-notification></system-notification>
     <global-dialog></global-dialog>
   </v-app>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, provide } from '@vue/composition-api';
-import NavBar from './components/app/NavBar.vue';
-import { CLIENT_EVENTS } from './assets/events';
-import { SHARED_EVENTS } from './assets/shared/events';
-import { socket } from './plugins/socket';
-import { viewComponent } from './plugins/routing/mapping';
-import GlobalDialog from './components/app/GlobalDialog.vue';
-import SystemNotification from './components/app/SystemNotification.vue';
-import { LOCAL_STORAGE_CONSTANTS } from './assets/constants';
-import { INotificationColor } from './assets/shared/interfaces';
-import { ERROR } from './assets/shared/constants/colors';
+<script setup lang="ts">
+import { onMounted, provide } from 'vue';
+import { VIEW_MAPPING } from '@/assets/routing/mapping';
+import { useClientStore } from '@/plugins/store/client';
+import NavBar from '@/components/app/NavBar.vue';
+import SystemNotification from '@/components/app/SystemNotification.vue';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { NotificationColorType, SystemNotificationType } from '@/assets/shared/models/types';
+import { OpenDialog, SendNotification } from '@/assets/types';
+import GlobalDialog from '@/components/app/GlobalDialog.vue';
+import { socket } from '@/plugins/socket';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { ClientDialogRoute } from '@/assets/routing/types';
 
-export default defineComponent({
-  components: { SystemNotification, GlobalDialog, NavBar },
-  setup() {
-    let sendNotification: Function;
-    let openDialog: Function;
-    provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: Function): void => {
-      sendNotification = _sendNotification;
-    });
-    provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: Function): void => {
-      openDialog = _openDialog;
-    });
+const clientStore = useClientStore();
 
-    provide(CLIENT_EVENTS.OPEN_DIALOG, (route: string, label: string): void => {
-      openDialog(route, label);
-    });
-    provide(
-      SHARED_EVENTS.SYSTEM_NOTIFICATION,
-      (color: INotificationColor, message: string): void => {
-        sendNotification(color, message);
-      }
-    );
+let sendNotification: SendNotification;
+let openDialog: OpenDialog;
+provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: SendNotification): void => {
+  sendNotification = _sendNotification;
+});
+provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: OpenDialog): void => {
+  openDialog = _openDialog;
+});
 
-    socket.on(
-      SHARED_EVENTS.SYSTEM_NOTIFICATION,
-      (color: INotificationColor, message: string): void => {
-        sendNotification(color, message);
-      }
-    );
+provide(CLIENT_EVENTS.OPEN_DIALOG, (route: ClientDialogRoute, label: string): void => {
+  openDialog(route, label);
+});
+provide(CLIENT_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColorType, message: string): void => {
+  sendNotification(color, message);
+});
 
-    onMounted((): void => {
-      if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
-        sendNotification(ERROR, 'Server URL not set');
-      }
-    });
+function viewComponent() {
+  return VIEW_MAPPING[clientStore.view];
+}
 
-    return {
-      viewComponent
-    };
+socket.on(SOCKET_EVENTS.SYSTEM_NOTIFICATION, (notification: SystemNotificationType) => {
+  sendNotification(notification.color, notification.message);
+});
+
+onMounted(() => {
+  if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
+    sendNotification('error', 'Server URL not set');
   }
 });
 </script>
 
 <style>
-.v-application {
-  background-color: var(--v-background-base) !important;
-}
-
-.v-sheet {
-  background-color: var(--v-background-darken1) !important;
-}
-
-.v-data-table {
-  background-color: var(--v-background-darken1) !important;
-}
-
-.v-data-table th {
-  background-color: var(--v-background-darken1) !important;
-}
-
-.v-data-table tr:hover {
-  background-color: var(--v-background-darken2) !important;
-}
-
-.v-data-table .v-data-table__selected {
-  background-color: var(--v-background-darken2) !important;
-}
-
-.v-pagination__item {
-  background-color: var(--v-background-base) !important;
-}
-
-.v-pagination__item:hover {
-  background-color: var(--v-background-darken1) !important;
-}
-
-.v-pagination__navigation {
-  background-color: var(--v-background-base) !important;
-}
-
-.v-pagination__navigation:hover {
-  background-color: var(--v-background-darken1) !important;
+thead {
+  z-index: 30;
 }
 </style>

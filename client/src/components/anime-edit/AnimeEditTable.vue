@@ -1,113 +1,85 @@
 <template>
   <v-data-table
-    dense
-    disable-sort
-    fixed-header
-    disable-filtering
-    hide-default-footer
-    :height="CLIENT_CONSTANTS.TABLE_HEIGHT"
-    :headers="headers"
+    density="compact"
+    :fixed-header="true"
+    :fixed-footer="true"
     :items="filteredAnimeList()"
+    :headers="headers"
+    v-model:page="currentPage"
     :items-per-page="itemsPerPage"
-    :page="currentPage"
+    :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
-    <template #top>
-      <v-container fluid>
-        <anime-edit-table-filter
-          :anime-id-filter.sync="animeIdFilter"
-          :anime-name-filter.sync="animeNameFilter"
-        ></anime-edit-table-filter>
-      </v-container>
-    </template>
-
-    <template #item.anime_name="{ item }">
-      <v-chip
-        small
-        v-for="(name, index) in item.anime_name"
-        color="primary"
-        :key="`${item.anime_id}_${index}`"
-      >
-        {{ name }}
-      </v-chip>
+    <template #item.animeName="{ item }">
+      <v-row :dense="true">
+        <v-col v-for="name in item.animeName" cols="auto">
+          <v-chip color="primary" size="small" :label="true">{{ name }}</v-chip>
+        </v-col>
+      </v-row>
     </template>
 
     <template #item.action="{ item }">
-      <v-icon color="warning" @click="editAnime(item)">mdi-pencil</v-icon>
-      <v-icon color="error" @click="deleteAnime(item)">mdi-delete</v-icon>
+      <table-action @item:edit="editAnime(item)" @item:delete="deleteAnime(item)"></table-action>
     </template>
 
-    <template #footer="{ props }">
-      <table-pagination
-        :current-page="props.pagination.page"
-        @input="currentPage = $event"
-        :length="props.pagination.pageCount"
-        :items-per-page.sync="itemsPerPage"
-      ></table-pagination>
+    <template #top>
+      <v-container :fluid="true">
+        <anime-edit-table-filters
+          v-model:anime-id.trim="filters.animeId"
+          v-model:anime-name.trim="filters.animeName"
+        ></anime-edit-table-filters>
+      </v-container>
+    </template>
+
+    <template #bottom="{ pageCount }">
+      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
     </template>
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
-import TablePagination from '../shared/TablePagination.vue';
-import { CLIENT_CONSTANTS } from '../../assets/constants';
-import AnimeEditTableFilter from './AnimeEditTableFilter.vue';
-import { IAnime } from '../../assets/shared/interfaces';
-import { store } from '../../plugins/store';
-import { MUTATIONS } from '../../plugins/store/mutations';
-import { CLIENT_EVENTS } from '../../assets/events';
-import { DIALOG_ROUTES } from '../../plugins/routing/routes';
-import { shouldDisplayResult } from '../../assets/game-helper';
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+import { useDataStore } from '@/plugins/store/data';
+import { AnimeType } from '@/assets/shared/models/types';
+import { useAdminStore } from '@/plugins/store/admin';
+import TablePagination from '@/components/common/tables/TablePagination.vue';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
+import AnimeEditTableFilters from '@/components/anime-edit/AnimeEditTableFilters.vue';
+import { isMatchFilter } from '@/assets/game-helpers';
+import { OpenDialog } from '@/assets/types';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { DIALOG_ROUTES } from '@/assets/routing/routes';
+import TableAction from '@/components/common/tables/TableAction.vue';
 
-export default defineComponent({
-  components: { TablePagination, AnimeEditTableFilter },
-  setup() {
-    const state = reactive({
-      headers: [
-        { text: 'Anime ID', value: 'anime_id' },
-        { text: 'Name', value: 'anime_name' },
-        { text: 'Action', value: 'action' }
-      ],
-      itemsPerPage: 10,
-      currentPage: 0,
-      animeIdFilter: '',
-      animeNameFilter: ''
-    });
-
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
-
-    function filteredAnimeList(): IAnime[] {
-      return store.getters.adminAnimeList.filter((anime: IAnime) => {
-        return (
-          shouldDisplayResult(state.animeNameFilter, anime.anime_name.join(',')) &&
-          anime.anime_id.toLowerCase().includes(state.animeIdFilter.toLowerCase())
-        );
-      });
-    }
-
-    function editAnime(anime: IAnime): void {
-      if (openDialog) {
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_ID, anime.anime_id);
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, anime.anime_name);
-        openDialog(DIALOG_ROUTES.EDIT_ANIME_DIALOG, 'Edit Anime');
-      }
-    }
-
-    function deleteAnime(anime: IAnime): void {
-      if (openDialog) {
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_ID, anime.anime_id);
-        store.commit(MUTATIONS.ADMIN_UPDATE_ANIME_NAME, anime.anime_name);
-        openDialog(DIALOG_ROUTES.DELETE_ANIME_DIALOG, 'Delete Anime');
-      }
-    }
-
-    return {
-      ...toRefs(state),
-      CLIENT_CONSTANTS,
-      filteredAnimeList,
-      editAnime,
-      deleteAnime
-    };
-  }
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const headers = [
+  { title: 'Anime ID', key: 'animeId', sortable: false },
+  { title: 'Anime Names', key: 'animeName', sortable: false },
+  { title: 'Action', key: 'action', sortable: false }
+];
+const filters = ref({
+  animeId: '',
+  animeName: ''
 });
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+
+function filteredAnimeList(): AnimeType[] {
+  return dataStore.animeList.filter((anime) => {
+    return anime.animeId.includes(filters.value.animeId) && isMatchFilter(filters.value.animeName, anime.animeName.join(','));
+  });
+}
+
+function editAnime(anime: AnimeType) {
+  adminStore.updateAnimeInEdit(anime);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
+  openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Edit Anime');
+}
+
+function deleteAnime(anime: AnimeType) {
+  adminStore.updateAnimeInEdit(anime);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Delete Anime');
+}
 </script>

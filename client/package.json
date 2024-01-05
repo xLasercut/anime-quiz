@@ -1,35 +1,36 @@
 {
   "name": "anime-quiz-client",
-  "description": "Anime Quiz Client",
-  "version": "1.0.0",
-  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "dev": "cross-env VUE_APP_VERSION=dev vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "prettier-format": "prettier --config ../.prettierrc 'src/**/*.{ts,vue}' --write"
+    "dev": "vite --port 8080",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "format": "prettier 'src/**/*.{ts,vue}' --write"
   },
-  "author": "xLasercut",
-  "license": "MIT",
   "dependencies": {
-    "@vue/composition-api": "^1.6.2",
-    "core-js": "^3.8.3",
-    "socket.io-client": "^4.5.0",
-    "vue": "^2.6.14",
-    "vue-youtube-embed": "^2.2.2",
-    "vuetify": "^2.6.0",
-    "vuex": "^3.6.2"
+    "@mdi/font": "7.2.96",
+    "@vime/core": "^5.4.1",
+    "@vime/vue-next": "^5.4.1",
+    "axios": "^1.6.4",
+    "install": "^0.13.0",
+    "pinia": "^2.1.7",
+    "roboto-fontface": "^0.10.0",
+    "socket.io-client": "^4.7.3",
+    "uuid": "^9.0.1",
+    "vue": "^3.4.5",
+    "vuetify": "^3.4.9",
+    "webfontloader": "^1.6.28",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-typescript": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "cross-env": "^7.0.3",
-    "sass": "~1.32.0",
-    "sass-loader": "^10.0.0",
-    "typescript": "~4.5.5",
-    "vue-cli-plugin-vuetify": "~2.5.0",
-    "vue-template-compiler": "^2.6.14",
-    "vuetify-loader": "^1.7.0"
+    "@babel/types": "^7.23.6",
+    "@types/node": "^20.10.6",
+    "@types/webfontloader": "^1.6.38",
+    "@vitejs/plugin-vue": "^4.6.2",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3",
+    "vite": "^4.5.1",
+    "vite-plugin-vuetify": "^1.0.2",
+    "vue-tsc": "^1.8.27"
   }
 }
