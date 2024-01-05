@@ -1,41 +1,35 @@
-import { ISong, ISongRaw, ISongTitleRaw } from '../shared/interfaces';
-import { AbstractModel } from './abstract';
-import { newSongSchema, songRawSchema, songSchema, songTitleRawSchema } from '../schemas/song';
-import { v4 } from 'uuid';
+import { z } from 'zod';
+import { SongArtist, SongId, SongSrc, SongTitle, SongType } from '../shared/models/song';
+import { isValidJson } from './common';
+import { AnimeId, AnimeName } from '../shared/models/anime';
+import { AnimeIdType, AnimeNameType } from '../shared/models/types';
 
-class SongRaw extends AbstractModel<ISongRaw> {
-  constructor(song: ISongRaw) {
-    super(songRawSchema, song);
-  }
+const DbSong = z.object({
+  song_id: SongId,
+  src: SongSrc,
+  type: SongType,
+  song_title: SongTitle,
+  artist: SongArtist,
+  anime_name: z
+    .string()
+    .trim()
+    .min(1)
+    .refine((val) => isValidJson(val), { message: 'Invalid json string' })
+    .transform((val) => JSON.parse(val))
+    .pipe(z.array(AnimeName))
+    .transform((val) => Array.from(new Set(val))),
+  anime_id: z
+    .string()
+    .trim()
+    .min(1)
+    .refine((val) => isValidJson(val), { message: 'Invalid json string' })
+    .transform((val) => JSON.parse(val))
+    .pipe(z.array(AnimeId))
+    .transform((val) => Array.from(new Set(val)))
+});
 
-  public toSong(): Song {
-    const { anime_id, anime_name, ...rest } = this._result.value;
-    const song: ISong = {
-      ...rest,
-      anime_id: this._jsonParseList(anime_id),
-      anime_name: Array.from(new Set(this._jsonParseList(anime_name)))
-    };
-    return new Song(song);
-  }
-}
+const DbSongTitle = z.object({
+  song_title: SongTitle
+});
 
-class NewSong extends AbstractModel<ISong> {
-  constructor(_song: ISong) {
-    const { song_id, ...rest } = _song;
-    super(newSongSchema, { ...rest, song_id: `song-${v4()}` });
-  }
-}
-
-class Song extends AbstractModel<ISong> {
-  constructor(song: ISong) {
-    super(songSchema, song);
-  }
-}
-
-class SongTitleRaw extends AbstractModel<ISongTitleRaw> {
-  constructor(songTitle: ISongTitleRaw) {
-    super(songTitleRawSchema, songTitle);
-  }
-}
-
-export { Song, NewSong, SongRaw, SongTitleRaw };
+export { DbSong, DbSongTitle };

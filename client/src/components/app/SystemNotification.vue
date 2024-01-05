@@ -1,52 +1,39 @@
 <template>
-  <v-snackbar top :timeout="6000" :color="color" v-model="show">
+  <v-snackbar location="top" :timeout="6000" :color="color" v-model="show">
     {{ message }}
-    <template #action>
-      <v-btn depressed icon @click="show = false">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
+    <template #actions>
+      <v-btn icon="mdi-close" @click="show = false" variant="text" density="comfortable" size="small"></v-btn>
     </template>
   </v-snackbar>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
-import { CLIENT_EVENTS } from '../../assets/events';
-import { INotificationColor } from '../../assets/shared/interfaces';
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { NotificationColorType } from '@/assets/shared/models/types';
+import { RegisterSendNotification } from '@/assets/types';
 
-export default defineComponent({
-  setup() {
-    const state = reactive({
-      message: '',
-      show: false,
-      color: 'error'
-    });
+const message = ref('');
+const show = ref(false);
+const color = ref<NotificationColorType>('error');
 
-    function _showNotification(color: INotificationColor, message: string): void {
-      state.color = color;
-      state.message = message;
-      state.show = true;
-    }
+function _showNotification(_color: NotificationColorType, _message: string): void {
+  color.value = _color;
+  message.value = _message;
+  show.value = true;
+}
 
-    function sendNotification(color: INotificationColor, message: string): void {
-      if (state.show) {
-        state.show = false;
-        setTimeout((): void => {
-          _showNotification(color, message);
-        }, 100);
-      } else {
-        _showNotification(color, message);
-      }
-    }
-
-    const registerSendNotification = inject<Function>(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION);
-    if (registerSendNotification) {
-      registerSendNotification(sendNotification);
-    }
-
-    return {
-      ...toRefs(state)
-    };
+function sendNotification(color: NotificationColorType, message: string): void {
+  if (show.value) {
+    show.value = false;
+    setTimeout((): void => {
+      _showNotification(color, message);
+    }, 100);
+  } else {
+    _showNotification(color, message);
   }
-});
+}
+
+const registerSendNotification = inject(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION) as RegisterSendNotification;
+registerSendNotification(sendNotification);
 </script>

@@ -1,21 +1,9 @@
 <template>
-  <v-main>
-    <v-card flat>
-      <anime-edit-table></anime-edit-table>
-    </v-card>
-  </v-main>
+  <v-card variant="flat">
+    <anime-edit-table></anime-edit-table>
+  </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { socket } from '../plugins/socket';
-import { SHARED_EVENTS } from '../assets/shared/events';
-import AnimeEditTable from '../components/anime-edit/AnimeEditTable.vue';
-
-export default defineComponent({
-  components: { AnimeEditTable },
-  setup() {
-    socket.emit(SHARED_EVENTS.JOIN_ANIME_EDIT);
-  }
-});
+<script setup lang="ts">
+import AnimeEditTable from '@/components/anime-edit/AnimeEditTable.vue';
 </script>

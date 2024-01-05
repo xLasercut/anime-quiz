@@ -1,116 +1,89 @@
 <template>
   <v-data-table
-    dense
-    disable-sort
-    fixed-header
-    disable-filtering
-    hide-default-footer
-    :height="CLIENT_CONSTANTS.TABLE_HEIGHT"
-    :headers="headers"
+    density="compact"
+    :fixed-header="true"
+    :fixed-footer="true"
     :items="filteredEmojiList()"
+    :headers="headers"
+    v-model:page="currentPage"
     :items-per-page="itemsPerPage"
-    :page="currentPage"
+    :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
   >
-    <template #top>
-      <v-container fluid>
-        <emoji-edit-table-filter
-          :emoji-command-filter.sync="emojiCommandFilter"
-          :emoji-source-filter.sync="emojiSourceFilter"
-          :emoji-type-filter.sync="emojiTypeFilter"
-        ></emoji-edit-table-filter>
-      </v-container>
-    </template>
-
     <template #item.src="{ item }">
-      <emoji-preview :emoji="item"></emoji-preview>
+      <game-emoji width="25pt" :emoji="item"></game-emoji>
     </template>
 
     <template #item.action="{ item }">
-      <v-icon color="warning" @click="editEmoji(item)">mdi-pencil</v-icon>
-      <v-icon color="error" @click="deleteEmoji(item)">mdi-delete</v-icon>
+      <table-action @item:edit="editEmoji(item)" @item:delete="deleteEmoji(item)"></table-action>
     </template>
 
-    <template #footer="{ props }">
-      <table-pagination
-        :current-page="props.pagination.page"
-        @input="currentPage = $event"
-        :length="props.pagination.pageCount"
-        :items-per-page.sync="itemsPerPage"
-      ></table-pagination>
+    <template #top>
+      <v-container :fluid="true">
+        <emoji-edit-table-filters
+          v-model:type.trim="filters.type"
+          v-model:emoji-id.trim="filters.emojiId"
+          v-model:command="filters.command"
+        ></emoji-edit-table-filters>
+      </v-container>
+    </template>
+
+    <template #bottom="{ pageCount }">
+      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
     </template>
   </v-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, reactive, toRefs } from '@vue/composition-api';
-import TablePagination from '../shared/TablePagination.vue';
-import { CLIENT_CONSTANTS } from '../../assets/constants';
-import { IEmoji } from '../../assets/shared/interfaces';
-import { store } from '../../plugins/store';
-import { MUTATIONS } from '../../plugins/store/mutations';
-import { CLIENT_EVENTS } from '../../assets/events';
-import { DIALOG_ROUTES } from '../../plugins/routing/routes';
-import EmojiEditTableFilter from './EmojiEditTableFilter.vue';
-import EmojiPreview from './EmojiPreview.vue';
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+import { useDataStore } from '@/plugins/store/data';
+import { EmojiType } from '@/assets/shared/models/types';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
+import GameEmoji from '@/components/common/GameEmoji.vue';
+import TablePagination from '@/components/common/tables/TablePagination.vue';
+import EmojiEditTableFilters from '@/components/emoji-edit/EmojiEditTableFilters.vue';
+import TableAction from '@/components/common/tables/TableAction.vue';
+import { DIALOG_ROUTES } from '@/assets/routing/routes';
+import { useAdminStore } from '@/plugins/store/admin';
+import { OpenDialog } from '@/assets/types';
+import { CLIENT_EVENTS } from '@/assets/events';
 
-export default defineComponent({
-  components: { EmojiPreview, EmojiEditTableFilter, TablePagination },
-  setup() {
-    const state = reactive({
-      headers: [
-        { text: 'Emoji ID', value: 'emoji_id' },
-        { text: 'Command', value: 'command' },
-        { text: 'Source', value: 'src' },
-        { text: 'Type', value: 'type' },
-        { text: 'Action', value: 'action' }
-      ],
-      itemsPerPage: 10,
-      currentPage: 0,
-      emojiCommandFilter: '',
-      emojiTypeFilter: '',
-      emojiSourceFilter: ''
-    });
-
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
-
-    function filteredEmojiList(): IEmoji[] {
-      return store.getters.emojiList.filter((emoji: IEmoji) => {
-        return (
-          emoji.command.toLowerCase().includes(state.emojiCommandFilter.toLowerCase()) &&
-          emoji.src.toLowerCase().includes(state.emojiSourceFilter.toLowerCase()) &&
-          emoji.type.toLowerCase().includes(state.emojiTypeFilter.toLowerCase())
-        );
-      });
-    }
-
-    function updateStore(emoji: IEmoji): void {
-      store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_TYPE, emoji.type);
-      store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_COMMAND, emoji.command);
-      store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_SRC, emoji.src);
-      store.commit(MUTATIONS.ADMIN_UPDATE_EMOJI_ID, emoji.emoji_id);
-    }
-
-    function editEmoji(emoji: IEmoji): void {
-      if (openDialog) {
-        updateStore(emoji);
-        openDialog(DIALOG_ROUTES.EDIT_EMOJI_DIALOG, 'Edit Emoji');
-      }
-    }
-
-    function deleteEmoji(emoji: IEmoji): void {
-      if (openDialog) {
-        updateStore(emoji);
-        openDialog(DIALOG_ROUTES.DELETE_EMOJI_DIALOG, 'Delete Emoji');
-      }
-    }
-
-    return {
-      ...toRefs(state),
-      CLIENT_CONSTANTS,
-      filteredEmojiList,
-      editEmoji,
-      deleteEmoji
-    };
-  }
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const headers = [
+  { title: 'Emoji ID', key: 'emojiId', sortable: false },
+  { title: 'Command', key: 'command', sortable: false },
+  { title: 'Src', key: 'src', sortable: false },
+  { title: 'Type', key: 'type', sortable: false },
+  { title: 'Action', key: 'action', sortable: false }
+];
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+const filters = ref({
+  emojiId: '',
+  command: '',
+  type: ''
 });
+
+function editEmoji(emoji: EmojiType) {
+  adminStore.updateEmojiInEdit(emoji);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
+  openDialog(DIALOG_ROUTES.EMOJI_EDIT, 'Edit Emoji');
+}
+
+function deleteEmoji(emoji: EmojiType) {
+  adminStore.updateEmojiInEdit(emoji);
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.EMOJI_EDIT, 'Delete Emoji');
+}
+
+function filteredEmojiList(): EmojiType[] {
+  return dataStore.emojiList.filter((emoji) => {
+    return (
+      emoji.emojiId.includes(filters.value.emojiId) &&
+      emoji.command.toLowerCase().includes(filters.value.command.toLowerCase()) &&
+      emoji.type.includes(filters.value.type)
+    );
+  });
+}
 </script>

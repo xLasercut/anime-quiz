@@ -1,21 +1,13 @@
 <template>
-  <v-main>
-    <v-card flat>
-      <user-edit-table></user-edit-table>
-    </v-card>
-  </v-main>
+  <v-card variant="flat">
+    <user-edit-table></user-edit-table>
+  </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { socket } from '../plugins/socket';
-import { SHARED_EVENTS } from 'anime-quiz-server/src/shared/events';
-import UserEditTable from '../components/user-edit/UserEditTable.vue';
+<script setup lang="ts">
+import { socket } from '@/plugins/socket';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import UserEditTable from '@/components/user-edit/UserEditTable.vue';
 
-export default defineComponent({
-  components: { UserEditTable },
-  setup() {
-    socket.emit(SHARED_EVENTS.JOIN_USER_EDIT);
-  }
-});
+socket.emit(SOCKET_EVENTS.UPDATE_STORE_USER_LIST);
 </script>

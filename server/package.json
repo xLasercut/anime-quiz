@@ -1,36 +1,41 @@
 {
   "name": "anime-quiz-server",
   "version": "1.0.0",
-  "description": "Anime Quiz Server",
+  "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf ./dist && tsc -b",
-    "start": "node dist/index.js",
     "dev": "env-cmd -f ./config.env nodemon src/index.ts",
-    "init:userdb": "ts-node tools/init-user-db.ts",
-    "prettier-format": "prettier --config ../.prettierrc 'src/**/*.ts' --write",
-    "interface:generate": "ts-node ./tools/generate-interfaces.ts"
+    "build": "rm -rf ./dist && tsc -b",
+    "bootstrap": "ts-node tools/bootstrap.ts",
+    "format": "prettier 'src/**/*.ts' --write",
+    "start": "node dist/index.js"
   },
   "author": "xLasercut",
   "license": "MIT",
   "dependencies": {
-    "@types/better-sqlite3": "^7.5.0",
-    "@types/node-cron": "^3.0.1",
-    "@types/uuid": "^8.3.4",
-    "better-sqlite3": "^7.5.3",
-    "env-cmd": "^10.1.0",
-    "joi": "^17.6.0",
-    "moment": "^2.29.3",
-    "node-cron": "^3.0.0",
-    "nodemon": "^2.0.16",
-    "socket.io": "^4.5.0",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.4",
-    "uuid": "^8.3.2",
-    "winston": "^3.7.2",
-    "winston-daily-rotate-file": "^4.6.1"
+    "axios": "^1.6.4",
+    "better-sqlite3": "^9.2.2",
+    "pino": "^8.17.2",
+    "socket.io": "^4.7.3",
+    "typescript": "^5.3.3",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "joi-to-typescript": "^4.0.5"
-  }
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^9.0.7",
+    "env-cmd": "^10.1.0",
+    "nodemon": "^3.0.2",
+    "prettier": "^3.1.1",
+    "ts-node": "^10.9.2"
+  },
+  "bugs": {
+    "url": "https://github.com/xLasercut/anime-quiz/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xLasercut/anime-quiz.git"
+  },
+  "homepage": "https://github.com/xLasercut/anime-quiz#readme"
 }

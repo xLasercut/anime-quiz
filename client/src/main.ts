@@ -1,17 +1,9 @@
-import Vue from 'vue';
 import App from './App.vue';
-import { store } from './plugins/store';
-import vuetify from './plugins/vuetify';
-import VueCompositionAPI from '@vue/composition-api';
-import VueYoutubeEmbed from 'vue-youtube-embed';
+import { createApp } from 'vue';
+import { registerPlugins } from '@/plugins';
 
-Vue.config.productionTip = false;
+const app = createApp(App);
 
-Vue.use(VueCompositionAPI);
-Vue.use(VueYoutubeEmbed);
+registerPlugins(app);
 
-new Vue({
-  store,
-  vuetify,
-  render: (h) => h(App)
-}).$mount('#app');
+app.mount('#app');

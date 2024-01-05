@@ -1,42 +1,47 @@
-import { ClientStoreState, RootStoreState } from '../../assets/interfaces';
-import { DIALOG_ROUTES, ROUTES } from '../routing/routes';
-import { MUTATIONS } from './mutations';
-import { Module } from 'vuex';
-import { IClientData } from '../../assets/shared/interfaces';
-import { getDefaultVolume } from '../../assets/game-helper';
+import { defineStore } from 'pinia';
+import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
+import { getDefaultVolume } from '@/assets/game-helpers';
+import { ClientDataType } from '@/assets/shared/models/types';
+import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
 
-const DEFAULT_STATE: ClientStoreState = {
-  view: ROUTES.LOGIN,
-  dialogView: DIALOG_ROUTES.LOGIN_SETTINGS,
-  username: '',
-  avatar: '',
-  admin: false,
-  host: false,
-  volume: getDefaultVolume()
-};
+interface State {
+  view: ClientRoute;
+  dialogView: ClientDialogRoute;
+  volume: number;
+  clientData: ClientDataType;
+}
 
-const client: Module<ClientStoreState, RootStoreState> = {
-  state: Object.assign({}, DEFAULT_STATE),
-  mutations: {
-    [MUTATIONS.CHANGE_DIALOG_VIEW]: (state: ClientStoreState, route: string) => {
-      state.dialogView = route;
+const useClientStore = defineStore('client', {
+  state: (): State => {
+    return {
+      view: ROUTES.LOGIN,
+      dialogView: DIALOG_ROUTES.LOGIN_SETTINGS,
+      volume: getDefaultVolume(),
+      clientData: {
+        admin: false,
+        discordId: '',
+        host: false,
+        displayName: '',
+        userId: '',
+        auth: false,
+        avatar: ''
+      }
+    };
+  },
+  actions: {
+    updateClientData(clientData: ClientDataType) {
+      this.clientData = clientData;
     },
-    [MUTATIONS.CHANGE_VIEW]: (state: ClientStoreState, route: string) => {
-      state.view = route;
+    changeView(view: ClientRoute) {
+      this.view = view;
     },
-    [MUTATIONS.SOCKET_UPDATE_CLIENT_DATA]: (state: ClientStoreState, clientData: IClientData) => {
-      state.username = clientData.username;
-      state.avatar = clientData.avatar;
-      state.admin = clientData.admin;
-      state.host = clientData.host;
+    changeDialogView(view: ClientDialogRoute) {
+      this.dialogView = view;
     },
-    [MUTATIONS.UPDATE_VOLUME]: (state: ClientStoreState, volume: number) => {
-      state.volume = volume;
-    },
-    [MUTATIONS.RESET_CLIENT_STORE_STATE]: (state: ClientStoreState) => {
-      Object.assign(state, DEFAULT_STATE);
+    updateVolume(volume: number) {
+      this.volume = volume;
     }
   }
-};
+});
 
-export { client };
+export { useClientStore };

@@ -5,11 +5,16 @@
     "outDir": "dist",
     "module": "CommonJS",
     "lib": [
-      "ESNext"
+      "ESNext",
+      "dom"
     ],
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "inlineSources": true
   },
   "include": [
     "src/**/*"
-  ]
+  ],
 }

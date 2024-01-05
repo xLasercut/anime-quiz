@@ -1,20 +1,61 @@
-import { ISong } from './shared/interfaces';
+import { UserDb } from './database/user';
+import { Emitter } from './emitters/emitter';
+import { SongDb } from './database/song';
+import { Oidc } from './app/oidc';
+import { AnimeDb } from './database/anime';
+import { DatabaseLock } from './database/lock';
+import { EmojiDb } from './database/emoji';
+import { UserSongDb } from './database/user-song';
+import { Server } from './app/server';
+import { GameRooms } from './game-state/room';
+import { Logger } from './app/logger';
+import { GameChatSerialiser } from './game-state/chat';
+import { DatabaseDataState } from './database/common';
 
-interface ILogTemplate {
-  reference: string;
-  level: string;
-  message: string;
+interface EmitterDependencies {
+  userDb: UserDb;
+  songDb: SongDb;
+  animeDb: AnimeDb;
+  emojiDb: EmojiDb;
+  userSongDb: UserSongDb;
+  gameRooms: GameRooms;
+  chatSerialiser: GameChatSerialiser;
+  dbDataState: DatabaseDataState;
 }
 
-interface IGameStateRaw {
-  playing: boolean;
-  currentSongCount: number;
-  startPosition: number;
-  gameList: ISong[];
-  songOverride: ISong | null;
-  countdown: NodeJS.Timer;
-  timeout: NodeJS.Timeout;
-  currentSong: ISong;
+interface HandlerDependencies {
+  io: Server;
+  logger: Logger;
+  config: ServerConfig;
+  dbDataState: DatabaseDataState;
+  userDb: UserDb;
+  songDb: SongDb;
+  animeDb: AnimeDb;
+  emitter: Emitter;
+  oidc: Oidc;
+  dbLock: DatabaseLock;
+  emojiDb: EmojiDb;
+  userSongDb: UserSongDb;
+  gameRooms: GameRooms;
 }
 
-export { ILogTemplate, IGameStateRaw };
+interface ServerConfig {
+  rootDir: string;
+  logDir: string;
+  dataDir: string;
+  dataBackupDir: string;
+  mainDbPath: string;
+  serverPort: string;
+  corsConfig: string;
+  clientAuthDelay: number;
+  userDbPath: string;
+  dbBackupSchedule: string;
+  dbBackupCount: number;
+  redirectUrl: string;
+  discordClientId: string;
+  discordClientSecret: string;
+  logLevel: string;
+  discordUserOverride: string;
+}
+
+export { HandlerDependencies, ServerConfig, EmitterDependencies };

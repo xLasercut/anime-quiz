@@ -1,120 +1,110 @@
 <template>
-  <v-main>
-    <v-row justify="center">
-      <v-col
-        v-for="card of cards"
-        :key="card.route"
-        v-if="showCard(card.requireAdmin)"
-        cols="6"
-        md="4"
-      >
-        <lobby-menu-card
-          :icon="card.icon"
-          :color="card.color"
-          :title="card.title"
-          :description="card.description"
-          @click="changeView(card.route)"
-        ></lobby-menu-card>
-      </v-col>
-    </v-row>
-  </v-main>
+  <v-row justify="center">
+    <v-col v-for="card of filteredCards()" :key="card.route" cols="6" md="4">
+      <lobby-menu-card
+        :icon="card.icon"
+        :color="card.color"
+        :title="card.title"
+        :description="card.description"
+        @click="changeView(card.route)"
+      ></lobby-menu-card>
+    </v-col>
+  </v-row>
 </template>
 
-<script lang="ts">
-import { MUTATIONS } from '../plugins/store/mutations';
-import { ROUTES } from '../plugins/routing/routes';
-import { defineComponent, onMounted, reactive, toRefs } from '@vue/composition-api';
-import { store } from '../plugins/store';
-import LobbyMenuCard from '../components/lobby/LobbyMenuCard.vue';
-import { socket } from '../plugins/socket';
-import { SHARED_EVENTS } from '../assets/shared/events';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import LobbyMenuCard from '@/components/lobby/LobbyMenuCard.vue';
+import { ROUTES } from '@/assets/routing/routes';
+import { useClientStore } from '@/plugins/store/client';
+import { useAdminStore } from '@/plugins/store/admin';
+import { socket } from '@/plugins/socket';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { ClientRoute } from '@/assets/routing/types';
 
-export default defineComponent({
-  components: { LobbyMenuCard },
-  setup() {
-    const state = reactive({
-      cards: [
-        {
-          color: 'success',
-          title: 'Game Room',
-          description: 'Play anime music quiz',
-          route: ROUTES.ROOM_LIST,
-          requireAdmin: false,
-          icon: 'mdi-gamepad-variant'
-        },
-        {
-          color: 'info',
-          title: 'Music Player',
-          description: 'Play music based on song list',
-          route: ROUTES.MUSIC_PLAYER,
-          requireAdmin: false,
-          icon: 'mdi-music-clef-treble'
-        },
-        {
-          color: 'primary',
-          title: 'Song List',
-          description: 'Add/Remove songs from your song list',
-          route: ROUTES.SONG_LIST,
-          requireAdmin: false,
-          icon: 'mdi-playlist-music'
-        },
-        {
-          color: 'error',
-          title: 'Anime Edit',
-          description: 'Edit Anime List',
-          route: ROUTES.ANIME_EDIT,
-          requireAdmin: true,
-          icon: 'mdi-database-edit'
-        },
-        {
-          color: 'error',
-          title: 'Song Edit',
-          description: 'Edit Song List',
-          route: ROUTES.SONG_EDIT,
-          requireAdmin: true,
-          icon: 'mdi-database-edit'
-        },
-        {
-          color: 'error',
-          title: 'Emoji Edit',
-          description: 'Edit Emoji List',
-          route: ROUTES.EMOJI_EDIT,
-          requireAdmin: true,
-          icon: 'mdi-database-edit'
-        },
-        {
-          color: 'error',
-          title: 'User Edit',
-          description: 'Edit User List',
-          route: ROUTES.USER_EDIT,
-          requireAdmin: true,
-          icon: 'mdi-database-edit'
-        }
-      ]
-    });
+const clientStore = useClientStore();
+const adminStore = useAdminStore();
 
-    function changeView(route: string): void {
-      store.commit(MUTATIONS.CHANGE_VIEW, route);
-    }
-
-    function showCard(requireAdmin: boolean): boolean {
-      if (!requireAdmin) {
-        return true;
-      }
-
-      return !!store.state.client.admin;
-    }
-
-    onMounted(() => {
-      socket.emit(SHARED_EVENTS.LEAVE_ALL_ROOMS);
-      store.commit(MUTATIONS.RESET_STORE_STATE);
-    });
-
-    return {
-      changeView,
-      ...toRefs(state),
-      showCard
-    };
+const cards = ref([
+  {
+    color: 'success',
+    title: 'Game Room',
+    description: 'Play anime music quiz',
+    route: ROUTES.GAME_ROOMS,
+    requireAdmin: false,
+    icon: 'mdi-gamepad-variant'
+  },
+  {
+    color: 'primary',
+    title: 'Song List',
+    description: 'Add/Remove songs from your song list',
+    route: ROUTES.SONG_LIST_EDIT,
+    requireAdmin: false,
+    icon: 'mdi-playlist-music'
+  },
+  {
+    color: 'success',
+    title: 'User Settings',
+    description: 'Update your user settings',
+    route: ROUTES.USER_SETTINGS,
+    requireAdmin: false,
+    icon: 'mdi-gamepad-variant'
+  },
+  {
+    color: 'error',
+    title: 'Anime Edit',
+    description: 'Add/Edit/Delete animes',
+    route: ROUTES.ANIME_EDIT,
+    requireAdmin: true,
+    icon: 'mdi-database-edit'
+  },
+  {
+    color: 'error',
+    title: 'Song Edit',
+    description: 'Add/Edit/Delete songs',
+    route: ROUTES.SONG_EDIT,
+    requireAdmin: true,
+    icon: 'mdi-database-edit'
+  },
+  {
+    color: 'error',
+    title: 'Emoji Edit',
+    description: 'Add/Edit/Delete emojis',
+    route: ROUTES.EMOJI_EDIT,
+    requireAdmin: true,
+    icon: 'mdi-database-edit'
+  },
+  {
+    color: 'error',
+    title: 'User Edit',
+    description: 'Add/Edit/Delete users',
+    route: ROUTES.USER_EDIT,
+    requireAdmin: true,
+    icon: 'mdi-database-edit'
   }
+]);
+
+function changeView(route: ClientRoute) {
+  clientStore.changeView(route);
+}
+
+function filteredCards() {
+  return cards.value.filter((card) => {
+    if (showCard(card.requireAdmin)) {
+      return card;
+    }
+  });
+}
+
+function showCard(requireAdmin: boolean): boolean {
+  if (!requireAdmin) {
+    return true;
+  }
+  return clientStore.clientData.admin;
+}
+
+onMounted(() => {
+  socket.emit(SOCKET_EVENTS.LEAVE_ALL_ROOMS);
+  adminStore.$reset();
 });
 </script>

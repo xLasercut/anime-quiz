@@ -1,55 +1,54 @@
 <template>
-  <v-toolbar-items>
-    <nav-btn icon="mdi-plus" color="success" @click="newSong()">New Song</nav-btn>
-    <nav-btn icon="mdi-refresh" color="info" @click="reload()">Reload</nav-btn>
-    <nav-btn icon="mdi-backspace-reverse-outline" color="warning" @click="back()">Back</nav-btn>
-  </v-toolbar-items>
+  <nav-btn icon="mdi-plus" color="success" @click="newSong()">New Song</nav-btn>
+  <nav-btn icon="mdi-refresh" color="info" @click="reload()">Reload</nav-btn>
+  <nav-btn icon="mdi-backspace-reverse-outline" color="warning" @click="back()">Back</nav-btn>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from '@vue/composition-api';
-import { store } from '../../plugins/store';
-import { MUTATIONS } from '../../plugins/store/mutations';
-import { DIALOG_ROUTES, ROUTES } from '../../plugins/routing/routes';
-import NavBtn from '../shared/buttons/NavBtn.vue';
-import { socket } from '../../plugins/socket';
-import { SHARED_EVENTS } from 'anime-quiz-server/src/shared/events';
-import { CLIENT_EVENTS } from '../../assets/events';
+<script setup lang="ts">
+import NavBtn from '@/components/common/buttons/NavBtn.vue';
+import { useClientStore } from '@/plugins/store/client';
+import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
+import { socket } from '@/plugins/socket';
+import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { useDataStore } from '@/plugins/store/data';
+import { useAdminStore } from '@/plugins/store/admin';
+import { OpenDialog } from '@/assets/types';
+import { CLIENT_EVENTS } from '@/assets/events';
+import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { inject } from 'vue';
 
-export default defineComponent({
-  components: { NavBtn },
-  setup() {
-    function back(): void {
-      store.commit(MUTATIONS.CHANGE_VIEW, ROUTES.LOBBY);
-    }
+const clientStore = useClientStore();
+const dataStore = useDataStore();
+const adminStore = useAdminStore();
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 
-    function reload(): void {
-      store.commit(MUTATIONS.SOCKET_UPDATE_SONG_LIST, []);
-      socket.emit(SHARED_EVENTS.GET_SONG_LIST);
-      socket.emit(SHARED_EVENTS.GET_ANIME_LIST);
-      socket.emit(SHARED_EVENTS.GET_SONG_TITLE_LIST);
-    }
+function newSong() {
+  adminStore.updateSongInEdit({
+    songId: '',
+    animeName: ['New Song'],
+    animeId: [],
+    src: '',
+    songTitle: '',
+    artist: '',
+    type: 'OP'
+  });
+  adminStore.generateNewSongId();
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.NEW);
+  openDialog(DIALOG_ROUTES.SONG_EDIT, 'New Song');
+}
 
-    const openDialog = inject<Function>(CLIENT_EVENTS.OPEN_DIALOG);
+function reload() {
+  dataStore.updateUserSongList([]);
+  dataStore.updateSongTitles([]);
+  dataStore.updateSongList([]);
+  dataStore.updateAnimeNames([]);
+  socket.emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_NAMES);
+  socket.emit(SOCKET_EVENTS.UPDATE_STORE_SONG_LIST);
+  socket.emit(SOCKET_EVENTS.UPDATE_STORE_SONG_TITLES);
+  socket.emit(SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST);
+}
 
-    function newSong(): void {
-      if (openDialog) {
-        store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_NAME, []);
-        store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ANIME_ID, []);
-        store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ID, '');
-        store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TITLE, '');
-        store.commit(MUTATIONS.ADMIN_UPDATE_SONG_ARTIST, '');
-        store.commit(MUTATIONS.ADMIN_UPDATE_SONG_SRC, '');
-        store.commit(MUTATIONS.ADMIN_UPDATE_SONG_TYPE, '');
-        openDialog(DIALOG_ROUTES.NEW_SONG_DIALOG, 'New Song');
-      }
-    }
-
-    return {
-      back,
-      reload,
-      newSong
-    };
-  }
-});
+function back() {
+  clientStore.changeView(ROUTES.LOBBY);
+}
 </script>

@@ -1,35 +1,26 @@
 import * as path from 'path';
+import { ServerConfig } from '../interfaces';
 
-class ServerConfig {
-  public rootDir: string;
-  public logDir: string;
-  public dataDir: string;
-  public dataBackupDir: string;
-  public mainDbPath: string;
-  public serverPort: string;
-  public serverPassword: string;
-  public adminPassword: string;
-  public corsConfig: string;
-  public clientAuthDelay: number;
-  public userDbPath: string;
-  public dbBackupSchedule: string;
-  public dbBackupCount: number;
+const ROOT_DIR = path.join(__dirname, '..', '..');
+const DATA_DIR = path.join(ROOT_DIR, 'data');
 
-  constructor() {
-    this.rootDir = path.join(__dirname, '..', '..');
-    this.logDir = path.join(this.rootDir, 'log');
-    this.dataDir = path.join(this.rootDir, 'data');
-    this.dataBackupDir = path.join(this.rootDir, 'data-backup');
-    this.mainDbPath = path.join(this.dataDir, 'anime-quiz.db');
-    this.userDbPath = path.join(this.dataDir, 'anime-quiz-user.db');
-    this.serverPort = process.env.SERVER_PORT || '3000';
-    this.serverPassword = process.env.SERVER_PASSWORD || 'server';
-    this.adminPassword = process.env.ADMIN_PASSWORD || 'admin';
-    this.corsConfig = process.env.CORS_CONFIG || '*';
-    this.clientAuthDelay = 2000;
-    this.dbBackupSchedule = process.env.DB_BACKUP_SCHEDULE || '0 2 * * *';
-    this.dbBackupCount = parseInt(process.env.DB_BACKUP_COUNT || '5');
-  }
-}
+const SERVER_CONFIG: ServerConfig = {
+  rootDir: ROOT_DIR,
+  logDir: path.join(ROOT_DIR, 'log'),
+  dataDir: DATA_DIR,
+  dataBackupDir: path.join(ROOT_DIR, 'data-backup'),
+  mainDbPath: path.join(DATA_DIR, 'anime-quiz.db'),
+  userDbPath: path.join(DATA_DIR, 'anime-quiz-user.db'),
+  serverPort: process.env.SERVER_PORT || '3000',
+  corsConfig: process.env.CORS_CONFIG || '*',
+  clientAuthDelay: 2000,
+  dbBackupSchedule: process.env.DB_BACKUP_SCHEDULE || '0 2 * * *',
+  dbBackupCount: parseInt(process.env.DB_BACKUP_COUNT || '5'),
+  redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080',
+  discordClientId: process.env.DISCORD_CLIENT_ID || '',
+  discordClientSecret: process.env.DISCORD_CLIENT_SECRET || '',
+  logLevel: process.env.LOG_LEVEL || 'info',
+  discordUserOverride: process.env.DISCORD_USER_OVERRIDE || ''
+};
 
-export { ServerConfig };
+export { SERVER_CONFIG };
