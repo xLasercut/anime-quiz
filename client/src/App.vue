@@ -26,7 +26,7 @@ import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { ClientDialogRoute } from '@/assets/routing/types';
 
-const clientStore = useClientStore()
+const clientStore = useClientStore();
 
 let sendNotification: SendNotification;
 let openDialog: OpenDialog;
