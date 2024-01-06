@@ -54,7 +54,8 @@ class GameRoomsHandler extends ServerHandler {
       const roomId = this._socket.data.currentGameRoom;
       this._gameRooms.getRoom(roomId).settings.update(settings);
       this._emitter.updateGameRoomSettings(this._gameRooms.getRoom(roomId).settings.dict, roomId);
-      this._emitter.updateGameChatSys('Settings updated', roomId);
+      const chatMessage = this._chatSerialiser.generateSystemMsg('Settings updated');
+      this._emitter.updateGameChat(chatMessage, roomId);
     }
   };
 }

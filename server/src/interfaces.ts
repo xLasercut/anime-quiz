@@ -11,6 +11,7 @@ import { GameRooms } from './game-state/room';
 import { Logger } from './app/logger';
 import { GameChatSerialiser } from './game-state/chat';
 import { DatabaseDataState } from './database/common';
+import { BotMessageDb } from './database/bot-message';
 
 interface EmitterDependencies {
   userDb: UserDb;
@@ -18,6 +19,7 @@ interface EmitterDependencies {
   animeDb: AnimeDb;
   emojiDb: EmojiDb;
   userSongDb: UserSongDb;
+  botMessageDb: BotMessageDb;
   gameRooms: GameRooms;
   chatSerialiser: GameChatSerialiser;
   dbDataState: DatabaseDataState;
@@ -37,6 +39,8 @@ interface HandlerDependencies {
   emojiDb: EmojiDb;
   userSongDb: UserSongDb;
   gameRooms: GameRooms;
+  botMessageDb: BotMessageDb;
+  chatSerialiser: GameChatSerialiser;
 }
 
 interface ServerConfig {

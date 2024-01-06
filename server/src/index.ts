@@ -21,6 +21,7 @@ import { GameRoomId } from './shared/models/game';
 import { GameRoomIdType } from './shared/models/types';
 import { GameChatSerialiser } from './game-state/chat';
 import { DatabaseDataState } from './database/common';
+import { BotMessageDb } from './database/bot-message';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -38,15 +39,18 @@ const songDb = new SongDb(SERVER_CONFIG, logger, dbDataState);
 const animeDb = new AnimeDb(SERVER_CONFIG, logger, songDb, dbDataState);
 const emojiDb = new EmojiDb(SERVER_CONFIG, logger, dbDataState);
 const userSongDb = new UserSongDb(SERVER_CONFIG, logger, dbDataState);
+const botMessageDb = new BotMessageDb(SERVER_CONFIG, logger, dbDataState);
 const gameRooms = new GameRooms(io, logger);
+const chatSerialiser = new GameChatSerialiser(logger, botMessageDb);
 const emitterDependencies: EmitterDependencies = {
   userDb: userDb,
   animeDb: animeDb,
   songDb: songDb,
   emojiDb: emojiDb,
   userSongDb: userSongDb,
+  botMessageDb: botMessageDb,
   gameRooms: gameRooms,
-  chatSerialiser: new GameChatSerialiser(logger),
+  chatSerialiser: chatSerialiser,
   dbDataState: dbDataState
 };
 const emitter = new Emitter(io, emitterDependencies);
@@ -62,15 +66,17 @@ const handlerDependencies: HandlerDependencies = {
   dbLock: dbLock,
   emojiDb: emojiDb,
   userSongDb: userSongDb,
+  botMessageDb: botMessageDb,
   io: io,
-  gameRooms: gameRooms
+  gameRooms: gameRooms,
+  chatSerialiser: chatSerialiser
 };
 
 const ioErrHandler = newIoErrorHandler(logger);
 
 io.on(SOCKET_EVENTS.CONNECT, (socket: Socket) => {
   logger.info('client connected', { id: socket.id });
-  const socketErrHandler = newSocketErrorHandler(logger, socket, emitter);
+  const socketErrHandler = newSocketErrorHandler(logger, socket, emitter, chatSerialiser);
   socket.data = new SocketData(socket, logger);
   const entryHandler = new EntryPointHandler(socket, socketErrHandler, handlerDependencies);
   entryHandler.start();
@@ -109,7 +115,8 @@ io.of('/').adapter.on(
     });
     const roomId = parseGameRoomId(_roomId);
     if (roomId) {
-      emitter.updateGameChatSys(`${socket.data.clientData.displayName} joined the room`, roomId);
+      const chatMessage = chatSerialiser.generateSystemMsg(`${socket.data.clientData.displayName} joined the room`);
+      emitter.updateGameChat(chatMessage, roomId);
       emitter.updateStorePlayerList(roomId);
     }
   })
@@ -126,7 +133,8 @@ io.of('/').adapter.on(
     });
     const roomId = parseGameRoomId(_roomId);
     if (roomId) {
-      emitter.updateGameChatSys(`${socket.data.clientData.displayName} left the room`, roomId);
+      const chatMessage = chatSerialiser.generateSystemMsg(`${socket.data.clientData.displayName} left the room`);
+      emitter.updateGameChat(chatMessage, roomId);
       const hostSocket = gameRooms.setNewHost(roomId);
       if (hostSocket) {
         emitter.updateStoreClientData(hostSocket.data.clientData, hostSocket.id);

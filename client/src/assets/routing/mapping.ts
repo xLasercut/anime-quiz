@@ -30,6 +30,9 @@ import LobbyPanel from '@/components/lobby/LobbyPanel.vue';
 import MainGameSettingsDialog from '@/components/main-game/MainGameSettingsDialog.vue';
 import MainGameSongPickerDialog from '@/components/main-game/MainGameSongPickerDialog.vue';
 import AdminDialog from '@/components/app/AdminDialog.vue';
+import BotMessageEdit from '@/views/BotMessageEdit.vue';
+import BotMessageEditPanel from '@/components/bot-message-edit/BotMessageEditPanel.vue';
+import BotMessageEditDialog from '@/components/bot-message-edit/BotMessageEditDialog.vue';
 
 const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -41,7 +44,8 @@ const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.SONG_EDIT]: SongEditPanel,
   [ROUTES.EMOJI_EDIT]: EmojiEditPanel,
   [ROUTES.GAME_ROOMS]: GameRoomsPanel,
-  [ROUTES.MAIN_GAME]: MainGamePanel
+  [ROUTES.MAIN_GAME]: MainGamePanel,
+  [ROUTES.BOT_MESSAGE_EDIT]: BotMessageEditPanel
 };
 
 const VIEW_MAPPING: Record<ClientRoute, Component> = {
@@ -54,7 +58,8 @@ const VIEW_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.SONG_EDIT]: SongEdit,
   [ROUTES.EMOJI_EDIT]: EmojiEdit,
   [ROUTES.GAME_ROOMS]: GameRooms,
-  [ROUTES.MAIN_GAME]: MainGame
+  [ROUTES.MAIN_GAME]: MainGame,
+  [ROUTES.BOT_MESSAGE_EDIT]: BotMessageEdit
 };
 
 const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
@@ -66,7 +71,8 @@ const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
   [DIALOG_ROUTES.NEW_GAME_ROOM]: GameRoomsNewRoomDialog,
   [DIALOG_ROUTES.MAIN_GAME_SETTINGS]: MainGameSettingsDialog,
   [DIALOG_ROUTES.MAIN_GAME_SONG_PICKER]: MainGameSongPickerDialog,
-  [DIALOG_ROUTES.ADMIN_PANEL]: AdminDialog
+  [DIALOG_ROUTES.ADMIN_PANEL]: AdminDialog,
+  [DIALOG_ROUTES.BOT_MESSAGE_EDIT]: BotMessageEditDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

@@ -76,6 +76,14 @@ const cards = ref([
   },
   {
     color: 'error',
+    title: 'Bot Message Edit',
+    description: 'Add/Edit/Delete bot messages',
+    route: ROUTES.BOT_MESSAGE_EDIT,
+    requireAdmin: true,
+    icon: 'mdi-database-edit'
+  },
+  {
+    color: 'error',
     title: 'User Edit',
     description: 'Add/Edit/Delete users',
     route: ROUTES.USER_EDIT,

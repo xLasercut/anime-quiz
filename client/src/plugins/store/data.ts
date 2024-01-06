@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia';
 import {
+  AnimeIdType,
   AnimeNameType,
   AnimeType,
+  BotMessageType,
+  EmojiType,
+  SongIdType,
   SongTitleType,
   SongType,
-  SongIdType,
-  UserType,
-  AnimeIdType,
-  EmojiType
+  UserType
 } from '@/assets/shared/models/types';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 
@@ -19,6 +20,7 @@ interface State {
   userSongList: SongIdType[];
   userList: UserType[];
   emojiList: EmojiType[];
+  botMessageList: BotMessageType[];
   dataVersion: string;
 }
 
@@ -37,6 +39,7 @@ const useDataStore = defineStore('data', {
       userSongList: [],
       userList: [],
       emojiList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.EMOJI_LIST] || '[]'),
+      botMessageList: [],
       dataVersion: localStorage[LOCAL_STORAGE_CONSTANTS.DATA_VERSION] || ''
     };
   },
@@ -76,6 +79,17 @@ const useDataStore = defineStore('data', {
           return 0;
         }
         if (a.command > b.command) {
+          return 1;
+        }
+        return -1;
+      });
+    },
+    updateBotMessageList(botMessageList: BotMessageType[]) {
+      this.botMessageList = botMessageList.sort((a, b) => {
+        if (a.displayName === b.displayName) {
+          return 0;
+        }
+        if (a.displayName > b.displayName) {
           return 1;
         }
         return -1;

@@ -2,6 +2,7 @@ import { Socket } from '../types';
 import { Emitter } from '../emitters/emitter';
 import { ZodError } from 'zod';
 import { Logger } from './logger';
+import { GameChatSerialiser } from '../game-state/chat';
 
 class DatabaseLockedError extends Error {
   constructor(message: string) {
@@ -27,7 +28,7 @@ class SongListEmptyError extends Error {
   }
 }
 
-function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e: any) {
+function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, chatSerialiser: GameChatSerialiser, e: any) {
   if (e instanceof UnauthorizedError) {
     logger.warn('unauthorized client', {
       id: socket.id,
@@ -81,7 +82,8 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, e:
   }
 
   if (e instanceof SongListEmptyError) {
-    emitter.updateGameChatSys('Empty song list', socket.data.currentGameRoom);
+    const chatMessage = chatSerialiser.generateSystemMsg('Empty song list');
+    emitter.updateGameChat(chatMessage, socket.data.currentGameRoom);
     return;
   }
 
@@ -114,7 +116,7 @@ function _handleIoError(logger: Logger, e: any) {
   logger.error('internal server error', { err: e });
 }
 
-function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter): Function {
+function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter, chatSerialiser: GameChatSerialiser): Function {
   return function (this: any, func: Function) {
     return (...args: any[]) => {
       const callback = args[args.length - 1];
@@ -123,13 +125,13 @@ function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter)
         if (ret && typeof ret.catch === 'function') {
           // async handler
           ret.catch((e: any) => {
-            _handleSocketError(logger, socket, emitter, e);
+            _handleSocketError(logger, socket, emitter, chatSerialiser, e);
             _handleCallback(callback);
           });
         }
       } catch (e: any) {
         // sync handler
-        _handleSocketError(logger, socket, emitter, e);
+        _handleSocketError(logger, socket, emitter, chatSerialiser, e);
         _handleCallback(callback);
       }
     };
