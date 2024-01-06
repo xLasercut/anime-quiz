@@ -42,12 +42,14 @@ class AdminGeneralHandler extends ServerHandler {
       this._songDb.reloadDb();
       this._userDb.reloadDb();
       this._userSongDb.reloadDb();
+      this._botMessageDb.reloadDb();
       this._emitter.updateStoreSongTitles();
       this._emitter.updateStoreAnimeNames();
       this._emitter.updateStoreSongList();
       this._emitter.updateStoreAnimeList();
       this._emitter.updateStoreEmojiList();
       this._emitter.updateStoreDataVersion();
+      this._emitter.updateStoreBotMessageList();
       this._emitter.systemNotification(
         {
           color: 'success',
