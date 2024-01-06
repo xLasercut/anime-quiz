@@ -27,6 +27,7 @@ import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
 
 let loadingInterval: NodeJS.Timeout;
+let timeout: NodeJS.Timeout;
 
 const gameStore = useGameStore();
 const clientStore = useClientStore();
@@ -117,28 +118,36 @@ function load() {
   }, 500);
 }
 
-socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
+function clearTimers() {
   clearInterval(loadingInterval);
+  clearTimeout(timeout);
+}
+
+socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
+  clearTimers();
   disabled.value = true;
   show.value = false;
   playbackReady.value = false;
   duration.value = -1;
+  timeout = setTimeout(() => {
+    disabled.value = false;
+  }, 500);
 });
 
 socket.on(SOCKET_EVENTS.GAME_START_LOAD, (_startPosition: number, _guessTime: number) => {
-  clearInterval(loadingInterval);
+  clearTimers();
   disabled.value = false;
   startPosition.value = _startPosition;
   guessTime.value = _guessTime;
   load();
+  resetVolume();
 });
 
 socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, () => {
   console.log('starting countdown');
-  clearInterval(loadingInterval);
+  clearTimers();
   disabled.value = false;
   muted.value = false;
-  resetVolume();
   nextTick(() => {
     player.value.play();
   });
@@ -146,23 +155,23 @@ socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, () => {
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
   console.log('time is up');
-  clearInterval(loadingInterval);
+  clearTimers();
   show.value = true;
   disabled.value = false;
 });
 
 socket.on(SOCKET_EVENTS.STOP_GAME, () => {
-  clearInterval(loadingInterval);
+  clearTimers();
   player.value.pause();
   disabled.value = false;
 });
 
 onUnmounted(() => {
+  clearTimers();
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
   socket.off(SOCKET_EVENTS.GAME_START_LOAD);
   socket.off(SOCKET_EVENTS.GAME_START_COUNTDOWN);
   socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);
   socket.off(SOCKET_EVENTS.STOP_GAME);
-  clearInterval(loadingInterval);
 });
 </script>
