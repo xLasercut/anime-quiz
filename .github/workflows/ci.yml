@@ -36,7 +36,7 @@ jobs:
           pushd client
           pnpm format:check
           popd
-          push server
+          pushd server
           pnpm format:check
           popd
 
