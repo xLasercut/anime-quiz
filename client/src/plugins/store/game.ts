@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { GameGuessType, GamePlayerType, GameRoomStateType, SongType } from '@/assets/shared/models/types';
+import { SONG_TYPES } from '@/assets/shared/song-types';
 
 interface State {
   playerList: GamePlayerType[];
@@ -17,7 +18,7 @@ const useGameStore = defineStore('game', {
       currentSong: {
         songId: '',
         src: '',
-        type: 'OP',
+        type: SONG_TYPES.OP,
         songTitle: '',
         artist: '',
         animeName: [],

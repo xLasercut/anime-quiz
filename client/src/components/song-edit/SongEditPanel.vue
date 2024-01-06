@@ -16,6 +16,7 @@ import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { inject } from 'vue';
+import { SONG_TYPES } from '@/assets/shared/song-types';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
@@ -30,7 +31,7 @@ function newSong() {
     src: '',
     songTitle: '',
     artist: '',
-    type: 'OP'
+    type: SONG_TYPES.OP
   });
   adminStore.generateNewSongId();
   adminStore.updateEditMode(DATABASE_EDIT_MODE.NEW);

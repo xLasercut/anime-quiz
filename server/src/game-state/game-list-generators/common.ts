@@ -1,5 +1,5 @@
 import { UserSongDb } from '../../database/user-song';
-import { AnimeIdType, GameRoomSettingsType, SongIdType, SongType, UserIdType } from '../../shared/models/types';
+import { AnimeIdType, GameRoomSettingsType, SongIdType, SongType, SongTypeType, UserIdType } from '../../shared/models/types';
 import { SongDb } from '../../database/song';
 
 abstract class GameListGenerator {
@@ -7,6 +7,7 @@ abstract class GameListGenerator {
   protected _songDb: SongDb;
   protected _duplicate: boolean;
   protected _songCount: number;
+  protected _songType: SongTypeType[];
   protected _players: UserIdType[];
   protected _dupeSongIds: Set<SongIdType>;
   protected _dupeAnimeIds: Set<AnimeIdType>;
@@ -16,6 +17,7 @@ abstract class GameListGenerator {
     this._songDb = songDb;
     this._duplicate = settings.duplicate;
     this._songCount = settings.songCount;
+    this._songType = settings.songType;
     this._players = players;
     this._dupeSongIds = new Set();
     this._dupeAnimeIds = new Set();
@@ -32,12 +34,9 @@ abstract class GameListGenerator {
 
   protected _shuffleSongList(songList: SongType[]): SongType[] {
     const shuffledList = [...songList];
-    let currentIndex = shuffledList.length,
-      randomIndex;
-    while (currentIndex !== 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-      [shuffledList[currentIndex], shuffledList[randomIndex]] = [shuffledList[randomIndex], shuffledList[currentIndex]];
+    for (let i = shuffledList.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledList[i], shuffledList[j]] = [shuffledList[j], shuffledList[i]];
     }
     return shuffledList;
   }
@@ -72,7 +71,10 @@ abstract class GameListGenerator {
 
   protected _getSongsByUserId(userId: UserIdType): SongType[] {
     const songIds = this._userSongDb.getUserSongList(userId);
-    return this._shuffleSongList(this._songDb.getSongListByIds(songIds));
+    const songList = this._songDb.getSongListByIds(songIds).filter((song) => {
+      return this._songType.includes(song.type);
+    });
+    return this._shuffleSongList(songList);
   }
 
   protected _getSongsByUserIds(userIds: UserIdType[]): SongType[] {
@@ -80,7 +82,10 @@ abstract class GameListGenerator {
     for (const userId of userIds) {
       songIds = songIds.concat(this._userSongDb.getUserSongList(userId));
     }
-    return this._shuffleSongList(this._songDb.getSongListByIds(Array.from(new Set(songIds))));
+    const songList = this._songDb.getSongListByIds(Array.from(new Set(songIds))).filter((song) => {
+      return this._songType.includes(song.type);
+    });
+    return this._shuffleSongList(songList);
   }
 }
 

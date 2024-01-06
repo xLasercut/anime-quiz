@@ -32,6 +32,7 @@ import { debounce } from '@/assets/game-helpers';
 import TableFilterTextField from '@/components/common/tables/TableFilterTextField.vue';
 import TableFilterCombobox from '@/components/common/tables/TableFilterCombobox.vue';
 import TableFilterSelect from '@/components/common/tables/TableFilterSelect.vue';
+import { SONG_TYPES } from '@/assets/shared/song-types';
 
 defineProps({
   anime: {
@@ -54,7 +55,7 @@ defineProps({
 
 const emit = defineEmits(['update:anime', 'update:title', 'update:artist', 'update:type']);
 const dataStore = useDataStore();
-const songTypes = ['OP', 'ED', 'INSERT'];
+const songTypes = Object.values(SONG_TYPES);
 
 const updateAnimeFilter = debounce((val: string): void => {
   emit('update:anime', val);
