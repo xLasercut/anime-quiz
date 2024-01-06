@@ -2,12 +2,22 @@ import { Socket } from 'socket.io-client';
 import { useDataStore } from '@/plugins/store/data';
 import { pinia } from '@/plugins/store';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
-import { AnimeNameType, AnimeType, EmojiType, SongIdType, SongTitleType, SongType, UserType } from '@/assets/shared/models/types';
+import {
+  AnimeNameType,
+  AnimeType,
+  BotMessageType,
+  EmojiType,
+  SongIdType,
+  SongTitleType,
+  SongType,
+  UserType
+} from '@/assets/shared/models/types';
 import { Song, SongId, SongTitle } from '@/assets/shared/models/song';
 import { Anime, AnimeName } from '@/assets/shared/models/anime';
 import { User } from '@/assets/shared/models/user';
 import { Emoji } from '@/assets/shared/models/emoji';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { BotMessage } from '@/assets/shared/models/bot-message';
 
 const dataStore = useDataStore(pinia);
 
@@ -50,6 +60,11 @@ function startDataStoreListeners(socket: Socket): void {
     const emojiList = _emojiList.map((emoji) => Emoji.parse(emoji));
     dataStore.updateEmojiList(emojiList);
     localStorage[LOCAL_STORAGE_CONSTANTS.EMOJI_LIST] = JSON.stringify(emojiList);
+  });
+
+  socket.on(SOCKET_EVENTS.UPDATE_STORE_BOT_MESSAGE_LIST, (_botMessageList: BotMessageType[]) => {
+    const botMessageList = _botMessageList.map((botMessage) => BotMessage.parse(botMessage));
+    dataStore.updateBotMessageList(botMessageList);
   });
 
   socket.on(SOCKET_EVENTS.UPDATE_STORE_DATA_VERSION, (dataVersion: string) => {

@@ -27,6 +27,13 @@ class DataHandler extends ServerHandler {
     },
     [SOCKET_EVENTS.UPDATE_STORE_EMOJI_LIST]: () => {
       this._emitter.updateStoreEmojiList(this._socket.id);
+    },
+    [SOCKET_EVENTS.UPDATE_STORE_BOT_MESSAGE_LIST]: () => {
+      this._logger.info('update store bot message list', {
+        clientData: this._socket.data.clientData
+      });
+      this._validateIsAdmin();
+      this._emitter.updateStoreBotMessageList(this._socket.id);
     }
   };
 }

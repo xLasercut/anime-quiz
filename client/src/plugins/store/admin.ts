@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
-import { AnimeType, EmojiType, SongType, UserType } from '@/assets/shared/models/types';
+import { AnimeType, BotMessageType, EmojiType, SongType, UserType } from '@/assets/shared/models/types';
 import { generateId } from '@/assets/game-helpers';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { SONG_TYPES } from '@/assets/shared/song-types';
+import { AVATARS } from '@/assets/shared/avatars';
 
 interface State {
   userInEdit: UserType;
@@ -9,6 +11,7 @@ interface State {
   animeInEdit: AnimeType;
   songInEdit: SongType;
   emojiInEdit: EmojiType;
+  botMessageInEdit: BotMessageType;
 }
 
 const useAdminStore = defineStore('admin', {
@@ -33,13 +36,21 @@ const useAdminStore = defineStore('admin', {
         src: '',
         songTitle: '',
         artist: '',
-        type: 'OP'
+        type: SONG_TYPES.OP
       },
       emojiInEdit: {
         emojiId: '',
         command: '',
         src: '',
         type: 'img'
+      },
+      botMessageInEdit: {
+        messageId: '',
+        command: '',
+        text: '',
+        avatar: AVATARS.MADOKA,
+        displayName: '',
+        userId: ''
       }
     };
   },
@@ -70,6 +81,15 @@ const useAdminStore = defineStore('admin', {
     },
     generateNewEmojiId() {
       this.emojiInEdit.emojiId = generateId('emoji');
+    },
+    updateBotMessageInEdit(botMessage: BotMessageType) {
+      this.botMessageInEdit = Object.assign({}, botMessage);
+    },
+    generateNewBotMessageId() {
+      this.botMessageInEdit.messageId = generateId('message');
+    },
+    generateNewBotMessageUserId() {
+      this.botMessageInEdit.userId = generateId('user');
     }
   },
   getters: {

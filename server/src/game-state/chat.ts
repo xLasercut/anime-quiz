@@ -2,6 +2,7 @@ import { Logger } from '../app/logger';
 import { AvatarType, DisplayNameType, GameChatType, UserIdType } from '../shared/models/types';
 import { Socket } from '../types';
 import { AVATARS } from '../shared/avatars';
+import { BotMessageDb } from '../database/bot-message';
 
 const SANITIZE_MAP: Record<string, string> = {
   '&': '&amp;',
@@ -14,9 +15,31 @@ const SANITIZE_MAP: Record<string, string> = {
 
 class GameChatSerialiser {
   protected _logger: Logger;
+  protected _botMessageDb: BotMessageDb;
 
-  constructor(logger: Logger) {
+  constructor(logger: Logger, botMessageDb: BotMessageDb) {
     this._logger = logger;
+    this._botMessageDb = botMessageDb;
+  }
+
+  public generateBotMsg(msg: string): GameChatType | undefined {
+    if (!msg.startsWith('/')) {
+      return undefined;
+    }
+
+    const command = msg.slice(1);
+    const botMessage = this._botMessageDb.getBotMessageByCommand(command);
+    if (!botMessage) {
+      return undefined;
+    }
+
+    return this._generateChatMsg(
+      botMessage.displayName,
+      false,
+      botMessage.avatar,
+      botMessage.userId,
+      `🎶 🎶 🎶\n${botMessage.text}\n🎶 🎶 🎶`
+    );
   }
 
   public generateUserMsg(socket: Socket, msg: string): GameChatType {

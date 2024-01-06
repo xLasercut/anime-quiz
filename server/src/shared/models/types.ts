@@ -17,6 +17,7 @@ import {
   GameRoomState,
   GameScore
 } from './game';
+import { BotMessage, MessageCommand } from './bot-message';
 
 export type ClientDataType = z.infer<typeof ClientData>;
 export type NotificationColorType = z.infer<typeof NotificationColor>;
@@ -50,3 +51,5 @@ export type GameScoreType = z.infer<typeof GameScore>;
 export type GamePlayerType = z.infer<typeof GamePlayer>;
 export type GameRoomStateType = z.infer<typeof GameRoomState>;
 export type SocketIdType = z.infer<typeof SocketId>;
+export type BotMessageType = z.infer<typeof BotMessage>;
+export type MessageCommandType = z.infer<typeof MessageCommand>;

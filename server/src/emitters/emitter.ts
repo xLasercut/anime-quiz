@@ -1,5 +1,12 @@
 import { Server } from '../app/server';
-import { ClientDataType, GameGuessType, GameRoomSettingsType, SystemNotificationType, UserIdType } from '../shared/models/types';
+import {
+  ClientDataType,
+  GameChatType,
+  GameGuessType,
+  GameRoomSettingsType,
+  SystemNotificationType,
+  UserIdType
+} from '../shared/models/types';
 import { SOCKET_EVENTS } from '../shared/events';
 import { EmitterDependencies } from '../interfaces';
 import { UserDb } from '../database/user';
@@ -11,6 +18,7 @@ import { GameRooms } from '../game-state/room';
 import { Socket } from '../types';
 import { GameChatSerialiser } from '../game-state/chat';
 import { DatabaseDataState } from '../database/common';
+import { BotMessageDb } from '../database/bot-message';
 
 class Emitter {
   protected _io: Server;
@@ -19,6 +27,7 @@ class Emitter {
   protected _emojiDb: EmojiDb;
   protected _animeDb: AnimeDb;
   protected _userSongDb: UserSongDb;
+  protected _botMessageDb: BotMessageDb;
   protected _gameRooms: GameRooms;
   protected _chatSerialiser: GameChatSerialiser;
   protected _dbDataState: DatabaseDataState;
@@ -30,6 +39,7 @@ class Emitter {
     this._emojiDb = dependencies.emojiDb;
     this._animeDb = dependencies.animeDb;
     this._userSongDb = dependencies.userSongDb;
+    this._botMessageDb = dependencies.botMessageDb;
     this._gameRooms = dependencies.gameRooms;
     this._chatSerialiser = dependencies.chatSerialiser;
     this._dbDataState = dependencies.dbDataState;
@@ -59,12 +69,8 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_GAME_STATE, this._gameRooms.getRoom(sid).state.dict);
   }
 
-  public updateGameChat(socket: Socket, message: string, sid: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, this._chatSerialiser.generateUserMsg(socket, message));
-  }
-
-  public updateGameChatSys(message: string, sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, this._chatSerialiser.generateSystemMsg(message));
+  public updateGameChat(gameChat: GameChatType, sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, gameChat);
   }
 
   public updateRoomList(sid?: string) {
@@ -105,6 +111,10 @@ class Emitter {
 
   public updateStoreUserList(sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_LIST, this._userDb.getUserList());
+  }
+
+  public updateStoreBotMessageList(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_BOT_MESSAGE_LIST, this._botMessageDb.messageList);
   }
 
   public updateStoreDataVersion(sid?: string) {
