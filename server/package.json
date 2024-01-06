@@ -7,7 +7,8 @@
     "build": "rm -rf ./dist && tsc -b",
     "bootstrap": "ts-node tools/bootstrap.ts",
     "format": "prettier 'src/**/*.ts' --write",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "format:check": "prettier 'src/**/*.ts' --check"
   },
   "author": "xLasercut",
   "license": "MIT",
