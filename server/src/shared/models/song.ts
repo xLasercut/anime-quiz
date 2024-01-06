@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { AnimeId, AnimeName } from './anime';
+import { SONG_TYPES } from '../song-types';
 
 const SongId = z
   .string()
@@ -7,7 +8,18 @@ const SongId = z
   .min(1)
   .regex(/^song-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
 
-const SongType = z.union([z.literal('OP'), z.literal('ED'), z.literal('INSERT')]);
+const SongType = z
+  .string()
+  .trim()
+  .refine(
+    (val) => {
+      return Object.values(SONG_TYPES).includes(val);
+    },
+    {
+      message: 'Invalid song type'
+    }
+  );
+
 const SongArtist = z.union([
   z.undefined().transform(() => null),
   z.null(),

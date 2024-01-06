@@ -62,12 +62,13 @@ import { socket } from '@/plugins/socket';
 import { SongId, SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
 import { z } from 'zod';
 import { AnimeId } from '@/assets/shared/models/anime';
+import { SONG_TYPES } from '@/assets/shared/song-types';
 
 const adminStore = useAdminStore();
 const dataStore = useDataStore();
 const valid = ref(false);
 const disabled = ref(false);
-const songTypes = ['OP', 'ED', 'INSERT'];
+const songTypes = Object.values(SONG_TYPES);
 const emit = defineEmits(['dialog:close']);
 
 const songIdRules = [

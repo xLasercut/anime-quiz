@@ -27,6 +27,14 @@
       :items="gameModeItems"
       :rules="gameModeRules"
     ></dialog-select>
+    <dialog-select
+      :disabled="settingsDisabled()"
+      label="Song Type"
+      v-model="settings.songType"
+      :items="songTypeItems"
+      :rules="songTypeRules"
+      :multiple="true"
+    ></dialog-select>
     <dialog-actions :disabled="settingsDisabled()" @dialog:close="$emit('dialog:close')"></dialog-actions>
   </dialog-form>
 </template>
@@ -45,13 +53,15 @@ import {
   GameRoomSettings,
   GameRoomSettingsGameMode,
   GameRoomSettingsGuessTime,
-  GameRoomSettingSongCount
+  GameRoomSettingSongCount,
+  GameRoomSettingsSongType
 } from '@/assets/shared/models/game';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { canParseValue } from '@/assets/game-helpers';
 import { z } from 'zod';
 import { useClientStore } from '@/plugins/store/client';
 import { useGameStore } from '@/plugins/store/game';
+import { SONG_TYPES } from '@/assets/shared/song-types';
 
 const clientStore = useClientStore();
 const gameStore = useGameStore();
@@ -62,12 +72,14 @@ const settings = ref<GameRoomSettingsType>({
   songCount: 20,
   guessTime: 30,
   duplicate: false,
-  gameMode: GAME_MODES.NORMAL
+  gameMode: GAME_MODES.NORMAL,
+  songType: Object.values(SONG_TYPES)
 });
 
 const valid = ref(false);
 const disabled = ref(false);
 const gameModeItems = Object.values(GAME_MODES);
+const songTypeItems = Object.values(SONG_TYPES);
 const songCountRules = [
   (v: number): boolean | string => !!v || 'Song Count cannot be blank',
   (v: number): boolean | string => canParseValue(v, GameRoomSettingSongCount) || 'Invalid Song Count'
@@ -80,6 +92,10 @@ const duplicateRules = [(v: boolean): boolean | string => canParseValue(v, z.boo
 const gameModeRules = [
   (v: string): boolean | string => !!v || 'Game Mode cannot be blank',
   (v: string): boolean | string => canParseValue(v, GameRoomSettingsGameMode) || 'Invalid Game Mode'
+];
+const songTypeRules = [
+  (v: string): boolean | string => v.length > 0 || 'Song type cannot be blank',
+  (v: string): boolean | string => canParseValue(v, GameRoomSettingsSongType) || 'Invalid Song Type'
 ];
 
 socket.on(SOCKET_EVENTS.UPDATE_CLIENT_GAME_ROOM_SETTINGS, (_settings: GameRoomSettingsType) => {

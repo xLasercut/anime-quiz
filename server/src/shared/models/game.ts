@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { Admin, Avatar, DisplayName, User, UserId } from './user';
 import { GAME_MODES } from '../game-modes';
 import { ClientData, NotificationColor } from './client';
-import { Song } from './song';
+import { Song, SongType } from './song';
 
 const GameRoomId = z
   .string()
@@ -35,11 +35,13 @@ const GameRoomSettingsGameMode = z
     }
   );
 
+const GameRoomSettingsSongType = z.array(SongType);
 const GameRoomSettings = z.object({
   songCount: GameRoomSettingSongCount,
   guessTime: GameRoomSettingsGuessTime,
   duplicate: z.boolean(),
-  gameMode: GameRoomSettingsGameMode
+  gameMode: GameRoomSettingsGameMode,
+  songType: GameRoomSettingsSongType
 });
 
 const GameGuess = z.object({
@@ -76,5 +78,6 @@ export {
   GameGuess,
   GameScore,
   GamePlayer,
-  GameRoomState
+  GameRoomState,
+  GameRoomSettingsSongType
 };

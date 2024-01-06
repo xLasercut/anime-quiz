@@ -138,8 +138,10 @@ socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, () => {
   clearInterval(loadingInterval);
   disabled.value = false;
   muted.value = false;
-  player.value.play();
   resetVolume();
+  nextTick(() => {
+    player.value.play();
+  });
 });
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
