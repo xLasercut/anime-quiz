@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { Player, Video, Youtube } from '@vime/vue-next';
 import { useGameStore } from '@/plugins/store/game';
-import { onUnmounted, ref, watch } from 'vue';
+import { nextTick, onUnmounted, ref, watch } from 'vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
@@ -58,10 +58,20 @@ function videoId(): string {
   return currentSongSplit[1];
 }
 
+function resetVolume(): void {
+  if (clientStore.volume === 0) {
+    volume.value = 1;
+  } else {
+    volume.value = 0;
+  }
+  nextTick(() => {
+    volume.value = clientStore.volume;
+  });
+}
+
 function playerReady(): void {
   player.value.pause();
   muted.value = false;
-  volume.value = clientStore.volume;
   socket.emit(SOCKET_EVENTS.GAME_SONG_LOADED);
   console.log('starting position updated');
 }
@@ -129,6 +139,7 @@ socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, () => {
   disabled.value = false;
   muted.value = false;
   player.value.play();
+  resetVolume();
 });
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
