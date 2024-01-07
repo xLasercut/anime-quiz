@@ -1,7 +1,6 @@
 <template>
   <v-col>
     <v-select
-      :clearable="true"
       :model-value="modelValue"
       @update:model-value="$emit('update:model-value', $event || '')"
       variant="outlined"
@@ -9,6 +8,7 @@
       :items="items"
       hide-details
       :label="label"
+      :multiple="true"
     ></v-select>
   </v-col>
 </template>

@@ -67,6 +67,8 @@ import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableActions from '@/components/song-list-edit/SongListEditTableActions.vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
+import { fi } from 'vuetify/locale';
+import { SONG_TYPES } from '@/assets/shared/song-types';
 
 const dataStore = useDataStore();
 const headers = [
@@ -81,7 +83,7 @@ const itemsPerPage = ref(15);
 const songsSelected = ref([]);
 const filters = ref({
   anime: '',
-  type: '',
+  type: Object.values(SONG_TYPES),
   title: '',
   artist: ''
 });
@@ -108,7 +110,7 @@ function filteredSongs(): SongType[] {
         isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
         isMatchFilter(filters.value.title, song.songTitle) &&
         isMatchFilter(filters.value.artist, song.artist) &&
-        isMatchFilter(filters.value.type, song.type)
+        filters.value.type.includes(song.type)
       );
     });
 }

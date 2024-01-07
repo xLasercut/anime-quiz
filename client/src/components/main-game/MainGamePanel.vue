@@ -1,18 +1,6 @@
 <template>
   <nav-btn color="primary" icon="mdi-playlist-music" @click="openSongPicker()" v-if="clientStore.clientData.admin"> Song </nav-btn>
-  <div class="volume-slider-container">
-    <v-slider
-      :min="0"
-      :max="100"
-      :step="1"
-      :hide-details="true"
-      prepend-icon="mdi-volume-medium"
-      density="compact"
-      thumb-size="15"
-      :model-value="clientStore.volume"
-      @update:model-value="updateVolume($event)"
-    ></v-slider>
-  </div>
+  <panel-volume-slider></panel-volume-slider>
   <nav-btn icon="mdi-stop" color="error" @click="stopGame()" v-if="showStopBtn()">Stop</nav-btn>
   <nav-btn icon="mdi-play" color="success" @click="startGame()" v-if="showStartBtn()">Start</nav-btn>
   <nav-btn icon="mdi-cog" color="primary" @click="openSettings()">Settings</nav-btn>
@@ -29,7 +17,7 @@ import { OpenDialog } from '@/assets/types';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useGameStore } from '@/plugins/store/game';
-import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import PanelVolumeSlider from '@/components/common/panel/PanelVolumeSlider.vue';
 
 const clientStore = useClientStore();
 const gameStore = useGameStore();
@@ -63,16 +51,4 @@ function showStartBtn(): boolean {
 function showStopBtn(): boolean {
   return (clientStore.clientData.host || clientStore.clientData.admin) && gameStore.playing;
 }
-
-function updateVolume(val: number) {
-  localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME] = val;
-  clientStore.updateVolume(val);
-}
 </script>
-
-<style scoped>
-.volume-slider-container {
-  width: 150px;
-  padding-top: 4px;
-}
-</style>
