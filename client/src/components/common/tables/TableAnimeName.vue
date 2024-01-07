@@ -3,9 +3,15 @@
     <template #activator="{ props }">
       <v-chip :label="true" v-bind="props" size="small" color="primary">{{ song.animeName[0] }}</v-chip>
     </template>
-    <v-list density="compact">
-      <v-list-item v-for="name in song.animeName" :title="name" density="compact"></v-list-item>
-    </v-list>
+    <v-sheet>
+      <v-container :fluid="true">
+        <v-row :dense="true" v-for="name in song.animeName">
+          <v-col cols="auto">
+            {{ name }}
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-sheet>
   </v-menu>
 </template>
 

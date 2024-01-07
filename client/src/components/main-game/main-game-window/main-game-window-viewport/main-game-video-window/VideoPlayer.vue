@@ -27,7 +27,6 @@ import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
 
 let loadingInterval: NodeJS.Timeout;
-let timeout: NodeJS.Timeout;
 
 const gameStore = useGameStore();
 const clientStore = useClientStore();
@@ -59,21 +58,29 @@ function videoId(): string {
   return currentSongSplit[1];
 }
 
-function resetVolume(): void {
-  if (clientStore.volume === 0) {
-    volume.value = 1;
-  } else {
-    volume.value = 0;
-  }
-  nextTick(() => {
+async function resetVolume(): Promise<void> {
+  await nextTick(() => {
+    if (clientStore.volume >= 100) {
+      volume.value = clientStore.volume - 1;
+    } else {
+      volume.value = clientStore.volume + 1;
+    }
+  });
+  await nextTick(() => {
     volume.value = clientStore.volume;
   });
 }
 
-function playerReady(): void {
-  player.value.pause();
-  muted.value = false;
-  socket.emit(SOCKET_EVENTS.GAME_SONG_LOADED);
+async function playerReady(): Promise<void> {
+  await nextTick(() => {
+    player.value.pause();
+  });
+  await nextTick(() => {
+    muted.value = false;
+  });
+  await nextTick(() => {
+    socket.emit(SOCKET_EVENTS.GAME_SONG_LOADED);
+  });
   console.log('starting position updated');
 }
 
@@ -104,23 +111,37 @@ function getSeekPosition(): number {
   return 0;
 }
 
-function load() {
-  muted.value = true;
-  player.value.pause();
-  loadingInterval = setInterval(() => {
-    console.log('loading video...');
-    if (playbackReady.value && duration.value !== -1) {
-      console.log('video loaded, updating starting position...');
-      currentTime.value = getSeekPosition();
-      player.value.play();
-      clearInterval(loadingInterval);
-    }
-  }, 500);
+async function waitVideoLoaded(): Promise<void> {
+  return new Promise((resolve) => {
+    loadingInterval = setInterval(() => {
+      console.log('loading video...');
+      if (playbackReady.value && duration.value !== -1) {
+        clearTimers();
+        resolve();
+      }
+    }, 500);
+  });
+}
+
+async function load() {
+  await nextTick(() => {
+    muted.value = true;
+  });
+  await nextTick(() => {
+    player.value.pause();
+  });
+  await waitVideoLoaded();
+  console.log('video loaded, updating starting position...');
+  await nextTick(() => {
+    currentTime.value = getSeekPosition();
+  });
+  await nextTick(() => {
+    player.value.play();
+  });
 }
 
 function clearTimers() {
   clearInterval(loadingInterval);
-  clearTimeout(timeout);
 }
 
 socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
@@ -129,26 +150,27 @@ socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
   show.value = false;
   playbackReady.value = false;
   duration.value = -1;
-  timeout = setTimeout(() => {
-    disabled.value = false;
-  }, 500);
 });
 
-socket.on(SOCKET_EVENTS.GAME_START_LOAD, (_startPosition: number, _guessTime: number) => {
+socket.on(SOCKET_EVENTS.GAME_UNLOCK_VIDEO_PLAYER, () => {
+  disabled.value = false;
+});
+
+socket.on(SOCKET_EVENTS.GAME_START_LOAD, async (_startPosition: number, _guessTime: number) => {
   clearTimers();
   disabled.value = false;
   startPosition.value = _startPosition;
   guessTime.value = _guessTime;
-  load();
-  resetVolume();
+  await load();
 });
 
-socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, () => {
+socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, async () => {
   console.log('starting countdown');
   clearTimers();
   disabled.value = false;
   muted.value = false;
-  nextTick(() => {
+  await resetVolume();
+  await nextTick(() => {
     player.value.play();
   });
 });
@@ -169,6 +191,7 @@ socket.on(SOCKET_EVENTS.STOP_GAME, () => {
 onUnmounted(() => {
   clearTimers();
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
+  socket.off(SOCKET_EVENTS.GAME_UNLOCK_VIDEO_PLAYER);
   socket.off(SOCKET_EVENTS.GAME_START_LOAD);
   socket.off(SOCKET_EVENTS.GAME_START_COUNTDOWN);
   socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);

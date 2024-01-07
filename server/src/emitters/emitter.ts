@@ -15,7 +15,6 @@ import { EmojiDb } from '../database/emoji';
 import { AnimeDb } from '../database/anime';
 import { UserSongDb } from '../database/user-song';
 import { GameRooms } from '../game-state/room';
-import { Socket } from '../types';
 import { GameChatSerialiser } from '../game-state/chat';
 import { DatabaseDataState } from '../database/common';
 import { BotMessageDb } from '../database/bot-message';
@@ -59,6 +58,10 @@ class Emitter {
 
   public gameNewRound(sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.GAME_NEW_ROUND);
+  }
+
+  public gameUnlockVideoPlayer(sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.GAME_UNLOCK_VIDEO_PLAYER);
   }
 
   public stopGame(sid: string) {
