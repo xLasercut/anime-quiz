@@ -55,9 +55,7 @@ class GameHandler extends ServerHandler {
     this._emitter.gameNewRound(roomId);
     this._emitter.updateStoreGameState(roomId);
     this._gameRooms.getRoom(roomId).state.newRound();
-    await this._gameRooms.getRoom(roomId).state.startTimeout(1500);
-    this._emitter.gameUnlockVideoPlayer(roomId);
-    await this._gameRooms.getRoom(roomId).state.startTimeout(500);
+    await this._gameRooms.getRoom(roomId).state.startTimeout(2000);
     this._emitter.gameStartLoad(roomId, startPosition, settings.guessTime);
     this._gameRooms.getRoom(roomId).state.songOverride = undefined;
     await this._gameRooms.getRoom(roomId).state.waitPlayerLoaded(10000);
