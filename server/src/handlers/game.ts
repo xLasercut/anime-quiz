@@ -25,8 +25,6 @@ class GameHandler extends ServerHandler {
       const generator = this._generatorFactory.getGenerator(roomSettings, playerIds);
       const gameSongList = generator.generate();
       this._gameRooms.getRoom(roomId).state.newGame(gameSongList);
-      this._emitter.gameNewRound(roomId);
-      this._emitter.updateStoreGameState(roomId);
       this._gameRooms.getRoom(roomId).state.resetScore();
       this._emitter.updateStorePlayerList(roomId);
       this._logger.info('new game', {
@@ -56,8 +54,10 @@ class GameHandler extends ServerHandler {
     const startPosition = Math.random();
     this._emitter.gameNewRound(roomId);
     this._emitter.updateStoreGameState(roomId);
-    await this._gameRooms.getRoom(roomId).state.startTimeout(2000);
     this._gameRooms.getRoom(roomId).state.newRound();
+    await this._gameRooms.getRoom(roomId).state.startTimeout(1500);
+    this._emitter.gameUnlockVideoPlayer(roomId);
+    await this._gameRooms.getRoom(roomId).state.startTimeout(500);
     this._emitter.gameStartLoad(roomId, startPosition, settings.guessTime);
     this._gameRooms.getRoom(roomId).state.songOverride = undefined;
     await this._gameRooms.getRoom(roomId).state.waitPlayerLoaded(10000);

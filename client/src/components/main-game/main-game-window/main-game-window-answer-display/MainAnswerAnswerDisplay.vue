@@ -1,11 +1,15 @@
 <template>
-  <v-menu location="bottom" :open-on-hover="true" :open-delay="0" :close-delay="0">
+  <v-menu location="bottom" :open-on-hover="true" :open-delay="0" :close-delay="0" transition="fade-transition" max-width="100%">
     <template #activator="{ props }">
-      <v-sheet class="answer-container" v-bind="props">{{ gameStore.currentSong.animeName[0] }} </v-sheet>
+      <v-sheet class="answer-container" v-bind="props">{{ gameStore.currentSong.animeName[0] }}</v-sheet>
     </template>
-    <v-list density="compact">
-      <v-list-item v-for="name in gameStore.currentSong.animeName" :title="name" density="compact"></v-list-item>
-    </v-list>
+    <v-sheet>
+      <v-container :fluid="true">
+        <v-row v-for="name in gameStore.currentSong.animeName" :dense="true">
+          <v-col cols="auto">{{ name }}</v-col>
+        </v-row>
+      </v-container>
+    </v-sheet>
   </v-menu>
 </template>
 
