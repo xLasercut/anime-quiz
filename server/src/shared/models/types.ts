@@ -13,6 +13,7 @@ import {
   GameRoomSettings,
   GameRoomSettingsGameMode,
   GameRoomSettingsGuessTime,
+  GameRoomSettingsLoadTime,
   GameRoomSettingSongCount,
   GameRoomState,
   GameScore
@@ -45,6 +46,7 @@ export type ClientLoginAuthType = z.infer<typeof ClientLoginAuth>;
 export type GameRoomSettingsType = z.infer<typeof GameRoomSettings>;
 export type GameRoomSettingSongCountType = z.infer<typeof GameRoomSettingSongCount>;
 export type GameRoomSettingsGuessTimeType = z.infer<typeof GameRoomSettingsGuessTime>;
+export type GameRoomSettingsLoadTimeType = z.infer<typeof GameRoomSettingsLoadTime>;
 export type GameRoomSettingsGameModeType = z.infer<typeof GameRoomSettingsGameMode>;
 export type GameGuessType = z.infer<typeof GameGuess>;
 export type GameScoreType = z.infer<typeof GameScore>;

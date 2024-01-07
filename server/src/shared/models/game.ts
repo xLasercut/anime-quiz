@@ -23,6 +23,8 @@ const GameChat = z.object({
 
 const GameRoomSettingSongCount = z.number().gte(1).lte(100);
 const GameRoomSettingsGuessTime = z.number().gte(5).lte(120);
+
+const GameRoomSettingsLoadTime = z.number().gte(5).lte(60);
 const GameRoomSettingsGameMode = z
   .string()
   .trim()
@@ -39,6 +41,7 @@ const GameRoomSettingsSongType = z.array(SongType);
 const GameRoomSettings = z.object({
   songCount: GameRoomSettingSongCount,
   guessTime: GameRoomSettingsGuessTime,
+  loadTime: GameRoomSettingsLoadTime,
   duplicate: z.boolean(),
   gameMode: GameRoomSettingsGameMode,
   songType: GameRoomSettingsSongType
@@ -79,5 +82,6 @@ export {
   GameScore,
   GamePlayer,
   GameRoomState,
-  GameRoomSettingsSongType
+  GameRoomSettingsSongType,
+  GameRoomSettingsLoadTime
 };

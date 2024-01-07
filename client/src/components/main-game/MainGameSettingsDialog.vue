@@ -16,6 +16,14 @@
       :max="120"
       :rules="guessTimeRules"
     ></dialog-slider>
+    <dialog-slider
+      :disabled="settingsDisabled()"
+      label="Video Load Wait Time"
+      v-model="settings.loadTime"
+      :min="5"
+      :max="60"
+      :rules="loadTimeRules"
+    ></dialog-slider>
     <dialog-radio :disabled="settingsDisabled()" label="Duplicate" v-model="settings.duplicate" :rules="duplicateRules">
       <v-radio label="True" :value="true"></v-radio>
       <v-radio label="False" :value="false"></v-radio>
@@ -53,6 +61,7 @@ import {
   GameRoomSettings,
   GameRoomSettingsGameMode,
   GameRoomSettingsGuessTime,
+  GameRoomSettingsLoadTime,
   GameRoomSettingSongCount,
   GameRoomSettingsSongType
 } from '@/assets/shared/models/game';
@@ -71,6 +80,7 @@ const emit = defineEmits(['dialog:close']);
 const settings = ref<GameRoomSettingsType>({
   songCount: 20,
   guessTime: 30,
+  loadTime: 10,
   duplicate: false,
   gameMode: GAME_MODES.NORMAL,
   songType: Object.values(SONG_TYPES)
@@ -87,6 +97,10 @@ const songCountRules = [
 const guessTimeRules = [
   (v: number): boolean | string => !!v || 'Guess Time cannot be blank',
   (v: number): boolean | string => canParseValue(v, GameRoomSettingsGuessTime) || 'Invalid Guess Time'
+];
+const loadTimeRules = [
+  (v: number): boolean | string => !!v || 'Video Load Wait Time cannot be blank',
+  (v: number): boolean | string => canParseValue(v, GameRoomSettingsLoadTime) || 'Invalid Video Load Wait Time'
 ];
 const duplicateRules = [(v: boolean): boolean | string => canParseValue(v, z.boolean()) || 'Invalid Duplicate'];
 const gameModeRules = [
