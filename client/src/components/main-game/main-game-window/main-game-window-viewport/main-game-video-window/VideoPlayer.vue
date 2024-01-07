@@ -29,6 +29,8 @@ import { getVideoId, isYoutubeVideo } from '@/assets/game-helpers';
 const gameStore = useGameStore();
 const clientStore = useClientStore();
 
+const emit = defineEmits(['update:loading-color']);
+
 const player = ref<any>(null);
 const muted = ref(false);
 const show = ref(false);
@@ -83,6 +85,7 @@ async function playerSeekedBeforeCountdown() {
   });
   await nextTick(() => {
     socket.emit(SOCKET_EVENTS.GAME_SONG_LOADED);
+    emit('update:loading-color', 'success');
   });
   console.log('countdown not started, player ready to begin round');
 }

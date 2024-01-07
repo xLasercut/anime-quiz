@@ -1,5 +1,5 @@
 <template>
-  <nav-btn color="primary" icon="mdi-playlist-music" @click="openSongPicker()" v-if="clientStore.clientData.admin"> Song </nav-btn>
+  <nav-btn color="info" icon="mdi-playlist-music" @click="openSongPicker()" v-if="clientStore.clientData.admin"> Song </nav-btn>
   <panel-volume-slider></panel-volume-slider>
   <nav-btn icon="mdi-stop" color="error" @click="stopGame()" v-if="showStopBtn()">Stop</nav-btn>
   <nav-btn icon="mdi-play" color="success" @click="startGame()" v-if="showStartBtn()">Start</nav-btn>

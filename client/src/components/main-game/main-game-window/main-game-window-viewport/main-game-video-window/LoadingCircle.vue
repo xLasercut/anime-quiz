@@ -1,11 +1,18 @@
 <template>
-  <v-progress-circular size="150" :width="5" indeterminate color="primary" v-show="show" class="loading-spinner"></v-progress-circular>
+  <v-progress-circular size="150" width="20" indeterminate :color="color" v-show="show" class="loading-spinner"></v-progress-circular>
 </template>
 
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
+
+defineProps({
+  color: {
+    type: String,
+    required: true
+  }
+});
 
 const show = ref(false);
 

@@ -149,8 +149,8 @@ class GameState {
     }
   }
 
-  public isLastSong(): boolean {
-    return this._currentSongCount >= this._gameSongList.length - 1;
+  public continueNextRound(): boolean {
+    return this._currentSongCount < this._gameSongList.length - 1 && this._playing;
   }
 
   public resetScore(): void {

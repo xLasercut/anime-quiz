@@ -58,15 +58,15 @@ class GameHandler extends ServerHandler {
     await this._gameRooms.getRoom(roomId).state.startTimeout(2000);
     this._emitter.gameStartLoad(roomId, startPosition, settings.guessTime);
     this._gameRooms.getRoom(roomId).state.songOverride = undefined;
-    await this._gameRooms.getRoom(roomId).state.waitPlayerLoaded(10000);
+    await this._gameRooms.getRoom(roomId).state.waitPlayerLoaded(settings.loadTime * 1000);
     this._emitter.gameStartCountdown(roomId);
     await this._gameRooms.getRoom(roomId).state.startTimeout(settings.guessTime * 1000);
     this._gameRooms.getRoom(roomId).state.updateScore();
     this._emitter.updateStorePlayerList(roomId);
     this._emitter.gameShowGuess(roomId);
-    if (!this._gameRooms.getRoom(roomId).state.isLastSong()) {
+    await this._gameRooms.getRoom(roomId).state.startTimeout(10000);
+    if (this._gameRooms.getRoom(roomId).state.continueNextRound()) {
       this._gameRooms.getRoom(roomId).state.nextSong();
-      await this._gameRooms.getRoom(roomId).state.startTimeout(10000);
       await this._newRound(roomId, settings);
     } else {
       this._stopGame(roomId);
