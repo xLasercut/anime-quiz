@@ -18,7 +18,8 @@ import { PropType } from 'vue';
 
 defineProps({
   modelValue: {
-    required: true
+    required: true,
+    type: Object as PropType<any[]>
   },
   items: {
     type: Object as PropType<any[]>
