@@ -51,6 +51,14 @@ const cards = ref([
     icon: 'mdi-gamepad-variant'
   },
   {
+    color: 'info',
+    title: 'Music Player',
+    description: 'Play your song list',
+    route: ROUTES.MUSIC_PLAYER,
+    requireAdmin: false,
+    icon: 'mdi-music'
+  },
+  {
     color: 'error',
     title: 'Anime Edit',
     description: 'Add/Edit/Delete animes',

@@ -52,6 +52,7 @@ import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
+import { SONG_TYPES } from '@/assets/shared/song-types';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -68,7 +69,7 @@ const currentPage = ref(1);
 const itemsPerPage = ref(15);
 const filters = ref({
   anime: '',
-  type: '',
+  type: Object.values(SONG_TYPES),
   title: '',
   artist: ''
 });
@@ -91,7 +92,7 @@ function filteredSongList(): SongType[] {
       isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
       isMatchFilter(filters.value.title, song.songTitle) &&
       isMatchFilter(filters.value.artist, song.artist) &&
-      isMatchFilter(filters.value.type, song.type)
+      filters.value.type.includes(song.type)
     );
   });
 }

@@ -33,6 +33,7 @@ import TableFilterTextField from '@/components/common/tables/TableFilterTextFiel
 import TableFilterCombobox from '@/components/common/tables/TableFilterCombobox.vue';
 import TableFilterSelect from '@/components/common/tables/TableFilterSelect.vue';
 import { SONG_TYPES } from '@/assets/shared/song-types';
+import { PropType } from 'vue';
 
 defineProps({
   anime: {
@@ -49,7 +50,7 @@ defineProps({
   },
   type: {
     required: true,
-    type: String
+    type: Object as PropType<string[]>
   }
 });
 
@@ -69,7 +70,7 @@ const updateArtistFilter = debounce((val: string): void => {
   emit('update:artist', val);
 }, 150);
 
-function updateTypeFilter(val: string): void {
+function updateTypeFilter(val: string[]): void {
   emit('update:type', val);
 }
 </script>

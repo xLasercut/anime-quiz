@@ -1,6 +1,5 @@
 <template>
   <Player
-    class="main-player"
     :currentTime="currentTime"
     :muted="muted"
     :volume="volume"
@@ -11,10 +10,10 @@
     @vmPlaybackReady="playbackReady = true"
     @vmSeeked="playerReady()"
   >
-    <Video v-if="!isYoutube() && !disabled">
+    <Video v-if="showNormal()">
       <source :data-src="gameStore.currentSong.src" />
     </Video>
-    <Youtube :video-id="videoId()" v-if="isYoutube() && !disabled"></Youtube>
+    <Youtube :video-id="getVideoId(gameStore.currentSong.src)" v-if="showYoutube()"></Youtube>
   </Player>
 </template>
 
@@ -25,6 +24,7 @@ import { nextTick, onUnmounted, ref, watch } from 'vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
+import { getVideoId, isYoutubeVideo } from '@/assets/game-helpers';
 
 let loadingInterval: NodeJS.Timeout;
 
@@ -49,13 +49,12 @@ watch(
   }
 );
 
-function isYoutube() {
-  return gameStore.currentSong.src.includes('youtube');
+function showYoutube(): boolean {
+  return isYoutubeVideo(gameStore.currentSong.src) && !disabled.value;
 }
 
-function videoId(): string {
-  const currentSongSplit = gameStore.currentSong.src.split('v=');
-  return currentSongSplit[1];
+function showNormal(): boolean {
+  return !isYoutubeVideo(gameStore.currentSong.src) && !disabled.value;
 }
 
 async function resetVolume(): Promise<void> {
@@ -170,6 +169,7 @@ socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, async () => {
   disabled.value = false;
   muted.value = false;
   await resetVolume();
+  await nextTick(() => {});
   await nextTick(() => {
     player.value.play();
   });

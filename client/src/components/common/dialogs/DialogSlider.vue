@@ -1,7 +1,13 @@
 <template>
   <v-row justify="center" :dense="true">
     <v-col cols="12">
-      <v-slider :model-value="modelValue" @update:model-value="$emit('update:model-value', $event)" step="1" v-bind="$attrs">
+      <v-slider
+        :model-value="modelValue"
+        @update:model-value="$emit('update:model-value', $event)"
+        step="1"
+        v-bind="$attrs"
+        color="primary"
+      >
         <template #append>
           <v-text-field
             :model-value="modelValue"

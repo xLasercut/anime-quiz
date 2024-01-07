@@ -22,6 +22,7 @@ const nordDark: ThemeDefinition = {
     'on-success': '#2e3440',
     warning: '#ebcb8b',
     'on-warning': '#2e3440',
+    'surface-variant': '#4c566a',
     'on-surface-variant': '#81a1c1'
   }
 };
@@ -45,6 +46,7 @@ const nordLight: ThemeDefinition = {
     'on-success': '#2e3440',
     warning: '#d89f47',
     'on-warning': '#2e3440',
+    'surface-variant': '#eceff4',
     'on-surface-variant': '#81a1c1'
   }
 };

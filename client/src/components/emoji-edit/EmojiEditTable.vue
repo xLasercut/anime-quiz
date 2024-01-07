@@ -62,7 +62,7 @@ const itemsPerPage = ref(15);
 const filters = ref({
   emojiId: '',
   command: '',
-  type: ''
+  type: ['img', 'dec']
 });
 
 function editEmoji(emoji: EmojiType) {
@@ -82,7 +82,7 @@ function filteredEmojiList(): EmojiType[] {
     return (
       emoji.emojiId.includes(filters.value.emojiId) &&
       emoji.command.toLowerCase().includes(filters.value.command.toLowerCase()) &&
-      emoji.type.includes(filters.value.type)
+      filters.value.type.includes(emoji.type)
     );
   });
 }

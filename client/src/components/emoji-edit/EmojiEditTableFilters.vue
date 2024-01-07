@@ -15,6 +15,7 @@
 import TableFilterTextField from '@/components/common/tables/TableFilterTextField.vue';
 import TableFilterSelect from '@/components/common/tables/TableFilterSelect.vue';
 import { debounce } from '@/assets/game-helpers';
+import { PropType } from 'vue';
 
 defineProps({
   emojiId: {
@@ -27,7 +28,7 @@ defineProps({
   },
   type: {
     required: true,
-    type: String
+    type: Object as PropType<string[]>
   }
 });
 
@@ -43,7 +44,7 @@ const updateCommand = debounce((val: string) => {
   emit('update:command', val);
 }, 100);
 
-function updateType(val: string) {
+function updateType(val: string[]) {
   emit('update:type', val);
 }
 </script>
