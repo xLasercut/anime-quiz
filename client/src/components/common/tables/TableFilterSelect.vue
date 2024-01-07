@@ -2,7 +2,7 @@
   <v-col>
     <v-select
       :model-value="modelValue"
-      @update:model-value="$emit('update:model-value', $event || '')"
+      @update:model-value="$emit('update:model-value', $event || [])"
       variant="outlined"
       density="compact"
       :items="items"

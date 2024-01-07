@@ -8,7 +8,7 @@
     @vmDurationChange="updateDuration"
     @vmCurrentTimeChange="updateCurrentTime"
     @vmPlaybackReady="playbackReady = true"
-    @vmSeeked="playerReady()"
+    @vmSeeked="playerSeeked()"
   >
     <Video v-if="showNormal()">
       <source :data-src="gameStore.currentSong.src" />
@@ -26,8 +26,6 @@ import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
 import { getVideoId, isYoutubeVideo } from '@/assets/game-helpers';
 
-let loadingInterval: NodeJS.Timeout;
-
 const gameStore = useGameStore();
 const clientStore = useClientStore();
 
@@ -42,12 +40,20 @@ const guessTime = ref(0);
 const disabled = ref(false);
 const volume = ref(clientStore.volume);
 
+const notPauseAfterSeek = ref(false);
+
 watch(
   () => clientStore.volume,
   (val: number) => {
     volume.value = val;
   }
 );
+
+watch([playbackReady, duration], async ([_playbackReady, _duration]) => {
+  if (_playbackReady && _duration !== -1) {
+    await seek();
+  }
+});
 
 function showYoutube(): boolean {
   return isYoutubeVideo(gameStore.currentSong.src) && !disabled.value;
@@ -70,17 +76,33 @@ async function resetVolume(): Promise<void> {
   });
 }
 
-async function playerReady(): Promise<void> {
+async function playerSeekedBeforeCountdown() {
   await nextTick(() => {
     player.value.pause();
-  });
-  await nextTick(() => {
     muted.value = false;
   });
   await nextTick(() => {
     socket.emit(SOCKET_EVENTS.GAME_SONG_LOADED);
   });
+  console.log('countdown not started, player ready to begin round');
+}
+
+async function playerSeekedAfterCountdown() {
+  await resetVolume();
+  await nextTick(() => {
+    muted.value = false;
+  });
+  console.log('countdown already started, video will continue to play');
+}
+
+async function playerSeeked(): Promise<void> {
   console.log('starting position updated');
+  if (notPauseAfterSeek.value) {
+    await playerSeekedAfterCountdown();
+    return;
+  }
+
+  await playerSeekedBeforeCountdown();
 }
 
 function updateDuration(val: any) {
@@ -110,27 +132,8 @@ function getSeekPosition(): number {
   return 0;
 }
 
-async function waitVideoLoaded(): Promise<void> {
-  return new Promise((resolve) => {
-    loadingInterval = setInterval(() => {
-      console.log('loading video...');
-      if (playbackReady.value && duration.value !== -1) {
-        clearTimers();
-        resolve();
-      }
-    }, 500);
-  });
-}
-
-async function load() {
-  await nextTick(() => {
-    muted.value = true;
-  });
-  await nextTick(() => {
-    player.value.pause();
-  });
-  await waitVideoLoaded();
-  console.log('video loaded, updating starting position...');
+async function seek() {
+  console.log('video loaded, updating starting position');
   await nextTick(() => {
     currentTime.value = getSeekPosition();
   });
@@ -139,37 +142,34 @@ async function load() {
   });
 }
 
-function clearTimers() {
-  clearInterval(loadingInterval);
-}
-
 socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
-  clearTimers();
+  console.log('new game round');
+  muted.value = true;
   disabled.value = true;
   show.value = false;
   playbackReady.value = false;
   duration.value = -1;
-});
-
-socket.on(SOCKET_EVENTS.GAME_UNLOCK_VIDEO_PLAYER, () => {
-  disabled.value = false;
+  notPauseAfterSeek.value = false;
 });
 
 socket.on(SOCKET_EVENTS.GAME_START_LOAD, async (_startPosition: number, _guessTime: number) => {
-  clearTimers();
+  console.log('loading video');
+  muted.value = true;
   disabled.value = false;
   startPosition.value = _startPosition;
   guessTime.value = _guessTime;
-  await load();
+  notPauseAfterSeek.value = false;
+  await nextTick(() => {
+    player.value.pause();
+  });
 });
 
 socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, async () => {
   console.log('starting countdown');
-  clearTimers();
   disabled.value = false;
   muted.value = false;
+  notPauseAfterSeek.value = true;
   await resetVolume();
-  await nextTick(() => {});
   await nextTick(() => {
     player.value.play();
   });
@@ -177,21 +177,20 @@ socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, async () => {
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
   console.log('time is up');
-  clearTimers();
   show.value = true;
   disabled.value = false;
+  muted.value = false;
+  notPauseAfterSeek.value = true;
 });
 
 socket.on(SOCKET_EVENTS.STOP_GAME, () => {
-  clearTimers();
   player.value.pause();
   disabled.value = false;
+  notPauseAfterSeek.value = false;
 });
 
 onUnmounted(() => {
-  clearTimers();
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
-  socket.off(SOCKET_EVENTS.GAME_UNLOCK_VIDEO_PLAYER);
   socket.off(SOCKET_EVENTS.GAME_START_LOAD);
   socket.off(SOCKET_EVENTS.GAME_START_COUNTDOWN);
   socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);

@@ -60,10 +60,6 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.GAME_NEW_ROUND);
   }
 
-  public gameUnlockVideoPlayer(sid: string) {
-    this._client(sid).emit(SOCKET_EVENTS.GAME_UNLOCK_VIDEO_PLAYER);
-  }
-
   public stopGame(sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.STOP_GAME);
   }
