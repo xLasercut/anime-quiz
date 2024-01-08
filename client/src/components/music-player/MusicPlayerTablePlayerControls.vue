@@ -35,13 +35,26 @@
       </v-col>
     </v-row>
     <v-row justify="center"> {{ getTimestamp(currentTime) }} / {{ getTimestamp(duration) }}</v-row>
+    <v-row justify="center">
+      <v-col cols="auto">
+        <v-checkbox-btn
+          true-icon="mdi-shuffle"
+          false-icon="mdi-shuffle-disabled"
+          color="info"
+          base-color="primary"
+          density="compact"
+          :model-value="shuffle"
+          @update:model-value="$emit('update:shuffle', $event)"
+        ></v-checkbox-btn>
+      </v-col>
+    </v-row>
   </v-col>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
-const emit = defineEmits(['seek', 'previous', 'play', 'pause', 'next']);
+const emit = defineEmits(['seek', 'previous', 'play', 'pause', 'next', 'update:shuffle']);
 
 const props = defineProps({
   duration: {
@@ -53,6 +66,10 @@ const props = defineProps({
     type: Number
   },
   playing: {
+    required: true,
+    type: Boolean
+  },
+  shuffle: {
     required: true,
     type: Boolean
   }

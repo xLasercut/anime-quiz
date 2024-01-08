@@ -29,6 +29,7 @@
           @next="nextSong()"
           @previous="previousSong()"
           @set-initial-song="playInitialSong()"
+          v-model:shuffle="shuffle"
         ></music-player-table-player>
         <song-list-edit-table-filters
           v-model:anime.trim="filters.anime"
@@ -85,6 +86,7 @@ const filters = ref({
   artist: '',
   type: Object.values(SONG_TYPES)
 });
+const shuffle = ref(true);
 
 watch(
   () => currentSong.value,
@@ -120,6 +122,33 @@ function songPickBtnColor(song: SongType): string {
   return 'success';
 }
 
+function _getRandomSong(songList: SongType[]): SongType {
+  const randomIndex = Math.floor(Math.random() * songList.length);
+  return songList[randomIndex];
+}
+
+function _getNextSong(songList: SongType[]): SongType {
+  if (shuffle.value) {
+    return _getRandomSong(songList);
+  }
+  const currentIndex = songList.indexOf(currentSong.value);
+  if (currentIndex >= songList.length - 1) {
+    return songList[0];
+  }
+  return songList[currentIndex + 1];
+}
+
+function _getPreviousSong(songList: SongType[]): SongType {
+  if (shuffle.value) {
+    return _getRandomSong(songList);
+  }
+  const currentIndex = songList.indexOf(currentSong.value);
+  if (currentIndex <= 0) {
+    return songList[songList.length - 1];
+  }
+  return songList[currentIndex - 1];
+}
+
 function nextSong() {
   const songList = filteredSongList();
 
@@ -127,12 +156,7 @@ function nextSong() {
     return;
   }
 
-  const currentIndex = songList.indexOf(currentSong.value);
-  if (currentIndex >= songList.length - 1) {
-    currentSong.value = songList[0];
-    return;
-  }
-  currentSong.value = songList[currentIndex + 1];
+  currentSong.value = _getNextSong(songList);
 }
 
 function previousSong() {
@@ -142,18 +166,18 @@ function previousSong() {
     return;
   }
 
-  const currentIndex = songList.indexOf(currentSong.value);
-  if (currentIndex <= 0) {
-    currentSong.value = songList[songList.length - 1];
-    return;
-  }
-  currentSong.value = songList[currentIndex - 1];
+  currentSong.value = _getPreviousSong(songList);
 }
 
 function playInitialSong() {
   const songList = filteredSongList();
-  if (songList.length > 0) {
-    currentSong.value = songList[0];
+  if (songList.length <= 0) {
+    return;
   }
+  if (shuffle.value) {
+    currentSong.value = _getRandomSong(songList);
+    return;
+  }
+  currentSong.value = songList[0];
 }
 </script>
