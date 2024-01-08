@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { EmojiCommandType, EmojiType } from '@/assets/shared/models/types';
 import GameEmoji from '@/components/common/GameEmoji.vue';
@@ -57,11 +57,13 @@ watch(
   () => message.value,
   (val: string) => {
     if (!val) {
+      showEmojiSelect.value = false;
       return;
     }
 
     const match = val.match(EMOJI_CHAT_FORMAT);
     if (!match) {
+      showEmojiSelect.value = false;
       return;
     }
 
@@ -78,11 +80,12 @@ watch(
     if (currentLength !== emojiChoicesOldLength.value) {
       emojiChoicesOldLength.value = currentLength;
       showEmojiSelect.value = false;
-      setTimeout(() => {
+      nextTick(() => {
         showEmojiSelect.value = true;
-      }, 1);
+      });
       return;
     }
+    showEmojiSelect.value = true;
   }
 );
 

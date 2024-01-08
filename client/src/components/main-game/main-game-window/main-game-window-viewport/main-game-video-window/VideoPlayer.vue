@@ -1,5 +1,6 @@
 <template>
   <media-player
+    class="game-video-player"
     ref="player"
     :muted="muted"
     :src="gameStore.currentSong.src"
@@ -162,3 +163,12 @@ onUnmounted(() => {
   socket.off(SOCKET_EVENTS.STOP_GAME);
 });
 </script>
+
+<style scoped>
+.game-video-player {
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+  border: none;
+}
+</style>

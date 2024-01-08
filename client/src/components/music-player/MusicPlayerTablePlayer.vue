@@ -3,6 +3,7 @@
     <v-col cols="auto">
       <div class="music-player-container">
         <media-player
+          class="music-player"
           ref="player"
           autoplay
           :src="song.src"
@@ -92,5 +93,12 @@ function pause() {
   max-width: 400px;
   height: 225px;
   max-height: 225px;
+}
+
+.music-player {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  border: none;
 }
 </style>
