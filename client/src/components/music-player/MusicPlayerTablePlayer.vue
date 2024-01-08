@@ -29,6 +29,8 @@
       :playing="playing"
       @next="$emit('next')"
       @previous="$emit('previous')"
+      :shuffle="shuffle"
+      @update:shuffle="$emit('update:shuffle', $event)"
     ></music-player-table-player-controls>
   </v-row>
 </template>
@@ -44,10 +46,14 @@ const props = defineProps({
   song: {
     required: true,
     type: Object as PropType<SongType>
+  },
+  shuffle: {
+    required: true,
+    type: Boolean
   }
 });
 
-const emit = defineEmits(['next', 'previous', 'play', 'set-initial-song']);
+const emit = defineEmits(['next', 'previous', 'play', 'set-initial-song', 'update:shuffle']);
 
 const clientStore = useClientStore();
 

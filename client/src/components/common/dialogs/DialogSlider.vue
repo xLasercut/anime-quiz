@@ -11,7 +11,7 @@
         <template #append>
           <v-text-field
             :model-value="modelValue"
-            @update:model-value="$emit('update:model-value', $event)"
+            @update:model-value="updateModel($event)"
             density="compact"
             type="number"
             hide-details
@@ -32,4 +32,15 @@ defineProps({
     type: Number
   }
 });
+
+const emit = defineEmits(['update:model-value']);
+
+function updateModel(val: any) {
+  try {
+    const intModelValue = parseInt(val);
+    emit('update:model-value', intModelValue);
+  } catch {
+    emit('update:model-value', 0);
+  }
+}
 </script>
