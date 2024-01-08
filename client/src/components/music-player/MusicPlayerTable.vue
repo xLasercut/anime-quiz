@@ -17,7 +17,7 @@
       <table-action-btn
         icon="mdi-play-box"
         :color="songPickBtnColor(item)"
-        @click="playSong(item)"
+        @click="currentSong = item"
         :disabled="songPickBtnDisabled(item)"
       ></table-action-btn>
     </template>
@@ -25,11 +25,10 @@
     <template #top>
       <v-container :fluid="true">
         <music-player-table-player
-          :disabled="disabled"
           :song="currentSong"
           @next="nextSong()"
           @previous="previousSong()"
-          @play="playInitialSong()"
+          @set-initial-song="playInitialSong()"
         ></music-player-table-player>
         <song-list-edit-table-filters
           v-model:anime.trim="filters.anime"
@@ -49,7 +48,7 @@
 <script setup lang="ts">
 import { useDataStore } from '@/plugins/store/data';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
-import { nextTick, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { CLIENT_CONSTANTS } from '@/assets/constants';
 import MusicPlayerTablePlayer from '@/components/music-player/MusicPlayerTablePlayer.vue';
@@ -71,7 +70,6 @@ const headers = [
 
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
-const disabled = ref(false);
 const currentSong = ref<SongType>({
   songId: '',
   src: '',
@@ -122,7 +120,7 @@ function songPickBtnColor(song: SongType): string {
   return 'success';
 }
 
-async function nextSong() {
+function nextSong() {
   const songList = filteredSongList();
 
   if (songList.length <= 0) {
@@ -131,13 +129,13 @@ async function nextSong() {
 
   const currentIndex = songList.indexOf(currentSong.value);
   if (currentIndex >= songList.length - 1) {
-    await playSong(songList[0]);
+    currentSong.value = songList[0];
     return;
   }
-  await playSong(songList[currentIndex + 1]);
+  currentSong.value = songList[currentIndex + 1];
 }
 
-async function previousSong() {
+function previousSong() {
   const songList = filteredSongList();
 
   if (songList.length <= 0) {
@@ -146,30 +144,16 @@ async function previousSong() {
 
   const currentIndex = songList.indexOf(currentSong.value);
   if (currentIndex <= 0) {
-    await playSong(songList[songList.length - 1]);
+    currentSong.value = songList[songList.length - 1];
     return;
   }
-  await playSong(songList[currentIndex - 1]);
+  currentSong.value = songList[currentIndex - 1];
 }
 
-async function playSong(song: SongType) {
-  await nextTick(() => {
-    disabled.value = true;
-  });
-  await nextTick(() => {
-    currentSong.value = song;
-  });
-  await nextTick(() => {
-    setTimeout(() => {
-      disabled.value = false;
-    }, 100);
-  });
-}
-
-async function playInitialSong() {
+function playInitialSong() {
   const songList = filteredSongList();
-  if (!currentSong.value.songId && songList.length > 0) {
-    await playSong(filteredSongList()[0]);
+  if (songList.length > 0) {
+    currentSong.value = songList[0];
   }
 }
 </script>
