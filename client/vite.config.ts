@@ -12,7 +12,11 @@ export default defineConfig({
   base: '/anime-quiz/',
   plugins: [
     vue({
-      template: {transformAssetUrls}
+      template: {
+        transformAssetUrls: transformAssetUrls, compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('media-')
+        }
+      },
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({

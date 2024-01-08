@@ -34,6 +34,8 @@ onUnmounted(() => {
   position: relative;
   width: 400px;
   max-width: 400px;
-  border-radius: 3px;
+  border-radius: 4px;
+  height: 225px;
+  max-height: 225px;
 }
 </style>

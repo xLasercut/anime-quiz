@@ -52,13 +52,4 @@ function canParseValue(v: any, parser: any): boolean {
   }
 }
 
-function isYoutubeVideo(source: string): boolean {
-  return source.includes('youtube');
-}
-
-function getVideoId(source: string): string {
-  const currentSongSplit = source.split('v=');
-  return currentSongSplit[1];
-}
-
-export { getDefaultVolume, getDefaultTheme, isMatchFilter, debounce, generateId, canParseValue, isYoutubeVideo, getVideoId };
+export { getDefaultVolume, getDefaultTheme, isMatchFilter, debounce, generateId, canParseValue };
