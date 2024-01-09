@@ -43,6 +43,7 @@ class AdminGeneralHandler extends ServerHandler {
       this._userDb.reloadDb();
       this._userSongDb.reloadDb();
       this._botMessageDb.reloadDb();
+      this._songStatsDb.reloadDb();
       this._emitter.updateStoreSongTitles();
       this._emitter.updateStoreAnimeNames();
       this._emitter.updateStoreSongList();
@@ -50,6 +51,7 @@ class AdminGeneralHandler extends ServerHandler {
       this._emitter.updateStoreEmojiList();
       this._emitter.updateStoreDataVersion();
       this._emitter.updateStoreBotMessageList();
+      this._emitter.updateStoreSongStatsList();
       this._emitter.systemNotification(
         {
           color: 'success',
