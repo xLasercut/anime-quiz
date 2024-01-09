@@ -1,13 +1,12 @@
 import { GameListGenerator } from './common';
-import { UserSongDb } from '../../database/user-song';
-import { SongDb } from '../../database/song';
 import { GameRoomSettingsType, SongType, UserIdType } from '../../shared/models/types';
+import { HandlerDependencies } from '../../interfaces';
 
 class ShiritoriGameListGenerator extends GameListGenerator {
   protected _firstLetterPattern: RegExp;
 
-  constructor(userSongDb: UserSongDb, songDb: SongDb, settings: GameRoomSettingsType, players: UserIdType[]) {
-    super(userSongDb, songDb, settings, players);
+  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+    super(dependencies, settings, players);
     this._firstLetterPattern = new RegExp('[A-Za-z]');
   }
 

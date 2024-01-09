@@ -14,7 +14,7 @@
     </template>
 
     <template #item.action="{ item }">
-      <table-action-btn icon="mdi-pencil" color="warning" @click="editSongStats(item)"></table-action-btn>
+      <table-action @item:edit="editSongStats(item)" @item:delete="deleteSongStats(item)"></table-action>
     </template>
 
     <template #top>
@@ -38,7 +38,6 @@
 import { useClientStore } from '@/plugins/store/client';
 import { useDataStore } from '@/plugins/store/data';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
-import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import { inject, ref } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
@@ -51,6 +50,7 @@ import { SONG_TYPES } from '@/assets/shared/song-types';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import { storeToRefs } from 'pinia';
+import TableAction from '@/components/common/tables/TableAction.vue';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
@@ -110,5 +110,14 @@ function editSongStats(song: CombinedSongStatsType) {
   });
   adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
   openDialog(DIALOG_ROUTES.SONG_STATS_EDIT, 'Edit Song Stats');
+}
+
+function deleteSongStats(song: CombinedSongStatsType) {
+  adminStore.updateSongStatsInEdit({
+    songId: song.songId,
+    playCount: song.playCount
+  });
+  adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
+  openDialog(DIALOG_ROUTES.SONG_STATS_EDIT, 'Delete Song Stats');
 }
 </script>

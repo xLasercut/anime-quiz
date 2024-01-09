@@ -12,7 +12,8 @@ const STATEMENTS = {
   SELECT_ALL_SONG_STATS: 'SELECT_ALL_SONG_STATS',
   SELECT_SONG_STATS_BY_SONG_ID: 'SELECT_SONG_STATS_BY_SONG_ID',
   INSERT_SONG_STATS: 'INSERT_SONG_STATS',
-  EDIT_SONG_STATS: 'EDIT_SONG_STATS'
+  EDIT_SONG_STATS: 'EDIT_SONG_STATS',
+  DELETE_SONG_STATS: 'DELETE_SONG_STATS'
 };
 
 const RAW_STATEMENTS = {
@@ -37,6 +38,10 @@ const RAW_STATEMENTS = {
     UPDATE song_stats 
     SET 
       play_count = @playCount
+    WHERE song_id = @songId
+  `,
+  [STATEMENTS.DELETE_SONG_STATS]: `
+    DELETE FROM song_stats
     WHERE song_id = @songId
   `
 };
@@ -107,7 +112,11 @@ class SongStatsDb extends ServerDb<SongStatsType> {
     this.reloadCache();
   }
 
-  public deleteRecord(record: SongStatsType) {}
+  public deleteRecord(record: SongStatsType) {
+    const statement = this._factory.getStatement(STATEMENTS.DELETE_SONG_STATS);
+    statement.run(record);
+    this.reloadCache();
+  }
 
   public validateRecordExists(record: SongStatsType) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_SONG_STATS_BY_SONG_ID);

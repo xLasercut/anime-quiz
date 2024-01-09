@@ -1,26 +1,47 @@
 import { UserSongDb } from '../../database/user-song';
-import { AnimeIdType, GameRoomSettingsType, SongIdType, SongType, SongTypeType, UserIdType } from '../../shared/models/types';
+import {
+  AnimeIdType,
+  CombinedSongStatsType,
+  GameRoomSettingsType,
+  SongIdType,
+  SongStatsPlayCountType,
+  SongType,
+  SongTypeType,
+  UserIdType
+} from '../../shared/models/types';
 import { SongDb } from '../../database/song';
+import { HandlerDependencies } from '../../interfaces';
+import { SongStatsDb } from '../../database/song-stats';
+import { Logger } from '../../app/logger';
 
 abstract class GameListGenerator {
   protected _userSongDb: UserSongDb;
   protected _songDb: SongDb;
+  protected _songStatsDb: SongStatsDb;
   protected _duplicate: boolean;
   protected _songCount: number;
+  protected _leastPlayed: boolean;
   protected _songType: SongTypeType[];
   protected _players: UserIdType[];
   protected _dupeSongIds: Set<SongIdType>;
   protected _dupeAnimeIds: Set<AnimeIdType>;
+  protected _songPlayCounts: { [key: SongIdType]: SongStatsPlayCountType } = {};
+  protected _maxPlayCount: number = 0;
+  protected _logger: Logger;
 
-  constructor(userSongDb: UserSongDb, songDb: SongDb, settings: GameRoomSettingsType, players: UserIdType[]) {
-    this._userSongDb = userSongDb;
-    this._songDb = songDb;
+  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+    this._logger = dependencies.logger;
+    this._userSongDb = dependencies.userSongDb;
+    this._songDb = dependencies.songDb;
+    this._songStatsDb = dependencies.songStatsDb;
     this._duplicate = settings.duplicate;
     this._songCount = settings.songCount;
     this._songType = settings.songType;
+    this._leastPlayed = settings.leastPlayed;
     this._players = players;
     this._dupeSongIds = new Set();
     this._dupeAnimeIds = new Set();
+    this._initSongStats();
   }
 
   public generate(): SongType[] {
@@ -32,8 +53,8 @@ abstract class GameListGenerator {
 
   protected abstract _generateList(): SongType[];
 
-  protected _shuffleSongList(songList: SongType[]): SongType[] {
-    const shuffledList = [...songList];
+  protected _shuffleArray<T>(listToShuffle: T[]): T[] {
+    const shuffledList = [...listToShuffle];
     for (let i = shuffledList.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffledList[i], shuffledList[j]] = [shuffledList[j], shuffledList[i]];
@@ -74,7 +95,13 @@ abstract class GameListGenerator {
     const songList = this._songDb.getSongListByIds(songIds).filter((song) => {
       return this._songType.includes(song.type);
     });
-    return this._shuffleSongList(songList);
+    const shuffledSongList = this._shuffleArray<SongType>(songList);
+
+    if (this._leastPlayed) {
+      return this._sortByLeastPlayed(shuffledSongList);
+    }
+
+    return shuffledSongList;
   }
 
   protected _getSongsByUserIds(userIds: UserIdType[]): SongType[] {
@@ -85,7 +112,52 @@ abstract class GameListGenerator {
     const songList = this._songDb.getSongListByIds(Array.from(new Set(songIds))).filter((song) => {
       return this._songType.includes(song.type);
     });
-    return this._shuffleSongList(songList);
+    const shuffledSongList = this._shuffleArray<SongType>(songList);
+
+    if (this._leastPlayed) {
+      return this._sortByLeastPlayed(shuffledSongList);
+    }
+
+    return shuffledSongList;
+  }
+
+  protected _getPlayCount(song: SongType): SongStatsPlayCountType {
+    return this._songPlayCounts[song.songId] || 0;
+  }
+
+  protected _initSongStats() {
+    const songStatsList = this._songStatsDb.getSongStats();
+    for (const songStats of songStatsList) {
+      this._songPlayCounts[songStats.songId] = songStats.playCount;
+    }
+    if (songStatsList.length > 0) {
+      this._maxPlayCount = Math.max(...Object.values(this._songPlayCounts));
+    }
+    this._logger.debug('loaded song stats', {
+      maxPlayCount: this._maxPlayCount
+    });
+  }
+
+  protected _sortByLeastPlayed(songList: SongType[]): SongType[] {
+    const songListWithStats: CombinedSongStatsType[] = songList.map((song) => {
+      return {
+        ...song,
+        playCount: this._getPlayCount(song)
+      };
+    });
+    const songListWithStatsLeastPlayed: CombinedSongStatsType[] = songListWithStats.sort((_, b) => {
+      if (b.playCount - this._maxPlayCount > -5) {
+        return -1;
+      }
+
+      return 0;
+    });
+    return songListWithStatsLeastPlayed.map((item) => {
+      const { playCount, ...rest } = item;
+      return {
+        ...rest
+      };
+    });
   }
 }
 
