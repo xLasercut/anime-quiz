@@ -11,7 +11,7 @@ class GameHandler extends ServerHandler {
 
   constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
     super(socket, errHandler, dependencies);
-    this._generatorFactory = new GameListGeneratorFactory(dependencies.userSongDb, dependencies.songDb);
+    this._generatorFactory = new GameListGeneratorFactory(dependencies);
   }
 
   protected _events = {

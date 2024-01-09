@@ -44,7 +44,8 @@ const GameRoomSettings = z.object({
   loadTime: GameRoomSettingsLoadTime,
   duplicate: z.boolean(),
   gameMode: GameRoomSettingsGameMode,
-  songType: GameRoomSettingsSongType
+  songType: GameRoomSettingsSongType,
+  leastPlayed: z.boolean()
 });
 
 const GameGuess = z.object({

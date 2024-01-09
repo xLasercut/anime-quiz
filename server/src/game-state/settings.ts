@@ -14,6 +14,7 @@ class GameSettings {
   protected _guessTime: GameRoomSettingsGuessTimeType = 30;
   protected _loadTime: GameRoomSettingsLoadTimeType = 10;
   protected _duplicate: boolean = false;
+  protected _leastPlayed: boolean = false;
   protected _gameMode: GameRoomSettingsGameModeType = GAME_MODES.NORMAL;
   protected _songType: SongTypeType[] = [SONG_TYPES.OP, SONG_TYPES.ED, SONG_TYPES.INSERT];
 
@@ -24,7 +25,8 @@ class GameSettings {
       loadTime: this._loadTime,
       duplicate: this._duplicate,
       gameMode: this._gameMode,
-      songType: this._songType
+      songType: this._songType,
+      leastPlayed: this._leastPlayed
     };
   }
 
@@ -35,6 +37,7 @@ class GameSettings {
     this._gameMode = settings.gameMode;
     this._songType = settings.songType;
     this._loadTime = settings.loadTime;
+    this._leastPlayed = settings.leastPlayed;
   }
 }
 

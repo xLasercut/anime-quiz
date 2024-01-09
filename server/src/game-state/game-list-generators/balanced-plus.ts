@@ -1,20 +1,19 @@
 import { GameListGenerator } from './common';
-import { UserSongDb } from '../../database/user-song';
-import { SongDb } from '../../database/song';
 import { GameRoomSettingsType, SongType, UserIdType } from '../../shared/models/types';
+import { HandlerDependencies } from '../../interfaces';
 
 class BalancedPlusGameListGenerator extends GameListGenerator {
   protected _songsPerUser: number;
   protected _normalSongCount: number;
 
-  constructor(userSongDb: UserSongDb, songDb: SongDb, settings: GameRoomSettingsType, players: UserIdType[]) {
-    super(userSongDb, songDb, settings, players);
+  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+    super(dependencies, settings, players);
     this._normalSongCount = Math.floor(this._songCount / 2);
     this._songsPerUser = Math.floor(this._normalSongCount / this._players.length);
   }
 
   protected _generateList(): SongType[] {
-    return this._shuffleSongList(this._generateNormalList().concat(this._generateBalancedList()));
+    return this._shuffleArray<SongType>(this._generateNormalList().concat(this._generateBalancedList()));
   }
 
   protected _generateNormalList(): SongType[] {

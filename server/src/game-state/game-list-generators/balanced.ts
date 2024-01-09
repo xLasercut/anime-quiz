@@ -1,18 +1,17 @@
 import { GameListGenerator } from './common';
-import { UserSongDb } from '../../database/user-song';
-import { SongDb } from '../../database/song';
 import { GameRoomSettingsType, SongType, UserIdType } from '../../shared/models/types';
+import { HandlerDependencies } from '../../interfaces';
 
 class BalancedGameListGenerator extends GameListGenerator {
   protected _songsPerUser: number;
 
-  constructor(userSongDb: UserSongDb, songDb: SongDb, settings: GameRoomSettingsType, players: UserIdType[]) {
-    super(userSongDb, songDb, settings, players);
+  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+    super(dependencies, settings, players);
     this._songsPerUser = Math.floor(this._songCount / this._players.length);
   }
 
   protected _generateList(): SongType[] {
-    const songList = [];
+    const songList: SongType[] = [];
     for (const userId of this._players) {
       let songCount = 0;
       for (const song of this._getSongsByUserId(userId)) {
@@ -28,7 +27,7 @@ class BalancedGameListGenerator extends GameListGenerator {
         }
       }
     }
-    return this._shuffleSongList(songList);
+    return this._shuffleArray<SongType>(songList);
   }
 }
 

@@ -28,6 +28,10 @@
       <v-radio label="True" :value="true"></v-radio>
       <v-radio label="False" :value="false"></v-radio>
     </dialog-radio>
+    <dialog-radio :disabled="settingsDisabled()" label="Least Played" v-model="settings.leastPlayed" :rules="leastPlayedRules">
+      <v-radio label="True" :value="true"></v-radio>
+      <v-radio label="False" :value="false"></v-radio>
+    </dialog-radio>
     <dialog-select
       :disabled="settingsDisabled()"
       label="Game Mode"
@@ -82,6 +86,7 @@ const settings = ref<GameRoomSettingsType>({
   guessTime: 30,
   loadTime: 10,
   duplicate: false,
+  leastPlayed: false,
   gameMode: GAME_MODES.NORMAL,
   songType: Object.values(SONG_TYPES)
 });
@@ -103,6 +108,7 @@ const loadTimeRules = [
   (v: number): boolean | string => canParseValue(v, GameRoomSettingsLoadTime) || 'Invalid Video Load Wait Time'
 ];
 const duplicateRules = [(v: boolean): boolean | string => canParseValue(v, z.boolean()) || 'Invalid Duplicate'];
+const leastPlayedRules = [(v: boolean): boolean | string => canParseValue(v, z.boolean()) || 'Invalid Least Played'];
 const gameModeRules = [
   (v: string): boolean | string => !!v || 'Game Mode cannot be blank',
   (v: string): boolean | string => canParseValue(v, GameRoomSettingsGameMode) || 'Invalid Game Mode'

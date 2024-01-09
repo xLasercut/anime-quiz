@@ -3,11 +3,14 @@
     density="compact"
     :fixed-header="true"
     :fixed-footer="true"
+    :show-expand="true"
     :items="filteredSongList()"
     :headers="headers"
     v-model:page="currentPage"
+    v-model:expanded="expanded"
     :items-per-page="itemsPerPage"
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
+    item-value="songId"
   >
     <template #item.animeName="{ item }">
       <table-anime-name :song="item"></table-anime-name>
@@ -30,6 +33,12 @@
           v-model:type.trim="filters.type"
         ></song-list-edit-table-filters>
       </v-container>
+    </template>
+
+    <template #expanded-row="{ columns, item }">
+      <tr>
+        <td :colspan="columns.length">{{ item }}</td>
+      </tr>
     </template>
 
     <template #bottom="{ pageCount }">
@@ -73,6 +82,7 @@ const filters = ref({
   title: '',
   artist: ''
 });
+const expanded = ref([]);
 
 function editSong(song: SongType) {
   adminStore.updateSongInEdit(song);
