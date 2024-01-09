@@ -13,7 +13,14 @@ const AVATARS = {
   PIKACHU: 'Pikachu',
   EREN: 'Eren',
   JUDAI: 'Judai',
-  YUGI: 'Yugi'
+  YUGI: 'Yugi',
+  REG: 'Reg',
+  NANACHI: 'Nanachi',
+  SHADOW: 'Shadow',
+  ANYA: 'Anya',
+  SYLPHIE: 'Sylphie',
+  ROXY: 'Roxy',
+  ERIS: 'Eris'
 };
 
 export { AVATARS };

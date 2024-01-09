@@ -1,5 +1,4 @@
 import { AVATARS } from '@/assets/shared/avatars';
-import { AvatarType } from '@/assets/shared/models/types';
 
 const AVATAR_MAP = {
   [AVATARS.ZERO_TWO]: 'https://i.imgur.com/qQ0Fkkx.png',
@@ -16,11 +15,14 @@ const AVATAR_MAP = {
   [AVATARS.PIKACHU]: 'https://i.imgur.com/QoEzMPR.jpg',
   [AVATARS.EREN]: 'https://i.imgur.com/5Dip9VY.jpg',
   [AVATARS.JUDAI]: 'https://i.imgur.com/IpCOoWU.png',
-  [AVATARS.YUGI]: 'https://i.imgur.com/JUdFemG.png'
+  [AVATARS.YUGI]: 'https://i.imgur.com/JUdFemG.png',
+  [AVATARS.REG]: 'https://i.imgur.com/aOSK1uc.png',
+  [AVATARS.NANACHI]: 'https://i.imgur.com/lbQa8Ru.png',
+  [AVATARS.SHADOW]: 'https://i.imgur.com/rP10lTt.png',
+  [AVATARS.ANYA]: 'https://i.imgur.com/RXX3z5Q.png',
+  [AVATARS.SYLPHIE]: 'https://i.imgur.com/kGnKKjT.png',
+  [AVATARS.ROXY]: 'https://i.imgur.com/UtqhYfC.png',
+  [AVATARS.ERIS]: 'https://i.imgur.com/YtCBX1c.png'
 };
 
-function getAvatarUrl(avatar: AvatarType): string {
-  return AVATAR_MAP[avatar] || 'https://i.imgur.com/dFFwfIx.jpg';
-}
-
-export { AVATAR_MAP, getAvatarUrl };
+export { AVATAR_MAP };

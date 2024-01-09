@@ -36,5 +36,5 @@ defineProps({
     }
   }
 });
-const avatars = Object.values(AVATARS);
+const avatars = Object.values(AVATARS).sort();
 </script>
