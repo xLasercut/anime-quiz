@@ -1,19 +1,30 @@
-import * as Database from 'better-sqlite3';
+import Database, { Database as SqliteDb } from 'better-sqlite3';
 import { SERVER_CONFIG } from '../src/app/config';
 
-const db = new Database(SERVER_CONFIG.userDbPath);
+function databaseConnection(filepath: string): SqliteDb {
+  const db = new Database(filepath);
+  db.pragma('journal_mode = WAL');
+  return db;
+}
 
-db.prepare(
-  `
+const userDb = databaseConnection(SERVER_CONFIG.userDbPath);
+const gameDb = databaseConnection(SERVER_CONFIG.gameDbPath);
+
+userDb
+  .prepare(
+    `
 CREATE TABLE IF NOT EXISTS user_songs
 (
     user_id text not null,
     song_id text not null
-)`
-).run();
+)
+`
+  )
+  .run();
 
-db.prepare(
-  `
+userDb
+  .prepare(
+    `
 CREATE TABLE IF NOT EXISTS users
 (
     discord_id   text    not null
@@ -25,6 +36,22 @@ CREATE TABLE IF NOT EXISTS users
     admin        integer not null
 );
 `
-).run();
+  )
+  .run();
 
-db.close();
+gameDb
+  .prepare(
+    `
+CREATE TABLE IF NOT EXISTS song_stats
+(
+    song_id    text    not null
+        constraint song_id
+            primary key,
+    play_count integer not null
+);
+`
+  )
+  .run();
+
+userDb.close();
+gameDb.close();

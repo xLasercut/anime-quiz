@@ -20,6 +20,10 @@ function userDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
   return _databaseConnection(currentDb, config.userDbPath);
 }
 
+function gameDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
+  return _databaseConnection(currentDb, config.gameDbPath);
+}
+
 class DatabaseDataState {
   protected _dataVersion: string;
 
@@ -66,4 +70,4 @@ abstract class ServerDb<RecordType> {
   }
 }
 
-export { ServerDb, mainDbConnection, userDbConnection, DatabaseDataState };
+export { ServerDb, mainDbConnection, userDbConnection, DatabaseDataState, gameDbConnection };

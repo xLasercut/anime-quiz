@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { SongArtist, SongId, SongSrc, SongTitle, SongType } from '../shared/models/song';
 import { isValidJson } from './common';
 import { AnimeId, AnimeName } from '../shared/models/anime';
-import { AnimeIdType, AnimeNameType } from '../shared/models/types';
 
 const DbSong = z.object({
   song_id: SongId,

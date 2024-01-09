@@ -16,6 +16,7 @@ import { Logger } from '../app/logger';
 import { DatabaseDataState } from '../database/common';
 import { BotMessageDb } from '../database/bot-message';
 import { GameChatSerialiser } from '../game-state/chat';
+import { SongStatsDb } from '../database/song-stats';
 
 abstract class ServerHandler {
   protected _logger: Logger;
@@ -31,6 +32,7 @@ abstract class ServerHandler {
   protected _errHandler: Function;
   protected _userSongDb: UserSongDb;
   protected _botMessageDb: BotMessageDb;
+  protected _songStatsDb: SongStatsDb;
   protected _io: Server;
   protected _gameRooms: GameRooms;
   protected _dbDataState: DatabaseDataState;
@@ -51,6 +53,7 @@ abstract class ServerHandler {
     this._emojiDb = dependencies.emojiDb;
     this._userSongDb = dependencies.userSongDb;
     this._botMessageDb = dependencies.botMessageDb;
+    this._songStatsDb = dependencies.songStatsDb;
     this._io = dependencies.io;
     this._gameRooms = dependencies.gameRooms;
     this._dbDataState = dependencies.dbDataState;

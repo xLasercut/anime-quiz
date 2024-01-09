@@ -8,6 +8,7 @@ import {
   BotMessageType,
   EmojiType,
   SongIdType,
+  SongStatsType,
   SongTitleType,
   SongType,
   UserType
@@ -18,6 +19,7 @@ import { User } from '@/assets/shared/models/user';
 import { Emoji } from '@/assets/shared/models/emoji';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { BotMessage } from '@/assets/shared/models/bot-message';
+import { SongStats } from '@/assets/shared/models/song-stats';
 
 const dataStore = useDataStore(pinia);
 
@@ -65,6 +67,11 @@ function startDataStoreListeners(socket: Socket): void {
   socket.on(SOCKET_EVENTS.UPDATE_STORE_BOT_MESSAGE_LIST, (_botMessageList: BotMessageType[]) => {
     const botMessageList = _botMessageList.map((botMessage) => BotMessage.parse(botMessage));
     dataStore.updateBotMessageList(botMessageList);
+  });
+
+  socket.on(SOCKET_EVENTS.UPDATE_STORE_SONG_STATS_LIST, (_songStatsList: SongStatsType[]) => {
+    const songStatsList = _songStatsList.map((songStats) => SongStats.parse(songStats));
+    dataStore.updateSongStatsList(songStatsList);
   });
 
   socket.on(SOCKET_EVENTS.UPDATE_STORE_DATA_VERSION, (dataVersion: string) => {

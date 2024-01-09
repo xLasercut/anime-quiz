@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { AnimeType, BotMessageType, EmojiType, SongType, UserType } from '@/assets/shared/models/types';
+import { AnimeType, BotMessageType, EmojiType, SongStatsType, SongType, UserType } from '@/assets/shared/models/types';
 import { generateId } from '@/assets/game-helpers';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SONG_TYPES } from '@/assets/shared/song-types';
@@ -12,6 +12,7 @@ interface State {
   songInEdit: SongType;
   emojiInEdit: EmojiType;
   botMessageInEdit: BotMessageType;
+  songStatsInEdit: SongStatsType;
 }
 
 const useAdminStore = defineStore('admin', {
@@ -51,6 +52,10 @@ const useAdminStore = defineStore('admin', {
         avatar: AVATARS.MADOKA,
         displayName: '',
         userId: ''
+      },
+      songStatsInEdit: {
+        songId: '',
+        playCount: 0
       }
     };
   },
@@ -90,6 +95,9 @@ const useAdminStore = defineStore('admin', {
     },
     generateNewBotMessageUserId() {
       this.botMessageInEdit.userId = generateId('user');
+    },
+    updateSongStatsInEdit(songStats: SongStatsType) {
+      this.songStatsInEdit = Object.assign({}, songStats);
     }
   },
   getters: {

@@ -19,6 +19,7 @@ import {
   GameScore
 } from './game';
 import { BotMessage, MessageCommand } from './bot-message';
+import { CombinedSongStats, SongStats, SongStatsPlayCount } from './song-stats';
 
 export type ClientDataType = z.infer<typeof ClientData>;
 export type NotificationColorType = z.infer<typeof NotificationColor>;
@@ -55,3 +56,6 @@ export type GameRoomStateType = z.infer<typeof GameRoomState>;
 export type SocketIdType = z.infer<typeof SocketId>;
 export type BotMessageType = z.infer<typeof BotMessage>;
 export type MessageCommandType = z.infer<typeof MessageCommand>;
+export type SongStatsType = z.infer<typeof SongStats>;
+export type SongStatsPlayCountType = z.infer<typeof SongStatsPlayCount>;
+export type CombinedSongStatsType = z.infer<typeof CombinedSongStats>;

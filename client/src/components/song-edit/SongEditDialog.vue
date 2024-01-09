@@ -5,7 +5,7 @@
       v-model.trim="adminStore.songInEdit.songId"
       append-icon="mdi-refresh"
       @click:append="adminStore.generateNewSongId()"
-      :rules="songIdRules"
+      :rules="SONG_ID_RULES"
       :disabled="adminStore.editModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-multi-autocomplete
@@ -59,10 +59,11 @@ import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
-import { SongId, SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
+import { SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
 import { z } from 'zod';
 import { AnimeId } from '@/assets/shared/models/anime';
 import { SONG_TYPES } from '@/assets/shared/song-types';
+import { SONG_ID_RULES } from '@/assets/form-rules';
 
 const adminStore = useAdminStore();
 const dataStore = useDataStore();
@@ -71,10 +72,6 @@ const disabled = ref(false);
 const songTypes = Object.values(SONG_TYPES);
 const emit = defineEmits(['dialog:close']);
 
-const songIdRules = [
-  (v: string): boolean | string => !!v || 'Song ID required',
-  (v: string): boolean | string => canParseValue(v, SongId) || 'Invalid Song ID'
-];
 const songTitleRules = [
   (v: string): boolean | string => !!v || 'Song Title required',
   (v: string): boolean | string => canParseValue(v, SongTitle) || 'Invalid Song Title'

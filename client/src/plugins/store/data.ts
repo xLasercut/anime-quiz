@@ -6,6 +6,7 @@ import {
   BotMessageType,
   EmojiType,
   SongIdType,
+  SongStatsType,
   SongTitleType,
   SongType,
   UserType
@@ -21,6 +22,7 @@ interface State {
   userList: UserType[];
   emojiList: EmojiType[];
   botMessageList: BotMessageType[];
+  songStatsList: SongStatsType[];
   dataVersion: string;
 }
 
@@ -40,7 +42,8 @@ const useDataStore = defineStore('data', {
       userList: [],
       emojiList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.EMOJI_LIST] || '[]'),
       botMessageList: [],
-      dataVersion: localStorage[LOCAL_STORAGE_CONSTANTS.DATA_VERSION] || ''
+      dataVersion: localStorage[LOCAL_STORAGE_CONSTANTS.DATA_VERSION] || '',
+      songStatsList: []
     };
   },
   actions: {
@@ -95,6 +98,9 @@ const useDataStore = defineStore('data', {
         return -1;
       });
     },
+    updateSongStatsList(songStatsList: SongStatsType[]) {
+      this.songStatsList = songStatsList;
+    },
     updateDataVersion(dataVersion: string) {
       this.dataVersion = dataVersion;
     }
@@ -107,6 +113,16 @@ const useDataStore = defineStore('data', {
           animeName: anime.animeName.join(',')
         };
       });
+    },
+    getSongStats: (state) => {
+      return (song: SongType): SongStatsType | null => {
+        for (const songStats of state.songStatsList) {
+          if (song.songId === songStats.songId) {
+            return songStats;
+          }
+        }
+        return null;
+      };
     }
   }
 });

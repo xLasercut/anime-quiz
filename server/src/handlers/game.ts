@@ -64,6 +64,17 @@ class GameHandler extends ServerHandler {
     this._gameRooms.getRoom(roomId).state.updateScore();
     this._emitter.updateStorePlayerList(roomId);
     this._emitter.gameShowGuess(roomId);
+    if (this._dbLock.locked) {
+      this._emitter.systemNotification(
+        {
+          color: 'error',
+          message: 'Database locked pending server upgrade'
+        },
+        roomId
+      );
+      this._stopGame(roomId);
+    }
+    this._songStatsDb.incrementPlayCount(this._gameRooms.getRoom(roomId).state.dict.currentSong);
     await this._gameRooms.getRoom(roomId).state.startTimeout(10000);
     if (this._gameRooms.getRoom(roomId).state.continueNextRound()) {
       this._gameRooms.getRoom(roomId).state.nextSong();

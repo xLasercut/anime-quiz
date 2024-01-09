@@ -17,11 +17,11 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { SongType } from '@/assets/shared/models/types';
+import { CombinedSongStatsType, SongType } from '@/assets/shared/models/types';
 
 defineProps({
   song: {
-    type: Object as PropType<SongType>,
+    type: Object as PropType<SongType | CombinedSongStatsType>,
     required: true
   }
 });
