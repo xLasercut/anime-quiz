@@ -17,6 +17,7 @@ import { GameHandler } from './game';
 import { AdminGameHandler } from './admin-game';
 import { AdminGeneralHandler } from './admin-general';
 import { AdminBotMessageHandler } from './admin-bot-message';
+import { AdminSongStatsHandler } from './admin-song-stats';
 
 class EntryPointHandler extends ServerHandler {
   protected _handlers: ServerHandler[];
@@ -58,7 +59,8 @@ class EntryPointHandler extends ServerHandler {
       new AdminEmojiHandler(socket, errHandler, dependencies),
       new AdminGameHandler(socket, errHandler, dependencies),
       new AdminGeneralHandler(socket, errHandler, dependencies),
-      new AdminBotMessageHandler(socket, errHandler, dependencies)
+      new AdminBotMessageHandler(socket, errHandler, dependencies),
+      new AdminSongStatsHandler(socket, errHandler, dependencies)
     ];
     this._socket.data.clientAuthTimer = setTimeout(
       this._errHandler(() => {

@@ -59,6 +59,14 @@ const cards = ref([
     icon: 'mdi-music'
   },
   {
+    color: 'warning',
+    title: 'Song Stats',
+    description: 'Display song stats',
+    route: ROUTES.SONG_STATS_EDIT,
+    requireAdmin: false,
+    icon: 'mdi-chart-areaspline'
+  },
+  {
     color: 'error',
     title: 'Anime Edit',
     description: 'Add/Edit/Delete animes',

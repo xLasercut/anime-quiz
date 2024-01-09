@@ -1,5 +1,6 @@
 import { Admin, Avatar, DiscordId, DisplayName, UserId } from '@/assets/shared/models/user';
 import { canParseValue } from '@/assets/game-helpers';
+import { SongId } from '@/assets/shared/models/song';
 
 function isValidDiscordId(v: string): boolean {
   return canParseValue(v, DiscordId);
@@ -44,4 +45,9 @@ const USER_ID_RULES = [
 
 const ADMIN_RULES = [(v: boolean): boolean | string => isValidAdmin(v) || 'Invalid Admin'];
 
-export { DISCORD_ID_RULES, DISPLAY_NAME_RULES, AVATAR_RULES, USER_ID_RULES, ADMIN_RULES };
+const SONG_ID_RULES = [
+  (v: string): boolean | string => !!v || 'Song ID required',
+  (v: string): boolean | string => canParseValue(v, SongId) || 'Invalid Song ID'
+];
+
+export { DISCORD_ID_RULES, DISPLAY_NAME_RULES, AVATAR_RULES, USER_ID_RULES, ADMIN_RULES, SONG_ID_RULES };

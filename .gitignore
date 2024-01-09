@@ -31,6 +31,9 @@ server/data-backup/
 anime-quiz-user.db
 anime-quiz-user.db-wal
 anime-quiz-user.db-shm
+anime-quiz-game.db
+anime-quiz-game.db-wal
+anime-quiz-game.db-shm
 
 !.gitkeep
 

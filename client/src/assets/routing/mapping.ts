@@ -35,6 +35,9 @@ import BotMessageEditPanel from '@/components/bot-message-edit/BotMessageEditPan
 import BotMessageEditDialog from '@/components/bot-message-edit/BotMessageEditDialog.vue';
 import MusicPlayerPanel from '@/components/music-player/MusicPlayerPanel.vue';
 import MusicPlayer from '@/views/MusicPlayer.vue';
+import SongStatsEditPanel from '@/components/song-stats-edit/SongStatsEditPanel.vue';
+import SongStatsEdit from '@/views/SongStatsEdit.vue';
+import SongStatsEditDialog from '@/components/song-stats-edit/SongStatsEditDialog.vue';
 
 const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -48,7 +51,8 @@ const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.GAME_ROOMS]: GameRoomsPanel,
   [ROUTES.MAIN_GAME]: MainGamePanel,
   [ROUTES.BOT_MESSAGE_EDIT]: BotMessageEditPanel,
-  [ROUTES.MUSIC_PLAYER]: MusicPlayerPanel
+  [ROUTES.MUSIC_PLAYER]: MusicPlayerPanel,
+  [ROUTES.SONG_STATS_EDIT]: SongStatsEditPanel
 };
 
 const VIEW_MAPPING: Record<ClientRoute, Component> = {
@@ -63,7 +67,8 @@ const VIEW_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.GAME_ROOMS]: GameRooms,
   [ROUTES.MAIN_GAME]: MainGame,
   [ROUTES.BOT_MESSAGE_EDIT]: BotMessageEdit,
-  [ROUTES.MUSIC_PLAYER]: MusicPlayer
+  [ROUTES.MUSIC_PLAYER]: MusicPlayer,
+  [ROUTES.SONG_STATS_EDIT]: SongStatsEdit
 };
 
 const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
@@ -76,7 +81,8 @@ const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
   [DIALOG_ROUTES.MAIN_GAME_SETTINGS]: MainGameSettingsDialog,
   [DIALOG_ROUTES.MAIN_GAME_SONG_PICKER]: MainGameSongPickerDialog,
   [DIALOG_ROUTES.ADMIN_PANEL]: AdminDialog,
-  [DIALOG_ROUTES.BOT_MESSAGE_EDIT]: BotMessageEditDialog
+  [DIALOG_ROUTES.BOT_MESSAGE_EDIT]: BotMessageEditDialog,
+  [DIALOG_ROUTES.SONG_STATS_EDIT]: SongStatsEditDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

@@ -18,6 +18,7 @@ import { GameRooms } from '../game-state/room';
 import { GameChatSerialiser } from '../game-state/chat';
 import { DatabaseDataState } from '../database/common';
 import { BotMessageDb } from '../database/bot-message';
+import { SongStatsDb } from '../database/song-stats';
 
 class Emitter {
   protected _io: Server;
@@ -27,6 +28,7 @@ class Emitter {
   protected _animeDb: AnimeDb;
   protected _userSongDb: UserSongDb;
   protected _botMessageDb: BotMessageDb;
+  protected _songStatsDb: SongStatsDb;
   protected _gameRooms: GameRooms;
   protected _chatSerialiser: GameChatSerialiser;
   protected _dbDataState: DatabaseDataState;
@@ -39,6 +41,7 @@ class Emitter {
     this._animeDb = dependencies.animeDb;
     this._userSongDb = dependencies.userSongDb;
     this._botMessageDb = dependencies.botMessageDb;
+    this._songStatsDb = dependencies.songStatsDb;
     this._gameRooms = dependencies.gameRooms;
     this._chatSerialiser = dependencies.chatSerialiser;
     this._dbDataState = dependencies.dbDataState;
@@ -114,6 +117,10 @@ class Emitter {
 
   public updateStoreBotMessageList(sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_BOT_MESSAGE_LIST, this._botMessageDb.messageList);
+  }
+
+  public updateStoreSongStatsList(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_SONG_STATS_LIST, this._songStatsDb.getSongStats());
   }
 
   public updateStoreDataVersion(sid?: string) {

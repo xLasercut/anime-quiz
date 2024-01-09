@@ -22,6 +22,7 @@ import { GameRoomIdType } from './shared/models/types';
 import { GameChatSerialiser } from './game-state/chat';
 import { DatabaseDataState } from './database/common';
 import { BotMessageDb } from './database/bot-message';
+import { SongStatsDb } from './database/song-stats';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -40,6 +41,7 @@ const animeDb = new AnimeDb(SERVER_CONFIG, logger, songDb, dbDataState);
 const emojiDb = new EmojiDb(SERVER_CONFIG, logger, dbDataState);
 const userSongDb = new UserSongDb(SERVER_CONFIG, logger, dbDataState);
 const botMessageDb = new BotMessageDb(SERVER_CONFIG, logger, dbDataState);
+const songStatsDb = new SongStatsDb(SERVER_CONFIG, logger, dbDataState);
 const gameRooms = new GameRooms(io, logger);
 const chatSerialiser = new GameChatSerialiser(logger, botMessageDb);
 const emitterDependencies: EmitterDependencies = {
@@ -49,6 +51,7 @@ const emitterDependencies: EmitterDependencies = {
   emojiDb: emojiDb,
   userSongDb: userSongDb,
   botMessageDb: botMessageDb,
+  songStatsDb: songStatsDb,
   gameRooms: gameRooms,
   chatSerialiser: chatSerialiser,
   dbDataState: dbDataState
@@ -67,6 +70,7 @@ const handlerDependencies: HandlerDependencies = {
   emojiDb: emojiDb,
   userSongDb: userSongDb,
   botMessageDb: botMessageDb,
+  songStatsDb: songStatsDb,
   io: io,
   gameRooms: gameRooms,
   chatSerialiser: chatSerialiser
@@ -118,6 +122,9 @@ io.of('/').adapter.on(
       const chatMessage = chatSerialiser.generateSystemMsg(`${socket.data.clientData.displayName} joined the room`);
       emitter.updateGameChat(chatMessage, roomId);
       emitter.updateStorePlayerList(roomId);
+      if (gameRooms.getRoom(roomId).state.dict.playing) {
+        emitter.updateStoreGameState(roomId);
+      }
     }
   })
 );

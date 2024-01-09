@@ -22,6 +22,10 @@ class DatabaseLock {
       throw new DatabaseLockedError('Database is not locked');
     }
   }
+
+  public get locked(): boolean {
+    return this._locked;
+  }
 }
 
 export { DatabaseLock };

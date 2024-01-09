@@ -7,7 +7,8 @@ services:
       context: './server/'
       dockerfile: 'Dockerfile'
     volumes:
-      - ./server/data/:/home/aq_server/data
+      - ./server/data/primary:/home/aq_server/data/primary
+      - ./server/data/secondary:/home/aq_server/data/secondary
       - ./server/log/:/home/aq_server/log
     env_file:
       - server/config.env

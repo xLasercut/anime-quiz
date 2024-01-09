@@ -12,6 +12,7 @@ import { Logger } from './app/logger';
 import { GameChatSerialiser } from './game-state/chat';
 import { DatabaseDataState } from './database/common';
 import { BotMessageDb } from './database/bot-message';
+import { SongStatsDb } from './database/song-stats';
 
 interface EmitterDependencies {
   userDb: UserDb;
@@ -20,6 +21,7 @@ interface EmitterDependencies {
   emojiDb: EmojiDb;
   userSongDb: UserSongDb;
   botMessageDb: BotMessageDb;
+  songStatsDb: SongStatsDb;
   gameRooms: GameRooms;
   chatSerialiser: GameChatSerialiser;
   dbDataState: DatabaseDataState;
@@ -40,6 +42,7 @@ interface HandlerDependencies {
   userSongDb: UserSongDb;
   gameRooms: GameRooms;
   botMessageDb: BotMessageDb;
+  songStatsDb: SongStatsDb;
   chatSerialiser: GameChatSerialiser;
 }
 
@@ -47,14 +50,14 @@ interface ServerConfig {
   rootDir: string;
   logDir: string;
   dataDir: string;
-  dataBackupDir: string;
+  primaryDataDir: string;
+  secondaryDataDir: string;
   mainDbPath: string;
   serverPort: string;
   corsConfig: string;
   clientAuthDelay: number;
   userDbPath: string;
-  dbBackupSchedule: string;
-  dbBackupCount: number;
+  gameDbPath: string;
   redirectUrl: string;
   discordClientId: string;
   discordClientSecret: string;
