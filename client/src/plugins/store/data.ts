@@ -113,6 +113,16 @@ const useDataStore = defineStore('data', {
           animeName: anime.animeName.join(',')
         };
       });
+    },
+    getSongStats: (state) => {
+      return (song: SongType): SongStatsType | null => {
+        for (const songStats of state.songStatsList) {
+          if (song.songId === songStats.songId) {
+            return songStats;
+          }
+        }
+        return null;
+      };
     }
   }
 });

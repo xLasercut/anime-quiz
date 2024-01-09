@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SongId } from './song';
+import { Song, SongId } from './song';
 
 const SongStatsPlayCount = z.number().min(0);
 
@@ -8,4 +8,11 @@ const SongStats = z.object({
   playCount: SongStatsPlayCount
 });
 
-export { SongStats, SongStatsPlayCount };
+const CombinedSongStats = z.intersection(
+  Song,
+  z.object({
+    playCount: SongStatsPlayCount
+  })
+);
+
+export { SongStats, SongStatsPlayCount, CombinedSongStats };

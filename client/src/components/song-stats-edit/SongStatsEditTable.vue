@@ -45,20 +45,18 @@ import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
-import { SongStatsPlayCountType, SongType } from '@/assets/shared/models/types';
+import { CombinedSongStatsType } from '@/assets/shared/models/types';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { SONG_TYPES } from '@/assets/shared/song-types';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
-
-interface CombinedSongStatsType extends SongType {
-  playCount: SongStatsPlayCountType;
-}
+import { storeToRefs } from 'pinia';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const { getSongStats } = storeToRefs(dataStore);
 
 const currentPage = ref(1);
 const itemsPerPage = ref(15);
@@ -83,30 +81,26 @@ function headers() {
   return _headers;
 }
 
-function filteredSongList() {
-  return dataStore.songList
-    .filter((song) => {
-      return (
-        isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
-        isMatchFilter(filters.value.title, song.songTitle) &&
-        isMatchFilter(filters.value.artist, song.artist) &&
-        filters.value.type.includes(song.type)
-      );
-    })
-    .map((song) => {
-      for (const songStat of dataStore.songStatsList) {
-        if (song.songId === songStat.songId) {
-          return {
-            ...song,
-            playCount: songStat.playCount
-          };
-        }
-      }
-      return null;
-    })
-    .filter((song) => {
-      return song !== null;
-    });
+function filteredSongList(): CombinedSongStatsType[] {
+  const songList = [];
+  for (const song of dataStore.songList) {
+    const songStats = getSongStats.value(song);
+    if (songStats) {
+      songList.push({
+        ...song,
+        playCount: songStats.playCount
+      });
+    }
+  }
+
+  return songList.filter((song) => {
+    return (
+      isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
+      isMatchFilter(filters.value.title, song.songTitle) &&
+      isMatchFilter(filters.value.artist, song.artist) &&
+      filters.value.type.includes(song.type)
+    );
+  });
 }
 
 function editSongStats(song: CombinedSongStatsType) {
