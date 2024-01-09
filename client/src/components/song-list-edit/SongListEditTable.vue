@@ -50,7 +50,12 @@
     </template>
 
     <template #bottom="{ pageCount }">
-      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
+      <table-pagination
+        v-model:current-page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :length="pageCount"
+        :local-storage-key="LOCAL_STORAGE_CONSTANTS.SONG_LIST_EDIT_TABLE_ITEMS_PER_PAGE"
+      ></table-pagination>
     </template>
   </v-data-table>
 </template>
@@ -60,7 +65,7 @@ import { ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { SongIdType, SongType } from '@/assets/shared/models/types';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
-import { CLIENT_CONSTANTS, SONG_LIST_EDIT_MODE } from '@/assets/constants';
+import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, SONG_LIST_EDIT_MODE } from '@/assets/constants';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';

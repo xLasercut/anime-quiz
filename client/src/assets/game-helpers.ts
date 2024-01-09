@@ -1,11 +1,13 @@
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { v4 as uuid4 } from 'uuid';
+import { LocalStorageConstant } from '@/assets/types';
 
-function getDefaultVolume(): number {
+function getLocalStorageNumber(localStorageKey: LocalStorageConstant, defaultValue: number): number {
   try {
-    return parseInt(localStorage[LOCAL_STORAGE_CONSTANTS.AQ_VOLUME]);
+    const stringValue = localStorage[localStorageKey] || `${defaultValue}`;
+    return parseInt(stringValue);
   } catch {
-    return 50;
+    return defaultValue;
   }
 }
 
@@ -52,4 +54,4 @@ function canParseValue(v: any, parser: any): boolean {
   }
 }
 
-export { getDefaultVolume, getDefaultTheme, isMatchFilter, debounce, generateId, canParseValue };
+export { getDefaultTheme, isMatchFilter, debounce, generateId, canParseValue, getLocalStorageNumber };

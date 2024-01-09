@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
-import { getDefaultVolume } from '@/assets/game-helpers';
+import { getLocalStorageNumber } from '@/assets/game-helpers';
 import { ClientDataType } from '@/assets/shared/models/types';
 import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
+import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 
 interface State {
   view: ClientRoute;
@@ -16,7 +17,7 @@ const useClientStore = defineStore('client', {
     return {
       view: ROUTES.LOGIN,
       dialogView: DIALOG_ROUTES.LOGIN_SETTINGS,
-      volume: getDefaultVolume(),
+      volume: getLocalStorageNumber(LOCAL_STORAGE_CONSTANTS.AQ_VOLUME, 50),
       clientData: {
         admin: false,
         discordId: '',
