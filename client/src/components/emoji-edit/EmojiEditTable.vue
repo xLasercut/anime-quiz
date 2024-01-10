@@ -51,6 +51,7 @@ import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -62,8 +63,7 @@ const headers = [
   { title: 'Type', key: 'type', sortable: false },
   { title: 'Action', key: 'action', sortable: false }
 ];
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.EMOJI_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({
   emojiId: '',
   command: '',

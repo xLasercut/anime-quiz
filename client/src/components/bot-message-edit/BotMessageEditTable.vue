@@ -51,6 +51,7 @@ import { useAdminStore } from '@/plugins/store/admin';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
 import BotMessageEditTableFilters from '@/components/bot-message-edit/BotMessageEditTableFilters.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -66,8 +67,7 @@ const headers = [
   { title: 'Action', key: 'action', sortable: false }
 ];
 
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.BOT_MESSAGE_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({
   messageId: '',
   userId: '',

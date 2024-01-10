@@ -54,6 +54,7 @@ import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import TableAction from '@/components/common/tables/TableAction.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -67,8 +68,7 @@ const filters = ref({
   animeId: '',
   animeName: ''
 });
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.ANIME_EDIT_TABLE_ITEMS_PER_PAGE);
 
 function filteredAnimeList(): AnimeType[] {
   return dataStore.animeList.filter((anime) => {

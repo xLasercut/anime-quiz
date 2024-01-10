@@ -56,6 +56,7 @@ import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTa
 import { isMatchFilter } from '@/assets/game-helpers';
 import { storeToRefs } from 'pinia';
 import TableAction from '@/components/common/tables/TableAction.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
@@ -63,8 +64,7 @@ const adminStore = useAdminStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 const { getSongStats } = storeToRefs(dataStore);
 
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.SONG_STATS_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({
   anime: '',
   type: Object.values(SONG_TYPES),

@@ -25,9 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, PropType } from 'vue';
+import { PropType } from 'vue';
 import { LocalStorageConstant } from '@/assets/types';
-import { getLocalStorageNumber } from '@/assets/game-helpers';
 
 const props = defineProps({
   currentPage: {
@@ -54,10 +53,6 @@ function updateItemsPerPage(val: number) {
   localStorage[props.localStorageKey] = val;
   emit('update:itemsPerPage', val);
 }
-
-onMounted(() => {
-  emit('update:itemsPerPage', getLocalStorageNumber(props.localStorageKey, props.itemsPerPage));
-});
 
 const itemsPerPageSelections = [5, 10, 15, 20, 30];
 </script>

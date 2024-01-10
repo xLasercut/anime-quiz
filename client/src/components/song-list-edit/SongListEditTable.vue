@@ -72,8 +72,8 @@ import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableActions from '@/components/song-list-edit/SongListEditTableActions.vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
-import { fi } from 'vuetify/locale';
 import { SONG_TYPES } from '@/assets/shared/song-types';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const headers = [
@@ -83,8 +83,8 @@ const headers = [
   { title: 'Type', key: 'type', sortable: false },
   { title: 'Source', key: 'src', sortable: false }
 ];
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.SONG_LIST_EDIT_TABLE_ITEMS_PER_PAGE);
 const songsSelected = ref([]);
 const filters = ref({
   anime: '',

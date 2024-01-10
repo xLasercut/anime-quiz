@@ -55,6 +55,7 @@ import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 import TableAction from '@/components/common/tables/TableAction.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -72,8 +73,7 @@ const filters = ref({
   userId: '',
   displayName: ''
 });
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.USER_EDIT_TABLE_ITEMS_PER_PAGE);
 
 function filteredUserList(): UserType[] {
   return dataStore.userList.filter((user) => {

@@ -67,6 +67,7 @@ import { useAdminStore } from '@/plugins/store/admin';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { SONG_TYPES } from '@/assets/shared/song-types';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -79,8 +80,7 @@ const headers = [
   { title: 'Source', key: 'src', sortable: false },
   { title: 'Action', key: 'action', sortable: false }
 ];
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.SONG_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({
   anime: '',
   type: Object.values(SONG_TYPES),

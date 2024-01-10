@@ -60,6 +60,7 @@ import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 import { SONG_TYPES } from '@/assets/shared/song-types';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const emit = defineEmits(['dialog:close']);
 
@@ -79,8 +80,7 @@ const filters = ref({
   title: '',
   artist: ''
 });
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MAIN_GAME_SONG_PICKER_ITEMS_PER_PAGE);
 
 function filteredSongs(): SongType[] {
   return dataStore.songList.filter((song) => {

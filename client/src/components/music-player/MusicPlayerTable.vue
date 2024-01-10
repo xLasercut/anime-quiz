@@ -63,6 +63,7 @@ import { SONG_TYPES } from '@/assets/shared/song-types';
 import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 
@@ -74,8 +75,7 @@ const headers = [
   { title: 'Action', key: 'action', sortable: false }
 ];
 
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MUSIC_PLAYER_TABLE_ITEMS_PER_PAGE);
 const currentSong = ref<SongType>({
   songId: '',
   src: '',
