@@ -17,7 +17,7 @@
         variant="outlined"
         :hide-details="true"
         :model-value="itemsPerPage"
-        @update:model-value="$emit('update:itemsPerPage', $event)"
+        @update:model-value="updateItemsPerPage($event)"
         :items="itemsPerPageSelections"
       ></v-select>
     </div>
@@ -25,7 +25,10 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+import { PropType } from 'vue';
+import { LocalStorageConstant } from '@/assets/types';
+
+const props = defineProps({
   currentPage: {
     required: true,
     type: Number
@@ -37,8 +40,19 @@ defineProps({
   length: {
     required: true,
     type: Number
+  },
+  localStorageKey: {
+    required: true,
+    type: String as PropType<LocalStorageConstant>
   }
 });
+
+const emit = defineEmits(['update:currentPage', 'update:itemsPerPage']);
+
+function updateItemsPerPage(val: number) {
+  localStorage[props.localStorageKey] = val;
+  emit('update:itemsPerPage', val);
+}
 
 const itemsPerPageSelections = [5, 10, 15, 20, 30];
 </script>

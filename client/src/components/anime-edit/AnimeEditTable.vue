@@ -31,7 +31,12 @@
     </template>
 
     <template #bottom="{ pageCount }">
-      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
+      <table-pagination
+        v-model:current-page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :length="pageCount"
+        :local-storage-key="LOCAL_STORAGE_CONSTANTS.ANIME_EDIT_TABLE_ITEMS_PER_PAGE"
+      ></table-pagination>
     </template>
   </v-data-table>
 </template>
@@ -42,13 +47,14 @@ import { useDataStore } from '@/plugins/store/data';
 import { AnimeType } from '@/assets/shared/models/types';
 import { useAdminStore } from '@/plugins/store/admin';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
-import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import AnimeEditTableFilters from '@/components/anime-edit/AnimeEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import TableAction from '@/components/common/tables/TableAction.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -62,8 +68,7 @@ const filters = ref({
   animeId: '',
   animeName: ''
 });
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.ANIME_EDIT_TABLE_ITEMS_PER_PAGE);
 
 function filteredAnimeList(): AnimeType[] {
   return dataStore.animeList.filter((anime) => {

@@ -37,7 +37,12 @@
     </template>
 
     <template #bottom="{ pageCount }">
-      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
+      <table-pagination
+        v-model:current-page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :length="pageCount"
+        :local-storage-key="LOCAL_STORAGE_CONSTANTS.MAIN_GAME_SONG_PICKER_ITEMS_PER_PAGE"
+      ></table-pagination>
     </template>
   </v-data-table>
 </template>
@@ -50,11 +55,12 @@ import { ref } from 'vue';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
-import { CLIENT_CONSTANTS } from '@/assets/constants';
+import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 import { SONG_TYPES } from '@/assets/shared/song-types';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const emit = defineEmits(['dialog:close']);
 
@@ -74,8 +80,7 @@ const filters = ref({
   title: '',
   artist: ''
 });
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MAIN_GAME_SONG_PICKER_ITEMS_PER_PAGE);
 
 function filteredSongs(): SongType[] {
   return dataStore.songList.filter((song) => {

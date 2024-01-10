@@ -41,7 +41,12 @@
     </template>
 
     <template #bottom="{ pageCount }">
-      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
+      <table-pagination
+        v-model:current-page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :length="pageCount"
+        :local-storage-key="LOCAL_STORAGE_CONSTANTS.MUSIC_PLAYER_TABLE_ITEMS_PER_PAGE"
+      ></table-pagination>
     </template>
   </v-data-table>
 </template>
@@ -51,13 +56,14 @@ import { useDataStore } from '@/plugins/store/data';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import { ref, watch } from 'vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
-import { CLIENT_CONSTANTS } from '@/assets/constants';
+import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import MusicPlayerTablePlayer from '@/components/music-player/MusicPlayerTablePlayer.vue';
 import { SongType } from '@/assets/shared/models/types';
 import { SONG_TYPES } from '@/assets/shared/song-types';
 import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 
@@ -69,8 +75,7 @@ const headers = [
   { title: 'Action', key: 'action', sortable: false }
 ];
 
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MUSIC_PLAYER_TABLE_ITEMS_PER_PAGE);
 const currentSong = ref<SongType>({
   songId: '',
   src: '',

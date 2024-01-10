@@ -29,7 +29,12 @@
     </template>
 
     <template #bottom="{ pageCount }">
-      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
+      <table-pagination
+        v-model:current-page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :length="pageCount"
+        :local-storage-key="LOCAL_STORAGE_CONSTANTS.SONG_STATS_EDIT_TABLE_ITEMS_PER_PAGE"
+      ></table-pagination>
     </template>
   </v-data-table>
 </template>
@@ -42,7 +47,7 @@ import { useAdminStore } from '@/plugins/store/admin';
 import { inject, ref } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
-import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { CombinedSongStatsType } from '@/assets/shared/models/types';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
@@ -51,6 +56,7 @@ import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTa
 import { isMatchFilter } from '@/assets/game-helpers';
 import { storeToRefs } from 'pinia';
 import TableAction from '@/components/common/tables/TableAction.vue';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
@@ -58,8 +64,7 @@ const adminStore = useAdminStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 const { getSongStats } = storeToRefs(dataStore);
 
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.SONG_STATS_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({
   anime: '',
   type: Object.values(SONG_TYPES),

@@ -28,7 +28,12 @@
     </template>
 
     <template #bottom="{ pageCount }">
-      <table-pagination v-model:current-page="currentPage" v-model:items-per-page="itemsPerPage" :length="pageCount"></table-pagination>
+      <table-pagination
+        v-model:current-page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :length="pageCount"
+        :local-storage-key="LOCAL_STORAGE_CONSTANTS.EMOJI_EDIT_TABLE_ITEMS_PER_PAGE"
+      ></table-pagination>
     </template>
   </v-data-table>
 </template>
@@ -37,7 +42,7 @@
 import { inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { EmojiType } from '@/assets/shared/models/types';
-import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE } from '@/assets/constants';
+import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import GameEmoji from '@/components/common/GameEmoji.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import EmojiEditTableFilters from '@/components/emoji-edit/EmojiEditTableFilters.vue';
@@ -46,6 +51,7 @@ import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
+import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -57,8 +63,7 @@ const headers = [
   { title: 'Type', key: 'type', sortable: false },
   { title: 'Action', key: 'action', sortable: false }
 ];
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.EMOJI_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({
   emojiId: '',
   command: '',
