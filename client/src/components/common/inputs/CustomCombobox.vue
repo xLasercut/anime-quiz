@@ -3,6 +3,7 @@
     :model-value="modelValue"
     @update:model-value="$emit('update:model-value', $event || '')"
     :custom-filter="customFilter"
+    :eager="true"
   ></v-combobox>
 </template>
 
