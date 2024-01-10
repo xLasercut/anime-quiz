@@ -78,7 +78,7 @@ function headers() {
     { title: 'Title', key: 'songTitle', sortable: false },
     { title: 'Artist', key: 'artist', sortable: false },
     { title: 'Type', key: 'type', sortable: false },
-    { title: 'Play Count', key: 'playCount', sortable: false }
+    { title: 'Play Count', key: 'playCount', sortable: true }
   ];
   if (clientStore.clientData.admin) {
     _headers.push({ title: 'Action', key: 'action', sortable: false });
