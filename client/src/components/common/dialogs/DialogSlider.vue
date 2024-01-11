@@ -7,6 +7,7 @@
         step="1"
         v-bind="$attrs"
         color="primary"
+        density="compact"
       >
         <template #append>
           <v-text-field

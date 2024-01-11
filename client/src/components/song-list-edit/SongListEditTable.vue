@@ -11,6 +11,7 @@
     :show-select="editMode !== SONG_LIST_EDIT_MODE.NONE"
     v-model="songsSelected"
     item-value="songId"
+    :no-filter="true"
   >
     <template #header.data-table-select></template>
     <template #item.data-table-select="{ isSelected, toggleSelect, item }">

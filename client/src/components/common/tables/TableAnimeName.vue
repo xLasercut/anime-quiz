@@ -1,5 +1,5 @@
 <template>
-  <v-menu location="top" :open-on-hover="true" :open-delay="0" :close-delay="0">
+  <v-menu location="top" :open-on-hover="true" :open-delay="0" :close-delay="0" transition="fade-transition">
     <template #activator="{ props }">
       <v-chip :label="true" v-bind="props" size="small" color="primary">{{ song.animeName[0] }}</v-chip>
     </template>

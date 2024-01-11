@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <nav-bar></nav-bar>
-    <v-container :fluid="true">
+    <v-container :fluid="true" :style="mainContainerStyles()">
       <v-main>
         <component :is="viewComponent()"></component>
       </v-main>
@@ -18,7 +18,7 @@ import { useClientStore } from '@/plugins/store/client';
 import NavBar from '@/components/app/NavBar.vue';
 import SystemNotification from '@/components/app/SystemNotification.vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { NotificationColorType, SystemNotificationType } from '@/assets/shared/models/types';
 import { OpenDialog, SendNotification } from '@/assets/types';
 import GlobalDialog from '@/components/app/GlobalDialog.vue';
@@ -46,6 +46,14 @@ provide(CLIENT_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColorType, messag
 
 function viewComponent() {
   return VIEW_MAPPING[clientStore.view];
+}
+
+function mainContainerStyles() {
+  return {
+    ['white-space']: 'pre-wrap',
+    overflow: 'auto',
+    height: CLIENT_CONSTANTS.MAIN_CONTAINER_HEIGHT
+  };
 }
 
 socket.on(SOCKET_EVENTS.SYSTEM_NOTIFICATION, (notification: SystemNotificationType) => {

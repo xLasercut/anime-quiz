@@ -8,16 +8,10 @@
       :rules="SONG_ID_RULES"
       :disabled="adminStore.editModeDisabled || disabled"
     ></dialog-text-field>
-    <dialog-multi-autocomplete
+    <dialog-multi-anime-autocomplete
       v-model="adminStore.songInEdit.animeId"
       :disabled="adminStore.deleteModeDisabled || disabled"
-      :items="dataStore.animeStringList"
-      item-title="animeName"
-      item-value="animeId"
-      :custom-filter="customFilter"
-      :rules="songAnimeIdRules"
-      label="Anime"
-    ></dialog-multi-autocomplete>
+    ></dialog-multi-anime-autocomplete>
     <dialog-text-field
       label="Title"
       v-model.trim="adminStore.songInEdit.songTitle"
@@ -52,21 +46,17 @@ import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
-import DialogMultiAutocomplete from '@/components/common/dialogs/DialogMultiAutocomplete.vue';
-import { useDataStore } from '@/plugins/store/data';
-import { canParseValue, isMatchFilter } from '@/assets/game-helpers';
+import DialogMultiAnimeAutocomplete from '@/components/common/dialogs/DialogMultiAnimeAutocomplete.vue';
+import { canParseValue } from '@/assets/game-helpers';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 import { SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
-import { z } from 'zod';
-import { AnimeId } from '@/assets/shared/models/anime';
 import { SONG_TYPES } from '@/assets/shared/song-types';
 import { SONG_ID_RULES } from '@/assets/form-rules';
 
 const adminStore = useAdminStore();
-const dataStore = useDataStore();
 const valid = ref(false);
 const disabled = ref(false);
 const songTypes = Object.values(SONG_TYPES);
@@ -83,10 +73,6 @@ const songSrcRules = [
 const songTypeRules = [
   (v: string): boolean | string => !!v || 'Song Type required',
   (v: string): boolean | string => canParseValue(v, SongType) || 'Invalid Type Source'
-];
-const songAnimeIdRules = [
-  (v: string[]): boolean | string => v.length > 0 || 'Anime required',
-  (v: string[]): boolean | string => canParseValue(v, z.array(AnimeId)) || 'Invalid anime'
 ];
 
 const CHANGE_MAP = {
@@ -106,9 +92,5 @@ function submitChange() {
       }
     });
   }
-}
-
-function customFilter(value: string, query: string) {
-  return isMatchFilter(query, value);
 }
 </script>

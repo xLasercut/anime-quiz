@@ -8,6 +8,7 @@
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
+    :no-filter="true"
   >
     <template #item.avatar="{ item }">
       <game-avatar :avatar="item.avatar"></game-avatar>
@@ -66,7 +67,7 @@ const headers = [
   { title: 'Display Name', key: 'displayName', sortable: false },
   { title: 'Avatar', key: 'avatar', sortable: false },
   { title: 'Admin', key: 'admin', sortable: false },
-  { title: 'Action', key: 'action', sortable: false }
+  { title: 'Action', key: 'action', sortable: false, width: CLIENT_CONSTANTS.TABLE_ACTION_WIDTH }
 ];
 const filters = ref({
   discordId: '',
