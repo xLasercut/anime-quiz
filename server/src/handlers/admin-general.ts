@@ -51,7 +51,7 @@ class AdminGeneralHandler extends ServerHandler {
       this._emitter.updateStoreEmojiList();
       this._emitter.updateStoreDataVersion();
       this._emitter.updateStoreBotMessageList();
-      this._emitter.updateStoreSongStatsList();
+      this._emitter.updateStoreSongStatsRecords();
       this._emitter.systemNotification(
         {
           color: 'success',

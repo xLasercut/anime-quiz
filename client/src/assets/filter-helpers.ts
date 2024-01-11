@@ -1,6 +1,5 @@
-import {ref} from "vue";
+import { ref } from 'vue';
 
 function useFilter() {
-  const previousResult = ref([])
-
+  const previousResult = ref([]);
 }

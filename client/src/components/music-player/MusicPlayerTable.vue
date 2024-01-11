@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="filteredSongList()"
+    :items="filteredSongList"
     :fixed-header="true"
     :fixed-footer="true"
     density="compact"
@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { useDataStore } from '@/plugins/store/data';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import MusicPlayerTablePlayer from '@/components/music-player/MusicPlayerTablePlayer.vue';
@@ -93,28 +93,33 @@ const filters = ref({
   type: Object.values(SONG_TYPES)
 });
 const shuffle = ref(true);
+const filteredSongList = ref<SongType[]>([]);
 
 watch(
   () => currentSong.value,
   (val: SongType) => {
-    const songIndex = filteredSongList().indexOf(val);
+    const songIndex = filteredSongList.value.indexOf(val);
     currentPage.value = Math.floor(songIndex / itemsPerPage.value) + 1;
   }
 );
 
-function filteredSongList() {
-  return dataStore.songList
-    .filter((song) => {
-      return dataStore.userSongList.includes(song.songId);
-    })
-    .filter((song) => {
-      return (
-        isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
-        isMatchFilter(filters.value.title, song.songTitle) &&
-        isMatchFilter(filters.value.artist, song.artist) &&
-        filters.value.type.includes(song.type)
-      );
-    });
+watch(
+  () => [filters.value.anime, filters.value.title, filters.value.artist, filters.value.type],
+  () => {
+    filterSongList();
+  }
+);
+
+function filterSongList() {
+  filteredSongList.value = dataStore.songList.filter((song) => {
+    return (
+      dataStore.userSongList.includes(song.songId) &&
+      isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
+      isMatchFilter(filters.value.title, song.songTitle) &&
+      isMatchFilter(filters.value.artist, song.artist) &&
+      filters.value.type.includes(song.type)
+    );
+  });
 }
 
 function songPickBtnDisabled(song: SongType): boolean {
@@ -156,7 +161,7 @@ function _getPreviousSong(songList: SongType[]): SongType {
 }
 
 function nextSong() {
-  const songList = filteredSongList();
+  const songList = filteredSongList.value;
 
   if (songList.length <= 0) {
     return;
@@ -166,7 +171,7 @@ function nextSong() {
 }
 
 function previousSong() {
-  const songList = filteredSongList();
+  const songList = filteredSongList.value;
 
   if (songList.length <= 0) {
     return;
@@ -176,7 +181,7 @@ function previousSong() {
 }
 
 function playInitialSong() {
-  const songList = filteredSongList();
+  const songList = filteredSongList.value;
   if (songList.length <= 0) {
     return;
   }
@@ -186,4 +191,8 @@ function playInitialSong() {
   }
   currentSong.value = songList[0];
 }
+
+onMounted(() => {
+  filterSongList();
+});
 </script>

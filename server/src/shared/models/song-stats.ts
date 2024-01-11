@@ -8,6 +8,8 @@ const SongStats = z.object({
   playCount: SongStatsPlayCount
 });
 
+const SongStatsRecords = z.record(SongId, SongStatsPlayCount);
+
 const CombinedSongStats = z.intersection(
   Song,
   z.object({
@@ -15,4 +17,4 @@ const CombinedSongStats = z.intersection(
   })
 );
 
-export { SongStats, SongStatsPlayCount, CombinedSongStats };
+export { SongStats, SongStatsPlayCount, CombinedSongStats, SongStatsRecords };

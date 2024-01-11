@@ -3,7 +3,7 @@
     density="compact"
     :fixed-header="true"
     :fixed-footer="true"
-    :items="filteredEmojiList()"
+    :items="filteredEmojiList"
     :headers="headers"
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { EmojiType } from '@/assets/shared/models/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
@@ -83,7 +83,7 @@ function deleteEmoji(emoji: EmojiType) {
   openDialog(DIALOG_ROUTES.EMOJI_EDIT, 'Delete Emoji');
 }
 
-function filteredEmojiList(): EmojiType[] {
+const filteredEmojiList = computed((): EmojiType[] => {
   return dataStore.emojiList.filter((emoji) => {
     return (
       emoji.emojiId.includes(filters.value.emojiId) &&
@@ -91,5 +91,5 @@ function filteredEmojiList(): EmojiType[] {
       filters.value.type.includes(emoji.type)
     );
   });
-}
+});
 </script>

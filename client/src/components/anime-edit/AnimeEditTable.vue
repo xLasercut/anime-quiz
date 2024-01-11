@@ -3,7 +3,7 @@
     density="compact"
     :fixed-header="true"
     :fixed-footer="true"
-    :items="filteredAnimeList()"
+    :items="filteredAnimeList"
     :headers="headers"
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { AnimeType } from '@/assets/shared/models/types';
 import { useAdminStore } from '@/plugins/store/admin';
@@ -71,11 +71,11 @@ const filters = ref({
 });
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.ANIME_EDIT_TABLE_ITEMS_PER_PAGE);
 
-function filteredAnimeList(): AnimeType[] {
+const filteredAnimeList = computed((): AnimeType[] => {
   return dataStore.animeList.filter((anime) => {
     return anime.animeId.includes(filters.value.animeId) && isMatchFilter(filters.value.animeName, anime.animeName.join(','));
   });
-}
+});
 
 function editAnime(anime: AnimeType) {
   adminStore.updateAnimeInEdit(anime);
