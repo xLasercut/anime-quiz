@@ -1,14 +1,14 @@
 <template>
   <div class="game-tooltip" @mouseover="updateShowOnHover(true)" @mouseleave="updateShowOnHover(false)">
     <slot name="activator"></slot>
-    <div :class="tooltipContentClasses()" :style="tooltipContentStyle()">
+    <div :class="tooltipContentClasses" :style="tooltipContentStyle()">
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, StyleValue, watch } from 'vue';
+import { computed, PropType, ref, StyleValue, watch } from 'vue';
 import { GameTooltipPosition } from '@/assets/types';
 
 const props = defineProps({
@@ -55,7 +55,7 @@ watch(
   }
 );
 
-function tooltipContentClasses(): string {
+const tooltipContentClasses = computed((): string => {
   const classes = ['game-tooltip-content', `tooltip-content-${props.location}`];
 
   if (show.value) {
@@ -65,7 +65,7 @@ function tooltipContentClasses(): string {
   }
 
   return classes.join(' ');
-}
+});
 
 function tooltipContentStyle(): StyleValue {
   if (props.width) {

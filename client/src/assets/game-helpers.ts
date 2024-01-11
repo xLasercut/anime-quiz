@@ -23,8 +23,10 @@ function getDefaultTheme(): string {
 }
 
 function isMatchFilter(queryText: string | null, itemText: string | null): boolean {
-  for (const word of (queryText || '').split(' ')) {
-    if (!(itemText || '').toLowerCase().includes(word.toLowerCase())) {
+  const lowerCaseQueryText = (queryText || '').toLowerCase();
+  const lowerCaseItemText = (itemText || '').toLowerCase();
+  for (const word of lowerCaseQueryText.split(' ')) {
+    if (!lowerCaseItemText.includes(word)) {
       return false;
     }
   }

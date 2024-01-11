@@ -6,7 +6,7 @@
     :headers="headers"
     :fixed-header="true"
     :fixed-footer="true"
-    :items="filteredSongs()"
+    :items="filteredSongs"
     density="compact"
     :no-filter="true"
   >
@@ -48,7 +48,7 @@
 import { SongType } from '@/assets/shared/models/types';
 import { isMatchFilter } from '@/assets/game-helpers';
 import { useDataStore } from '@/plugins/store/data';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
@@ -78,7 +78,7 @@ const filters = ref({
 });
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MAIN_GAME_SONG_PICKER_ITEMS_PER_PAGE);
 
-function filteredSongs(): SongType[] {
+const filteredSongs = computed((): SongType[] => {
   return dataStore.songList.filter((song) => {
     return (
       isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
@@ -87,7 +87,7 @@ function filteredSongs(): SongType[] {
       filters.value.type.includes(song.type)
     );
   });
-}
+});
 
 function selectSongOverride(song: SongType) {
   socket.emit(SOCKET_EVENTS.ADMIN_GAME_SONG_OVERRIDE, song);

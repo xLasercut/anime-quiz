@@ -1,5 +1,5 @@
 import { DatabaseDataState, gameDbConnection, mainDbConnection, ServerDb } from './common';
-import { SongStatsType, SongType } from '../shared/models/types';
+import { SongStatsRecordsType, SongStatsType, SongType } from '../shared/models/types';
 import { ServerConfig } from '../interfaces';
 import { Logger } from '../app/logger';
 import { Database as SqliteDb } from 'better-sqlite3';
@@ -70,6 +70,17 @@ class SongStatsDb extends ServerDb<SongStatsType> {
           playCount: dbSong.play_count
         };
       });
+  }
+
+  public getSongStatsRecords(): SongStatsRecordsType {
+    const records: SongStatsRecordsType = {};
+    const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_SONG_STATS);
+    const response = statement.all();
+    for (const item of response) {
+      const dbSongStats = DbSongStats.parse(item);
+      records[dbSongStats.song_id] = dbSongStats.play_count;
+    }
+    return records;
   }
 
   public getSongStatsById(song: SongType): SongStatsType | null {

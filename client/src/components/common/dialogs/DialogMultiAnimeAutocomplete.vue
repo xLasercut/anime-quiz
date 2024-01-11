@@ -14,7 +14,6 @@
         :disabled="disabled"
         :model-value="modelValue"
         @update:model-value="$emit('update:modelValue', $event)"
-        v-model:search="search"
         :custom-filter="filterItem"
       >
         <template #chip="{ item }">
@@ -26,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
+import { PropType } from 'vue';
 import { AnimeIdType } from '@/assets/shared/models/types';
 import { canParseValue, isMatchFilter } from '@/assets/game-helpers';
 import { z } from 'zod';
@@ -48,8 +47,6 @@ defineProps({
 
 defineEmits(['update:modelValue']);
 const dataStore = useDataStore();
-
-const search = ref('');
 
 const songAnimeIdRules = [
   (v: string[]): boolean | string => v.length > 0 || 'Anime required',

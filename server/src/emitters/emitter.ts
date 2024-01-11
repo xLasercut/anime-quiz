@@ -119,8 +119,8 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_BOT_MESSAGE_LIST, this._botMessageDb.messageList);
   }
 
-  public updateStoreSongStatsList(sid?: string) {
-    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_SONG_STATS_LIST, this._songStatsDb.getSongStats());
+  public updateStoreSongStatsRecords(sid?: string) {
+    this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_SONG_STATS_RECORDS, this._songStatsDb.getSongStatsRecords());
   }
 
   public updateStoreDataVersion(sid?: string) {

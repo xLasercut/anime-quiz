@@ -4,14 +4,14 @@
     @update:model-value="$emit('update:modelValue', $event || '')"
     :eager="true"
     :no-filter="true"
-    :items="itemsList()"
+    :items="itemsList"
     v-model:search="search"
   ></v-combobox>
 </template>
 
 <script setup lang="ts">
 import { isMatchFilter } from '@/assets/game-helpers';
-import { PropType, ref } from 'vue';
+import { computed, PropType, ref } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -27,7 +27,7 @@ defineEmits(['update:modelValue']);
 
 const search = ref('');
 
-function itemsList(): string[] {
+const itemsList = computed((): string[] => {
   if (!search.value) {
     return [];
   }
@@ -35,5 +35,5 @@ function itemsList(): string[] {
   return props.items.filter((item) => {
     return isMatchFilter(search.value, item);
   });
-}
+});
 </script>

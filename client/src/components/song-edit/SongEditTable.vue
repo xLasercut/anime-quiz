@@ -4,7 +4,7 @@
     :fixed-header="true"
     :fixed-footer="true"
     :show-expand="true"
-    :items="filteredSongList()"
+    :items="filteredSongList"
     :headers="headers"
     v-model:page="currentPage"
     v-model:expanded="expanded"
@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { SongType } from '@/assets/shared/models/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
@@ -102,7 +102,7 @@ function deleteSong(song: SongType) {
   openDialog(DIALOG_ROUTES.SONG_EDIT, 'Delete Song');
 }
 
-function filteredSongList(): SongType[] {
+const filteredSongList = computed((): SongType[] => {
   return dataStore.songList.filter((song) => {
     return (
       isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
@@ -111,5 +111,5 @@ function filteredSongList(): SongType[] {
       filters.value.type.includes(song.type)
     );
   });
-}
+});
 </script>

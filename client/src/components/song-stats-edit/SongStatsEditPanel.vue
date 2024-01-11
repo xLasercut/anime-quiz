@@ -1,5 +1,5 @@
 <template>
-  <nav-btn icon="mdi-plus" color="success" @click="newSongStats()" v-if="clientStore.clientData.admin">New Song </nav-btn>
+  <nav-btn icon="mdi-plus" color="success" @click="newSongStats()" v-if="clientStore.clientData.admin">New Song Stats</nav-btn>
   <nav-btn icon="mdi-refresh" color="info" @click="reload()">Reload</nav-btn>
   <nav-btn icon="mdi-backspace-reverse-outline" color="warning" @click="back()">Back</nav-btn>
 </template>
@@ -32,8 +32,8 @@ function newSongStats() {
 }
 
 function reload() {
-  dataStore.updateSongStatsList([]);
-  socket.emit(SOCKET_EVENTS.UPDATE_STORE_SONG_STATS_LIST);
+  dataStore.updateSongStatsRecords({});
+  socket.emit(SOCKET_EVENTS.UPDATE_STORE_SONG_STATS_RECORDS);
 }
 
 function back() {

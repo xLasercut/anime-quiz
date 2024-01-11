@@ -24,7 +24,7 @@ class AdminSongStatsHandler extends ServerHandler {
         animeId: []
       });
       this._songStatsDb.newRecord(songStats);
-      this._emitter.updateStoreSongStatsList();
+      this._emitter.updateStoreSongStatsRecords();
       this._emitter.systemNotification(
         {
           color: 'success',
@@ -43,7 +43,7 @@ class AdminSongStatsHandler extends ServerHandler {
       const songStats = SongStats.parse(_songStats);
       this._songStatsDb.validateRecordExists(songStats);
       this._songStatsDb.editRecord(songStats);
-      this._emitter.updateStoreSongStatsList();
+      this._emitter.updateStoreSongStatsRecords();
       this._emitter.systemNotification(
         {
           color: 'success',
@@ -62,7 +62,7 @@ class AdminSongStatsHandler extends ServerHandler {
       const songStats = SongStats.parse(_songStats);
       this._songStatsDb.validateRecordExists(songStats);
       this._songStatsDb.deleteRecord(songStats);
-      this._emitter.updateStoreSongStatsList();
+      this._emitter.updateStoreSongStatsRecords();
       this._emitter.systemNotification(
         {
           color: 'success',

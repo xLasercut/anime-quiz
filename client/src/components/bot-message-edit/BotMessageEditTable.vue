@@ -4,7 +4,7 @@
     :fixed-header="true"
     :fixed-footer="true"
     :headers="headers"
-    :items="filteredMessageList()"
+    :items="filteredMessageList"
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
@@ -43,7 +43,7 @@
 import { BotMessageType } from '@/assets/shared/models/types';
 import { useDataStore } from '@/plugins/store/data';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import TableAction from '@/components/common/tables/TableAction.vue';
@@ -87,7 +87,7 @@ function deleteBotMessage(botMessage: BotMessageType) {
   openDialog(DIALOG_ROUTES.BOT_MESSAGE_EDIT, 'Delete Bot Message');
 }
 
-function filteredMessageList(): BotMessageType[] {
+const filteredMessageList = computed((): BotMessageType[] => {
   return dataStore.botMessageList.filter((botMessage) => {
     return (
       botMessage.messageId.includes(filters.value.messageId) &&
@@ -95,5 +95,5 @@ function filteredMessageList(): BotMessageType[] {
       botMessage.userId.includes(filters.value.userId)
     );
   });
-}
+});
 </script>

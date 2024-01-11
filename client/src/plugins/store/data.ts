@@ -5,7 +5,7 @@ import {
   BotMessageType,
   EmojiType,
   SongIdType,
-  SongStatsType,
+  SongStatsRecordsType,
   SongTitleType,
   SongType,
   UserType
@@ -22,7 +22,7 @@ interface State {
   userList: UserType[];
   emojiList: EmojiType[];
   botMessageList: BotMessageType[];
-  songStatsList: SongStatsType[];
+  songStatsRecords: SongStatsRecordsType;
   dataVersion: string;
 }
 
@@ -38,7 +38,7 @@ const useDataStore = defineStore('data', {
       emojiList: JSON.parse(localStorage[LOCAL_STORAGE_CONSTANTS.EMOJI_LIST] || '[]'),
       botMessageList: [],
       dataVersion: localStorage[LOCAL_STORAGE_CONSTANTS.DATA_VERSION] || '',
-      songStatsList: []
+      songStatsRecords: {}
     };
   },
   actions: {
@@ -93,8 +93,8 @@ const useDataStore = defineStore('data', {
         return -1;
       });
     },
-    updateSongStatsList(songStatsList: SongStatsType[]) {
-      this.songStatsList = songStatsList;
+    updateSongStatsRecords(songStatsRecords: SongStatsRecordsType) {
+      this.songStatsRecords = songStatsRecords;
     },
     updateDataVersion(dataVersion: string) {
       this.dataVersion = dataVersion;
@@ -108,16 +108,6 @@ const useDataStore = defineStore('data', {
           animeName: anime.animeName.join(',')
         };
       });
-    },
-    getSongStats: (state) => {
-      return (song: SongType): SongStatsType | null => {
-        for (const songStats of state.songStatsList) {
-          if (song.songId === songStats.songId) {
-            return songStats;
-          }
-        }
-        return null;
-      };
     }
   }
 });

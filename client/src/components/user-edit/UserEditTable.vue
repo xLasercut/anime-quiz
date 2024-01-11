@@ -3,7 +3,7 @@
     density="compact"
     :fixed-header="true"
     :fixed-footer="true"
-    :items="filteredUserList()"
+    :items="filteredUserList"
     :headers="headers"
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { UserType } from '@/assets/shared/models/types';
 import GameAvatar from '@/components/common/GameAvatar.vue';
@@ -76,7 +76,7 @@ const filters = ref({
 });
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.USER_EDIT_TABLE_ITEMS_PER_PAGE);
 
-function filteredUserList(): UserType[] {
+const filteredUserList = computed((): UserType[] => {
   return dataStore.userList.filter((user) => {
     return (
       user.discordId.includes(filters.value.discordId) &&
@@ -84,7 +84,7 @@ function filteredUserList(): UserType[] {
       user.displayName.toLowerCase().includes(filters.value.displayName.toLowerCase())
     );
   });
-}
+});
 
 function editUser(user: UserType) {
   adminStore.updateUserInEdit(user);

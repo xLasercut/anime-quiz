@@ -4,7 +4,7 @@
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
     density="compact"
-    :items="filteredSongs()"
+    :items="filteredSongs"
     :headers="headers"
     :fixed-header="true"
     :fixed-footer="true"
@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { SongIdType, SongType } from '@/assets/shared/models/types';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
@@ -103,23 +103,26 @@ watch(
   }
 );
 
-function filteredSongs(): SongType[] {
-  return dataStore.songList
-    .filter((song) => {
-      if (editMode.value !== SONG_LIST_EDIT_MODE.REMOVE) {
-        return true;
-      }
-      return dataStore.userSongList.includes(song.songId);
-    })
-    .filter((song) => {
+const filteredSongs = computed((): SongType[] => {
+  return dataStore.songList.filter((song) => {
+    if (editMode.value === SONG_LIST_EDIT_MODE.REMOVE) {
       return (
+        dataStore.userSongList.includes(song.songId) &&
         isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
         isMatchFilter(filters.value.title, song.songTitle) &&
         isMatchFilter(filters.value.artist, song.artist) &&
         filters.value.type.includes(song.type)
       );
-    });
-}
+    }
+
+    return (
+      isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
+      isMatchFilter(filters.value.title, song.songTitle) &&
+      isMatchFilter(filters.value.artist, song.artist) &&
+      filters.value.type.includes(song.type)
+    );
+  });
+});
 
 function checkboxFalseIcon(disabled: boolean): string {
   if (disabled) {
