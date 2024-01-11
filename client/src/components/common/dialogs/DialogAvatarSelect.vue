@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center" :dense="true">
     <v-col cols="12">
-      <v-select variant="outlined" label="Avatar" v-bind="$attrs" :items="avatars" density="comfortable">
+      <v-select variant="outlined" label="Avatar" v-bind="$attrs" :items="avatars" density="compact">
         <template #item="{ item, props }">
           <v-list-item @click="props.onClick">
             <template #prepend>

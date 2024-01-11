@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import {
-  AnimeIdType,
   AnimeNameType,
   AnimeType,
   BotMessageType,
@@ -12,6 +11,7 @@ import {
   UserType
 } from '@/assets/shared/models/types';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { AnimeString } from '@/assets/types';
 
 interface State {
   songList: SongType[];
@@ -24,11 +24,6 @@ interface State {
   botMessageList: BotMessageType[];
   songStatsList: SongStatsType[];
   dataVersion: string;
-}
-
-interface AnimeString {
-  animeId: AnimeIdType;
-  animeName: string;
 }
 
 const useDataStore = defineStore('data', {

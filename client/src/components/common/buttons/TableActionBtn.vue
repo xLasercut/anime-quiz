@@ -1,7 +1,5 @@
 <template>
-  <v-btn density="comfortable" variant="flat">
-    <v-icon>{{ icon }}</v-icon>
-  </v-btn>
+  <v-btn density="comfortable" :icon="icon" variant="text"></v-btn>
 </template>
 
 <script setup lang="ts">

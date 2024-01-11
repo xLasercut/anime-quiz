@@ -8,6 +8,7 @@
     :fixed-header="true"
     :fixed-footer="true"
     density="compact"
+    :no-filter="true"
   >
     <template #item.animeName="{ item }">
       <table-anime-name :song="item"></table-anime-name>
@@ -73,7 +74,7 @@ const filters = ref({
 });
 
 function headers() {
-  const _headers = [
+  const _headers: { title: string; key: string; sortable: boolean; width?: string }[] = [
     { title: 'Anime', key: 'animeName', sortable: false },
     { title: 'Title', key: 'songTitle', sortable: false },
     { title: 'Artist', key: 'artist', sortable: false },
@@ -81,7 +82,7 @@ function headers() {
     { title: 'Play Count', key: 'playCount', sortable: true }
   ];
   if (clientStore.clientData.admin) {
-    _headers.push({ title: 'Action', key: 'action', sortable: false });
+    _headers.push({ title: 'Action', key: 'action', sortable: false, width: CLIENT_CONSTANTS.TABLE_ACTION_WIDTH });
   }
   return _headers;
 }

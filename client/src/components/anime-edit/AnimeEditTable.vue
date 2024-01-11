@@ -8,6 +8,7 @@
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
+    :no-filter="true"
   >
     <template #item.animeName="{ item }">
       <v-row :dense="true">
@@ -62,7 +63,7 @@ const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
 const headers = [
   { title: 'Anime ID', key: 'animeId', sortable: false },
   { title: 'Anime Names', key: 'animeName', sortable: false },
-  { title: 'Action', key: 'action', sortable: false }
+  { title: 'Action', key: 'action', sortable: false, width: CLIENT_CONSTANTS.TABLE_ACTION_WIDTH }
 ];
 const filters = ref({
   animeId: '',

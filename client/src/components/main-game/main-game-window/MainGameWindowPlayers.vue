@@ -1,19 +1,9 @@
 <template>
   <v-row justify="center">
     <v-col cols="auto" v-for="player in gameStore.playerList">
-      <v-menu
-        location="top"
-        min-width="150px"
-        max-width="150px"
-        v-model="show"
-        :open-on-click="false"
-        :open-on-focus="false"
-        :open-on-hover="false"
-        transition="fade-transition"
-        :persistent="true"
-      >
-        <template #activator="{ props }">
-          <div class="player-container" v-bind="props">
+      <game-tooltip location="top" :open-on-hover="false" v-model="show">
+        <template #activator>
+          <div class="player-container">
             <v-row justify="center">
               <v-badge :dot="true" :color="badgeColor(player)">
                 <game-avatar :avatar="player.avatar" size="100"></game-avatar>
@@ -34,7 +24,7 @@
         <v-sheet class="player-guess" :color="player.scoreColor">
           {{ playerGuess(player) }}
         </v-sheet>
-      </v-menu>
+      </game-tooltip>
     </v-col>
   </v-row>
 </template>
@@ -46,6 +36,7 @@ import { GamePlayerType } from '@/assets/shared/models/types';
 import { onUnmounted, ref } from 'vue';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
+import GameTooltip from '@/components/common/GameTooltip.vue';
 
 const gameStore = useGameStore();
 
@@ -106,6 +97,7 @@ onUnmounted(() => {
   word-wrap: break-word;
   text-align: center;
   padding: 2px;
+  border-radius: 4px;
 }
 
 .player-name {

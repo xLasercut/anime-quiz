@@ -1,8 +1,8 @@
 <template>
-  <v-toolbar height="40" :flat="true" color="surface">
+  <v-toolbar :height="CLIENT_CONSTANTS.NAV_BAR_HEIGHT" :flat="true" color="surface">
     <v-toolbar-items>
       <nav-btn icon="mdi-theme-light-dark" @click="changeTheme()">Theme</nav-btn>
-      <nav-btn icon="mdi-shield-crown" color="warning" v-if="clientStore.clientData.admin" @click="openAdminDialog()">Admin</nav-btn>
+      <nav-btn icon="mdi-shield-crown" color="warning" v-if="clientStore.clientData.admin" @click="openAdminDialog()"> Admin </nav-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <v-toolbar-items>
@@ -18,7 +18,7 @@ import { PANEL_MAPPING } from '@/assets/routing/mapping';
 import { useClientStore } from '@/plugins/store/client';
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import DefaultPanel from '@/components/app/DefaultPanel.vue';
-import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
 import { inject } from 'vue';

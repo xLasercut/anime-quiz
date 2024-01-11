@@ -8,6 +8,7 @@
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
+    :no-filter="true"
   >
     <template #item.src="{ item }">
       <game-emoji width="25pt" :emoji="item"></game-emoji>
@@ -61,7 +62,7 @@ const headers = [
   { title: 'Command', key: 'command', sortable: false },
   { title: 'Src', key: 'src', sortable: false },
   { title: 'Type', key: 'type', sortable: false },
-  { title: 'Action', key: 'action', sortable: false }
+  { title: 'Action', key: 'action', sortable: false, width: CLIENT_CONSTANTS.TABLE_ACTION_WIDTH }
 ];
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.EMOJI_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({

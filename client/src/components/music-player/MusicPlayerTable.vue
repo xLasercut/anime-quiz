@@ -8,6 +8,7 @@
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
     :height="CLIENT_CONSTANTS.MUSIC_PLAYER_TABLE_HEIGHT"
+    :no-filter="true"
   >
     <template #item.animeName="{ item }">
       <table-anime-name :song="item"></table-anime-name>
@@ -72,7 +73,7 @@ const headers = [
   { title: 'Title', key: 'songTitle', sortable: false },
   { title: 'Artist', key: 'artist', sortable: false },
   { title: 'Type', key: 'type', sortable: false },
-  { title: 'Action', key: 'action', sortable: false }
+  { title: 'Action', key: 'action', sortable: false, width: '60px' }
 ];
 
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MUSIC_PLAYER_TABLE_ITEMS_PER_PAGE);

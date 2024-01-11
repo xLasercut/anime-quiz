@@ -8,13 +8,10 @@
     :fixed-footer="true"
     :items="filteredSongs()"
     density="compact"
+    :no-filter="true"
   >
     <template #item.animeName="{ item }">
       <table-anime-name :song="item"></table-anime-name>
-    </template>
-
-    <template #item.src="{ item }">
-      <a :href="item.src" target="_blank">View</a>
     </template>
 
     <template #item.action="{ item }">
@@ -71,8 +68,7 @@ const headers = [
   { title: 'Title', key: 'songTitle', sortable: false },
   { title: 'Artist', key: 'artist', sortable: false },
   { title: 'Type', key: 'type', sortable: false },
-  { title: 'Source', key: 'src', sortable: false },
-  { title: 'Action', key: 'action', sortable: false }
+  { title: 'Action', key: 'action', sortable: false, width: '60px' }
 ];
 const filters = ref({
   anime: '',
