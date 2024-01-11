@@ -15,13 +15,17 @@
 
 <script setup lang="ts">
 import CustomCombobox from '@/components/common/inputs/CustomCombobox.vue';
+import { PropType } from 'vue';
 
 defineProps({
   modelValue: {
     required: true,
     type: String
   },
-  items: {},
+  items: {
+    required: true,
+    type: Array as PropType<string[]>
+  },
   label: {}
 });
 </script>

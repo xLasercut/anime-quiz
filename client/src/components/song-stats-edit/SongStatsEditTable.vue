@@ -74,7 +74,7 @@ const filters = ref({
 });
 
 function headers() {
-  const _headers = [
+  const _headers: { title: string; key: string; sortable: boolean; width?: string }[] = [
     { title: 'Anime', key: 'animeName', sortable: false },
     { title: 'Title', key: 'songTitle', sortable: false },
     { title: 'Artist', key: 'artist', sortable: false },
