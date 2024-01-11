@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers()"
-    :items="filteredSongList()"
+    :items="filteredSongList"
     v-model:page="currentPage"
     :items-per-page="itemsPerPage"
     :height="CLIENT_CONSTANTS.ADMIN_TABLE_HEIGHT"
@@ -45,7 +45,7 @@ import { useClientStore } from '@/plugins/store/client';
 import { useDataStore } from '@/plugins/store/data';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import { useAdminStore } from '@/plugins/store/admin';
-import { inject, ref } from 'vue';
+import {inject, onMounted, ref, watch} from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { OpenDialog } from '@/assets/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
@@ -72,6 +72,7 @@ const filters = ref({
   title: '',
   artist: ''
 });
+const filteredSongList = ref<CombinedSongStatsType[]>([]);
 
 function headers() {
   const _headers: { title: string; key: string; sortable: boolean; width?: string }[] = [
@@ -87,11 +88,17 @@ function headers() {
   return _headers;
 }
 
-function filteredSongList(): CombinedSongStatsType[] {
+function filterSongList() {
   const songList = [];
   for (const song of dataStore.songList) {
     const songStats = getSongStats.value(song);
-    if (songStats) {
+    if (
+      songStats &&
+      isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
+      isMatchFilter(filters.value.title, song.songTitle) &&
+      isMatchFilter(filters.value.artist, song.artist) &&
+      filters.value.type.includes(song.type)
+    ) {
       songList.push({
         ...song,
         playCount: songStats.playCount
@@ -99,14 +106,7 @@ function filteredSongList(): CombinedSongStatsType[] {
     }
   }
 
-  return songList.filter((song) => {
-    return (
-      isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
-      isMatchFilter(filters.value.title, song.songTitle) &&
-      isMatchFilter(filters.value.artist, song.artist) &&
-      filters.value.type.includes(song.type)
-    );
-  });
+  filteredSongList.value = songList;
 }
 
 function editSongStats(song: CombinedSongStatsType) {
@@ -126,4 +126,12 @@ function deleteSongStats(song: CombinedSongStatsType) {
   adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
   openDialog(DIALOG_ROUTES.SONG_STATS_EDIT, 'Delete Song Stats');
 }
+
+watch(() => filters.value.anime, () => {
+  filterSongList()
+})
+
+onMounted(() => {
+  filterSongList();
+});
 </script>
