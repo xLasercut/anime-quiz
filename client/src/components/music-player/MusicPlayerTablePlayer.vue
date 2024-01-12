@@ -3,7 +3,6 @@
     <v-col cols="auto">
       <div class="music-player-container">
         <media-player
-          class="music-player"
           ref="player"
           autoplay
           :src="song.src"
@@ -15,6 +14,7 @@
           @source-change="playbackEnded = false"
           @time-update="updateCurrentTime($event)"
           @duration-change="updateDuration($event)"
+          load="eager"
         >
           <media-provider></media-provider>
         </media-player>
@@ -101,10 +101,9 @@ function pause() {
   max-height: 225px;
 }
 
-.music-player {
+media-player {
   width: 100%;
   height: 100%;
-  border-radius: 4px;
   border: none;
 }
 </style>
