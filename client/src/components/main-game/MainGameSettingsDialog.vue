@@ -24,14 +24,13 @@
       :max="60"
       :rules="loadTimeRules"
     ></dialog-slider>
-    <dialog-radio :disabled="settingsDisabled()" label="Duplicate" v-model="settings.duplicate" :rules="duplicateRules">
-      <v-radio label="True" :value="true"></v-radio>
-      <v-radio label="False" :value="false"></v-radio>
-    </dialog-radio>
-    <dialog-radio :disabled="settingsDisabled()" label="Least Played" v-model="settings.leastPlayed" :rules="leastPlayedRules">
-      <v-radio label="True" :value="true"></v-radio>
-      <v-radio label="False" :value="false"></v-radio>
-    </dialog-radio>
+    <dialog-toggle :disabled="settingsDisabled()" label="Duplicate" v-model="settings.duplicate" :rules="duplicateRules"></dialog-toggle>
+    <dialog-toggle
+      :disabled="settingsDisabled()"
+      label="Least Played"
+      v-model="settings.leastPlayed"
+      :rules="leastPlayedRules"
+    ></dialog-toggle>
     <dialog-select
       :disabled="settingsDisabled()"
       label="Game Mode"
@@ -57,7 +56,6 @@ import { onUnmounted, ref } from 'vue';
 import { GAME_MODES } from '@/assets/shared/game-modes';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogSlider from '@/components/common/dialogs/DialogSlider.vue';
-import DialogRadio from '@/components/common/dialogs/DialogRadio.vue';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
@@ -75,6 +73,7 @@ import { z } from 'zod';
 import { useClientStore } from '@/plugins/store/client';
 import { useGameStore } from '@/plugins/store/game';
 import { SONG_TYPES } from '@/assets/shared/song-types';
+import DialogToggle from '@/components/common/dialogs/DialogToggle.vue';
 
 const clientStore = useClientStore();
 const gameStore = useGameStore();

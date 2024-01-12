@@ -26,15 +26,13 @@
       :rules="AVATAR_RULES"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></user-settings-avatar-select>
-    <dialog-radio
+    <dialog-toggle
       label="Admin"
       v-model="adminStore.userInEdit.admin"
       :rules="ADMIN_RULES"
       :disabled="adminStore.deleteModeDisabled || disabled"
     >
-      <v-radio label="True" :value="true"></v-radio>
-      <v-radio label="False" :value="false"></v-radio>
-    </dialog-radio>
+    </dialog-toggle>
     <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
   </dialog-form>
 </template>
@@ -44,7 +42,6 @@ import { ref } from 'vue';
 import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import UserSettingsAvatarSelect from '@/components/common/dialogs/DialogAvatarSelect.vue';
-import DialogRadio from '@/components/common/dialogs/DialogRadio.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import { ADMIN_RULES, AVATAR_RULES, DISCORD_ID_RULES, DISPLAY_NAME_RULES, USER_ID_RULES } from '@/assets/form-rules';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
@@ -52,6 +49,7 @@ import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { User } from '@/assets/shared/models/user';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import DialogToggle from '@/components/common/dialogs/DialogToggle.vue';
 
 const adminStore = useAdminStore();
 const valid = ref(false);
