@@ -1,6 +1,5 @@
 <template>
   <media-player
-    class="game-video-player"
     ref="player"
     :muted="muted"
     :src="gameStore.currentSong.src"
@@ -11,6 +10,7 @@
     @can-play="playbackReady = true"
     @seeked="playerSeeked()"
     :style="styles()"
+    load="eager"
   >
     <media-provider></media-provider>
   </media-player>
@@ -165,10 +165,9 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.game-video-player {
+media-player {
   height: 100%;
   width: 100%;
-  border-radius: 4px;
   border: none;
 }
 </style>
