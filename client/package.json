@@ -11,7 +11,7 @@
     "format:check": "prettier 'src/**/*.{ts,vue}' --check"
   },
   "dependencies": {
-    "@mdi/font": "7.2.96",
+    "@mdi/font": "7.4.47",
     "axios": "^1.6.5",
     "install": "^0.13.0",
     "pinia": "^2.1.7",
