@@ -21,7 +21,7 @@ const SERVER_CONFIG: ServerConfig = {
   redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080/anime-quiz/',
   discordClientId: process.env.DISCORD_CLIENT_ID || '',
   discordClientSecret: process.env.DISCORD_CLIENT_SECRET || '',
-  logLevel: process.env.LOG_LEVEL || 'info',
+  logLevel: process.env.LOG_LEVEL || 'warn',
   discordUserOverride: process.env.DISCORD_USER_OVERRIDE || ''
 };
 
