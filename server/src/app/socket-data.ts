@@ -11,8 +11,8 @@ import { DbUserSongType, DbUserType } from '../models/types';
 import { ClientData } from '../shared/models/client';
 import { Socket } from '../types';
 import { GameRoomId } from '../shared/models/game';
-import { Logger } from './logger';
 import { UnauthorizedError } from './exceptions';
+import { Logger } from 'winston';
 
 class SocketData {
   protected _clientData: ClientDataType;

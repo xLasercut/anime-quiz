@@ -7,7 +7,7 @@ import { ClientDataType, DiscordIdType, UserIdType, UserType } from '../shared/m
 import { User } from '../shared/models/user';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 
 const STATEMENTS = {
   SELECT_ALL_USER: 'SELECT_ALL_USER',

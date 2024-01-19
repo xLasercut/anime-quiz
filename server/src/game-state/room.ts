@@ -3,7 +3,7 @@ import { GamePlayerType, GameRoomIdType } from '../shared/models/types';
 import { GameRoomId } from '../shared/models/game';
 import { ZodError } from 'zod';
 import { GameRoom } from './interfaces';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
 import { GameSettings } from './settings';
 import { Socket } from '../types';

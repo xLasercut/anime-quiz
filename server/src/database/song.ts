@@ -8,7 +8,7 @@ import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DbSongType } from '../models/types';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 
 const STATEMENTS = {
   SELECT_ALL_SONG: 'SELECT_ALL_SONG',

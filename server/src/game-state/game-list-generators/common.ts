@@ -12,7 +12,7 @@ import {
 import { SongDb } from '../../database/song';
 import { HandlerDependencies } from '../../interfaces';
 import { SongStatsDb } from '../../database/song-stats';
-import { Logger } from '../../app/logger';
+import { Logger } from 'winston';
 
 abstract class GameListGenerator {
   protected _userSongDb: UserSongDb;

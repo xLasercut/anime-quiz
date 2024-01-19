@@ -1,39 +1,33 @@
-import pino from 'pino';
-import { ServerConfig } from '../interfaces';
+import { format, transports } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
+import { SERVER_CONFIG } from './config';
 
-class Logger {
-  protected _logger: pino.Logger;
+const { combine, timestamp, json, errors } = format;
 
-  constructor(config: ServerConfig) {
-    this._logger = pino({
-      level: config.logLevel,
-      nestedKey: 'data',
-      timestamp: pino.stdTimeFunctions.isoTime,
-      formatters: {
-        level: (label) => {
-          return {
-            level: label.toUpperCase()
-          };
-        }
-      }
-    });
-  }
+const LOG_FORMAT = combine(
+  timestamp(),
+  format((info) => {
+    const { timestamp, level, message, ...rest } = info;
+    return {
+      timestamp,
+      level: level.toUpperCase(),
+      message,
+      ...rest
+    };
+  })(),
+  errors({ stack: true }),
+  json({ deterministic: false })
+);
 
-  public info(msg: string, obj: any, ...args: any[]) {
-    this._logger.info(obj, msg, args);
-  }
+const LOG_TRANSPORTS = [
+  new DailyRotateFile({
+    frequency: '24h',
+    filename: 'anime-quiz-%DATE%.log',
+    datePattern: 'YYYY-MM-DD',
+    dirname: SERVER_CONFIG.logDir,
+    maxFiles: '5'
+  }),
+  new transports.Console()
+];
 
-  public warn(msg: string, obj: any, ...args: any[]) {
-    this._logger.warn(obj, msg, args);
-  }
-
-  public error(msg: string, obj: any, ...args: any[]) {
-    this._logger.error(obj, msg, args);
-  }
-
-  public debug(msg: string, obj: any, ...args: any[]) {
-    this._logger.debug(obj, msg, args);
-  }
-}
-
-export { Logger };
+export { LOG_FORMAT, LOG_TRANSPORTS };
