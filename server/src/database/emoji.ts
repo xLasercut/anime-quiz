@@ -6,7 +6,7 @@ import { Emoji } from '../shared/models/emoji';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 
 const STATEMENTS = {
   SELECT_ALL_EMOJI: 'SELECT_ALL_EMOJI',

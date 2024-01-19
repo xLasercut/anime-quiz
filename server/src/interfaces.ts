@@ -8,11 +8,11 @@ import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
 import { Server } from './app/server';
 import { GameRooms } from './game-state/room';
-import { Logger } from './app/logger';
 import { GameChatSerialiser } from './game-state/chat';
 import { DatabaseDataState } from './database/common';
 import { BotMessageDb } from './database/bot-message';
 import { SongStatsDb } from './database/song-stats';
+import { Logger } from 'winston';
 
 interface EmitterDependencies {
   userDb: UserDb;

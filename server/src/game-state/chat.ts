@@ -1,4 +1,4 @@
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 import { AvatarType, DisplayNameType, GameChatType, UserIdType } from '../shared/models/types';
 import { Socket } from '../types';
 import { AVATARS } from '../shared/avatars';

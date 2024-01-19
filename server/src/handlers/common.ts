@@ -12,7 +12,7 @@ import { UserSongDb } from '../database/user-song';
 import { Server } from '../app/server';
 import { SocketEventNameType } from '../shared/types';
 import { GameRooms } from '../game-state/room';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 import { DatabaseDataState } from '../database/common';
 import { BotMessageDb } from '../database/bot-message';
 import { GameChatSerialiser } from '../game-state/chat';

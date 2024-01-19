@@ -1,6 +1,6 @@
 import { ServerConfig } from '../interfaces';
 import axios from 'axios';
-import { Logger } from './logger';
+import { Logger } from 'winston';
 
 interface DiscordTokenApiResponse {
   token_type: string;

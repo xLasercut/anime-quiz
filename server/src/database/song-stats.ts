@@ -1,7 +1,7 @@
 import { DatabaseDataState, gameDbConnection, mainDbConnection, ServerDb } from './common';
 import { SongStatsRecordsType, SongStatsType, SongType } from '../shared/models/types';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DbSongStatsType } from '../models/types';

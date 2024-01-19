@@ -1,8 +1,8 @@
 import { Socket } from '../types';
 import { Emitter } from '../emitters/emitter';
 import { ZodError } from 'zod';
-import { Logger } from './logger';
 import { GameChatSerialiser } from '../game-state/chat';
+import { Logger } from 'winston';
 
 class DatabaseLockedError extends Error {
   constructor(message: string) {
@@ -33,7 +33,7 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, ch
     logger.warn('unauthorized client', {
       id: socket.id,
       clientData: socket.data.clientData,
-      err: e
+      err: e.stack
     });
     emitter.systemNotification(
       {
@@ -50,7 +50,7 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, ch
     logger.warn('data quality error', {
       id: socket.id,
       clientData: socket.data.clientData,
-      err: e
+      err: e.stack
     });
     const firstIssue = e.issues[0];
     const fields = firstIssue.path.join(', ');
@@ -69,7 +69,7 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, ch
     logger.warn('data quality error', {
       id: socket.id,
       clientData: socket.data.clientData,
-      err: e
+      err: e.stack
     });
     emitter.systemNotification(
       {
@@ -98,7 +98,7 @@ function _handleSocketError(logger: Logger, socket: Socket, emitter: Emitter, ch
     return;
   }
 
-  logger.error('internal server error', { err: e });
+  logger.error('internal server error', e);
 }
 
 function _handleCallback(callback: any): void {
@@ -109,11 +109,11 @@ function _handleCallback(callback: any): void {
 
 function _handleIoError(logger: Logger, e: any) {
   if (e instanceof ZodError) {
-    logger.warn('data quality error', { err: e });
+    logger.warn('data quality error', e);
     return;
   }
 
-  logger.error('internal server error', { err: e });
+  logger.error('internal server error', e);
 }
 
 function newSocketErrorHandler(logger: Logger, socket: Socket, emitter: Emitter, chatSerialiser: GameChatSerialiser): Function {

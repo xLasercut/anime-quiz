@@ -1,7 +1,7 @@
 import Database, { Database as SqliteDb } from 'better-sqlite3';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logger';
 import { v4 } from 'uuid';
+import { Logger } from 'winston';
 
 function _databaseConnection(currentDb: SqliteDb | null, filepath: string): SqliteDb {
   if (currentDb) {

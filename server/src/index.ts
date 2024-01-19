@@ -16,13 +16,14 @@ import { DatabaseLock } from './database/lock';
 import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
 import { GameRooms } from './game-state/room';
-import { Logger } from './app/logger';
+import { LOG_FORMAT, LOG_TRANSPORTS } from './app/logger';
 import { GameRoomId } from './shared/models/game';
 import { GameRoomIdType } from './shared/models/types';
 import { GameChatSerialiser } from './game-state/chat';
 import { DatabaseDataState } from './database/common';
 import { BotMessageDb } from './database/bot-message';
 import { SongStatsDb } from './database/song-stats';
+import { createLogger } from 'winston';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -30,7 +31,11 @@ const io = new Server(httpServer, {
     origin: SERVER_CONFIG.corsConfig
   }
 });
-const logger = new Logger(SERVER_CONFIG);
+const logger = createLogger({
+  level: SERVER_CONFIG.logLevel,
+  format: LOG_FORMAT,
+  transports: LOG_TRANSPORTS
+});
 const oidc = new Oidc(SERVER_CONFIG, logger);
 
 const dbLock = new DatabaseLock();

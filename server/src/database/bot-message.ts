@@ -2,7 +2,7 @@ import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
 import { BotMessageType, MessageCommandType } from '../shared/models/types';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { ServerConfig } from '../interfaces';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 import { StatementFactory } from './statement';
 import { DbBotMessage } from '../models/bot-message';
 import { BotMessage } from '../shared/models/bot-message';

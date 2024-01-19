@@ -6,7 +6,7 @@ import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
 import { SongIdType, UserIdType } from '../shared/models/types';
 import { DbUserSongList } from '../models/user';
-import { Logger } from '../app/logger';
+import { Logger } from 'winston';
 
 const STATEMENTS = {
   INSERT_USER_SONGS: 'INSERT_USER_SONGS',
