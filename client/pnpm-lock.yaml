@@ -21,8 +21,8 @@ dependencies:
     specifier: ^0.10.0
     version: 0.10.0
   socket.io-client:
-    specifier: ^4.7.3
-    version: 4.7.3
+    specifier: ^4.7.4
+    version: 4.7.4
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -748,8 +748,8 @@ packages:
       lru-cache: 6.0.0
     dev: true
 
-  /socket.io-client@4.7.3:
-    resolution: {integrity: sha512-nU+ywttCyBitXIl9Xe0RSEfek4LneYkJxCeNnKCuhwoH4jGXO1ipIUw/VA/+Vvv2G1MTym11fzFC0SxkrcfXDw==}
+  /socket.io-client@4.7.4:
+    resolution: {integrity: sha512-wh+OkeF0rAVCrABWQBaEjLfb7DVPotMbu0cgWgyR0v6eA4EoVnAwcIeIbcdTE3GT/H3kbdLl7OoH2+asoDRIIg==}
     engines: {node: '>=10.0.0'}
     dependencies:
       '@socket.io/component-emitter': 3.1.0
