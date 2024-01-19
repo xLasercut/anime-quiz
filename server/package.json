@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.8",
-    "@types/node": "^20.10.6",
+    "@types/node": "^20.11.5",
     "@types/uuid": "^9.0.7",
     "env-cmd": "^10.1.0",
     "nodemon": "^3.0.2",
