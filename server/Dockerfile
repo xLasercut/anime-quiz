@@ -1,4 +1,4 @@
-FROM node:18-bookworm
+FROM node:20-bookworm-slim
 
 LABEL maintainer="xLasercut"
 
@@ -6,7 +6,7 @@ ARG WRK_DIR=/home/aq_server
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y curl bash bash-completion sqlite3 && \
+    apt-get install -y curl bash bash-completion && \
     mkdir ${WRK_DIR}
 
 WORKDIR ${WRK_DIR}
