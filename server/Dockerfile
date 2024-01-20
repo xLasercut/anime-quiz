@@ -6,7 +6,7 @@ ARG WRK_DIR=/home/aq_server
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y curl bash bash-completion && \
+    apt-get install -y curl bash bash-completion sqlite3 && \
     mkdir ${WRK_DIR}
 
 WORKDIR ${WRK_DIR}
