@@ -19,14 +19,14 @@
     "socket.io-client": "^4.7.4",
     "uuid": "^9.0.1",
     "vidstack": "^1.10.5",
-    "vue": "^3.4.16",
+    "vue": "^3.4.15",
     "vuetify": "^3.5.3",
     "webfontloader": "^1.6.28",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@babel/types": "^7.23.9",
-    "@types/node": "^20.11.16",
+    "@types/node": "^20.11.17",
     "@types/uuid": "^9.0.8",
     "@types/webfontloader": "^1.6.38",
     "@vitejs/plugin-vue": "^4.6.2",
