@@ -3,23 +3,29 @@
     <v-col cols="auto" v-for="player in gameStore.playerList">
       <game-tooltip location="top" :open-on-hover="false" v-model="show">
         <template #activator>
-          <div class="player-container">
-            <v-row justify="center">
-              <v-badge :dot="true" :color="badgeColor(player)">
-                <game-avatar :avatar="player.avatar" size="100"></game-avatar>
-              </v-badge>
+          <v-sheet rounded="lg" :width="playerCardWidth">
+            <v-row justify="center" :dense="true">
+              <game-avatar :avatar="player.avatar" :size="playerCardWidth" rounded="t-lg b-0"></game-avatar>
             </v-row>
-            <v-row justify="center">
-              <v-sheet class="player-name">
-                {{ player.displayName }}
-              </v-sheet>
+            <v-row justify="center" no-gutters>
+              <v-col cols="auto">
+                <div class="player-name">
+                  {{ player.displayName }}
+                </div>
+              </v-col>
             </v-row>
-            <v-row justify="center">
-              <v-sheet class="player-score">
-                {{ player.score }}
-              </v-sheet>
+            <v-row justify="center" no-gutters>
+              <div class="player-score">{{ player.score }}</div>
             </v-row>
-          </div>
+            <v-row justify="space-between" no-gutters>
+              <v-col cols="auto">
+                <v-icon :color="badgeColor(player)" size="small" icon="mdi-circle"></v-icon>
+              </v-col>
+              <v-col cols="auto">
+                <v-icon :color="skipIconColor(player)" size="small" :icon="skipIcon(player)"></v-icon>
+              </v-col>
+            </v-row>
+          </v-sheet>
         </template>
         <v-sheet class="player-guess" :color="player.scoreColor">
           {{ playerGuess(player) }}
@@ -42,6 +48,7 @@ const gameStore = useGameStore();
 
 let timeout: NodeJS.Timeout;
 const show = ref(false);
+const playerCardWidth = ref('150');
 
 function playerGuess(player: GamePlayerType): string {
   return `${player.guess.anime || '...'} - ${player.guess.title || '...'}`;
@@ -70,6 +77,20 @@ function badgeColor(player: GamePlayerType): string {
   return 'info';
 }
 
+function skipIconColor(player: GamePlayerType): string {
+  if (player.skipSong) {
+    return 'success';
+  }
+  return 'error';
+}
+
+function skipIcon(player: GamePlayerType): string {
+  if (player.skipSong) {
+    return 'mdi-check';
+  }
+  return 'mdi-close';
+}
+
 socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
   show.value = false;
 });
@@ -86,11 +107,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.player-container {
-  min-width: 150px;
-  max-width: 150px;
-}
-
 .player-guess {
   min-width: 150px;
   max-width: 150px;
@@ -101,20 +117,16 @@ onUnmounted(() => {
 }
 
 .player-name {
-  min-width: 100px;
-  max-width: 100px;
+  max-width: 150px;
   font-size: 11pt;
-  border-radius: 5px;
   word-wrap: break-word;
   text-align: center;
   margin-top: 5px;
 }
 
 .player-score {
-  min-width: 50px;
-  max-width: 50px;
+  max-width: 150px;
   font-size: 11pt;
-  border-radius: 0 0 25px 25px;
   text-align: center;
 }
 </style>

@@ -9,6 +9,7 @@ import {
   GameChatText,
   GameGuess,
   GamePlayer,
+  GamePlayerLifeLineType,
   GameRoomId,
   GameRoomSettings,
   GameRoomSettingsGameMode,
@@ -60,3 +61,4 @@ export type SongStatsType = z.infer<typeof SongStats>;
 export type SongStatsPlayCountType = z.infer<typeof SongStatsPlayCount>;
 export type SongStatsRecordsType = z.infer<typeof SongStatsRecords>;
 export type CombinedSongStatsType = z.infer<typeof CombinedSongStats>;
+export type GamePlayerLifeLineTypeType = z.infer<typeof GamePlayerLifeLineType>;

@@ -71,4 +71,11 @@ onMounted(() => {
 thead {
   z-index: 30;
 }
+
+.main-game-answer-container {
+  font-size: 16pt;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+}
 </style>

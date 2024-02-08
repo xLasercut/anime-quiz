@@ -70,6 +70,7 @@ socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
 });
 
 socket.on(SOCKET_EVENTS.STOP_GAME, () => {
+  show.value = false;
   clearInterval(timer);
 });
 
