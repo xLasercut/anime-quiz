@@ -3,6 +3,7 @@ import {
   ClientDataType,
   GameChatType,
   GameGuessType,
+  GamePlayerLifeLineTypeType,
   GameRoomSettingsType,
   SystemNotificationType,
   UserIdType
@@ -47,6 +48,10 @@ class Emitter {
     this._dbDataState = dependencies.dbDataState;
   }
 
+  public gameShowLifeLine(lifeLineType: GamePlayerLifeLineTypeType, sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, lifeLineType);
+  }
+
   public gameShowGuess(sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.GAME_SHOW_GUESS);
   }
@@ -61,6 +66,10 @@ class Emitter {
 
   public gameNewRound(sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.GAME_NEW_ROUND);
+  }
+
+  public startGame(sid: string) {
+    this._client(sid).emit(SOCKET_EVENTS.START_GAME);
   }
 
   public stopGame(sid: string) {

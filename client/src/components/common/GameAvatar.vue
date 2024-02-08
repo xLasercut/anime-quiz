@@ -11,6 +11,12 @@ const props = defineProps({
   avatar: {
     type: String as PropType<AvatarType>,
     required: true
+  },
+  border: {
+    type: Boolean,
+    default: (): boolean => {
+      return true;
+    }
   }
 });
 
@@ -19,9 +25,12 @@ function getAvatarUrl(): string {
 }
 
 function avatarStyle() {
-  return {
-    border: '1px solid rgb(var(--v-theme-on-surface))'
-  };
+  if (props.border) {
+    return {
+      border: '1px solid rgb(var(--v-theme-on-surface))'
+    };
+  }
+  return {};
 }
 </script>
 

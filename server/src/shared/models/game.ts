@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Admin, Avatar, DisplayName, User, UserId } from './user';
+import { Admin, Avatar, DisplayName, UserId } from './user';
 import { GAME_MODES } from '../game-modes';
 import { ClientData, NotificationColor } from './client';
 import { Song, SongType } from './song';
@@ -60,9 +60,12 @@ const GamePlayer = z.intersection(
   z.object({
     guess: GameGuess,
     score: GameScore,
-    scoreColor: NotificationColor
+    scoreColor: NotificationColor,
+    skipSong: z.boolean()
   })
 );
+
+const GamePlayerLifeLineType = z.union([z.literal('ANIME_HINT'), z.literal('SONG_HINT')]);
 
 const GameRoomState = z.object({
   currentSong: Song,
@@ -84,5 +87,6 @@ export {
   GamePlayer,
   GameRoomState,
   GameRoomSettingsSongType,
-  GameRoomSettingsLoadTime
+  GameRoomSettingsLoadTime,
+  GamePlayerLifeLineType
 };

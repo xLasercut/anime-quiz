@@ -1,6 +1,7 @@
 import {
   ClientDataType,
   GameGuessType,
+  GamePlayerLifeLineTypeType,
   GamePlayerType,
   GameRoomIdType,
   GameScoreType,
@@ -24,6 +25,8 @@ class SocketData {
   protected _songLoaded: boolean;
   protected _pendingScore: number;
   protected _scoreColor: NotificationColorType;
+  protected _skipSong: boolean;
+  protected _lifeLine: Record<GamePlayerLifeLineTypeType, boolean>;
 
   constructor(socket: Socket, logger: Logger) {
     this._logger = logger;
@@ -46,6 +49,27 @@ class SocketData {
     this._songLoaded = false;
     this._pendingScore = 0;
     this._scoreColor = 'error';
+    this._skipSong = false;
+    this._lifeLine = {
+      ANIME_HINT: true,
+      SONG_HINT: true
+    };
+  }
+
+  public useLifeLine(lifeLineType: GamePlayerLifeLineTypeType): boolean {
+    if (this._lifeLine[lifeLineType]) {
+      this._lifeLine[lifeLineType] = false;
+      return true;
+    }
+    return false;
+  }
+
+  public get skipSong(): boolean {
+    return this._skipSong;
+  }
+
+  public set skipSong(skipSong: boolean) {
+    this._skipSong = skipSong;
   }
 
   public get clientData(): ClientDataType {
@@ -57,7 +81,8 @@ class SocketData {
       ...this._clientData,
       guess: this._gameGuess,
       score: this._score,
-      scoreColor: this._scoreColor
+      scoreColor: this._scoreColor,
+      skipSong: this._skipSong
     };
   }
 
@@ -97,8 +122,12 @@ class SocketData {
     return gameRooms[0];
   }
 
-  public resetScore(): void {
+  public newGame(): void {
     this._score = 0;
+    this._lifeLine = {
+      ANIME_HINT: true,
+      SONG_HINT: true
+    };
   }
 
   public updateUserSettings(clientData: ClientDataType): void {
@@ -143,6 +172,7 @@ class SocketData {
       anime: '',
       title: ''
     };
+    this._skipSong = false;
   }
 
   protected _getScoreColor(): NotificationColorType {

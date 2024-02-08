@@ -3,8 +3,8 @@ import { SOCKET_EVENTS } from '../shared/events';
 import { GameListGeneratorFactory } from '../game-state/game-list-generator';
 import { Socket } from '../types';
 import { HandlerDependencies } from '../interfaces';
-import { GameGuessType, GameRoomIdType, GameRoomSettingsType } from '../shared/models/types';
-import { GameGuess } from '../shared/models/game';
+import { GameGuessType, GamePlayerLifeLineTypeType, GameRoomIdType, GameRoomSettingsType } from '../shared/models/types';
+import { GameGuess, GamePlayerLifeLineType } from '../shared/models/game';
 
 class GameHandler extends ServerHandler {
   protected _generatorFactory: GameListGeneratorFactory;
@@ -25,8 +25,9 @@ class GameHandler extends ServerHandler {
       const generator = this._generatorFactory.getGenerator(roomSettings, playerIds);
       const gameSongList = generator.generate();
       this._gameRooms.getRoom(roomId).state.newGame(gameSongList);
-      this._gameRooms.getRoom(roomId).state.resetScore();
+      this._gameRooms.getRoom(roomId).state.playerNewGame();
       this._emitter.updateStorePlayerList(roomId);
+      this._emitter.startGame(roomId);
       this._logger.info('new game', {
         roomId: roomId,
         settings: roomSettings,
@@ -47,20 +48,34 @@ class GameHandler extends ServerHandler {
       this._socket.data.gameGuess = gameGuess;
       this._socket.data.pendingScore = this._gameRooms.getRoom(roomId).state.calculateScore(gameGuess);
       this._emitter.updateStoreGameGuess(gameGuess, this._socket.id);
+    },
+    [SOCKET_EVENTS.GAME_SKIP_SONG]: (callback: Function) => {
+      this._socket.data.skipSong = true;
+      const roomId = this._socket.data.currentGameRoom;
+      this._emitter.updateStorePlayerList(roomId);
+      callback(true);
+    },
+    [SOCKET_EVENTS.GAME_USE_LIFE_LINE]: (_lifeLineType: GamePlayerLifeLineTypeType) => {
+      const lifeLineType = GamePlayerLifeLineType.parse(_lifeLineType);
+      const success = this._socket.data.useLifeLine(lifeLineType);
+      if (success) {
+        this._emitter.gameShowLifeLine(lifeLineType, this._socket.id);
+      }
     }
   };
 
   protected async _newRound(roomId: GameRoomIdType, settings: GameRoomSettingsType) {
     const startPosition = Math.random();
     this._emitter.gameNewRound(roomId);
-    this._emitter.updateStoreGameState(roomId);
     this._gameRooms.getRoom(roomId).state.newRound();
+    this._emitter.updateStoreGameState(roomId);
+    this._emitter.updateStorePlayerList(roomId);
     await this._gameRooms.getRoom(roomId).state.startTimeout(2000);
     this._emitter.gameStartLoad(roomId, startPosition, settings.guessTime);
     this._gameRooms.getRoom(roomId).state.songOverride = undefined;
     await this._gameRooms.getRoom(roomId).state.waitPlayerLoaded(settings.loadTime * 1000);
     this._emitter.gameStartCountdown(roomId);
-    await this._gameRooms.getRoom(roomId).state.startTimeout(settings.guessTime * 1000);
+    await this._gameRooms.getRoom(roomId).state.startCountdown(settings.guessTime * 1000);
     this._gameRooms.getRoom(roomId).state.updateScore();
     this._emitter.updateStorePlayerList(roomId);
     this._emitter.gameShowGuess(roomId);

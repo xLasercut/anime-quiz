@@ -108,10 +108,35 @@ class GameState {
     });
   }
 
+  public async startCountdown(duration: number): Promise<void> {
+    const tick = 500;
+    this._clearCountdown();
+    let time = 0;
+    return new Promise((resolve) => {
+      this._timer = setInterval(() => {
+        if (time >= duration || this._playerSkippedSong()) {
+          this._clearCountdown();
+          resolve();
+        }
+        time += tick;
+      }, tick);
+    });
+  }
+
   protected _playerLoaded(): boolean {
     for (const socketId of this._io.getSocketIds(this._roomId)) {
       const socket = this._io.sockets.sockets.get(socketId) as Socket;
       if (!socket.data.songLoaded) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  protected _playerSkippedSong(): boolean {
+    for (const socketId of this._io.getSocketIds(this._roomId)) {
+      const socket = this._io.sockets.sockets.get(socketId) as Socket;
+      if (!socket.data.skipSong) {
         return false;
       }
     }
@@ -153,9 +178,9 @@ class GameState {
     return this._currentSongCount < this._gameSongList.length - 1 && this._playing;
   }
 
-  public resetScore(): void {
+  public playerNewGame(): void {
     for (const socketId of this._io.getSocketIds(this._roomId)) {
-      this._io.sockets.sockets.get(socketId)?.data.resetScore();
+      this._io.sockets.sockets.get(socketId)?.data.newGame();
     }
   }
 

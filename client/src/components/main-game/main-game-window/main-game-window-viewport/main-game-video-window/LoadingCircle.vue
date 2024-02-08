@@ -32,11 +32,16 @@ socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
   show.value = false;
 });
 
+socket.on(SOCKET_EVENTS.STOP_GAME, () => {
+  show.value = false;
+});
+
 onUnmounted(() => {
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
   socket.off(SOCKET_EVENTS.GAME_START_LOAD);
   socket.off(SOCKET_EVENTS.GAME_START_COUNTDOWN);
   socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);
+  socket.off(SOCKET_EVENTS.STOP_GAME);
 });
 </script>
 

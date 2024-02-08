@@ -22,19 +22,40 @@ import MainAnswerQuestionDisplay from '@/components/main-game/main-game-window/m
 import { useGameStore } from '@/plugins/store/game';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
+import { GamePlayerLifeLineTypeType } from '@/assets/shared/models/types';
+import { GamePlayerLifeLineType } from '@/assets/shared/models/game';
+import MainAnswerHintDisplay from '@/components/main-game/main-game-window/main-game-window-answer-display/MainAnswerHintDisplay.vue';
 
 const gameStore = useGameStore();
 const show = ref(false);
+const showHint = ref(false);
+
+socket.on(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, (_lifeLineType: GamePlayerLifeLineTypeType) => {
+  const lifeLineType = GamePlayerLifeLineType.parse(_lifeLineType);
+  if (lifeLineType === 'ANIME_HINT') {
+    showHint.value = true;
+  }
+});
 
 socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
   show.value = false;
+  showHint.value = false;
 });
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
   show.value = true;
+  showHint.value = false;
+});
+
+socket.on(SOCKET_EVENTS.STOP_GAME, () => {
+  showHint.value = false;
 });
 
 function answerDisplay() {
+  if (showHint.value) {
+    return MainAnswerHintDisplay;
+  }
+
   if (show.value) {
     return MainAnswerAnswerDisplay;
   }
@@ -44,6 +65,8 @@ function answerDisplay() {
 onUnmounted(() => {
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
   socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);
+  socket.off(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE);
+  socket.off(SOCKET_EVENTS.STOP_GAME);
 });
 </script>
 
