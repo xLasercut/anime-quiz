@@ -33,9 +33,3 @@ function avatarStyle() {
   return {};
 }
 </script>
-
-<style scoped>
-img {
-  border: 1px solid black;
-}
-</style>
