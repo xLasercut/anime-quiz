@@ -19,7 +19,7 @@
     "socket.io-client": "^4.7.4",
     "uuid": "^9.0.1",
     "vidstack": "^1.10.5",
-    "vue": "^3.4.15",
+    "vue": "^3.4.16",
     "vuetify": "^3.5.3",
     "webfontloader": "^1.6.28",
     "zod": "^3.22.4"
