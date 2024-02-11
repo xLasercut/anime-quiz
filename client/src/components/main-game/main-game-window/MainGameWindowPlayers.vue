@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" :dense="true">
     <v-col cols="auto" v-for="player in gameStore.playerList">
       <game-tooltip location="top" :open-on-hover="false" v-model="show">
         <template #activator>
@@ -19,10 +19,10 @@
             </v-row>
             <v-row justify="space-between" no-gutters>
               <v-col cols="auto">
-                <v-icon :color="badgeColor(player)" size="small" icon="mdi-circle"></v-icon>
+                <v-icon :color="badgeColor(player)" size="x-small" icon="mdi-circle"></v-icon>
               </v-col>
               <v-col cols="auto">
-                <v-icon :color="skipIconColor(player)" size="small" :icon="skipIcon(player)"></v-icon>
+                <v-icon :color="skipIconColor(player)" size="x-small" :icon="skipIcon(player)"></v-icon>
               </v-col>
             </v-row>
           </v-sheet>
