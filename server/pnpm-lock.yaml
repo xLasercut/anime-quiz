@@ -9,8 +9,8 @@ dependencies:
     specifier: ^1.6.7
     version: 1.6.7
   better-sqlite3:
-    specifier: ^9.4.0
-    version: 9.4.0
+    specifier: ^9.4.1
+    version: 9.4.1
   socket.io:
     specifier: ^4.7.4
     version: 4.7.4
@@ -206,8 +206,8 @@ packages:
     engines: {node: ^4.5.0 || >= 5.9}
     dev: false
 
-  /better-sqlite3@9.4.0:
-    resolution: {integrity: sha512-5kynxekMxSjCMiFyUBLHggFcJkCmiZi6fUkiGz/B5GZOvdRWQJD0klqCx5/Y+bm2AKP7I/DHbSFx26AxjruWNg==}
+  /better-sqlite3@9.4.1:
+    resolution: {integrity: sha512-QpqiQeMI4WkE+dQ68zTMX5OzlPGc7lXIDP1iKUt4Omt9PdaVgzKYxHIJRIzt1E+RUBQoFmkip/IbvzyrxehAIg==}
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
