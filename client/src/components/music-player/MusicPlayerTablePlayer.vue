@@ -5,7 +5,7 @@
         <media-player
           ref="player"
           autoplay
-          :src="song.src"
+          :src="mediaSrc()"
           :currentTime="currentTime"
           @pause="playing = false"
           @play="playing = true"
@@ -71,6 +71,13 @@ watch(
     }
   }
 );
+
+function mediaSrc(): string {
+  if (clientStore.audioOnly && props.song.audioSrc) {
+    return props.song.audioSrc;
+  }
+  return props.song.src;
+}
 
 function updateCurrentTime(event: MediaTimeUpdateEvent) {
   currentTime.value = event.detail.currentTime;

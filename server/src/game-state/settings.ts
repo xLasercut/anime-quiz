@@ -14,8 +14,8 @@ class GameSettings {
   protected _guessTime: GameRoomSettingsGuessTimeType = 30;
   protected _loadTime: GameRoomSettingsLoadTimeType = 10;
   protected _duplicate: boolean = false;
-  protected _leastPlayed: boolean = false;
-  protected _gameMode: GameRoomSettingsGameModeType = GAME_MODES.NORMAL;
+  protected _leastPlayed: boolean = true;
+  protected _gameMode: GameRoomSettingsGameModeType = GAME_MODES.BALANCED_PLUS;
   protected _songType: SongTypeType[] = [SONG_TYPES.OP, SONG_TYPES.ED, SONG_TYPES.INSERT];
 
   public get dict(): GameRoomSettingsType {

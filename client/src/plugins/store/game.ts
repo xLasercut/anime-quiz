@@ -22,7 +22,8 @@ const useGameStore = defineStore('game', {
         songTitle: '',
         artist: '',
         animeName: [],
-        animeId: []
+        animeId: [],
+        audioSrc: ''
       },
       playing: false,
       currentSongCount: 0,
@@ -37,8 +38,11 @@ const useGameStore = defineStore('game', {
     updatePlayerList(playerList: GamePlayerType[]) {
       this.playerList = playerList;
     },
-    updateGameState(gameState: GameRoomStateType) {
+    updateGameState(gameState: GameRoomStateType, audioOnly: boolean) {
       this.currentSong = gameState.currentSong;
+      if (audioOnly && gameState.currentSong.audioSrc) {
+        this.currentSong.src = gameState.currentSong.audioSrc;
+      }
       this.currentSongCount = gameState.currentSongCount;
       this.maxSongCount = gameState.maxSongCount;
       this.playing = gameState.playing;
