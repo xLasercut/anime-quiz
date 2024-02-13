@@ -17,6 +17,7 @@ import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
 import { GamePlayerLifeLineTypeType } from '@/assets/shared/models/types';
 import { GamePlayerLifeLineType } from '@/assets/shared/models/game';
+import { getGameNameHint } from '@/assets/game-helpers';
 
 const gameStore = useGameStore();
 const show = ref(false);
@@ -30,6 +31,10 @@ socket.on(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, (_lifeLineType: GamePlayerLifeLineT
 });
 
 const songTitle = computed((): string => {
+  if (showHint.value) {
+    return getGameNameHint(gameStore.currentSong.songTitle);
+  }
+
   if (show.value) {
     return gameStore.currentSong.songTitle;
   }
@@ -60,8 +65,13 @@ socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
   showHint.value = false;
 });
 
+socket.on(SOCKET_EVENTS.STOP_GAME, () => {
+  showHint.value = false;
+});
+
 onUnmounted(() => {
   socket.off(SOCKET_EVENTS.GAME_NEW_ROUND);
   socket.off(SOCKET_EVENTS.GAME_SHOW_GUESS);
+  socket.off(SOCKET_EVENTS.STOP_GAME);
 });
 </script>

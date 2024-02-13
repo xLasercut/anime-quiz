@@ -56,4 +56,41 @@ function canParseValue(v: any, parser: any): boolean {
   }
 }
 
-export { getDefaultTheme, isMatchFilter, debounce, generateId, canParseValue, getLocalStorageNumber };
+function getIndexToShow(showCharacterCount: number, nameLength: number, nameSplit: string[]): Set<number> {
+  const indexToShow: Set<number> = new Set();
+  while (indexToShow.size < showCharacterCount) {
+    const randomIndex = Math.floor(Math.random() * nameLength);
+    const character = nameSplit[randomIndex];
+    if (!indexToShow.has(randomIndex) && character !== ' ') {
+      indexToShow.add(randomIndex);
+    }
+  }
+  return indexToShow;
+}
+
+function getGameNameHint(originalName: string): string {
+  const nameSplit = originalName.split('');
+  const nameLength = nameSplit.length;
+
+  let showCharacterCount = 4;
+  if (showCharacterCount >= nameLength) {
+    showCharacterCount = Math.floor(nameLength / 2);
+  }
+
+  const indexToShow = getIndexToShow(showCharacterCount, nameLength, nameSplit);
+
+  const nameHintSplit = [];
+
+  for (let i = 0; i < nameLength; i++) {
+    if (indexToShow.has(i) || nameSplit[i] === ' ') {
+      nameHintSplit.push(nameSplit[i]);
+      continue;
+    }
+
+    nameHintSplit.push('_');
+  }
+
+  return nameHintSplit.join('');
+}
+
+export { getDefaultTheme, isMatchFilter, debounce, generateId, canParseValue, getLocalStorageNumber, getGameNameHint };
