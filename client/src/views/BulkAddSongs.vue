@@ -8,7 +8,7 @@
             <dialog-text-field label="Anime Slug" v-model.trim="animeSlug" :rules="animeSlugRules"></dialog-text-field>
             <v-row :dense="true">
               <v-col cols="auto">
-                <icon-btn icon="mdi-reload" color="warning" type="submit" :disabled="!loadSongsValid">Load Songs </icon-btn>
+                <icon-btn icon="mdi-reload" color="warning" type="submit" :disabled="disabled || !loadSongsValid">Load Songs </icon-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -42,17 +42,18 @@
 
 <script setup lang="ts">
 import DialogMultiAnimeAutocomplete from '@/components/common/dialogs/DialogMultiAnimeAutocomplete.vue';
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import axios from 'axios';
 import { SongType } from '@/assets/shared/models/types';
 import { AnimeThemesResponse, AnimeThemesResponseString } from '@/assets/models';
-import { AnimeThemesResponseAnimeThemeType } from '@/assets/types';
+import { AnimeThemesResponseAnimeThemeType, SendNotification } from '@/assets/types';
 import BulkAddSongSongInfo from '@/components/bulk-add-songs/BulkAddSongSongInfo.vue';
 import { canParseValue, generateId } from '@/assets/game-helpers';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { CLIENT_EVENTS } from '@/assets/events';
 
 const anime = ref([]);
 const animeSlug = ref('');
@@ -66,27 +67,38 @@ const animeSlugRules = [
   (v: string): boolean | string => canParseValue(v, AnimeThemesResponseString) || 'Invalid Anime Slug'
 ];
 
+const sendNotification = inject(CLIENT_EVENTS.SYSTEM_NOTIFICATION) as SendNotification;
+
 async function loadSongs() {
   if (!loadSongsValid.value) {
     return;
   }
 
-  const url = `https://api.animethemes.moe/anime/${animeSlug.value}?include=animethemes.animethemeentries.videos,animethemes.song,animethemes.song.artists`;
-  const response = await axios.get(url);
-  const parsedResponse = AnimeThemesResponse.parse(response.data);
+  disabled.value = true;
 
-  songs.value = [];
+  try {
+    const url = `https://api.animethemes.moe/anime/${animeSlug.value}?include=animethemes.animethemeentries.videos,animethemes.song,animethemes.song.artists`;
+    const response = await axios.get(url);
+    const parsedResponse = AnimeThemesResponse.parse(response.data);
 
-  for (const animeTheme of parsedResponse.anime.animethemes) {
-    songs.value.push({
-      songId: generateId('song'),
-      src: getVideoLink(animeTheme),
-      type: animeTheme.type,
-      songTitle: animeTheme.song.title,
-      artist: getArtist(animeTheme),
-      animeId: anime.value,
-      animeName: []
-    });
+    songs.value = [];
+
+    for (const animeTheme of parsedResponse.anime.animethemes) {
+      songs.value.push({
+        songId: generateId('song'),
+        src: getVideoLink(animeTheme),
+        type: animeTheme.type,
+        songTitle: animeTheme.song.title,
+        artist: getArtist(animeTheme),
+        animeId: anime.value,
+        animeName: []
+      });
+    }
+    disabled.value = false;
+  } catch (e) {
+    disabled.value = false;
+    console.error(e);
+    sendNotification('error', 'Failed to generate songs to add. See console log');
   }
 }
 
@@ -127,7 +139,8 @@ async function addSongs() {
     disabled.value = false;
   } catch (e) {
     disabled.value = false;
-    console.log('failed to add song');
+    console.error(e);
+    sendNotification('error', 'Failed to add songs. See console log');
   }
 }
 
