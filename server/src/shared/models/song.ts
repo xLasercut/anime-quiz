@@ -34,6 +34,20 @@ const SongArtist = z.union([
     })
 ]);
 
+const SongAudioSrc = z.union([
+  z.undefined().transform(() => null),
+  z.null(),
+  z
+    .string()
+    .trim()
+    .transform((val: string) => {
+      if (!val) {
+        return null;
+      }
+      return val;
+    })
+]);
+
 const SongTitle = z.string().trim().min(1);
 const SongSrc = z.string().trim().min(1).url();
 
@@ -44,7 +58,8 @@ const Song = z.object({
   songTitle: SongTitle,
   artist: SongArtist,
   animeName: z.array(AnimeName),
-  animeId: z.array(AnimeId)
+  animeId: z.array(AnimeId),
+  audioSrc: SongAudioSrc
 });
 
-export { SongId, SongType, SongArtist, SongTitle, SongSrc, Song };
+export { SongId, SongType, SongArtist, SongTitle, SongSrc, Song, SongAudioSrc };

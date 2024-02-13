@@ -18,7 +18,14 @@
     </template>
 
     <template #item.src="{ item }">
-      <a :href="item.src" target="_blank">View</a>
+      <v-row :dense="true">
+        <v-col cols="auto">
+          <a :href="item.src" target="_blank">Video</a>
+        </v-col>
+        <v-col cols="auto">
+          <a :href="item.audioSrc" target="_blank" v-if="item.audioSrc">Audio</a>
+        </v-col>
+      </v-row>
     </template>
 
     <template #item.action="{ item }">

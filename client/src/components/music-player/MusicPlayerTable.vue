@@ -84,7 +84,8 @@ const currentSong = ref<SongType>({
   songTitle: '',
   artist: '',
   animeName: [],
-  animeId: []
+  animeId: [],
+  audioSrc: ''
 });
 const filters = ref({
   anime: '',

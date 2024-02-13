@@ -10,6 +10,7 @@ interface State {
   dialogView: ClientDialogRoute;
   volume: number;
   clientData: ClientDataType;
+  audioOnly: boolean;
 }
 
 const useClientStore = defineStore('client', {
@@ -27,7 +28,8 @@ const useClientStore = defineStore('client', {
         auth: false,
         avatar: '',
         socketId: ''
-      }
+      },
+      audioOnly: false
     };
   },
   actions: {
@@ -42,6 +44,9 @@ const useClientStore = defineStore('client', {
     },
     updateVolume(volume: number) {
       this.volume = volume;
+    },
+    toggleAudioOnly() {
+      this.audioOnly = !this.audioOnly;
     }
   }
 });

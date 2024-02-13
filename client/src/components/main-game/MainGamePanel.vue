@@ -1,5 +1,6 @@
 <template>
   <nav-btn color="info" icon="mdi-playlist-music" @click="openSongPicker()" v-if="clientStore.clientData.admin"> Song </nav-btn>
+  <panel-audio-only-toggle></panel-audio-only-toggle>
   <panel-volume-slider></panel-volume-slider>
   <nav-btn icon="mdi-stop" color="error" @click="stopGame()" v-if="showStopBtn()">Stop</nav-btn>
   <nav-btn icon="mdi-play" color="success" @click="startGame()" v-if="showStartBtn()">Start</nav-btn>
@@ -18,6 +19,7 @@ import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useGameStore } from '@/plugins/store/game';
 import PanelVolumeSlider from '@/components/common/panel/PanelVolumeSlider.vue';
+import PanelAudioOnlyToggle from '@/components/common/panel/PanelAudioOnlyToggle.vue';
 
 const clientStore = useClientStore();
 const gameStore = useGameStore();

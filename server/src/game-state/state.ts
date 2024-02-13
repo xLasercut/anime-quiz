@@ -12,7 +12,8 @@ class GameState {
     songTitle: '',
     artist: '',
     animeName: [],
-    animeId: []
+    animeId: [],
+    audioSrc: ''
   };
   protected _currentSongCount: number = 0;
   protected _maxSongCount: number = 0;

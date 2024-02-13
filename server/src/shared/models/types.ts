@@ -21,6 +21,7 @@ import {
 } from './game';
 import { BotMessage, MessageCommand } from './bot-message';
 import { CombinedSongStats, SongStats, SongStatsPlayCount, SongStatsRecords } from './song-stats';
+import { AnimeThemesResponseAnimeTheme, AnimeThemesResponseVideo } from './anime-themes';
 
 export type ClientDataType = z.infer<typeof ClientData>;
 export type NotificationColorType = z.infer<typeof NotificationColor>;
@@ -62,3 +63,5 @@ export type SongStatsPlayCountType = z.infer<typeof SongStatsPlayCount>;
 export type SongStatsRecordsType = z.infer<typeof SongStatsRecords>;
 export type CombinedSongStatsType = z.infer<typeof CombinedSongStats>;
 export type GamePlayerLifeLineTypeType = z.infer<typeof GamePlayerLifeLineType>;
+export type AnimeThemesResponseAnimeThemeType = z.infer<typeof AnimeThemesResponseAnimeTheme>;
+export type AnimeThemesResponseVideoType = z.infer<typeof AnimeThemesResponseVideo>;

@@ -26,6 +26,7 @@
           v-model:src.trim="songs[index].src"
           v-model:artist.trim="songs[index].artist"
           v-model:type.trim="songs[index].type"
+          v-model:audio-src.trim="songs[index].audioSrc"
           :disabled="disabled"
           @remove-song="removeSong($event)"
         ></bulk-add-song-song-info>
@@ -47,14 +48,19 @@ import { computed, inject, ref } from 'vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import axios from 'axios';
-import { SongIdType, SongType } from '@/assets/shared/models/types';
-import { AnimeThemesResponse, AnimeThemesResponseString } from '@/assets/models';
-import { AnimeThemesResponseAnimeThemeType, SendNotification } from '@/assets/types';
+import { AnimeThemesResponseAnimeThemeType, AnimeThemesResponseVideoType, SongIdType, SongType } from '@/assets/shared/models/types';
+import { SendNotification } from '@/assets/types';
 import BulkAddSongSongInfo from '@/components/bulk-add-songs/BulkAddSongSongInfo.vue';
 import { canParseValue, generateId } from '@/assets/game-helpers';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { CLIENT_EVENTS } from '@/assets/events';
+import { AnimeThemesResponse, AnimeThemesResponseString } from '@/assets/shared/models/anime-themes';
+
+interface SongSrc {
+  video: string;
+  audio: string;
+}
 
 const anime = ref([]);
 const animeSlug = ref('');
@@ -78,21 +84,23 @@ async function loadSongs() {
   disabled.value = true;
 
   try {
-    const url = `https://api.animethemes.moe/anime/${animeSlug.value}?include=animethemes.animethemeentries.videos,animethemes.song,animethemes.song.artists`;
+    const url = `https://api.animethemes.moe/anime/${animeSlug.value}?include=animethemes.animethemeentries.videos,animethemes.song,animethemes.song.artists,animethemes.animethemeentries.videos.audio`;
     const response = await axios.get(url);
     const parsedResponse = AnimeThemesResponse.parse(response.data);
 
     songs.value = [];
 
     for (const animeTheme of parsedResponse.anime.animethemes) {
+      const songSrc = getSongSrc(animeTheme);
       songs.value.push({
         songId: generateId('song'),
-        src: getVideoLink(animeTheme),
+        src: songSrc.video,
         type: animeTheme.type,
         songTitle: animeTheme.song.title,
         artist: getArtist(animeTheme),
         animeId: anime.value,
-        animeName: []
+        animeName: [],
+        audioSrc: songSrc.audio
       });
     }
     disabled.value = false;
@@ -115,15 +123,33 @@ function getArtist(animeTheme: AnimeThemesResponseAnimeThemeType): string {
     .join(' & ');
 }
 
-function getVideoLink(animeTheme: AnimeThemesResponseAnimeThemeType): string {
+function getSongSrc(animeTheme: AnimeThemesResponseAnimeThemeType): SongSrc {
+  let videos: AnimeThemesResponseVideoType[] = [];
+
   for (const entry of animeTheme.animethemeentries) {
-    for (const video of entry.videos) {
-      if (video.resolution === 720) {
-        return video.link;
-      }
+    videos = videos.concat(entry.videos);
+  }
+
+  if (videos.length <= 0) {
+    return {
+      video: '',
+      audio: ''
+    };
+  }
+
+  for (const video of videos) {
+    if (video.resolution === 720) {
+      return {
+        video: video.link,
+        audio: video.audio.link || ''
+      };
     }
   }
-  return animeTheme.animethemeentries[0].videos[0].link;
+
+  return {
+    video: animeTheme.animethemeentries[0].videos[0].link,
+    audio: animeTheme.animethemeentries[0].videos[0].audio.link || ''
+  };
 }
 
 const showAddSongsButton = computed(() => {
