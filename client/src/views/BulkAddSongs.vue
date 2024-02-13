@@ -104,6 +104,10 @@ async function loadSongs() {
 }
 
 function getArtist(animeTheme: AnimeThemesResponseAnimeThemeType): string {
+  if (animeTheme.song.artists.length <= 0) {
+    return '';
+  }
+
   return animeTheme.song.artists
     .map((artist) => {
       return artist.name;
