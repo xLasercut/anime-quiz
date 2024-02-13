@@ -88,8 +88,11 @@ const props = defineProps({
     required: true
   },
   artist: {
-    type: String,
-    required: true
+    type: String as PropType<string | null>,
+    required: true,
+    default: (): string => {
+      return '';
+    }
   },
   type: {
     type: String as PropType<SongTypeType>,
