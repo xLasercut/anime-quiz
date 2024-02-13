@@ -47,14 +47,14 @@ import { computed, inject, ref } from 'vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import axios from 'axios';
-import { SongIdType, SongType } from '@/assets/shared/models/types';
-import { AnimeThemesResponse, AnimeThemesResponseString } from '@/assets/models';
-import { AnimeThemesResponseAnimeThemeType, SendNotification } from '@/assets/types';
+import { AnimeThemesResponseAnimeThemeType, SongIdType, SongType } from '@/assets/shared/models/types';
+import { SendNotification } from '@/assets/types';
 import BulkAddSongSongInfo from '@/components/bulk-add-songs/BulkAddSongSongInfo.vue';
 import { canParseValue, generateId } from '@/assets/game-helpers';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { CLIENT_EVENTS } from '@/assets/events';
+import { AnimeThemesResponse, AnimeThemesResponseString } from '@/assets/shared/models/anime-themes';
 
 const anime = ref([]);
 const animeSlug = ref('');
