@@ -15,13 +15,13 @@
     <dialog-text-field
       label="Title"
       v-model.trim="adminStore.songInEdit.songTitle"
-      :rules="songTitleRules"
+      :rules="SONG_TITLE_RULES"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
       label="Src"
       v-model.trim="adminStore.songInEdit.src"
-      :rules="songSrcRules"
+      :rules="SONG_SRC_RULES"
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
@@ -34,7 +34,7 @@
       v-model.trim="adminStore.songInEdit.type"
       :disabled="adminStore.deleteModeDisabled || disabled"
       :items="songTypes"
-      :rules="songTypeRules"
+      :rules="SONG_TYPE_RULES"
     ></dialog-select>
     <dialog-actions :disabled="disabled" @dialog:close="$emit('dialog:close')"></dialog-actions>
   </dialog-form>
@@ -47,33 +47,18 @@ import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogMultiAnimeAutocomplete from '@/components/common/dialogs/DialogMultiAnimeAutocomplete.vue';
-import { canParseValue } from '@/assets/game-helpers';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { socket } from '@/plugins/socket';
-import { SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
 import { SONG_TYPES } from '@/assets/shared/song-types';
-import { SONG_ID_RULES } from '@/assets/form-rules';
+import { SONG_ID_RULES, SONG_SRC_RULES, SONG_TITLE_RULES, SONG_TYPE_RULES } from '@/assets/form-rules';
 
 const adminStore = useAdminStore();
 const valid = ref(false);
 const disabled = ref(false);
 const songTypes = Object.values(SONG_TYPES);
 const emit = defineEmits(['dialog:close']);
-
-const songTitleRules = [
-  (v: string): boolean | string => !!v || 'Song Title required',
-  (v: string): boolean | string => canParseValue(v, SongTitle) || 'Invalid Song Title'
-];
-const songSrcRules = [
-  (v: string): boolean | string => !!v || 'Song Source required',
-  (v: string): boolean | string => canParseValue(v, SongSrc) || 'Invalid Song Source'
-];
-const songTypeRules = [
-  (v: string): boolean | string => !!v || 'Song Type required',
-  (v: string): boolean | string => canParseValue(v, SongType) || 'Invalid Type Source'
-];
 
 const CHANGE_MAP = {
   [DATABASE_EDIT_MODE.NEW]: SOCKET_EVENTS.ADMIN_NEW_SONG,
