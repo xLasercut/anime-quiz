@@ -1,5 +1,5 @@
 <template>
-  <div class="audio-only-prompt" v-show="show && clientStore.audioOnly && gameStore.currentSong.audioSrc">
+  <div class="audio-only-prompt" v-show="show">
     <h1>Audio Only</h1>
   </div>
 </template>
@@ -20,7 +20,9 @@ socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
 });
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
-  show.value = true;
+  if (clientStore.audioOnly && gameStore.currentSong.audioSrc) {
+    show.value = true;
+  }
 });
 
 socket.on(SOCKET_EVENTS.STOP_GAME, () => {
