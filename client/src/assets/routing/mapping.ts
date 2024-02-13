@@ -38,6 +38,8 @@ import MusicPlayer from '@/views/MusicPlayer.vue';
 import SongStatsEditPanel from '@/components/song-stats-edit/SongStatsEditPanel.vue';
 import SongStatsEdit from '@/views/SongStatsEdit.vue';
 import SongStatsEditDialog from '@/components/song-stats-edit/SongStatsEditDialog.vue';
+import BulkAddSongs from '@/views/BulkAddSongs.vue';
+import BulkAddSongsPanel from '@/components/bulk-add-songs/BulkAddSongsPanel.vue';
 
 const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -52,7 +54,8 @@ const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.MAIN_GAME]: MainGamePanel,
   [ROUTES.BOT_MESSAGE_EDIT]: BotMessageEditPanel,
   [ROUTES.MUSIC_PLAYER]: MusicPlayerPanel,
-  [ROUTES.SONG_STATS_EDIT]: SongStatsEditPanel
+  [ROUTES.SONG_STATS_EDIT]: SongStatsEditPanel,
+  [ROUTES.BULK_ADD_SONGS]: BulkAddSongsPanel
 };
 
 const VIEW_MAPPING: Record<ClientRoute, Component> = {
@@ -68,7 +71,8 @@ const VIEW_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.MAIN_GAME]: MainGame,
   [ROUTES.BOT_MESSAGE_EDIT]: BotMessageEdit,
   [ROUTES.MUSIC_PLAYER]: MusicPlayer,
-  [ROUTES.SONG_STATS_EDIT]: SongStatsEdit
+  [ROUTES.SONG_STATS_EDIT]: SongStatsEdit,
+  [ROUTES.BULK_ADD_SONGS]: BulkAddSongs
 };
 
 const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {

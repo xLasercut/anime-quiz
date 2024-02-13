@@ -1,6 +1,6 @@
 import { Admin, Avatar, DiscordId, DisplayName, UserId } from '@/assets/shared/models/user';
 import { canParseValue } from '@/assets/game-helpers';
-import { SongId } from '@/assets/shared/models/song';
+import { SongId, SongSrc, SongTitle, SongType } from '@/assets/shared/models/song';
 
 function isValidDiscordId(v: string): boolean {
   return canParseValue(v, DiscordId);
@@ -50,4 +50,27 @@ const SONG_ID_RULES = [
   (v: string): boolean | string => canParseValue(v, SongId) || 'Invalid Song ID'
 ];
 
-export { DISCORD_ID_RULES, DISPLAY_NAME_RULES, AVATAR_RULES, USER_ID_RULES, ADMIN_RULES, SONG_ID_RULES };
+const SONG_TITLE_RULES = [
+  (v: string): boolean | string => !!v || 'Song Title required',
+  (v: string): boolean | string => canParseValue(v, SongTitle) || 'Invalid Song Title'
+];
+const SONG_SRC_RULES = [
+  (v: string): boolean | string => !!v || 'Song Source required',
+  (v: string): boolean | string => canParseValue(v, SongSrc) || 'Invalid Song Source'
+];
+const SONG_TYPE_RULES = [
+  (v: string): boolean | string => !!v || 'Song Type required',
+  (v: string): boolean | string => canParseValue(v, SongType) || 'Invalid Type Source'
+];
+
+export {
+  DISCORD_ID_RULES,
+  DISPLAY_NAME_RULES,
+  AVATAR_RULES,
+  USER_ID_RULES,
+  ADMIN_RULES,
+  SONG_ID_RULES,
+  SONG_TITLE_RULES,
+  SONG_SRC_RULES,
+  SONG_TYPE_RULES
+};

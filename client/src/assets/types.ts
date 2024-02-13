@@ -1,6 +1,8 @@
 import { AnimeIdType, NotificationColorType } from '@/assets/shared/models/types';
 import { ClientDialogRoute } from '@/assets/routing/types';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { z } from 'zod';
+import { AnimeThemesResponseAnimeTheme } from '@/assets/models';
 
 export type SendNotification = (color: NotificationColorType, message: string) => void;
 export type RegisterSendNotification = (func: SendNotification) => void;
@@ -12,3 +14,4 @@ export interface AnimeString {
   animeId: AnimeIdType;
   animeName: string;
 }
+export type AnimeThemesResponseAnimeThemeType = z.infer<typeof AnimeThemesResponseAnimeTheme>;

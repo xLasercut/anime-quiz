@@ -105,6 +105,14 @@ const cards = ref([
     route: ROUTES.USER_EDIT,
     requireAdmin: true,
     icon: 'mdi-database-edit'
+  },
+  {
+    color: 'error',
+    title: 'Bulk Add Songs',
+    description: 'Bulk add songs',
+    route: ROUTES.BULK_ADD_SONGS,
+    requireAdmin: true,
+    icon: 'mdi-database-edit'
   }
 ]);
 
