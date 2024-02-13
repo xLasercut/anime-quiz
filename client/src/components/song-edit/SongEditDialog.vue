@@ -25,6 +25,11 @@
       :disabled="adminStore.deleteModeDisabled || disabled"
     ></dialog-text-field>
     <dialog-text-field
+      label="Audio Src"
+      v-model.trim="adminStore.songInEdit.audioSrc"
+      :disabled="adminStore.deleteModeDisabled || disabled"
+    ></dialog-text-field>
+    <dialog-text-field
       label="Artist"
       v-model.trim="adminStore.songInEdit.artist"
       :disabled="adminStore.deleteModeDisabled || disabled"

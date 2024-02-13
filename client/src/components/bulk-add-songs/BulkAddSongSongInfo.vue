@@ -36,6 +36,12 @@
         :disabled="disabled"
       ></dialog-text-field>
       <dialog-text-field
+        label="Audio Src"
+        :model-value="audioSrc"
+        @update:model-value="$emit('update:audioSrc', $event)"
+        :disabled="disabled"
+      ></dialog-text-field>
+      <dialog-text-field
         label="Artist"
         :model-value="artist"
         @update:model-value="$emit('update:artist', $event)"
@@ -94,13 +100,28 @@ const props = defineProps({
       return '';
     }
   },
+  audioSrc: {
+    type: String as PropType<string | null>,
+    required: true,
+    default: (): string => {
+      return '';
+    }
+  },
   type: {
     type: String as PropType<SongTypeType>,
     required: true
   }
 });
 
-const emit = defineEmits(['update:songId', 'update:songTitle', 'update:src', 'update:artist', 'update:type', 'removeSong']);
+const emit = defineEmits([
+  'update:songId',
+  'update:songTitle',
+  'update:src',
+  'update:artist',
+  'update:type',
+  'removeSong',
+  'update:audioSrc'
+]);
 
 const songTypes = Object.values(SONG_TYPES);
 

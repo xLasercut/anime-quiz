@@ -37,7 +37,8 @@ const useAdminStore = defineStore('admin', {
         src: '',
         songTitle: '',
         artist: '',
-        type: SONG_TYPES.OP
+        type: SONG_TYPES.OP,
+        audioSrc: ''
       },
       emojiInEdit: {
         emojiId: '',

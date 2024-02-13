@@ -3,17 +3,25 @@ import { z } from 'zod';
 const AnimeThemesResponseNumber = z.number();
 const AnimeThemesResponseString = z.string().trim().min(1);
 
+const AnimeThemesResponseAudio = z.object({
+  id: AnimeThemesResponseNumber,
+  basename: AnimeThemesResponseString,
+  filename: AnimeThemesResponseString,
+  link: AnimeThemesResponseString
+});
+
 const AnimeThemesResponseVideo = z.object({
   id: AnimeThemesResponseNumber,
   basename: AnimeThemesResponseString,
   filename: AnimeThemesResponseString,
   resolution: AnimeThemesResponseNumber,
-  link: AnimeThemesResponseString
+  link: AnimeThemesResponseString,
+  audio: AnimeThemesResponseAudio
 });
 
 const AnimeThemesResponseAnimeThemeEntry = z.object({
   id: AnimeThemesResponseNumber,
-  videos: z.array(AnimeThemesResponseVideo).min(1)
+  videos: z.array(AnimeThemesResponseVideo)
 });
 
 const AnimeThemesResponseArtist = z.object({
@@ -46,4 +54,11 @@ const AnimeThemesResponse = z.object({
   anime: AnimeThemesResponseAnime
 });
 
-export { AnimeThemesResponse, AnimeThemesResponseAnimeTheme, AnimeThemesResponseString };
+export {
+  AnimeThemesResponse,
+  AnimeThemesResponseAnimeTheme,
+  AnimeThemesResponseString,
+  AnimeThemesResponseAnime,
+  AnimeThemesResponseNumber,
+  AnimeThemesResponseVideo
+};

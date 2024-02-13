@@ -21,7 +21,8 @@ class AdminSongStatsHandler extends ServerHandler {
         songTitle: '',
         artist: '',
         animeName: [],
-        animeId: []
+        animeId: [],
+        audioSrc: ''
       });
       this._songStatsDb.newRecord(songStats);
       this._emitter.updateStoreSongStatsRecords();

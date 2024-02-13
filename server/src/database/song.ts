@@ -30,6 +30,7 @@ const MAIN_RAW_STATEMENTS = {
       songs.song_title,
       songs.type,
       songs.artist,
+      songs.audio_src,
       json_group_array(song_animes.anime_id) as anime_id,
       json_group_array(animes.anime_name) as anime_name
     FROM songs
@@ -60,7 +61,8 @@ const MAIN_RAW_STATEMENTS = {
       song_title = @songTitle,
       src = @src,
       artist = @artist,
-      type = @type
+      type = @type,
+      audio_src = @audioSrc
     WHERE song_id = @songId
   `,
   [STATEMENTS.DELETE_SONG_ANIME_BY_SONG_ID]: `
@@ -187,7 +189,8 @@ class SongDb extends ServerDb<SongType> {
           artist: dbSong.artist,
           type: dbSong.type,
           animeId: dbSong.anime_id,
-          animeName: dbSong.anime_name
+          animeName: dbSong.anime_name,
+          audioSrc: dbSong.audio_src
         };
         return Song.parse(song);
       });
