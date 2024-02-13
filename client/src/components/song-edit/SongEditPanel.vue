@@ -31,7 +31,8 @@ function newSong() {
     src: '',
     songTitle: '',
     artist: '',
-    type: SONG_TYPES.OP
+    type: SONG_TYPES.OP,
+    audioSrc: ''
   });
   adminStore.generateNewSongId();
   adminStore.updateEditMode(DATABASE_EDIT_MODE.NEW);
