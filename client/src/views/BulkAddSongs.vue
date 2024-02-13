@@ -27,6 +27,7 @@
           v-model:artist.trim="songs[index].artist"
           v-model:type.trim="songs[index].type"
           :disabled="disabled"
+          @remove-song="removeSong($event)"
         ></bulk-add-song-song-info>
       </v-col>
     </v-row>
@@ -46,7 +47,7 @@ import { computed, inject, ref } from 'vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import axios from 'axios';
-import { SongType } from '@/assets/shared/models/types';
+import { SongIdType, SongType } from '@/assets/shared/models/types';
 import { AnimeThemesResponse, AnimeThemesResponseString } from '@/assets/models';
 import { AnimeThemesResponseAnimeThemeType, SendNotification } from '@/assets/types';
 import BulkAddSongSongInfo from '@/components/bulk-add-songs/BulkAddSongSongInfo.vue';
@@ -154,5 +155,11 @@ async function sendAddSongRequest(song: SongType): Promise<void> {
       }
     });
   });
+}
+
+function removeSong(songId: SongIdType) {
+  const songIds = songs.value.map((song) => song.songId);
+  const indexToRemove = songIds.indexOf(songId);
+  songs.value.splice(indexToRemove, 1);
 }
 </script>
