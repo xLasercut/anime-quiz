@@ -25,7 +25,7 @@ const AnimeThemesResponseArtist = z.object({
 const AnimeThemesResponseSong = z.object({
   id: AnimeThemesResponseNumber,
   title: AnimeThemesResponseString,
-  artists: z.array(AnimeThemesResponseArtist).min(1)
+  artists: z.array(AnimeThemesResponseArtist).min(0)
 });
 
 const AnimeThemesResponseAnimeTheme = z.object({
