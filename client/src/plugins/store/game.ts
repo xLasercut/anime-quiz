@@ -2,9 +2,13 @@ import { defineStore } from 'pinia';
 import { GameGuessType, GamePlayerType, GameRoomStateType, SongType } from '@/assets/shared/models/types';
 import { SONG_TYPES } from '@/assets/shared/song-types';
 
+interface CurrentSongType extends SongType {
+  currentSongSrc: string;
+}
+
 interface State {
   playerList: GamePlayerType[];
-  currentSong: SongType;
+  currentSong: CurrentSongType;
   playing: boolean;
   currentSongCount: number;
   maxSongCount: number;
@@ -23,7 +27,8 @@ const useGameStore = defineStore('game', {
         artist: '',
         animeName: [],
         animeId: [],
-        audioSrc: ''
+        audioSrc: '',
+        currentSongSrc: ''
       },
       playing: false,
       currentSongCount: 0,
@@ -39,9 +44,12 @@ const useGameStore = defineStore('game', {
       this.playerList = playerList;
     },
     updateGameState(gameState: GameRoomStateType, audioOnly: boolean) {
-      this.currentSong = gameState.currentSong;
+      this.currentSong = {
+        ...gameState.currentSong,
+        currentSongSrc: gameState.currentSong.src
+      };
       if (audioOnly && gameState.currentSong.audioSrc) {
-        this.currentSong.src = gameState.currentSong.audioSrc;
+        this.currentSong.currentSongSrc = gameState.currentSong.audioSrc;
       }
       this.currentSongCount = gameState.currentSongCount;
       this.maxSongCount = gameState.maxSongCount;
