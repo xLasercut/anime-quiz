@@ -2,7 +2,7 @@
   <media-player
     ref="player"
     :muted="muted"
-    :src="gameStore.currentSong.src"
+    :src="gameStore.currentSong.currentSongSrc"
     :currentTime="currentTime"
     :volume="clientStore.volume / 100"
     @time-update="updateCurrentTime($event)"

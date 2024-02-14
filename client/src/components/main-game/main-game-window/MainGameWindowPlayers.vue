@@ -7,19 +7,17 @@
             <v-row justify="center" :dense="true">
               <game-avatar :avatar="player.avatar" :size="playerCardWidth" rounded="t-lg b-0"></game-avatar>
             </v-row>
-            <v-row justify="center" no-gutters>
-              <v-col cols="auto">
+            <v-row justify="space-between" no-gutters :dense="true">
+              <v-col cols="12">
                 <div class="player-name">
                   {{ player.displayName }}
                 </div>
               </v-col>
-            </v-row>
-            <v-row justify="center" no-gutters>
-              <div class="player-score">{{ player.score }}</div>
-            </v-row>
-            <v-row justify="space-between" no-gutters>
               <v-col cols="auto">
                 <v-icon :color="badgeColor(player)" size="x-small" icon="mdi-circle"></v-icon>
+              </v-col>
+              <v-col cols="auto">
+                <div class="player-score">{{ player.score }}</div>
               </v-col>
               <v-col cols="auto">
                 <v-icon :color="skipIconColor(player)" size="x-small" :icon="skipIcon(player)"></v-icon>
@@ -117,16 +115,18 @@ onUnmounted(() => {
 }
 
 .player-name {
-  max-width: 150px;
+  width: 150px;
   font-size: 11pt;
   word-wrap: break-word;
   text-align: center;
-  margin-top: 5px;
+  font-weight: bold;
 }
 
 .player-score {
-  max-width: 150px;
+  width: 100px;
   font-size: 11pt;
   text-align: center;
+  font-weight: bold;
+  word-wrap: break-word;
 }
 </style>

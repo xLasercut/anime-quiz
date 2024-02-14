@@ -20,7 +20,7 @@ socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {
 });
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {
-  if (clientStore.audioOnly && gameStore.currentSong.audioSrc) {
+  if (clientStore.audioOnly && gameStore.currentSong.audioSrc === gameStore.currentSong.currentSongSrc) {
     show.value = true;
   }
 });
