@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.7",
-    "better-sqlite3": "^9.4.1",
+    "better-sqlite3": "^9.4.3",
     "socket.io": "^4.7.4",
     "typescript": "^5.3.3",
     "uuid": "^9.0.1",
