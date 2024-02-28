@@ -47,8 +47,8 @@ devDependencies:
     specifier: ^7.23.9
     version: 7.23.9
   '@types/node':
-    specifier: ^20.11.17
-    version: 20.11.17
+    specifier: ^20.11.22
+    version: 20.11.22
   '@types/uuid':
     specifier: ^9.0.8
     version: 9.0.8
@@ -66,7 +66,7 @@ devDependencies:
     version: 5.3.3
   vite:
     specifier: ^4.5.2
-    version: 4.5.2(@types/node@20.11.17)
+    version: 4.5.2(@types/node@20.11.22)
   vite-plugin-vuetify:
     specifier: ^1.0.2
     version: 1.0.2(vite@4.5.2)(vue@3.4.15)(vuetify@3.5.3)
@@ -286,8 +286,8 @@ packages:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
     dev: false
 
-  /@types/node@20.11.17:
-    resolution: {integrity: sha512-QmgQZGWu1Yw9TDyAP9ZzpFJKynYNeOvwMJmaxABfieQoVoiVOS6MN1WSpqpRcbeA5+RW82kraAVxCCJg+780Qw==}
+  /@types/node@20.11.22:
+    resolution: {integrity: sha512-/G+IxWxma6V3E+pqK1tSl2Fo1kl41pK1yeCyDsgkF9WlVAme4j5ISYM2zR11bgLFJGLN5sVK40T4RJNuiZbEjA==}
     dependencies:
       undici-types: 5.26.5
 
@@ -306,7 +306,7 @@ packages:
       vite: ^4.0.0 || ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.5.2(@types/node@20.11.17)
+      vite: 4.5.2(@types/node@20.11.22)
       vue: 3.4.15(typescript@5.3.3)
     dev: true
 
@@ -948,13 +948,13 @@ packages:
       '@vuetify/loader-shared': 1.7.1(vue@3.4.15)(vuetify@3.5.3)
       debug: 4.3.4
       upath: 2.0.1
-      vite: 4.5.2(@types/node@20.11.17)
+      vite: 4.5.2(@types/node@20.11.22)
       vuetify: 3.5.3(typescript@5.3.3)(vite-plugin-vuetify@1.0.2)(vue@3.4.15)
     transitivePeerDependencies:
       - supports-color
       - vue
 
-  /vite@4.5.2(@types/node@20.11.17):
+  /vite@4.5.2(@types/node@20.11.22):
     resolution: {integrity: sha512-tBCZBNSBbHQkaGyhGCDUGqeo2ph8Fstyp6FMSvTtsXeZSPpSMGlviAOav2hxVTqFcx8Hj/twtWKsMJXNY0xI8w==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -982,7 +982,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.11.17
+      '@types/node': 20.11.22
       esbuild: 0.18.20
       postcss: 8.4.35
       rollup: 3.29.4
