@@ -10,7 +10,7 @@
         variant="solo"
         flat
         :disabled="disabled"
-        @keydown.enter.prevent="sendGuess()"
+        @keyup.enter.prevent="sendGuess()"
         @blur.prevent="sendGuess()"
       ></custom-combobox>
     </v-col>
@@ -24,7 +24,7 @@
         variant="solo"
         flat
         :disabled="disabled"
-        @keydown.enter.prevent="sendGuess()"
+        @keyup.enter.prevent="sendGuess()"
         @blur.prevent="sendGuess()"
       ></custom-combobox>
     </v-col>
