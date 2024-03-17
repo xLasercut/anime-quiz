@@ -12,7 +12,8 @@ services:
       - ./server/log/:/home/aq_server/log
     env_file:
       - server/config.env
-    network_mode: host
+    ports:
+      - "3000:3000"
     logging:
       options:
         max-size: 50m
