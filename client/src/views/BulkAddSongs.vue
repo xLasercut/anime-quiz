@@ -84,8 +84,11 @@ async function loadSongs() {
   disabled.value = true;
 
   try {
-    const url = `https://api.animethemes.moe/anime/${animeSlug.value}?include=animethemes.animethemeentries.videos,animethemes.song,animethemes.song.artists,animethemes.animethemeentries.videos.audio`;
-    const response = await axios.get(url);
+    const url = `https://api.animethemes.moe/anime/${animeSlug.value}`;
+    const params = {
+      include: 'animethemes.animethemeentries.videos,animethemes.song,animethemes.song.artists,animethemes.animethemeentries.videos.audio'
+    };
+    const response = await axios.get(url, { params: params });
     const parsedResponse = AnimeThemesResponse.parse(response.data);
 
     songs.value = [];
