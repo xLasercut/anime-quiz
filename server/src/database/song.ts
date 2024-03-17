@@ -45,9 +45,9 @@ const MAIN_RAW_STATEMENTS = {
   `,
   [STATEMENTS.INSERT_SONG]: `
     INSERT INTO songs 
-      (song_id, song_title, src, artist, type)
+      (song_id, song_title, src, artist, type, audio_src)
     VALUES
-      (@songId, @songTitle, @src, @artist, @type)
+      (@songId, @songTitle, @src, @artist, @type, @audioSrc)
   `,
   [STATEMENTS.INSERT_SONG_ANIME]: `
     INSERT INTO song_animes
