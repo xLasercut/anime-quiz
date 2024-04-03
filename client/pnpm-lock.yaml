@@ -27,8 +27,8 @@ dependencies:
     specifier: ^9.0.1
     version: 9.0.1
   vidstack:
-    specifier: ^1.11.6
-    version: 1.11.6
+    specifier: ^1.11.7
+    version: 1.11.7
   vue:
     specifier: ^3.4.21
     version: 3.4.21(typescript@5.4.3)
@@ -910,8 +910,8 @@ packages:
     hasBin: true
     dev: false
 
-  /vidstack@1.11.6:
-    resolution: {integrity: sha512-4plNNejYZP5YTtUb3ZBFGvzYu8jd1WZFzNic1+0XWad247nRTYRthxFyJm0dl9SCP351ADVsbKfDevT26MwDfA==}
+  /vidstack@1.11.7:
+    resolution: {integrity: sha512-l6n08U4DNfABYQXo8YzCxIkKSG4WVTQzsWIh5r2Xgxl4GFNKcE6nA2wxlLioWBpt43igpZOHdvP7pm1sgbGUfw==}
     engines: {node: '>=18'}
     dependencies:
       media-captions: 1.0.3
