@@ -16,7 +16,7 @@
     "axios": "^1.6.8",
     "better-sqlite3": "^9.4.3",
     "socket.io": "^4.7.5",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.4",
     "uuid": "^9.0.1",
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^4.7.1",
