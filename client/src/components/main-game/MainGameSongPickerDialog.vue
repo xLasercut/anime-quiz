@@ -25,10 +25,10 @@
     <template #top>
       <v-container :fluid="true">
         <song-list-edit-table-filters
-          v-model:anime.trim="filters.anime"
-          v-model:title.trim="filters.title"
-          v-model:artist.trim="filters.artist"
-          v-model:type.trim="filters.type"
+          v-model:anime="filters.anime"
+          v-model:title="filters.title"
+          v-model:artist="filters.artist"
+          v-model:type="filters.type"
         ></song-list-edit-table-filters>
       </v-container>
     </template>
