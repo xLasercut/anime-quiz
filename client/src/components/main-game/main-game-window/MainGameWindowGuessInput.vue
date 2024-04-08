@@ -4,7 +4,7 @@
       <custom-combobox
         label="Anime"
         :items="dataStore.animeNames"
-        v-model.trim="guessInput.anime"
+        v-model="guessInput.anime"
         persistent-hint
         :hint="`Selected Anime: ${gameStore.gameGuess.anime}`"
         variant="solo"
@@ -12,13 +12,14 @@
         :disabled="disabled"
         @keyup.enter.prevent="sendGuess()"
         @blur.prevent="sendGuess()"
+        :debounce-time="200"
       ></custom-combobox>
     </v-col>
     <v-col cols="12" sm="6">
       <custom-combobox
         label="Song Title"
         :items="dataStore.songTitles"
-        v-model.trim="guessInput.title"
+        v-model="guessInput.title"
         :hint="`Selected Song Title: ${gameStore.gameGuess.title}`"
         persistent-hint
         variant="solo"
@@ -26,6 +27,7 @@
         :disabled="disabled"
         @keyup.enter.prevent="sendGuess()"
         @blur.prevent="sendGuess()"
+        :debounce-time="200"
       ></custom-combobox>
     </v-col>
   </v-row>
@@ -49,7 +51,11 @@ const guessInput = ref({
 });
 
 function sendGuess() {
-  socket.emit(SOCKET_EVENTS.GAME_EDIT_GUESS, guessInput.value);
+  const guess = {
+    anime: guessInput.value.anime.trim(),
+    title: guessInput.value.title.trim()
+  };
+  socket.emit(SOCKET_EVENTS.GAME_EDIT_GUESS, guess);
 }
 
 socket.on(SOCKET_EVENTS.GAME_NEW_ROUND, () => {

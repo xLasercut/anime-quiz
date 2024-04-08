@@ -5,12 +5,13 @@
     :eager="true"
     :no-filter="true"
     :items="itemsList"
-    v-model:search="search"
+    :search="search"
+    @update:search="updateSearch($event)"
   ></v-combobox>
 </template>
 
 <script setup lang="ts">
-import { isMatchFilter } from '@/assets/game-helpers';
+import { debounce, isMatchFilter } from '@/assets/game-helpers';
 import { computed, PropType, ref } from 'vue';
 
 const props = defineProps({
@@ -21,11 +22,21 @@ const props = defineProps({
   items: {
     required: true,
     type: Array as PropType<string[]>
+  },
+  debounceTime: {
+    type: Number,
+    default: (): number => {
+      return 150;
+    }
   }
 });
 defineEmits(['update:modelValue']);
 
 const search = ref('');
+
+const updateSearch = debounce((val: string) => {
+  search.value = val || '';
+}, props.debounceTime);
 
 const itemsList = computed((): string[] => {
   if (!search.value) {
