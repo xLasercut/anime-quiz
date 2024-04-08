@@ -14,9 +14,9 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.8",
-    "better-sqlite3": "^9.4.3",
+    "better-sqlite3": "^9.4.5",
     "socket.io": "^4.7.5",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.4",
     "uuid": "^9.0.1",
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^4.7.1",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.9",
-    "@types/node": "^20.12.2",
+    "@types/node": "^20.12.5",
     "@types/uuid": "^9.0.8",
     "env-cmd": "^10.1.0",
     "nodemon": "^3.1.0",
