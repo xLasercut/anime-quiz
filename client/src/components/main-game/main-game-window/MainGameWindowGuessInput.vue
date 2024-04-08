@@ -12,7 +12,6 @@
         :disabled="disabled"
         @keyup.enter.prevent="sendGuess()"
         @blur.prevent="sendGuess()"
-        :debounce-time="200"
       ></custom-combobox>
     </v-col>
     <v-col cols="12" sm="6">
@@ -27,7 +26,6 @@
         :disabled="disabled"
         @keyup.enter.prevent="sendGuess()"
         @blur.prevent="sendGuess()"
-        :debounce-time="200"
       ></custom-combobox>
     </v-col>
   </v-row>

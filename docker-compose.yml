@@ -1,4 +1,3 @@
-version: '3'
 services:
   amq_server:
     container_name: amq_server

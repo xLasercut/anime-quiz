@@ -26,7 +26,7 @@ const props = defineProps({
   debounceTime: {
     type: Number,
     default: (): number => {
-      return 150;
+      return 100;
     }
   }
 });
