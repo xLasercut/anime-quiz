@@ -22,6 +22,8 @@ COPY src/. ${WRK_DIR}/src/
 COPY tsconfig.json ${WRK_DIR}/tsconfig.json
 RUN pnpm build
 
+COPY data/. ${WRK_DIR}/data/
+
 EXPOSE 3000
 
 CMD ["pnpm", "start"]

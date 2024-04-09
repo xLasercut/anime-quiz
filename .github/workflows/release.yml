@@ -11,7 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -23,13 +27,7 @@ jobs:
         run: npm install -g pnpm
 
       - name: Install dependencies
-        run: |
-          pushd client
-          pnpm install
-          popd
-          pushd server
-          pnpm install
-          popd
+        run: make install
 
       - name: Build client
         run: |
@@ -39,10 +37,17 @@ jobs:
           echo VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} >> .env
           export VITE_CLIENT_VERSION=${{ github.ref_name }}
           echo VITE_CLIENT_VERSION=${{ env.VITE_CLIENT_VERSION }} >> .env
-          pnpm build
+          make build
 
       - name: Publish client
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: client/dist
+
+      - name: Build and push server
+        uses: docker/build-push-action@v5
+        with:
+          context: server
+          push: false
+          platforms: linux/amd64,linux/arm64
