@@ -7,7 +7,7 @@ build-%:
 format-%:
 	$(MAKE) -C $* format
 
-format-check-%:
+check-format-%:
 	$(MAKE) -C $* format-check
 
 
@@ -17,4 +17,4 @@ build: build-server build-client
 
 format: format-server format-client
 
-format-check: format-check-server format-check-client
+check-format: check-format-server check-format-client
