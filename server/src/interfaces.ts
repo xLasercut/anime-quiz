@@ -63,6 +63,7 @@ interface ServerConfig {
   discordClientSecret: string;
   logLevel: string;
   discordUserOverride: string;
+  serverVersion: string;
 }
 
 export { HandlerDependencies, ServerConfig, EmitterDependencies };

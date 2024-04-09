@@ -21,7 +21,8 @@ const ClientData = z.intersection(
 
 const ClientLoginAuth = z.object({
   code: z.string(),
-  dataVersion: z.string()
+  dataVersion: z.string(),
+  clientVersion: z.string()
 });
 
 export { ClientData, NotificationColor, SystemNotification, ClientLoginAuth, SocketId };

@@ -29,6 +29,7 @@ class EntryPointHandler extends ServerHandler {
         clientLoginAuth: _clientLoginAuth
       });
       const clientLoginAuth = ClientLoginAuth.parse(_clientLoginAuth);
+      this._validateClientVersion(clientLoginAuth);
       const discordUser = await this._oidc.getUserInfo(clientLoginAuth.code);
       this._userDb.validateAllowedUser(discordUser.id);
       const dbUser = this._userDb.getUserInfo(discordUser.id);
@@ -97,6 +98,12 @@ class EntryPointHandler extends ServerHandler {
   protected _checkClientAuth() {
     if (!this._socket.data.clientData.auth) {
       throw new UnauthorizedError();
+    }
+  }
+
+  protected _validateClientVersion(clientLoginAuth: ClientLoginAuthType) {
+    if (this._config.serverVersion !== clientLoginAuth.clientVersion) {
+      throw new UnauthorizedError('Client version out of date');
     }
   }
 }

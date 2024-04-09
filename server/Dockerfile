@@ -3,6 +3,8 @@ FROM node:20-bookworm
 LABEL maintainer="xLasercut"
 
 ARG WRK_DIR=/home/aq_server
+ARG DOCKER_SERVER_VERSION
+ENV SERVER_VERSION=${DOCKER_SERVER_VERSION}
 
 RUN apt-get update && \
     apt-get upgrade -y && \
