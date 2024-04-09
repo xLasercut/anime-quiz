@@ -51,3 +51,4 @@ jobs:
           context: server
           push: false
           platforms: linux/amd64,linux/arm64
+          build-args: DOCKER_SERVER_VERSION=${{ github.ref_name }}

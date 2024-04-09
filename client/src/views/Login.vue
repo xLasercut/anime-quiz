@@ -15,7 +15,7 @@
           </v-col>
         </v-row>
         <v-row :dense="true">
-          <v-col cols="auto"> Client Version: {{ CLIENT_VERSION }} </v-col>
+          <v-col cols="auto"> Client Version: {{ CLIENT_VERSION }}</v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -65,7 +65,8 @@ function authorizeUser() {
     disabled.value = true;
     const clientLoginAuth: ClientLoginAuthType = {
       code: code,
-      dataVersion: dataStore.dataVersion
+      dataVersion: dataStore.dataVersion,
+      clientVersion: CLIENT_VERSION
     };
     socket.connect();
     socket.emit(SOCKET_EVENTS.AUTHORIZE_USER, clientLoginAuth, (auth: boolean) => {

@@ -22,7 +22,8 @@ const SERVER_CONFIG: ServerConfig = {
   discordClientId: process.env.DISCORD_CLIENT_ID || '',
   discordClientSecret: process.env.DISCORD_CLIENT_SECRET || '',
   logLevel: process.env.LOG_LEVEL || 'warn',
-  discordUserOverride: process.env.DISCORD_USER_OVERRIDE || ''
+  discordUserOverride: process.env.DISCORD_USER_OVERRIDE || '',
+  serverVersion: process.env.SERVER_VERSION || 'dev'
 };
 
 export { SERVER_CONFIG };
