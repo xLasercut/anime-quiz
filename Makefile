@@ -8,7 +8,7 @@ format-%:
 	$(MAKE) -C $* format
 
 format-check-%:
-	$(MAKE) -C $* format-checkt
+	$(MAKE) -C $* format-check
 
 
 install: install-server install-client
