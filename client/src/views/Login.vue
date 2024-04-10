@@ -29,7 +29,7 @@ import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
-import { CLIENT_VERSION, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { CLIENT_VERSION, LOCAL_STORAGE_CONSTANTS, ROOT_URL_PATH } from '@/assets/constants';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { SendNotification } from '@/assets/types';
 import { getAuthorizeUrl } from '@/assets/authorization';
@@ -57,7 +57,7 @@ function authorizeUser() {
 
   if (code && returnedState !== localStorage[LOCAL_STORAGE_CONSTANTS.OAUTH_STATE]) {
     console.error('State mismatch');
-    window.location.href = '/anime-quiz/';
+    window.location.href = ROOT_URL_PATH;
     return;
   }
 

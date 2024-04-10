@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { LOCAL_STORAGE_CONSTANTS, ROOT_URL_PATH } from '@/assets/constants';
 import { SOCKET_EVENTS } from '@/assets/shared/events';
 import { startDataStoreListeners } from '@/plugins/socket/data';
 import { startClientStoreListeners } from '@/plugins/socket/client';
@@ -13,7 +13,7 @@ startDataStoreListeners(socket);
 startGameStoreListeners(socket);
 
 socket.on(SOCKET_EVENTS.DISCONNECT, () => {
-  window.location.href = '/anime-quiz/';
+  window.location.href = ROOT_URL_PATH;
 });
 
 export { socket };
