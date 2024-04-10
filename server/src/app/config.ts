@@ -18,7 +18,7 @@ const SERVER_CONFIG: ServerConfig = {
   serverPort: process.env.SERVER_PORT || '3000',
   corsConfig: process.env.CORS_CONFIG || '*',
   clientAuthDelay: 2000,
-  redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080/anime-quiz/',
+  redirectUrl: process.env.REDIRECT_URL || 'http://localhost:8080',
   discordClientId: process.env.DISCORD_CLIENT_ID || '',
   discordClientSecret: process.env.DISCORD_CLIENT_SECRET || '',
   logLevel: process.env.LOG_LEVEL || 'warn',

@@ -9,7 +9,6 @@ import { fileURLToPath, URL } from 'node:url';
 // https://vitejs.dev/config/
 
 export default defineConfig({
-  base: '/anime-quiz/',
   plugins: [
     vue({
       template: {
