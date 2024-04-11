@@ -1,12 +1,9 @@
-name: CI
+name: Running tests
 
 env:
   CACHE_NAME: node_modules
 
-on:
-  pull_request:
-    branches:
-      - '*'
+on: [pull_request]
 
 jobs:
   setup-cache:
