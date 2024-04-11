@@ -96,7 +96,7 @@ jobs:
 
   clear-cache:
     name: Clear Caches
-    needs: [ build-client, build-server, check-formatting ]
+    needs: [ build-client, build-server ]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
