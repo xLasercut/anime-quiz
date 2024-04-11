@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Runner setup
         uses: ./.github/actions/runner-setup/
 
@@ -34,6 +37,9 @@ jobs:
     needs: [ setup-cache ]
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Runner setup
         uses: ./.github/actions/runner-setup/
 
@@ -67,6 +73,9 @@ jobs:
     needs: [ setup-cache ]
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Runner setup
         uses: ./.github/actions/runner-setup/
 
@@ -91,6 +100,9 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Clear cache
         uses: ./.github/actions/clear-cache/
         with:
