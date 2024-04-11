@@ -1,4 +1,4 @@
-name: CI
+name: Running tests
 
 env:
   CACHE_NAME: node_modules
