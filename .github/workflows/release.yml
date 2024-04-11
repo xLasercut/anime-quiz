@@ -1,36 +1,55 @@
 name: Release
 
+env:
+  CACHE_NAME: node_modules
+
 on:
   push:
     tags:
       - '*'
 
 jobs:
-  build:
-    name: Release
+  setup-cache:
+    name: Setup cache
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Runner setup
+        uses: ./.github/actions/runner-setup/
 
       - name: Install dependencies
         run: make install
+
+      - name: Create cache - ${{ env.CACHE_NAME }}
+        uses: ./.github/actions/caching/
+        with:
+          path: |
+            server/node_modules
+            client/node_modules
+          name: ${{ env.CACHE_NAME }}
+
+  build-client:
+    name: Build and publish client
+    runs-on: ubuntu-latest
+    needs: [ setup-cache ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Runner setup
+        uses: ./.github/actions/runner-setup/
+
+      - name: Download cache - ${{ env.CACHE_NAME }}
+        uses: ./.github/actions/caching/
+        with:
+          path: |
+            server/node_modules
+            client/node_modules
+          name: ${{ env.CACHE_NAME }}
 
       - name: Build client
         run: |
@@ -48,6 +67,21 @@ jobs:
           branch: gh-pages
           folder: client/dist
 
+  build-server:
+    name: Build and publish server
+    runs-on: ubuntu-latest
+    needs: [ setup-cache ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -62,3 +96,19 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: lasercut/anime-quiz:latest,lasercut/anime-quiz:${{ github.ref_name }}
           build-args: DOCKER_SERVER_VERSION=${{ github.ref_name }}
+
+  clear-cache:
+    name: Clear Caches
+    needs: [ build-client, build-server, check-formatting ]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone - ${{ env.BRANCH_NAME }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.BRANCH_NAME }}
+
+      - name: Clear cache
+        uses: ./.github/actions/clear-cache/
+        with:
+          name: ${{ env.CACHE_NAME }}
