@@ -79,6 +79,9 @@ jobs:
 
       - name: Set client env file
         uses: ./.github/actions/create-client-env-file
+        with:
+          client_id: ${{ secrets.VITE_DISCORD_CLIENT_ID }}
+          redirect_url: ${{ secrets.VITE_REDIRECT_URL }}
 
       - name: Test build typescript
         run: pnpm build
