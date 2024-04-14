@@ -50,8 +50,7 @@ jobs:
           touch client/.env
           echo VITE_DISCORD_CLIENT_ID=${{ secrets.VITE_DISCORD_CLIENT_ID }} >> client/.env
           echo VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} >> client/.env
-          export VITE_CLIENT_VERSION=$(git rev-parse --short "$GITHUB_SHA")
-          echo VITE_CLIENT_VERSION=${{ env.VITE_CLIENT_VERSION }} >> client/.env
+          echo VITE_CLIENT_VERSION=${{ github.ref_name }} >> client/.env
           pnpm build
 
       - name: Publish client
