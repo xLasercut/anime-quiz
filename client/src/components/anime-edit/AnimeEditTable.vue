@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { TAnime } from 'anime-quiz-shared-resources/src/models/types';
+import { TAnime } from 'anime-quiz-shared-resources';
 import { useAdminStore } from '@/plugins/store/admin';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';

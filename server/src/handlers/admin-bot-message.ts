@@ -1,7 +1,5 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TBotMessage } from 'anime-quiz-shared-resources/src/models/types';
-import { BotMessage } from 'anime-quiz-shared-resources/src/models/bot-message';
+import { BotMessage, SOCKET_EVENTS, TBotMessage } from 'anime-quiz-shared-resources';
 
 class AdminBotMessageHandler extends ServerHandler {
   protected _events = {

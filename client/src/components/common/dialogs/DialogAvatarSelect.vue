@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import GameAvatar from '@/components/common/GameAvatar.vue';
-import { AVATARS } from 'anime-quiz-shared-resources/src/avatars';
+import { AVATARS } from 'anime-quiz-shared-resources';
 
 defineProps({
   avatarSize: {

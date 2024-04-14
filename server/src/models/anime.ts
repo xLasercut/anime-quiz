@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AnimeId, AnimeName } from 'anime-quiz-shared-resources/src/models/anime';
+import { AnimeId, AnimeName } from 'anime-quiz-shared-resources';
 import { isValidJson } from './common';
 
 const DbAnime = z.object({

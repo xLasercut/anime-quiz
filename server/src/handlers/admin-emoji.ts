@@ -1,7 +1,5 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TEmoji } from 'anime-quiz-shared-resources/src/models/types';
-import { Emoji } from 'anime-quiz-shared-resources/src/models/emoji';
+import { Emoji, SOCKET_EVENTS, TEmoji } from 'anime-quiz-shared-resources';
 
 class AdminEmojiHandler extends ServerHandler {
   protected _events = {

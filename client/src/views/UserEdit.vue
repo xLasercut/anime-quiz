@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import UserEditTable from '@/components/user-edit/UserEditTable.vue';
 
 socket.emit(SOCKET_EVENTS.UPDATE_STORE_USER_LIST);

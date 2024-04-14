@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { getLocalStorageNumber } from '@/assets/game-helpers';
-import { TClientData } from 'anime-quiz-shared-resources/src/models/types';
+import { TClientData } from 'anime-quiz-shared-resources';
 import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 
@@ -11,6 +11,7 @@ interface State {
   volume: number;
   clientData: TClientData;
   audioOnly: boolean;
+  mediaPreviewSrc: string;
 }
 
 const useClientStore = defineStore('client', {
@@ -29,7 +30,8 @@ const useClientStore = defineStore('client', {
         avatar: '',
         socketId: ''
       },
-      audioOnly: false
+      audioOnly: false,
+      mediaPreviewSrc: ''
     };
   },
   actions: {
@@ -45,8 +47,8 @@ const useClientStore = defineStore('client', {
     updateVolume(volume: number) {
       this.volume = volume;
     },
-    toggleAudioOnly() {
-      this.audioOnly = !this.audioOnly;
+    setMediaPreviewSrc(src: string) {
+      this.mediaPreviewSrc = src;
     }
   }
 });

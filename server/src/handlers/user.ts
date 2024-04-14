@@ -1,8 +1,5 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TClientData, TSongId } from 'anime-quiz-shared-resources/src/models/types';
-import { ClientData } from 'anime-quiz-shared-resources/src/models/client';
-import { SongId } from 'anime-quiz-shared-resources/src/models/song';
+import { ClientData, SOCKET_EVENTS, SongId, TClientData, TSongId } from 'anime-quiz-shared-resources';
 
 class UserHandler extends ServerHandler {
   protected _events = {

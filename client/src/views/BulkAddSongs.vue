@@ -48,14 +48,20 @@ import { computed, inject, ref } from 'vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import axios from 'axios';
-import { TAnimeThemesResponseAnimeTheme, TAnimeThemesResponseVideo, TSongId, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import {
+  AnimeThemesResponse,
+  AnimeThemesResponseString,
+  SOCKET_EVENTS,
+  TAnimeThemesResponseAnimeTheme,
+  TAnimeThemesResponseVideo,
+  TSong,
+  TSongId
+} from 'anime-quiz-shared-resources';
 import { TSendNotification } from '@/assets/types';
 import BulkAddSongSongInfo from '@/components/bulk-add-songs/BulkAddSongSongInfo.vue';
 import { canParseValue, generateId } from '@/assets/game-helpers';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { AnimeThemesResponse, AnimeThemesResponseString } from 'anime-quiz-shared-resources/src/models/anime-themes';
 
 interface SongSrc {
   video: string;

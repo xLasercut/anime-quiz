@@ -40,6 +40,7 @@ import SongStatsEdit from '@/views/SongStatsEdit.vue';
 import SongStatsEditDialog from '@/components/song-stats-edit/SongStatsEditDialog.vue';
 import BulkAddSongs from '@/views/BulkAddSongs.vue';
 import BulkAddSongsPanel from '@/components/bulk-add-songs/BulkAddSongsPanel.vue';
+import VideoPlayerDialog from '@/components/common/VideoPlayerDialog.vue';
 
 const PANEL_MAPPING: Record<ClientRoute, Component> = {
   [ROUTES.LOGIN]: LoginPanel,
@@ -86,7 +87,8 @@ const DIALOG_MAPPINGS: Record<ClientDialogRoute, Component> = {
   [DIALOG_ROUTES.MAIN_GAME_SONG_PICKER]: MainGameSongPickerDialog,
   [DIALOG_ROUTES.ADMIN_PANEL]: AdminDialog,
   [DIALOG_ROUTES.BOT_MESSAGE_EDIT]: BotMessageEditDialog,
-  [DIALOG_ROUTES.SONG_STATS_EDIT]: SongStatsEditDialog
+  [DIALOG_ROUTES.SONG_STATS_EDIT]: SongStatsEditDialog,
+  [DIALOG_ROUTES.VIDEO_PLAYER]: VideoPlayerDialog
 };
 
 export { VIEW_MAPPING, PANEL_MAPPING, DIALOG_MAPPINGS };

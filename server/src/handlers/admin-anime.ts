@@ -1,7 +1,5 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TAnime } from 'anime-quiz-shared-resources/src/models/types';
-import { Anime } from 'anime-quiz-shared-resources/src/models/anime';
+import { Anime, SOCKET_EVENTS, TAnime } from 'anime-quiz-shared-resources';
 
 class AdminAnimeHandler extends ServerHandler {
   protected _events = {

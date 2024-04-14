@@ -1,8 +1,5 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TSongStats } from 'anime-quiz-shared-resources/src/models/types';
-import { SongStats } from 'anime-quiz-shared-resources/src/models/song-stats';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
+import { SOCKET_EVENTS, SONG_TYPES, SongStats, TSongStats } from 'anime-quiz-shared-resources';
 
 class AdminSongStatsHandler extends ServerHandler {
   protected _events = {

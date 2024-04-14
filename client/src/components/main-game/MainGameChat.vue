@@ -16,10 +16,8 @@
 import { CLIENT_CONSTANTS } from '@/assets/constants';
 import MainGameChatInput from '@/components/main-game/main-game-chat/MainGameChatInput.vue';
 import { nextTick, onUnmounted, ref } from 'vue';
-import { TGameChat } from 'anime-quiz-shared-resources/src/models/types';
+import { GameChat, SOCKET_EVENTS, TGameChat } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { GameChat } from 'anime-quiz-shared-resources/src/models/game';
 import MainGameChatMessage from '@/components/main-game/main-game-chat/MainGameChatMessage.vue';
 
 const messages = ref<TGameChat[]>([]);

@@ -1,7 +1,5 @@
 import { z } from 'zod';
-import { Avatar, DisplayName, UserId } from 'anime-quiz-shared-resources/src/models/user';
-import { GameChatText } from 'anime-quiz-shared-resources/src/models/game';
-import { MessageCommand, MessageId } from 'anime-quiz-shared-resources/src/models/bot-message';
+import { Avatar, DisplayName, GameChatText, MessageCommand, MessageId, UserId } from 'anime-quiz-shared-resources';
 
 const DbBotMessage = z.object({
   message_id: MessageId,

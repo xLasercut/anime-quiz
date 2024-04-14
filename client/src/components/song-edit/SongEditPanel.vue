@@ -9,14 +9,13 @@ import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import { useClientStore } from '@/plugins/store/client';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS, SONG_TYPES } from 'anime-quiz-shared-resources';
 import { useDataStore } from '@/plugins/store/data';
 import { useAdminStore } from '@/plugins/store/admin';
 import { TOpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { inject } from 'vue';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();

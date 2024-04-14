@@ -4,7 +4,7 @@ import { TServerConfig } from '../interfaces';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
-import { TSongId, TUserId } from 'anime-quiz-shared-resources/src/models/types';
+import { TSongId, TUserId } from 'anime-quiz-shared-resources';
 import { DbUserSongList } from '../models/user';
 import { Logger } from 'winston';
 

@@ -1,5 +1,5 @@
 import { GameListGenerator } from './common';
-import { TGameRoomSettings, TSong, TUserId } from 'anime-quiz-shared-resources/src/models/types';
+import { TGameRoomSettings, TSong, TUserId } from 'anime-quiz-shared-resources';
 import { THandlerDependencies } from '../../interfaces';
 
 class ShiritoriGameListGenerator extends GameListGenerator {

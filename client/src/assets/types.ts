@@ -1,4 +1,4 @@
-import { TAnimeId, TNotificationColor } from 'anime-quiz-shared-resources/src/models/types';
+import { TAnimeId, TNotificationColor } from 'anime-quiz-shared-resources';
 import { ClientDialogRoute } from '@/assets/routing/types';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 

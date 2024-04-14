@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import { TGameGuess, TGamePlayer, TGameRoomState, TSong } from 'anime-quiz-shared-resources/src/models/types';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
+import { SONG_TYPES, TGameGuess, TGamePlayer, TGameRoomState, TSong } from 'anime-quiz-shared-resources';
 
 interface CurrentSongType extends TSong {
   currentSongSrc: string;

@@ -1,7 +1,5 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TGameRoomId, TGameRoomSettings } from 'anime-quiz-shared-resources/src/models/types';
-import { GameRoomId, GameRoomSettings } from 'anime-quiz-shared-resources/src/models/game';
+import { GameRoomId, GameRoomSettings, SOCKET_EVENTS, TGameRoomId, TGameRoomSettings } from 'anime-quiz-shared-resources';
 
 class GameRoomsHandler extends ServerHandler {
   protected _events = {

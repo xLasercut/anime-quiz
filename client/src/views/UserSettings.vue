@@ -37,7 +37,7 @@ import DialogForm from '@/components/common/dialogs/DialogForm.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import UserSettingsAvatarSelect from '@/components/common/dialogs/DialogAvatarSelect.vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { AVATAR_RULES, DISPLAY_NAME_RULES } from '@/assets/form-rules';
 
 const clientStore = useClientStore();

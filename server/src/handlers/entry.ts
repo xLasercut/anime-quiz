@@ -1,6 +1,6 @@
 import { ServerHandler } from './common';
 import { Socket } from '../types';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { ClientLoginAuth, SOCKET_EVENTS, TClientLoginAuth } from 'anime-quiz-shared-resources';
 import { UserHandler } from './user';
 import { DataHandler } from './data';
 import { THandlerDependencies } from '../interfaces';
@@ -11,8 +11,6 @@ import { AdminSongHandler } from './admin-song';
 import { AdminEmojiHandler } from './admin-emoji';
 import { GameRoomsHandler } from './game-rooms';
 import { ChatHandler } from './chat';
-import { TClientLoginAuth } from 'anime-quiz-shared-resources/src/models/types';
-import { ClientLoginAuth } from 'anime-quiz-shared-resources/src/models/client';
 import { GameHandler } from './game';
 import { AdminGameHandler } from './admin-game';
 import { AdminGeneralHandler } from './admin-general';

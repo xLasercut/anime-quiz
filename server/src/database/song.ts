@@ -2,8 +2,7 @@ import { DatabaseDataState, mainDbConnection, ServerDb, userDbConnection } from 
 import { TServerConfig } from '../interfaces';
 
 import { DbSong, DbSongTitle } from '../models/song';
-import { TSongId, TSongTitle, TSong } from 'anime-quiz-shared-resources/src/models/types';
-import { Song } from 'anime-quiz-shared-resources/src/models/song';
+import { Song, TSong, TSongId, TSongTitle } from 'anime-quiz-shared-resources';
 import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';

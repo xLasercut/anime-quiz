@@ -16,7 +16,7 @@ import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TOpenDialog } from '@/assets/types';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { useGameStore } from '@/plugins/store/game';
 import PanelVolumeSlider from '@/components/common/panel/PanelVolumeSlider.vue';
 import PanelAudioOnlyToggle from '@/components/common/panel/PanelAudioOnlyToggle.vue';

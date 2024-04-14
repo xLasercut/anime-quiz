@@ -1,5 +1,4 @@
-import { GAME_MODES } from 'anime-quiz-shared-resources/src/game-modes';
-import { TGameRoomSettings, TUserId } from 'anime-quiz-shared-resources/src/models/types';
+import { GAME_MODES, TGameRoomSettings, TUserId } from 'anime-quiz-shared-resources';
 import { NormalGameListGenerator } from './game-list-generators/normal';
 import { GameListGenerator } from './game-list-generators/common';
 import { BalancedPlusGameListGenerator } from './game-list-generators/balanced-plus';

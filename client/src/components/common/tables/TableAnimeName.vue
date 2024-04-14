@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { TCombinedSongStats, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { TCombinedSongStats, TSong } from 'anime-quiz-shared-resources';
 
 defineProps({
   song: {

@@ -1,4 +1,4 @@
-import { TGameGuess, TGameRoomId, TGameRoomState, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { TGameGuess, TGameRoomId, TGameRoomState, TSong } from 'anime-quiz-shared-resources';
 import { Server } from '../app/server';
 import { Socket } from '../types';
 import { SongListEmptyError } from '../app/exceptions';

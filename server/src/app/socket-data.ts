@@ -1,17 +1,17 @@
 import {
+  ClientData,
+  GameRoomId,
   TClientData,
   TGameGuess,
-  TGamePlayerLifeLineType,
   TGamePlayer,
+  TGamePlayerLifeLineType,
   TGameRoomId,
   TGameScore,
   TNotificationColor,
   TSongId
-} from 'anime-quiz-shared-resources/src/models/types';
-import { TDbUserSong, TDbUser } from '../models/types';
-import { ClientData } from 'anime-quiz-shared-resources/src/models/client';
+} from 'anime-quiz-shared-resources';
+import { TDbUser, TDbUserSong } from '../models/types';
 import { Socket } from '../types';
-import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
 import { UnauthorizedError } from './exceptions';
 import { Logger } from 'winston';
 

@@ -22,9 +22,7 @@
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TGameRoomId } from 'anime-quiz-shared-resources/src/models/types';
-import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
+import { GameRoomId, SOCKET_EVENTS, TGameRoomId } from 'anime-quiz-shared-resources';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 import { useGameStore } from '@/plugins/store/game';

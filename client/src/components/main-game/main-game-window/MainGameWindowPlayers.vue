@@ -36,9 +36,8 @@
 <script setup lang="ts">
 import { useGameStore } from '@/plugins/store/game';
 import GameAvatar from '@/components/common/GameAvatar.vue';
-import { TGamePlayer } from 'anime-quiz-shared-resources/src/models/types';
+import { SOCKET_EVENTS, TGamePlayer } from 'anime-quiz-shared-resources';
 import { onUnmounted, ref } from 'vue';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 import GameTooltip from '@/components/common/GameTooltip.vue';
 

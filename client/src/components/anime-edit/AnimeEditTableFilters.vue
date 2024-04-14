@@ -14,7 +14,7 @@
 import { PropType } from 'vue';
 import TableFilterTextField from '@/components/common/tables/TableFilterTextField.vue';
 import TableFilterCombobox from '@/components/common/tables/TableFilterCombobox.vue';
-import { TAnimeId } from 'anime-quiz-shared-resources/src/models/types';
+import { TAnimeId } from 'anime-quiz-shared-resources';
 import { debounce } from '@/assets/game-helpers';
 import { useDataStore } from '@/plugins/store/data';
 

@@ -1,5 +1,5 @@
 <template>
-  <nav-btn icon="mdi-plus" color="success" @click="newSongStats()" v-if="clientStore.clientData.admin">New Song Stats</nav-btn>
+  <nav-btn icon="mdi-plus" color="success" @click="newSongStats()" v-if="clientStore.clientData.admin">New Song Stats </nav-btn>
   <nav-btn icon="mdi-refresh" color="info" @click="reload()">Reload</nav-btn>
   <nav-btn icon="mdi-backspace-reverse-outline" color="warning" @click="back()">Back</nav-btn>
 </template>
@@ -9,7 +9,7 @@ import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { useClientStore } from '@/plugins/store/client';
 import { useDataStore } from '@/plugins/store/data';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
 import { useAdminStore } from '@/plugins/store/admin';
 import { inject } from 'vue';

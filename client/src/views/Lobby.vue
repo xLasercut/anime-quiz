@@ -19,7 +19,7 @@ import { ROUTES } from '@/assets/routing/routes';
 import { useClientStore } from '@/plugins/store/client';
 import { useAdminStore } from '@/plugins/store/admin';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { ClientRoute } from '@/assets/routing/types';
 
 const clientStore = useClientStore();

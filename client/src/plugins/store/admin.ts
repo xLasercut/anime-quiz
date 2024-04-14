@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia';
-import { TAnime, TBotMessage, TEmoji, TSongStats, TSong, TUser } from 'anime-quiz-shared-resources/src/models/types';
+import { AVATARS, SONG_TYPES, TAnime, TBotMessage, TEmoji, TSong, TSongStats, TUser } from 'anime-quiz-shared-resources';
 import { generateId } from '@/assets/game-helpers';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
-import { AVATARS } from 'anime-quiz-shared-resources/src/avatars';
 
 interface State {
   userInEdit: TUser;

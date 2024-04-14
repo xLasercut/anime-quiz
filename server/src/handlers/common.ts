@@ -10,7 +10,7 @@ import { DatabaseLock } from '../database/lock';
 import { EmojiDb } from '../database/emoji';
 import { UserSongDb } from '../database/user-song';
 import { Server } from '../app/server';
-import { TSocketEventName } from 'anime-quiz-shared-resources/src/types';
+import { TSocketEventName } from 'anime-quiz-shared-resources';
 import { GameRooms } from '../game-state/room';
 import { Logger } from 'winston';
 import { DatabaseDataState } from '../database/common';

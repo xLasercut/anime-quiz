@@ -13,7 +13,7 @@ import { useGameStore } from '@/plugins/store/game';
 import { onUnmounted, ref } from 'vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 
 const gameStore = useGameStore();
 const disabled = ref(true);

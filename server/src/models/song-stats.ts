@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { SongId } from 'anime-quiz-shared-resources/src/models/song';
-import { SongStatsPlayCount } from 'anime-quiz-shared-resources/src/models/song-stats';
+import { SongId } from 'anime-quiz-shared-resources';
+import { SongStatsPlayCount } from 'anime-quiz-shared-resources';
 
 const DbSongStats = z.object({
   song_id: SongId,

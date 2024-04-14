@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EmojiCommand, EmojiId, EmojiSrc, EmojiType } from 'anime-quiz-shared-resources/src/models/emoji';
+import { EmojiCommand, EmojiId, EmojiSrc, EmojiType } from 'anime-quiz-shared-resources';
 
 const DbEmoji = z.object({
   command: EmojiCommand,

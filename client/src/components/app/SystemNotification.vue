@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { TNotificationColor } from 'anime-quiz-shared-resources/src/models/types';
+import { TNotificationColor } from 'anime-quiz-shared-resources';
 import { TRegisterSendNotification } from '@/assets/types';
 
 const message = ref('');

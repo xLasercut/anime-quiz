@@ -40,9 +40,8 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { TEmojiCommand, TEmoji } from 'anime-quiz-shared-resources/src/models/types';
+import { SOCKET_EVENTS, TEmoji, TEmojiCommand } from 'anime-quiz-shared-resources';
 import GameEmoji from '@/components/common/GameEmoji.vue';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 
 const EMOJI_CHAT_FORMAT = new RegExp('(:)(?:[^:]+)$', 'ig');

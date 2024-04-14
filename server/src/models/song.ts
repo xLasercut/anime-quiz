@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { SongArtist, SongAudioSrc, SongId, SongSrc, SongTitle, SongType } from 'anime-quiz-shared-resources/src/models/song';
+import { SongArtist, SongAudioSrc, SongId, SongSrc, SongTitle, SongType } from 'anime-quiz-shared-resources';
 import { isValidJson } from './common';
-import { AnimeId, AnimeName } from 'anime-quiz-shared-resources/src/models/anime';
+import { AnimeId, AnimeName } from 'anime-quiz-shared-resources';
 
 const DbSong = z.object({
   song_id: SongId,

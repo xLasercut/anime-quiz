@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS, TClientLoginAuth } from 'anime-quiz-shared-resources';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
@@ -33,7 +33,6 @@ import { CLIENT_VERSION, LOCAL_STORAGE_CONSTANTS, ROOT_URL_PATH } from '@/assets
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TSendNotification } from '@/assets/types';
 import { getAuthorizeUrl } from '@/assets/authorization';
-import { TClientLoginAuth } from 'anime-quiz-shared-resources/src/models/types';
 import { useDataStore } from '@/plugins/store/data';
 
 const clientStore = useClientStore();

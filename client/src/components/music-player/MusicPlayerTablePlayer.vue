@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { PropType, ref, watch } from 'vue';
 import { useClientStore } from '@/plugins/store/client';
-import { TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { TSong } from 'anime-quiz-shared-resources';
 import MusicPlayerTablePlayerControls from '@/components/music-player/MusicPlayerTablePlayerControls.vue';
 import { MediaDurationChangeEvent, MediaTimeUpdateEvent } from 'vidstack';
 
