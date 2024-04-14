@@ -1,4 +1,4 @@
-import { HandlerDependencies, ServerConfig } from '../interfaces';
+import { THandlerDependencies, TServerConfig } from '../interfaces';
 import { UserDb } from '../database/user';
 import { Socket, SocketEvent } from '../types';
 import { Emitter } from '../emitters/emitter';
@@ -10,7 +10,7 @@ import { DatabaseLock } from '../database/lock';
 import { EmojiDb } from '../database/emoji';
 import { UserSongDb } from '../database/user-song';
 import { Server } from '../app/server';
-import { SocketEventNameType } from '../shared/types';
+import { TSocketEventName } from 'anime-quiz-shared-resources/src/types';
 import { GameRooms } from '../game-state/room';
 import { Logger } from 'winston';
 import { DatabaseDataState } from '../database/common';
@@ -20,7 +20,7 @@ import { SongStatsDb } from '../database/song-stats';
 
 abstract class ServerHandler {
   protected _logger: Logger;
-  protected _config: ServerConfig;
+  protected _config: TServerConfig;
   protected _userDb: UserDb;
   protected _emitter: Emitter;
   protected _songDb: SongDb;
@@ -37,9 +37,9 @@ abstract class ServerHandler {
   protected _gameRooms: GameRooms;
   protected _dbDataState: DatabaseDataState;
   protected _chatSerialiser: GameChatSerialiser;
-  protected abstract _events: Record<SocketEventNameType, SocketEvent>;
+  protected abstract _events: Record<TSocketEventName, SocketEvent>;
 
-  protected constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
+  protected constructor(socket: Socket, errHandler: Function, dependencies: THandlerDependencies) {
     this._socket = socket;
     this._errHandler = errHandler;
     this._logger = dependencies.logger;

@@ -36,9 +36,9 @@
 <script setup lang="ts">
 import { useGameStore } from '@/plugins/store/game';
 import GameAvatar from '@/components/common/GameAvatar.vue';
-import { GamePlayerType } from '@/assets/shared/models/types';
+import { TGamePlayer } from 'anime-quiz-shared-resources/src/models/types';
 import { onUnmounted, ref } from 'vue';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 import GameTooltip from '@/components/common/GameTooltip.vue';
 
@@ -48,7 +48,7 @@ let timeout: NodeJS.Timeout;
 const show = ref(false);
 const playerCardWidth = ref('150');
 
-function playerGuess(player: GamePlayerType): string {
+function playerGuess(player: TGamePlayer): string {
   return `${player.guess.anime || '...'} - ${player.guess.title || '...'}`;
 }
 
@@ -63,7 +63,7 @@ function showGuess() {
   }, 8000);
 }
 
-function badgeColor(player: GamePlayerType): string {
+function badgeColor(player: TGamePlayer): string {
   if (player.admin) {
     return 'warning';
   }
@@ -75,14 +75,14 @@ function badgeColor(player: GamePlayerType): string {
   return 'info';
 }
 
-function skipIconColor(player: GamePlayerType): string {
+function skipIconColor(player: TGamePlayer): string {
   if (player.skipSong) {
     return 'success';
   }
   return 'error';
 }
 
-function skipIcon(player: GamePlayerType): string {
+function skipIcon(player: TGamePlayer): string {
   if (player.skipSong) {
     return 'mdi-check';
   }

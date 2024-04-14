@@ -1,10 +1,10 @@
 import { DatabaseDataState, gameDbConnection, mainDbConnection, ServerDb } from './common';
-import { SongStatsRecordsType, SongStatsType, SongType } from '../shared/models/types';
-import { ServerConfig } from '../interfaces';
+import { TSongStatsRecords, TSongStats, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { TServerConfig } from '../interfaces';
 import { Logger } from 'winston';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
-import { DbSongStatsType } from '../models/types';
+import { TDbSongStats } from '../models/types';
 import { DbSongStats } from '../models/song-stats';
 import { DataQualityError } from '../app/exceptions';
 
@@ -46,25 +46,25 @@ const RAW_STATEMENTS = {
   `
 };
 
-class SongStatsDb extends ServerDb<SongStatsType> {
+class SongStatsDb extends ServerDb<TSongStats> {
   protected _db: SqliteDb;
   protected _factory: StatementFactory;
 
-  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+  constructor(config: TServerConfig, logger: Logger, state: DatabaseDataState) {
     super(config, logger, state);
     this._db = gameDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
     this.reloadCache();
   }
 
-  public getSongStats(): SongStatsType[] {
+  public getSongStats(): TSongStats[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_SONG_STATS);
     const response = statement.all();
     return response
-      .map((item): DbSongStatsType => {
+      .map((item): TDbSongStats => {
         return DbSongStats.parse(item);
       })
-      .map((dbSong): SongStatsType => {
+      .map((dbSong): TSongStats => {
         return {
           songId: dbSong.song_id,
           playCount: dbSong.play_count
@@ -72,8 +72,8 @@ class SongStatsDb extends ServerDb<SongStatsType> {
       });
   }
 
-  public getSongStatsRecords(): SongStatsRecordsType {
-    const records: SongStatsRecordsType = {};
+  public getSongStatsRecords(): TSongStatsRecords {
+    const records: TSongStatsRecords = {};
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_SONG_STATS);
     const response = statement.all();
     for (const item of response) {
@@ -83,7 +83,7 @@ class SongStatsDb extends ServerDb<SongStatsType> {
     return records;
   }
 
-  public getSongStatsById(song: SongType): SongStatsType | null {
+  public getSongStatsById(song: TSong): TSongStats | null {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_SONG_STATS_BY_SONG_ID);
     const response = statement.get(song);
     if (!response) {
@@ -96,7 +96,7 @@ class SongStatsDb extends ServerDb<SongStatsType> {
     };
   }
 
-  public incrementPlayCount(song: SongType) {
+  public incrementPlayCount(song: TSong) {
     const songStats = this.getSongStatsById(song);
     if (!songStats) {
       this.newRecord({
@@ -111,25 +111,25 @@ class SongStatsDb extends ServerDb<SongStatsType> {
     }
   }
 
-  public newRecord(record: SongStatsType) {
+  public newRecord(record: TSongStats) {
     const statement = this._factory.getStatement(STATEMENTS.INSERT_SONG_STATS);
     statement.run(record);
     this.reloadCache();
   }
 
-  public editRecord(record: SongStatsType) {
+  public editRecord(record: TSongStats) {
     const statement = this._factory.getStatement(STATEMENTS.EDIT_SONG_STATS);
     statement.run(record);
     this.reloadCache();
   }
 
-  public deleteRecord(record: SongStatsType) {
+  public deleteRecord(record: TSongStats) {
     const statement = this._factory.getStatement(STATEMENTS.DELETE_SONG_STATS);
     statement.run(record);
     this.reloadCache();
   }
 
-  public validateRecordExists(record: SongStatsType) {
+  public validateRecordExists(record: TSongStats) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_SONG_STATS_BY_SONG_ID);
     const response = statement.get(record);
     if (!response) {
@@ -137,7 +137,7 @@ class SongStatsDb extends ServerDb<SongStatsType> {
     }
   }
 
-  public validateRecordNotExists(record: SongStatsType) {
+  public validateRecordNotExists(record: TSongStats) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_SONG_STATS_BY_SONG_ID);
     const response = statement.get(record);
     if (response) {

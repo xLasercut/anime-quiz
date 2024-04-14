@@ -20,17 +20,17 @@ import MainAnswerAnswerDisplay from '@/components/main-game/main-game-window/mai
 import { onUnmounted, ref } from 'vue';
 import MainAnswerQuestionDisplay from '@/components/main-game/main-game-window/main-game-window-answer-display/MainAnswerQuestionDisplay.vue';
 import { useGameStore } from '@/plugins/store/game';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
-import { GamePlayerLifeLineTypeType } from '@/assets/shared/models/types';
-import { GamePlayerLifeLineType } from '@/assets/shared/models/game';
+import { TGamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/types';
+import { GamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/game';
 import MainAnswerHintDisplay from '@/components/main-game/main-game-window/main-game-window-answer-display/MainAnswerHintDisplay.vue';
 
 const gameStore = useGameStore();
 const show = ref(false);
 const showHint = ref(false);
 
-socket.on(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, (_lifeLineType: GamePlayerLifeLineTypeType) => {
+socket.on(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, (_lifeLineType: TGamePlayerLifeLineType) => {
   const lifeLineType = GamePlayerLifeLineType.parse(_lifeLineType);
   if (lifeLineType === 'ANIME_HINT') {
     showHint.value = true;

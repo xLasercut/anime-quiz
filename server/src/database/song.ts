@@ -1,13 +1,13 @@
 import { DatabaseDataState, mainDbConnection, ServerDb, userDbConnection } from './common';
-import { ServerConfig } from '../interfaces';
+import { TServerConfig } from '../interfaces';
 
 import { DbSong, DbSongTitle } from '../models/song';
-import { SongIdType, SongTitleType, SongType } from '../shared/models/types';
-import { Song } from '../shared/models/song';
+import { TSongId, TSongTitle, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { Song } from 'anime-quiz-shared-resources/src/models/song';
 import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
-import { DbSongType } from '../models/types';
+import { TDbSong } from '../models/types';
 import { Logger } from 'winston';
 
 const STATEMENTS = {
@@ -88,15 +88,15 @@ const USER_RAW_STATEMENTS = {
   `
 };
 
-class SongDb extends ServerDb<SongType> {
+class SongDb extends ServerDb<TSong> {
   protected _mainDb: SqliteDb;
   protected _userDb: SqliteDb;
   protected _mainFactory: StatementFactory;
   protected _userFactory: StatementFactory;
-  protected _songList: SongType[] = [];
-  protected _songTitles: SongTitleType[] = [];
+  protected _songList: TSong[] = [];
+  protected _songTitles: TSongTitle[] = [];
 
-  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+  constructor(config: TServerConfig, logger: Logger, state: DatabaseDataState) {
     super(config, logger, state);
     this._mainDb = mainDbConnection(null, config);
     this._userDb = userDbConnection(null, config);
@@ -105,28 +105,28 @@ class SongDb extends ServerDb<SongType> {
     this.reloadCache();
   }
 
-  public get songList(): SongType[] {
+  public get songList(): TSong[] {
     return this._songList;
   }
 
-  public get songTitles(): SongTitleType[] {
+  public get songTitles(): TSongTitle[] {
     return this._songTitles;
   }
 
-  public getSongListByIds(songIds: SongIdType[]): SongType[] {
+  public getSongListByIds(songIds: TSongId[]): TSong[] {
     return this._songList.filter((song) => {
       return songIds.includes(song.songId);
     });
   }
 
-  public newRecord(record: SongType) {
+  public newRecord(record: TSong) {
     const statement = this._mainFactory.getStatement(STATEMENTS.INSERT_SONG);
     statement.run(record);
     this._newSongAnime(record);
     this.reloadCache();
   }
 
-  public editRecord(record: SongType) {
+  public editRecord(record: TSong) {
     const statement = this._mainFactory.getStatement(STATEMENTS.EDIT_SONG);
     statement.run(record);
     this._deleteSongAnime(record);
@@ -134,7 +134,7 @@ class SongDb extends ServerDb<SongType> {
     this.reloadCache();
   }
 
-  public deleteRecord(record: SongType) {
+  public deleteRecord(record: TSong) {
     const deleteSongStatement = this._mainFactory.getStatement(STATEMENTS.DELETE_SONG);
     deleteSongStatement.run(record);
     const deleteUserSongStatement = this._userFactory.getStatement(STATEMENTS.DELETE_USER_SONGS_BY_SONG_ID);
@@ -143,12 +143,12 @@ class SongDb extends ServerDb<SongType> {
     this.reloadCache();
   }
 
-  protected _deleteSongAnime(song: SongType) {
+  protected _deleteSongAnime(song: TSong) {
     const statement = this._mainFactory.getStatement(STATEMENTS.DELETE_SONG_ANIME_BY_SONG_ID);
     statement.run(song);
   }
 
-  protected _newSongAnime(song: SongType) {
+  protected _newSongAnime(song: TSong) {
     const statement = this._mainFactory.getStatement(STATEMENTS.INSERT_SONG_ANIME);
     const insertMany = this._mainDb.transaction(() => {
       for (const animeId of song.animeId) {
@@ -158,7 +158,7 @@ class SongDb extends ServerDb<SongType> {
     insertMany();
   }
 
-  public validateRecordExists(record: SongType) {
+  public validateRecordExists(record: TSong) {
     const statement = this._mainFactory.getStatement(STATEMENTS.SELECT_SONG_BY_SONG_ID);
     const response = statement.get(record);
     if (!response) {
@@ -166,7 +166,7 @@ class SongDb extends ServerDb<SongType> {
     }
   }
 
-  public validateRecordNotExists(record: SongType) {
+  public validateRecordNotExists(record: TSong) {
     const statement = this._mainFactory.getStatement(STATEMENTS.SELECT_SONG_BY_SONG_ID);
     const response = statement.get(record);
     if (response) {
@@ -174,15 +174,15 @@ class SongDb extends ServerDb<SongType> {
     }
   }
 
-  protected _getSongList(): SongType[] {
+  protected _getSongList(): TSong[] {
     const statement = this._mainFactory.getStatement(STATEMENTS.SELECT_ALL_SONG);
     const response = statement.all();
     return response
-      .map((item): DbSongType => {
+      .map((item): TDbSong => {
         return DbSong.parse(item);
       })
       .map((dbSong) => {
-        const song: SongType = {
+        const song: TSong = {
           songId: dbSong.song_id,
           songTitle: dbSong.song_title,
           src: dbSong.src,
@@ -196,11 +196,11 @@ class SongDb extends ServerDb<SongType> {
       });
   }
 
-  protected _getSongTitles(): SongTitleType[] {
+  protected _getSongTitles(): TSongTitle[] {
     const statement = this._mainFactory.getStatement(STATEMENTS.SELECT_ALL_SONG_TITLES);
     const response = statement.all();
-    const existingSongTitles: Set<SongTitleType> = new Set();
-    const songTitles: SongTitleType[] = [];
+    const existingSongTitles: Set<TSongTitle> = new Set();
+    const songTitles: TSongTitle[] = [];
     for (const item of response) {
       const parsedSongTitle = DbSongTitle.parse(item).song_title;
       if (existingSongTitles.has(parsedSongTitle.toLowerCase())) {

@@ -17,7 +17,7 @@ import VideoPlayer from '@/components/main-game/main-game-window/main-game-windo
 import CountdownTimer from '@/components/main-game/main-game-window/main-game-window-viewport/main-game-video-window/CountdownTimer.vue';
 import { onUnmounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import AudioOnlyPrompt from '@/components/main-game/main-game-window/main-game-window-viewport/main-game-video-window/AudioOnlyPrompt.vue';
 
 const loadingCircleColor = ref('primary');

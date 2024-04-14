@@ -26,16 +26,16 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { AnimeIdType } from '@/assets/shared/models/types';
+import { TAnimeId } from 'anime-quiz-shared-resources/src/models/types';
 import { canParseValue, isMatchFilter } from '@/assets/game-helpers';
 import { z } from 'zod';
-import { AnimeId } from '@/assets/shared/models/anime';
+import { AnimeId } from 'anime-quiz-shared-resources/src/models/anime';
 import { useDataStore } from '@/plugins/store/data';
 
 defineProps({
   modelValue: {
     required: true,
-    type: Array as PropType<AnimeIdType[]>
+    type: Array as PropType<TAnimeId[]>
   },
   disabled: {
     type: Boolean,

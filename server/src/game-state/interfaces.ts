@@ -1,9 +1,9 @@
 import { GameSettings } from './settings';
 import { GameState } from './state';
 
-interface GameRoom {
+interface TGameRoom {
   settings: GameSettings;
   state: GameState;
 }
 
-export { GameRoom };
+export { TGameRoom };

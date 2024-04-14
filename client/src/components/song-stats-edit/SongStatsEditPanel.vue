@@ -9,18 +9,18 @@ import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { useClientStore } from '@/plugins/store/client';
 import { useDataStore } from '@/plugins/store/data';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 import { useAdminStore } from '@/plugins/store/admin';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 
 function newSongStats() {
   adminStore.updateSongStatsInEdit({

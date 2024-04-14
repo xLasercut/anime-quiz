@@ -1,5 +1,5 @@
 import Database, { Database as SqliteDb } from 'better-sqlite3';
-import { ServerConfig } from '../interfaces';
+import { TServerConfig } from '../interfaces';
 import { v4 } from 'uuid';
 import { Logger } from 'winston';
 
@@ -12,15 +12,15 @@ function _databaseConnection(currentDb: SqliteDb | null, filepath: string): Sqli
   return db;
 }
 
-function mainDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
+function mainDbConnection(currentDb: SqliteDb | null, config: TServerConfig) {
   return _databaseConnection(currentDb, config.mainDbPath);
 }
 
-function userDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
+function userDbConnection(currentDb: SqliteDb | null, config: TServerConfig) {
   return _databaseConnection(currentDb, config.userDbPath);
 }
 
-function gameDbConnection(currentDb: SqliteDb | null, config: ServerConfig) {
+function gameDbConnection(currentDb: SqliteDb | null, config: TServerConfig) {
   return _databaseConnection(currentDb, config.gameDbPath);
 }
 
@@ -41,11 +41,11 @@ class DatabaseDataState {
 }
 
 abstract class ServerDb<RecordType> {
-  protected _config: ServerConfig;
+  protected _config: TServerConfig;
   protected _logger: Logger;
   protected _state: DatabaseDataState;
 
-  protected constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+  protected constructor(config: TServerConfig, logger: Logger, state: DatabaseDataState) {
     this._config = config;
     this._logger = logger;
     this._state = state;

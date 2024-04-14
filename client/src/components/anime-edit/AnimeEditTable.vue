@@ -45,13 +45,13 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { AnimeType } from '@/assets/shared/models/types';
+import { TAnime } from 'anime-quiz-shared-resources/src/models/types';
 import { useAdminStore } from '@/plugins/store/admin';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import AnimeEditTableFilters from '@/components/anime-edit/AnimeEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import TableAction from '@/components/common/tables/TableAction.vue';
@@ -59,7 +59,7 @@ import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 const headers = [
   { title: 'Anime ID', key: 'animeId', sortable: false },
   { title: 'Anime Names', key: 'animeName', sortable: false },
@@ -71,19 +71,19 @@ const filters = ref({
 });
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.ANIME_EDIT_TABLE_ITEMS_PER_PAGE);
 
-const filteredAnimeList = computed((): AnimeType[] => {
+const filteredAnimeList = computed((): TAnime[] => {
   return dataStore.animeList.filter((anime) => {
     return anime.animeId.includes(filters.value.animeId) && isMatchFilter(filters.value.animeName, anime.animeName.join(','));
   });
 });
 
-function editAnime(anime: AnimeType) {
+function editAnime(anime: TAnime) {
   adminStore.updateAnimeInEdit(anime);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
   openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Edit Anime');
 }
 
-function deleteAnime(anime: AnimeType) {
+function deleteAnime(anime: TAnime) {
   adminStore.updateAnimeInEdit(anime);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
   openDialog(DIALOG_ROUTES.ANIME_EDIT, 'Delete Anime');

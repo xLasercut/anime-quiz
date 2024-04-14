@@ -1,7 +1,7 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { GameRoomIdType, GameRoomSettingsType } from '../shared/models/types';
-import { GameRoomId, GameRoomSettings } from '../shared/models/game';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TGameRoomId, TGameRoomSettings } from 'anime-quiz-shared-resources/src/models/types';
+import { GameRoomId, GameRoomSettings } from 'anime-quiz-shared-resources/src/models/game';
 
 class GameRoomsHandler extends ServerHandler {
   protected _events = {
@@ -15,7 +15,7 @@ class GameRoomsHandler extends ServerHandler {
     [SOCKET_EVENTS.GET_ROOM_LIST]: () => {
       this._emitter.updateRoomList(this._socket.id);
     },
-    [SOCKET_EVENTS.NEW_GAME_ROOM]: (_roomId: GameRoomIdType, callback: Function) => {
+    [SOCKET_EVENTS.NEW_GAME_ROOM]: (_roomId: TGameRoomId, callback: Function) => {
       this._logger.info('new game room request', {
         clientData: this._socket.data.clientData,
         request: _roomId
@@ -27,7 +27,7 @@ class GameRoomsHandler extends ServerHandler {
       this._socket.join(roomId);
       callback(true);
     },
-    [SOCKET_EVENTS.JOIN_GAME_ROOM]: (_roomId: GameRoomIdType, callback: Function) => {
+    [SOCKET_EVENTS.JOIN_GAME_ROOM]: (_roomId: TGameRoomId, callback: Function) => {
       this._logger.info('join game room request', {
         clientData: this._socket.data.clientData,
         request: _roomId
@@ -45,7 +45,7 @@ class GameRoomsHandler extends ServerHandler {
       const roomId = this._socket.data.currentGameRoom;
       this._emitter.updateGameRoomSettings(this._gameRooms.getRoom(roomId).settings.dict, socketId);
     },
-    [SOCKET_EVENTS.UPDATE_SERVER_GAME_ROOM_SETTINGS]: (_settings: GameRoomSettingsType) => {
+    [SOCKET_EVENTS.UPDATE_SERVER_GAME_ROOM_SETTINGS]: (_settings: TGameRoomSettings) => {
       this._logger.info('updating game room settings', {
         clientData: this._socket.data.clientData,
         request: _settings

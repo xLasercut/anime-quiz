@@ -1,24 +1,24 @@
 import {
-  GameRoomSettingsGameModeType,
-  GameRoomSettingsGuessTimeType,
-  GameRoomSettingsLoadTimeType,
-  GameRoomSettingSongCountType,
-  GameRoomSettingsType,
-  SongTypeType
-} from '../shared/models/types';
-import { GAME_MODES } from '../shared/game-modes';
-import { SONG_TYPES } from '../shared/song-types';
+  TGameRoomSettingsGameMode,
+  TGameRoomSettingsGuessTime,
+  TGameRoomSettingsLoadTime,
+  TGameRoomSettingSongCount,
+  TGameRoomSettings,
+  TSongType
+} from 'anime-quiz-shared-resources/src/models/types';
+import { GAME_MODES } from 'anime-quiz-shared-resources/src/game-modes';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 
 class GameSettings {
-  protected _songCount: GameRoomSettingSongCountType = 20;
-  protected _guessTime: GameRoomSettingsGuessTimeType = 30;
-  protected _loadTime: GameRoomSettingsLoadTimeType = 10;
+  protected _songCount: TGameRoomSettingSongCount = 20;
+  protected _guessTime: TGameRoomSettingsGuessTime = 30;
+  protected _loadTime: TGameRoomSettingsLoadTime = 10;
   protected _duplicate: boolean = false;
   protected _leastPlayed: boolean = true;
-  protected _gameMode: GameRoomSettingsGameModeType = GAME_MODES.BALANCED_PLUS;
-  protected _songType: SongTypeType[] = [SONG_TYPES.OP, SONG_TYPES.ED, SONG_TYPES.INSERT];
+  protected _gameMode: TGameRoomSettingsGameMode = GAME_MODES.BALANCED_PLUS;
+  protected _songType: TSongType[] = [SONG_TYPES.OP, SONG_TYPES.ED, SONG_TYPES.INSERT];
 
-  public get dict(): GameRoomSettingsType {
+  public get dict(): TGameRoomSettings {
     return {
       songCount: this._songCount,
       guessTime: this._guessTime,
@@ -30,7 +30,7 @@ class GameSettings {
     };
   }
 
-  public update(settings: GameRoomSettingsType) {
+  public update(settings: TGameRoomSettings) {
     this._songCount = settings.songCount;
     this._guessTime = settings.guessTime;
     this._duplicate = settings.duplicate;

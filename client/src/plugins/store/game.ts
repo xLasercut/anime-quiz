@@ -1,18 +1,18 @@
 import { defineStore } from 'pinia';
-import { GameGuessType, GamePlayerType, GameRoomStateType, SongType } from '@/assets/shared/models/types';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { TGameGuess, TGamePlayer, TGameRoomState, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 
-interface CurrentSongType extends SongType {
+interface CurrentSongType extends TSong {
   currentSongSrc: string;
 }
 
 interface State {
-  playerList: GamePlayerType[];
+  playerList: TGamePlayer[];
   currentSong: CurrentSongType;
   playing: boolean;
   currentSongCount: number;
   maxSongCount: number;
-  gameGuess: GameGuessType;
+  gameGuess: TGameGuess;
 }
 
 const useGameStore = defineStore('game', {
@@ -40,10 +40,10 @@ const useGameStore = defineStore('game', {
     };
   },
   actions: {
-    updatePlayerList(playerList: GamePlayerType[]) {
+    updatePlayerList(playerList: TGamePlayer[]) {
       this.playerList = playerList;
     },
-    updateGameState(gameState: GameRoomStateType, audioOnly: boolean) {
+    updateGameState(gameState: TGameRoomState, audioOnly: boolean) {
       this.currentSong = {
         ...gameState.currentSong,
         currentSongSrc: gameState.currentSong.src
@@ -55,7 +55,7 @@ const useGameStore = defineStore('game', {
       this.maxSongCount = gameState.maxSongCount;
       this.playing = gameState.playing;
     },
-    updateGameGuess(gameGuess: GameGuessType) {
+    updateGameGuess(gameGuess: TGameGuess) {
       this.gameGuess = gameGuess;
     }
   }

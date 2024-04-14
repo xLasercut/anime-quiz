@@ -1,21 +1,21 @@
 import { GameListGenerator } from './common';
-import { GameRoomSettingsType, SongType, UserIdType } from '../../shared/models/types';
-import { HandlerDependencies } from '../../interfaces';
+import { TGameRoomSettings, TSong, TUserId } from 'anime-quiz-shared-resources/src/models/types';
+import { THandlerDependencies } from '../../interfaces';
 
 class ShiritoriGameListGenerator extends GameListGenerator {
   protected _firstLetterPattern: RegExp;
 
-  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+  constructor(dependencies: THandlerDependencies, settings: TGameRoomSettings, players: TUserId[]) {
     super(dependencies, settings, players);
     this._firstLetterPattern = new RegExp('[A-Za-z]');
   }
 
-  protected _generateList(): SongType[] {
+  protected _generateList(): TSong[] {
     const userSongs = this._getSongsByUserIds(this._players);
     if (userSongs.length <= 0) {
       return [];
     }
-    const songList: SongType[] = [];
+    const songList: TSong[] = [];
     let lastLetter = '';
     let unmatchCount = 0;
     while (songList.length < this._songCount && unmatchCount < 2) {
@@ -34,14 +34,14 @@ class ShiritoriGameListGenerator extends GameListGenerator {
     return songList;
   }
 
-  protected _findNextSong(userSongs: SongType[], lastLetter: string): SongType | null {
+  protected _findNextSong(userSongs: TSong[], lastLetter: string): TSong | null {
     if (lastLetter) {
       return this._findNextSongFromLastLetter(userSongs, lastLetter);
     }
     return this._findNextSongStandard(userSongs);
   }
 
-  protected _findNextSongFromLastLetter(userSongs: SongType[], lastLetter: string): SongType | null {
+  protected _findNextSongFromLastLetter(userSongs: TSong[], lastLetter: string): TSong | null {
     for (const song of userSongs) {
       for (const animeName of song.animeName) {
         if (!this._isDupeSong(song) && this._getFirstLetter(animeName) === lastLetter && !this._isDupeAnime(song)) {
@@ -52,7 +52,7 @@ class ShiritoriGameListGenerator extends GameListGenerator {
     return null;
   }
 
-  protected _findNextSongStandard(userSongs: SongType[]): SongType | null {
+  protected _findNextSongStandard(userSongs: TSong[]): TSong | null {
     for (const song of userSongs) {
       if (!this._isDupeSong(song) && !this._isDupeAnime(song)) {
         return song;

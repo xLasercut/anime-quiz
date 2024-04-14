@@ -1,18 +1,18 @@
 import { defineStore } from 'pinia';
-import { AnimeType, BotMessageType, EmojiType, SongStatsType, SongType, UserType } from '@/assets/shared/models/types';
+import { TAnime, TBotMessage, TEmoji, TSongStats, TSong, TUser } from 'anime-quiz-shared-resources/src/models/types';
 import { generateId } from '@/assets/game-helpers';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { SONG_TYPES } from '@/assets/shared/song-types';
-import { AVATARS } from '@/assets/shared/avatars';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
+import { AVATARS } from 'anime-quiz-shared-resources/src/avatars';
 
 interface State {
-  userInEdit: UserType;
+  userInEdit: TUser;
   editMode: string;
-  animeInEdit: AnimeType;
-  songInEdit: SongType;
-  emojiInEdit: EmojiType;
-  botMessageInEdit: BotMessageType;
-  songStatsInEdit: SongStatsType;
+  animeInEdit: TAnime;
+  songInEdit: TSong;
+  emojiInEdit: TEmoji;
+  botMessageInEdit: TBotMessage;
+  songStatsInEdit: TSongStats;
 }
 
 const useAdminStore = defineStore('admin', {
@@ -61,7 +61,7 @@ const useAdminStore = defineStore('admin', {
     };
   },
   actions: {
-    updateUserInEdit(user: UserType) {
+    updateUserInEdit(user: TUser) {
       this.userInEdit = Object.assign({}, user);
     },
     generateNewUserId() {
@@ -73,22 +73,22 @@ const useAdminStore = defineStore('admin', {
     generateNewAnimeId() {
       this.animeInEdit.animeId = generateId('anime');
     },
-    updateAnimeInEdit(anime: AnimeType) {
+    updateAnimeInEdit(anime: TAnime) {
       this.animeInEdit = Object.assign({}, anime);
     },
-    updateSongInEdit(song: SongType) {
+    updateSongInEdit(song: TSong) {
       this.songInEdit = Object.assign({}, song);
     },
     generateNewSongId() {
       this.songInEdit.songId = generateId('song');
     },
-    updateEmojiInEdit(emoji: EmojiType) {
+    updateEmojiInEdit(emoji: TEmoji) {
       this.emojiInEdit = Object.assign({}, emoji);
     },
     generateNewEmojiId() {
       this.emojiInEdit.emojiId = generateId('emoji');
     },
-    updateBotMessageInEdit(botMessage: BotMessageType) {
+    updateBotMessageInEdit(botMessage: TBotMessage) {
       this.botMessageInEdit = Object.assign({}, botMessage);
     },
     generateNewBotMessageId() {
@@ -97,7 +97,7 @@ const useAdminStore = defineStore('admin', {
     generateNewBotMessageUserId() {
       this.botMessageInEdit.userId = generateId('user');
     },
-    updateSongStatsInEdit(songStats: SongStatsType) {
+    updateSongStatsInEdit(songStats: TSongStats) {
       this.songStatsInEdit = Object.assign({}, songStats);
     }
   },

@@ -1,12 +1,12 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { SocketIdType, SongType } from '../shared/models/types';
-import { Song } from '../shared/models/song';
-import { SocketId } from '../shared/models/client';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TSocketId, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { Song } from 'anime-quiz-shared-resources/src/models/song';
+import { SocketId } from 'anime-quiz-shared-resources/src/models/client';
 
 class AdminGameHandler extends ServerHandler {
   protected _events = {
-    [SOCKET_EVENTS.ADMIN_GAME_SONG_OVERRIDE]: (_song: SongType) => {
+    [SOCKET_EVENTS.ADMIN_GAME_SONG_OVERRIDE]: (_song: TSong) => {
       this._logger.info('game song override', {
         request: _song,
         clientData: this._socket.data.clientData
@@ -23,7 +23,7 @@ class AdminGameHandler extends ServerHandler {
         this._socket.id
       );
     },
-    [SOCKET_EVENTS.ADMIN_GAME_KICK_PLAYER]: (_socketId: SocketIdType) => {
+    [SOCKET_EVENTS.ADMIN_GAME_KICK_PLAYER]: (_socketId: TSocketId) => {
       this._logger.info('game kick player', {
         request: _socketId,
         clientData: this._socket.data.clientData

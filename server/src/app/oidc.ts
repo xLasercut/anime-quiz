@@ -1,4 +1,4 @@
-import { ServerConfig } from '../interfaces';
+import { TServerConfig } from '../interfaces';
 import axios from 'axios';
 import { Logger } from 'winston';
 
@@ -18,12 +18,12 @@ interface DiscordUserApiResponse {
 }
 
 class Oidc {
-  protected _config: ServerConfig;
+  protected _config: TServerConfig;
   protected _logger: Logger;
   protected _tokenUrl: string = 'https://discord.com/api/oauth2/token';
   protected _userInfoUrl: string = 'https://discord.com/api/users/@me';
 
-  constructor(config: ServerConfig, logger: Logger) {
+  constructor(config: TServerConfig, logger: Logger) {
     this._config = config;
     this._logger = logger;
   }

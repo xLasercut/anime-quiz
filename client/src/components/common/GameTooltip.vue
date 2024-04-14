@@ -9,12 +9,12 @@
 
 <script setup lang="ts">
 import { computed, PropType, ref, StyleValue, watch } from 'vue';
-import { GameTooltipPosition } from '@/assets/types';
+import { TGameTooltipPosition } from '@/assets/types';
 
 const props = defineProps({
   location: {
-    type: String as PropType<GameTooltipPosition>,
-    default: (): GameTooltipPosition => {
+    type: String as PropType<TGameTooltipPosition>,
+    default: (): TGameTooltipPosition => {
       return 'top';
     }
   },

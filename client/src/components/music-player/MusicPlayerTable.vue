@@ -59,8 +59,8 @@ import { onMounted, ref, watch } from 'vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import MusicPlayerTablePlayer from '@/components/music-player/MusicPlayerTablePlayer.vue';
-import { SongType } from '@/assets/shared/models/types';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
@@ -77,7 +77,7 @@ const headers = [
 ];
 
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MUSIC_PLAYER_TABLE_ITEMS_PER_PAGE);
-const currentSong = ref<SongType>({
+const currentSong = ref<TSong>({
   songId: '',
   src: '',
   type: SONG_TYPES.OP,
@@ -94,11 +94,11 @@ const filters = ref({
   type: Object.values(SONG_TYPES)
 });
 const shuffle = ref(true);
-const filteredSongList = ref<SongType[]>([]);
+const filteredSongList = ref<TSong[]>([]);
 
 watch(
   () => currentSong.value,
-  (val: SongType) => {
+  (val: TSong) => {
     const songIndex = filteredSongList.value.indexOf(val);
     currentPage.value = Math.floor(songIndex / itemsPerPage.value) + 1;
   }
@@ -123,23 +123,23 @@ function filterSongList() {
   });
 }
 
-function songPickBtnDisabled(song: SongType): boolean {
+function songPickBtnDisabled(song: TSong): boolean {
   return currentSong.value.songId === song.songId;
 }
 
-function songPickBtnColor(song: SongType): string {
+function songPickBtnColor(song: TSong): string {
   if (songPickBtnDisabled(song)) {
     return 'primary';
   }
   return 'success';
 }
 
-function _getRandomSong(songList: SongType[]): SongType {
+function _getRandomSong(songList: TSong[]): TSong {
   const randomIndex = Math.floor(Math.random() * songList.length);
   return songList[randomIndex];
 }
 
-function _getNextSong(songList: SongType[]): SongType {
+function _getNextSong(songList: TSong[]): TSong {
   if (shuffle.value) {
     return _getRandomSong(songList);
   }
@@ -150,7 +150,7 @@ function _getNextSong(songList: SongType[]): SongType {
   return songList[currentIndex + 1];
 }
 
-function _getPreviousSong(songList: SongType[]): SongType {
+function _getPreviousSong(songList: TSong[]): TSong {
   if (shuffle.value) {
     return _getRandomSong(songList);
   }

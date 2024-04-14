@@ -4,9 +4,11 @@ import { DbSong, DbSongTitle } from './song';
 import { DbAnime } from './anime';
 import { DbSongStats } from './song-stats';
 
-export type DbUserType = z.infer<typeof DbUser>;
-export type DbSongType = z.infer<typeof DbSong>;
-export type DbAnimeType = z.infer<typeof DbAnime>;
-export type DbSongTitleType = z.infer<typeof DbSongTitle>;
-export type DbUserSongType = z.infer<typeof DbUserSong>;
-export type DbSongStatsType = z.infer<typeof DbSongStats>;
+type TDbUser = z.infer<typeof DbUser>;
+type TDbSong = z.infer<typeof DbSong>;
+type TDbAnime = z.infer<typeof DbAnime>;
+type TDbSongTitle = z.infer<typeof DbSongTitle>;
+type TDbUserSong = z.infer<typeof DbUserSong>;
+type TDbSongStats = z.infer<typeof DbSongStats>;
+
+export type { TDbUser, TDbSong, TDbAnime, TDbSongTitle, TDbUserSong, TDbSongStats };

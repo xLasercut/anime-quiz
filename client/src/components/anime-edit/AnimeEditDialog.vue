@@ -25,10 +25,10 @@ import { useAdminStore } from '@/plugins/store/admin';
 import DialogMultiCombobox from '@/components/common/dialogs/DialogMultiCombobox.vue';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 import { canParseValue } from '@/assets/game-helpers';
-import { AnimeId, AnimeName } from '@/assets/shared/models/anime';
+import { AnimeId, AnimeName } from 'anime-quiz-shared-resources/src/models/anime';
 import { z } from 'zod';
 
 const adminStore = useAdminStore();

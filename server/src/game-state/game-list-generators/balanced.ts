@@ -1,17 +1,17 @@
 import { GameListGenerator } from './common';
-import { GameRoomSettingsType, SongType, UserIdType } from '../../shared/models/types';
-import { HandlerDependencies } from '../../interfaces';
+import { TGameRoomSettings, TSong, TUserId } from 'anime-quiz-shared-resources/src/models/types';
+import { THandlerDependencies } from '../../interfaces';
 
 class BalancedGameListGenerator extends GameListGenerator {
   protected _songsPerUser: number;
 
-  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+  constructor(dependencies: THandlerDependencies, settings: TGameRoomSettings, players: TUserId[]) {
     super(dependencies, settings, players);
     this._songsPerUser = Math.floor(this._songCount / this._players.length);
   }
 
-  protected _generateList(): SongType[] {
-    const songList: SongType[] = [];
+  protected _generateList(): TSong[] {
+    const songList: TSong[] = [];
     for (const userId of this._players) {
       let songCount = 0;
       for (const song of this._getSongsByUserId(userId)) {
@@ -27,7 +27,7 @@ class BalancedGameListGenerator extends GameListGenerator {
         }
       }
     }
-    return this._shuffleArray<SongType>(songList);
+    return this._shuffleArray<TSong>(songList);
   }
 }
 

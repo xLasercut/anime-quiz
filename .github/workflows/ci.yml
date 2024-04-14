@@ -3,7 +3,7 @@ name: CI
 env:
   CACHE_NAME: node_modules
 
-on: [pull_request]
+on: [ pull_request ]
 
 jobs:
   setup-cache:
@@ -18,7 +18,7 @@ jobs:
         uses: ./.github/actions/runner-setup/
 
       - name: Install dependencies
-        run: make install
+        run: pnpm install
 
       - name: Create cache - ${{ env.CACHE_NAME }}
         uses: ./.github/actions/caching/
@@ -26,33 +26,12 @@ jobs:
           path: |
             server/node_modules
             client/node_modules
+            shared-resources/node_modules
+            node_modules
           name: ${{ env.CACHE_NAME }}
 
   check-formatting:
     name: Check formatting
-    runs-on: ubuntu-latest
-    needs: [setup-cache]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Runner setup
-        uses: ./.github/actions/runner-setup/
-
-      - name: Download cache - ${{ env.CACHE_NAME }}
-        uses: ./.github/actions/caching/
-        with:
-          path: |
-            server/node_modules
-            client/node_modules
-          name: ${{ env.CACHE_NAME }}
-
-      - name: Check formatting
-        run: make check-format
-
-  test-build-client:
-    name: Test build client
     runs-on: ubuntu-latest
     needs: [ setup-cache ]
 
@@ -69,20 +48,43 @@ jobs:
           path: |
             server/node_modules
             client/node_modules
+            shared-resources/node_modules
+            node_modules
           name: ${{ env.CACHE_NAME }}
 
-      - name: Test build client
-        run: |
-          cd client
-          touch .env
-          echo VITE_DISCORD_CLIENT_ID=${{ secrets.VITE_DISCORD_CLIENT_ID }} >> .env
-          echo VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} >> .env
-          export VITE_CLIENT_VERSION=$(git rev-parse --short "$GITHUB_SHA")
-          echo VITE_CLIENT_VERSION=${{ env.VITE_CLIENT_VERSION }} >> .env
-          make build
+      - name: Check formatting
+        run: pnpm format:check
 
-  test-build-server:
-    name: Test build server
+  test-build-typescript:
+    name: Test build typescript
+    runs-on: ubuntu-latest
+    needs: [ setup-cache ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Runner setup
+        uses: ./.github/actions/runner-setup/
+
+      - name: Download cache - ${{ env.CACHE_NAME }}
+        uses: ./.github/actions/caching/
+        with:
+          path: |
+            server/node_modules
+            client/node_modules
+            shared-resources/node_modules
+            node_modules
+          name: ${{ env.CACHE_NAME }}
+
+      - name: Set client env file
+        uses: ./.github/actions/create-client-env-file
+
+      - name: Test build typescript
+        run: pnpm build
+
+  test-build-server-docker:
+    name: Test build server docker
     runs-on: ubuntu-latest
     needs: [ setup-cache ]
 
@@ -96,20 +98,20 @@ jobs:
       - name: Test build server
         uses: docker/build-push-action@v5
         with:
-          context: server
+          context: .
           push: false
           platforms: linux/amd64,linux/arm64
           build-args: DOCKER_SERVER_VERSION=${{ github.ref_name }}
 
   clear-cache:
     name: Clear Caches
-    needs: [ test-build-client, test-build-server, check-formatting ]
+    needs: [ test-build-typescript, test-build-server-docker, check-formatting ]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Clear cache
         uses: ./.github/actions/clear-cache/
         with:

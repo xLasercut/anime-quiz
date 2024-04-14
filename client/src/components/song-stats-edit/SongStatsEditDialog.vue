@@ -24,10 +24,10 @@ import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import { SONG_ID_RULES } from '@/assets/form-rules';
 import { canParseValue } from '@/assets/game-helpers';
-import { SongStatsPlayCount } from '@/assets/shared/models/song-stats';
+import { SongStatsPlayCount } from 'anime-quiz-shared-resources/src/models/song-stats';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 
 const adminStore = useAdminStore();

@@ -1,8 +1,8 @@
 import { Server } from '../app/server';
-import { GamePlayerType, GameRoomIdType } from '../shared/models/types';
-import { GameRoomId } from '../shared/models/game';
+import { TGamePlayer, TGameRoomId } from 'anime-quiz-shared-resources/src/models/types';
+import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
 import { ZodError } from 'zod';
-import { GameRoom } from './interfaces';
+import { TGameRoom } from './interfaces';
 import { Logger } from 'winston';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
 import { GameSettings } from './settings';
@@ -12,22 +12,22 @@ import { GameState } from './state';
 class GameRooms {
   protected _io: Server;
   protected _logger: Logger;
-  protected _rooms: Record<GameRoomIdType, GameRoom> = {};
+  protected _rooms: Record<TGameRoomId, TGameRoom> = {};
 
   constructor(io: Server, logger: Logger) {
     this._io = io;
     this._logger = logger;
   }
 
-  public getRoom(roomId: string): GameRoom {
+  public getRoom(roomId: string): TGameRoom {
     if (!(roomId in this._rooms)) {
       throw new UnauthorizedError();
     }
     return this._rooms[roomId];
   }
 
-  public getRoomList(): GameRoomIdType[] {
-    const roomList: GameRoomIdType[] = [];
+  public getRoomList(): TGameRoomId[] {
+    const roomList: TGameRoomId[] = [];
 
     for (const [_roomId, _] of this._io.sockets.adapter.rooms) {
       try {
@@ -42,38 +42,38 @@ class GameRooms {
     return roomList;
   }
 
-  public validateRoomNotExists(roomId: GameRoomIdType) {
+  public validateRoomNotExists(roomId: TGameRoomId) {
     if (roomId in this._rooms) {
       throw new DataQualityError('Room already exists');
     }
   }
 
-  public validateRoomExists(roomId: GameRoomIdType) {
+  public validateRoomExists(roomId: TGameRoomId) {
     if (!(roomId in this._rooms)) {
       throw new DataQualityError('Room does not exists');
     }
   }
 
-  public getPlayerList(roomId: GameRoomIdType): GamePlayerType[] {
+  public getPlayerList(roomId: TGameRoomId): TGamePlayer[] {
     return this._io.getSocketIds(roomId).map((socketId) => {
       const socket = this._io.sockets.sockets.get(socketId) as Socket;
       return socket.data.playerData;
     });
   }
 
-  public newRoom(roomId: GameRoomIdType) {
+  public newRoom(roomId: TGameRoomId) {
     this._rooms[roomId] = {
       settings: new GameSettings(),
       state: new GameState(this._io, roomId)
     };
   }
 
-  public deleteRoom(roomId: GameRoomIdType) {
+  public deleteRoom(roomId: TGameRoomId) {
     this._rooms[roomId].state.stopGame();
     delete this._rooms[roomId];
   }
 
-  public setNewHost(roomId: GameRoomIdType): Socket | undefined {
+  public setNewHost(roomId: TGameRoomId): Socket | undefined {
     const socketIds = this._io.getSocketIds(roomId);
     if (socketIds.length > 0) {
       const hostSocketId = socketIds[0];

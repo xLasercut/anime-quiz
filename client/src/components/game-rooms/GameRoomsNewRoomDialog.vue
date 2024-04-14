@@ -11,9 +11,9 @@ import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { ref } from 'vue';
 import { canParseValue, generateId } from '@/assets/game-helpers';
-import { GameRoomId } from '@/assets/shared/models/game';
+import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 

@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { SongType } from '@/assets/shared/models/types';
+import { TSong } from 'anime-quiz-shared-resources/src/models/types';
 import { isMatchFilter } from '@/assets/game-helpers';
 import { useDataStore } from '@/plugins/store/data';
 import { computed, ref } from 'vue';
@@ -54,9 +54,9 @@ import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { usePagination } from '@/assets/pagination-helpers';
 
 const emit = defineEmits(['dialog:close']);
@@ -78,7 +78,7 @@ const filters = ref({
 });
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.MAIN_GAME_SONG_PICKER_ITEMS_PER_PAGE);
 
-const filteredSongs = computed((): SongType[] => {
+const filteredSongs = computed((): TSong[] => {
   return dataStore.songList.filter((song) => {
     return (
       isMatchFilter(filters.value.anime, song.animeName.join(',')) &&
@@ -89,7 +89,7 @@ const filteredSongs = computed((): SongType[] => {
   });
 });
 
-function selectSongOverride(song: SongType) {
+function selectSongOverride(song: TSong) {
   socket.emit(SOCKET_EVENTS.ADMIN_GAME_SONG_OVERRIDE, song);
   emit('dialog:close');
 }

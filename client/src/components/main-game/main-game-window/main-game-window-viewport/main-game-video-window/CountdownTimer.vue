@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 
 let timer: NodeJS.Timeout;

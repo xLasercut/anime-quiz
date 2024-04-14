@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue';
-import { GameChatType } from '@/assets/shared/models/types';
+import { TGameChat } from 'anime-quiz-shared-resources/src/models/types';
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import { useDataStore } from '@/plugins/store/data';
 
@@ -23,7 +23,7 @@ const dataStore = useDataStore();
 const props = defineProps({
   message: {
     required: true,
-    type: Object as PropType<GameChatType>
+    type: Object as PropType<TGameChat>
   }
 });
 

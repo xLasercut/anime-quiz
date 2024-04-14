@@ -1,11 +1,11 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
-import { BotMessageType, MessageCommandType } from '../shared/models/types';
+import { TBotMessage, TMessageCommand } from 'anime-quiz-shared-resources/src/models/types';
 import { Database as SqliteDb } from 'better-sqlite3';
-import { ServerConfig } from '../interfaces';
+import { TServerConfig } from '../interfaces';
 import { Logger } from 'winston';
 import { StatementFactory } from './statement';
 import { DbBotMessage } from '../models/bot-message';
-import { BotMessage } from '../shared/models/bot-message';
+import { BotMessage } from 'anime-quiz-shared-resources/src/models/bot-message';
 import { DataQualityError } from '../app/exceptions';
 
 const STATEMENTS = {
@@ -64,41 +64,41 @@ const RAW_STATEMENTS = {
   `
 };
 
-class BotMessageDb extends ServerDb<BotMessageType> {
+class BotMessageDb extends ServerDb<TBotMessage> {
   protected _db: SqliteDb;
   protected _factory: StatementFactory;
-  protected _messageList: BotMessageType[] = [];
+  protected _messageList: TBotMessage[] = [];
 
-  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+  constructor(config: TServerConfig, logger: Logger, state: DatabaseDataState) {
     super(config, logger, state);
     this._db = mainDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
     this.reloadCache();
   }
 
-  public get messageList(): BotMessageType[] {
+  public get messageList(): TBotMessage[] {
     return this._messageList;
   }
 
-  public newRecord(record: BotMessageType) {
+  public newRecord(record: TBotMessage) {
     const statement = this._factory.getStatement(STATEMENTS.INSERT_BOT_MESSAGE);
     statement.run(record);
     this.reloadCache();
   }
 
-  public editRecord(record: BotMessageType) {
+  public editRecord(record: TBotMessage) {
     const statement = this._factory.getStatement(STATEMENTS.EDIT_BOT_MESSAGE);
     statement.run(record);
     this.reloadCache();
   }
 
-  public deleteRecord(record: BotMessageType) {
+  public deleteRecord(record: TBotMessage) {
     const statement = this._factory.getStatement(STATEMENTS.DELETE_BOT_MESSAGE);
     statement.run(record);
     this.reloadCache();
   }
 
-  public validateRecordExists(record: BotMessageType) {
+  public validateRecordExists(record: TBotMessage) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_BOT_MESSAGE_BY_ID);
     const response = statement.get(record);
     if (!response) {
@@ -106,7 +106,7 @@ class BotMessageDb extends ServerDb<BotMessageType> {
     }
   }
 
-  public validateRecordNotExists(record: BotMessageType) {
+  public validateRecordNotExists(record: TBotMessage) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_BOT_MESSAGE_BY_ID_OR_COMMAND);
     const response = statement.get(record);
     if (response) {
@@ -114,7 +114,7 @@ class BotMessageDb extends ServerDb<BotMessageType> {
     }
   }
 
-  public validateCommandNotExists(record: BotMessageType) {
+  public validateCommandNotExists(record: TBotMessage) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_BOT_MESSAGE_BY_COMMAND);
     const response = statement.get(record);
     if (response) {
@@ -132,13 +132,13 @@ class BotMessageDb extends ServerDb<BotMessageType> {
     this._messageList = this._getMessageList();
   }
 
-  protected _getMessageList(): BotMessageType[] {
+  protected _getMessageList(): TBotMessage[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_BOT_MESSAGE);
     const response = statement.all();
     return response
       .map((item) => DbBotMessage.parse(item))
       .map((dbBotMessage) => {
-        const botMessage: BotMessageType = {
+        const botMessage: TBotMessage = {
           messageId: dbBotMessage.message_id,
           command: dbBotMessage.command,
           avatar: dbBotMessage.avatar,
@@ -150,7 +150,7 @@ class BotMessageDb extends ServerDb<BotMessageType> {
       });
   }
 
-  public getBotMessageByCommand(command: MessageCommandType): BotMessageType | undefined {
+  public getBotMessageByCommand(command: TMessageCommand): TBotMessage | undefined {
     for (const botMessage of this._messageList) {
       if (botMessage.command.toLowerCase() === command.toLowerCase()) {
         return botMessage;

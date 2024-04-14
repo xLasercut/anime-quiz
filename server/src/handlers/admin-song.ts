@@ -1,11 +1,11 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { SongType } from '../shared/models/types';
-import { Song } from '../shared/models/song';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { Song } from 'anime-quiz-shared-resources/src/models/song';
 
 class AdminSongHandler extends ServerHandler {
   protected _events = {
-    [SOCKET_EVENTS.ADMIN_NEW_SONG]: (_song: SongType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_NEW_SONG]: (_song: TSong, callback: Function) => {
       this._logger.info('admin add song', {
         clientData: this._socket.data.clientData,
         request: _song
@@ -20,7 +20,7 @@ class AdminSongHandler extends ServerHandler {
       this._emitter.systemNotification({ color: 'success', message: `Added song ${song.songTitle}` }, this._socket.id);
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_EDIT_SONG]: (_song: SongType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_EDIT_SONG]: (_song: TSong, callback: Function) => {
       this._logger.info('admin edit song', {
         clientData: this._socket.data.clientData,
         request: _song
@@ -35,7 +35,7 @@ class AdminSongHandler extends ServerHandler {
       this._emitter.systemNotification({ color: 'success', message: `Edited song ${song.songTitle}` }, this._socket.id);
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_DELETE_SONG]: (_song: SongType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_DELETE_SONG]: (_song: TSong, callback: Function) => {
       this._logger.info('admin delete song', {
         clientData: this._socket.data.clientData,
         request: _song

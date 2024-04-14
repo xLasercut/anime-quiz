@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { useGameStore } from '@/plugins/store/game';
 import { nextTick, onUnmounted, ref, watch } from 'vue';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
 import { MediaDurationChangeEvent, MediaTimeUpdateEvent } from 'vidstack';

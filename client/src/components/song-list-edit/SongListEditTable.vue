@@ -71,16 +71,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { SongIdType, SongType } from '@/assets/shared/models/types';
+import { TSongId, TSong } from 'anime-quiz-shared-resources/src/models/types';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, SONG_LIST_EDIT_MODE } from '@/assets/constants';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableActions from '@/components/song-list-edit/SongListEditTableActions.vue';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
@@ -110,7 +110,7 @@ watch(
   }
 );
 
-const filteredSongs = computed((): SongType[] => {
+const filteredSongs = computed((): TSong[] => {
   return dataStore.songList.filter((song) => {
     if (editMode.value === SONG_LIST_EDIT_MODE.REMOVE) {
       return (
@@ -152,7 +152,7 @@ function checkboxColor(): string {
   return 'success';
 }
 
-function checkboxDisabled(songId: SongIdType, isSelected: boolean): boolean {
+function checkboxDisabled(songId: TSongId, isSelected: boolean): boolean {
   if (disabled.value) {
     return true;
   }

@@ -14,7 +14,7 @@ import { BotMessageDb } from './database/bot-message';
 import { SongStatsDb } from './database/song-stats';
 import { Logger } from 'winston';
 
-interface EmitterDependencies {
+interface TEmitterDependencies {
   userDb: UserDb;
   songDb: SongDb;
   animeDb: AnimeDb;
@@ -27,10 +27,10 @@ interface EmitterDependencies {
   dbDataState: DatabaseDataState;
 }
 
-interface HandlerDependencies {
+interface THandlerDependencies {
   io: Server;
   logger: Logger;
-  config: ServerConfig;
+  config: TServerConfig;
   dbDataState: DatabaseDataState;
   userDb: UserDb;
   songDb: SongDb;
@@ -46,7 +46,7 @@ interface HandlerDependencies {
   chatSerialiser: GameChatSerialiser;
 }
 
-interface ServerConfig {
+interface TServerConfig {
   rootDir: string;
   logDir: string;
   dataDir: string;
@@ -66,4 +66,4 @@ interface ServerConfig {
   serverVersion: string;
 }
 
-export { HandlerDependencies, ServerConfig, EmitterDependencies };
+export type { THandlerDependencies, TServerConfig, TEmitterDependencies };

@@ -16,15 +16,15 @@
 import { CLIENT_CONSTANTS } from '@/assets/constants';
 import MainGameChatInput from '@/components/main-game/main-game-chat/MainGameChatInput.vue';
 import { nextTick, onUnmounted, ref } from 'vue';
-import { GameChatType } from '@/assets/shared/models/types';
+import { TGameChat } from 'anime-quiz-shared-resources/src/models/types';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
-import { GameChat } from '@/assets/shared/models/game';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { GameChat } from 'anime-quiz-shared-resources/src/models/game';
 import MainGameChatMessage from '@/components/main-game/main-game-chat/MainGameChatMessage.vue';
 
-const messages = ref<GameChatType[]>([]);
+const messages = ref<TGameChat[]>([]);
 
-socket.on(SOCKET_EVENTS.UPDATE_GAME_CHAT, (_chat: GameChatType) => {
+socket.on(SOCKET_EVENTS.UPDATE_GAME_CHAT, (_chat: TGameChat) => {
   const chat = GameChat.parse(_chat);
   if (messages.value.length > 100) {
     messages.value.splice(0, 1);

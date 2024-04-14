@@ -1,3 +1,31 @@
+# editor directories
+.idea
+.vscode
+**/.idea
+**/.vscode
+
+# generic
 node_modules
+**/node_modules
 dist
+**/dist
 Dockerfile
+**/Dockerfile
+.prettierrc
+**/.prettierrc
+.nvmrc
+**/.nvmrc
+.gitignore
+**/.gitignore
+.editorconfig
+**/.editorconfig
+docker-compose.yml
+LICENSE
+README.md
+**/README.md
+
+# server specific
+server/data/secondary
+server/log
+server/tools
+server/config.env

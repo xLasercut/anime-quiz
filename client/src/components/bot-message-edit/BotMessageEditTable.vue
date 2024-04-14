@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { BotMessageType } from '@/assets/shared/models/types';
+import { TBotMessage } from 'anime-quiz-shared-resources/src/models/types';
 import { useDataStore } from '@/plugins/store/data';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { computed, inject, ref } from 'vue';
@@ -50,13 +50,13 @@ import TableAction from '@/components/common/tables/TableAction.vue';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import BotMessageEditTableFilters from '@/components/bot-message-edit/BotMessageEditTableFilters.vue';
 import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 
 const headers = [
   { title: 'Message ID', key: 'messageId', sortable: false },
@@ -75,19 +75,19 @@ const filters = ref({
   command: ''
 });
 
-function editBotMessage(botMessage: BotMessageType) {
+function editBotMessage(botMessage: TBotMessage) {
   adminStore.updateBotMessageInEdit(botMessage);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
   openDialog(DIALOG_ROUTES.BOT_MESSAGE_EDIT, 'Edit Bot Message');
 }
 
-function deleteBotMessage(botMessage: BotMessageType) {
+function deleteBotMessage(botMessage: TBotMessage) {
   adminStore.updateBotMessageInEdit(botMessage);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
   openDialog(DIALOG_ROUTES.BOT_MESSAGE_EDIT, 'Delete Bot Message');
 }
 
-const filteredMessageList = computed((): BotMessageType[] => {
+const filteredMessageList = computed((): TBotMessage[] => {
   return dataStore.botMessageList.filter((botMessage) => {
     return (
       botMessage.messageId.includes(filters.value.messageId) &&

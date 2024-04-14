@@ -1,8 +1,8 @@
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { v4 as uuid4 } from 'uuid';
-import { LocalStorageConstant } from '@/assets/types';
+import { TLocalStorageConstant } from '@/assets/types';
 
-function getLocalStorageNumber(localStorageKey: LocalStorageConstant, defaultValue: number): number {
+function getLocalStorageNumber(localStorageKey: TLocalStorageConstant, defaultValue: number): number {
   try {
     const stringValue = localStorage[localStorageKey] || `${defaultValue}`;
     return parseInt(stringValue);

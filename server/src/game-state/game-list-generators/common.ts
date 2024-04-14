@@ -1,16 +1,16 @@
 import { UserSongDb } from '../../database/user-song';
 import {
-  AnimeIdType,
-  CombinedSongStatsType,
-  GameRoomSettingsType,
-  SongIdType,
-  SongStatsPlayCountType,
-  SongType,
-  SongTypeType,
-  UserIdType
-} from '../../shared/models/types';
+  TAnimeId,
+  TCombinedSongStats,
+  TGameRoomSettings,
+  TSongId,
+  TSongStatsPlayCount,
+  TSong,
+  TSongType,
+  TUserId
+} from 'anime-quiz-shared-resources/src/models/types';
 import { SongDb } from '../../database/song';
-import { HandlerDependencies } from '../../interfaces';
+import { THandlerDependencies } from '../../interfaces';
 import { SongStatsDb } from '../../database/song-stats';
 import { Logger } from 'winston';
 
@@ -21,15 +21,15 @@ abstract class GameListGenerator {
   protected _duplicate: boolean;
   protected _songCount: number;
   protected _leastPlayed: boolean;
-  protected _songType: SongTypeType[];
-  protected _players: UserIdType[];
-  protected _dupeSongIds: Set<SongIdType>;
-  protected _dupeAnimeIds: Set<AnimeIdType>;
-  protected _songPlayCounts: { [key: SongIdType]: SongStatsPlayCountType } = {};
+  protected _songType: TSongType[];
+  protected _players: TUserId[];
+  protected _dupeSongIds: Set<TSongId>;
+  protected _dupeAnimeIds: Set<TAnimeId>;
+  protected _songPlayCounts: { [key: TSongId]: TSongStatsPlayCount } = {};
   protected _maxPlayCount: number = 0;
   protected _logger: Logger;
 
-  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+  constructor(dependencies: THandlerDependencies, settings: TGameRoomSettings, players: TUserId[]) {
     this._logger = dependencies.logger;
     this._userSongDb = dependencies.userSongDb;
     this._songDb = dependencies.songDb;
@@ -44,14 +44,14 @@ abstract class GameListGenerator {
     this._initSongStats();
   }
 
-  public generate(): SongType[] {
+  public generate(): TSong[] {
     if (this._players.length <= 0) {
       return [];
     }
     return this._generateList();
   }
 
-  protected abstract _generateList(): SongType[];
+  protected abstract _generateList(): TSong[];
 
   protected _shuffleArray<T>(listToShuffle: T[]): T[] {
     const shuffledList = [...listToShuffle];
@@ -62,7 +62,7 @@ abstract class GameListGenerator {
     return shuffledList;
   }
 
-  protected _isDupeAnime(song: SongType): boolean {
+  protected _isDupeAnime(song: TSong): boolean {
     if (this._duplicate) {
       return false;
     }
@@ -76,26 +76,26 @@ abstract class GameListGenerator {
     return false;
   }
 
-  protected _addDupeAnime(song: SongType) {
+  protected _addDupeAnime(song: TSong) {
     for (const animeId of song.animeId) {
       this._dupeAnimeIds.add(animeId);
     }
   }
 
-  protected _addDupeSong(song: SongType) {
+  protected _addDupeSong(song: TSong) {
     this._dupeSongIds.add(song.songId);
   }
 
-  protected _isDupeSong(song: SongType): boolean {
+  protected _isDupeSong(song: TSong): boolean {
     return this._dupeSongIds.has(song.songId);
   }
 
-  protected _getSongsByUserId(userId: UserIdType): SongType[] {
+  protected _getSongsByUserId(userId: TUserId): TSong[] {
     const songIds = this._userSongDb.getUserSongList(userId);
     const songList = this._songDb.getSongListByIds(songIds).filter((song) => {
       return this._songType.includes(song.type);
     });
-    const shuffledSongList = this._shuffleArray<SongType>(songList);
+    const shuffledSongList = this._shuffleArray<TSong>(songList);
 
     if (this._leastPlayed) {
       return this._sortByLeastPlayed(shuffledSongList);
@@ -104,15 +104,15 @@ abstract class GameListGenerator {
     return shuffledSongList;
   }
 
-  protected _getSongsByUserIds(userIds: UserIdType[]): SongType[] {
-    let songIds: SongIdType[] = [];
+  protected _getSongsByUserIds(userIds: TUserId[]): TSong[] {
+    let songIds: TSongId[] = [];
     for (const userId of userIds) {
       songIds = songIds.concat(this._userSongDb.getUserSongList(userId));
     }
     const songList = this._songDb.getSongListByIds(Array.from(new Set(songIds))).filter((song) => {
       return this._songType.includes(song.type);
     });
-    const shuffledSongList = this._shuffleArray<SongType>(songList);
+    const shuffledSongList = this._shuffleArray<TSong>(songList);
 
     if (this._leastPlayed) {
       return this._sortByLeastPlayed(shuffledSongList);
@@ -121,7 +121,7 @@ abstract class GameListGenerator {
     return shuffledSongList;
   }
 
-  protected _getPlayCount(song: SongType): SongStatsPlayCountType {
+  protected _getPlayCount(song: TSong): TSongStatsPlayCount {
     return this._songPlayCounts[song.songId] || 0;
   }
 
@@ -138,14 +138,14 @@ abstract class GameListGenerator {
     });
   }
 
-  protected _sortByLeastPlayed(songList: SongType[]): SongType[] {
-    const songListWithStats: CombinedSongStatsType[] = songList.map((song) => {
+  protected _sortByLeastPlayed(songList: TSong[]): TSong[] {
+    const songListWithStats: TCombinedSongStats[] = songList.map((song) => {
       return {
         ...song,
         playCount: this._getPlayCount(song)
       };
     });
-    const songListWithStatsLeastPlayed: CombinedSongStatsType[] = songListWithStats.sort((_, b) => {
+    const songListWithStatsLeastPlayed: TCombinedSongStats[] = songListWithStats.sort((_, b) => {
       if (b.playCount - this._maxPlayCount > -5) {
         return -1;
       }

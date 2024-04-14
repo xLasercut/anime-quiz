@@ -11,17 +11,17 @@ import { useDataStore } from '@/plugins/store/data';
 import { useAdminStore } from '@/plugins/store/admin';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { AVATARS } from '@/assets/shared/avatars';
+import { AVATARS } from 'anime-quiz-shared-resources/src/avatars';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 
 function reload() {
   dataStore.updateBotMessageList([]);
