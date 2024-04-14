@@ -64,9 +64,9 @@ import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { SONG_ID_RULES, SONG_SRC_RULES, SONG_TITLE_RULES, SONG_TYPE_RULES } from '@/assets/form-rules';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogMultiAnimeAutocomplete from '@/components/common/dialogs/DialogMultiAnimeAutocomplete.vue';
-import { AnimeIdType, SongIdType, SongTitleType, SongTypeType } from '@/assets/shared/models/types';
+import { TAnimeId, TSongId, TSongTitle, TSongType } from 'anime-quiz-shared-resources/src/models/types';
 import { computed, PropType } from 'vue';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { generateId } from '@/assets/game-helpers';
 import { useDataStore } from '@/plugins/store/data';
 
@@ -78,15 +78,15 @@ const props = defineProps({
     required: true
   },
   songId: {
-    type: String as PropType<SongIdType>,
+    type: String as PropType<TSongId>,
     required: true
   },
   animeId: {
-    type: Array as PropType<AnimeIdType[]>,
+    type: Array as PropType<TAnimeId[]>,
     required: true
   },
   songTitle: {
-    type: String as PropType<SongTitleType>,
+    type: String as PropType<TSongTitle>,
     required: true
   },
   src: {
@@ -108,7 +108,7 @@ const props = defineProps({
     }
   },
   type: {
-    type: String as PropType<SongTypeType>,
+    type: String as PropType<TSongType>,
     required: true
   }
 });

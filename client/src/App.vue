@@ -19,28 +19,28 @@ import NavBar from '@/components/app/NavBar.vue';
 import SystemNotification from '@/components/app/SystemNotification.vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { NotificationColorType, SystemNotificationType } from '@/assets/shared/models/types';
-import { OpenDialog, SendNotification } from '@/assets/types';
+import { TNotificationColor, TSystemNotification } from 'anime-quiz-shared-resources/src/models/types';
+import { TOpenDialog, TSendNotification } from '@/assets/types';
 import GlobalDialog from '@/components/app/GlobalDialog.vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { ClientDialogRoute } from '@/assets/routing/types';
 
 const clientStore = useClientStore();
 
-let sendNotification: SendNotification;
-let openDialog: OpenDialog;
-provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: SendNotification): void => {
+let sendNotification: TSendNotification;
+let openDialog: TOpenDialog;
+provide(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION, (_sendNotification: TSendNotification): void => {
   sendNotification = _sendNotification;
 });
-provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: OpenDialog): void => {
+provide(CLIENT_EVENTS.REGISTER_OPEN_DIALOG, (_openDialog: TOpenDialog): void => {
   openDialog = _openDialog;
 });
 
 provide(CLIENT_EVENTS.OPEN_DIALOG, (route: ClientDialogRoute, label: string): void => {
   openDialog(route, label);
 });
-provide(CLIENT_EVENTS.SYSTEM_NOTIFICATION, (color: NotificationColorType, message: string): void => {
+provide(CLIENT_EVENTS.SYSTEM_NOTIFICATION, (color: TNotificationColor, message: string): void => {
   sendNotification(color, message);
 });
 
@@ -56,7 +56,7 @@ function mainContainerStyles() {
   };
 }
 
-socket.on(SOCKET_EVENTS.SYSTEM_NOTIFICATION, (notification: SystemNotificationType) => {
+socket.on(SOCKET_EVENTS.SYSTEM_NOTIFICATION, (notification: TSystemNotification) => {
   sendNotification(notification.color, notification.message);
 });
 

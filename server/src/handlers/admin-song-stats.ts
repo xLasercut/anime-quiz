@@ -1,12 +1,12 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { SongStatsType } from '../shared/models/types';
-import { SongStats } from '../shared/models/song-stats';
-import { SONG_TYPES } from '../shared/song-types';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TSongStats } from 'anime-quiz-shared-resources/src/models/types';
+import { SongStats } from 'anime-quiz-shared-resources/src/models/song-stats';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 
 class AdminSongStatsHandler extends ServerHandler {
   protected _events = {
-    [SOCKET_EVENTS.ADMIN_NEW_SONG_STATS]: (_songStats: SongStatsType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_NEW_SONG_STATS]: (_songStats: TSongStats, callback: Function) => {
       this._logger.info('admin new song stats', {
         clientData: this._socket.data.clientData,
         request: _songStats
@@ -35,7 +35,7 @@ class AdminSongStatsHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_EDIT_SONG_STATS]: (_songStats: SongStatsType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_EDIT_SONG_STATS]: (_songStats: TSongStats, callback: Function) => {
       this._logger.info('admin edit song stats', {
         clientData: this._socket.data.clientData,
         request: _songStats
@@ -54,7 +54,7 @@ class AdminSongStatsHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_DELETE_SONG_STATS]: (_songStats: SongStatsType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_DELETE_SONG_STATS]: (_songStats: TSongStats, callback: Function) => {
       this._logger.info('admin delete song stats', {
         clientData: this._socket.data.clientData,
         request: _songStats

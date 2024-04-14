@@ -1,15 +1,15 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { GameListGeneratorFactory } from '../game-state/game-list-generator';
 import { Socket } from '../types';
-import { HandlerDependencies } from '../interfaces';
-import { GameGuessType, GamePlayerLifeLineTypeType, GameRoomIdType, GameRoomSettingsType } from '../shared/models/types';
-import { GameGuess, GamePlayerLifeLineType } from '../shared/models/game';
+import { THandlerDependencies } from '../interfaces';
+import { TGameGuess, TGamePlayerLifeLineType, TGameRoomId, TGameRoomSettings } from 'anime-quiz-shared-resources/src/models/types';
+import { GameGuess, GamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/game';
 
 class GameHandler extends ServerHandler {
   protected _generatorFactory: GameListGeneratorFactory;
 
-  constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
+  constructor(socket: Socket, errHandler: Function, dependencies: THandlerDependencies) {
     super(socket, errHandler, dependencies);
     this._generatorFactory = new GameListGeneratorFactory(dependencies);
   }
@@ -42,7 +42,7 @@ class GameHandler extends ServerHandler {
     [SOCKET_EVENTS.GAME_SONG_LOADED]: () => {
       this._socket.data.songLoaded = true;
     },
-    [SOCKET_EVENTS.GAME_EDIT_GUESS]: (_guess: GameGuessType) => {
+    [SOCKET_EVENTS.GAME_EDIT_GUESS]: (_guess: TGameGuess) => {
       const gameGuess = GameGuess.parse(_guess);
       const roomId = this._socket.data.currentGameRoom;
       this._socket.data.gameGuess = gameGuess;
@@ -55,7 +55,7 @@ class GameHandler extends ServerHandler {
       this._emitter.updateStorePlayerList(roomId);
       callback(true);
     },
-    [SOCKET_EVENTS.GAME_USE_LIFE_LINE]: (_lifeLineType: GamePlayerLifeLineTypeType) => {
+    [SOCKET_EVENTS.GAME_USE_LIFE_LINE]: (_lifeLineType: TGamePlayerLifeLineType) => {
       const lifeLineType = GamePlayerLifeLineType.parse(_lifeLineType);
       const success = this._socket.data.useLifeLine(lifeLineType);
       if (success) {
@@ -64,7 +64,7 @@ class GameHandler extends ServerHandler {
     }
   };
 
-  protected async _newRound(roomId: GameRoomIdType, settings: GameRoomSettingsType) {
+  protected async _newRound(roomId: TGameRoomId, settings: TGameRoomSettings) {
     const startPosition = Math.random();
     this._emitter.gameNewRound(roomId);
     this._gameRooms.getRoom(roomId).state.newRound();
@@ -99,7 +99,7 @@ class GameHandler extends ServerHandler {
     }
   }
 
-  protected _stopGame(roomId: GameRoomIdType) {
+  protected _stopGame(roomId: TGameRoomId) {
     this._gameRooms.getRoom(roomId).state.stopGame();
     this._emitter.updateStoreGameState(roomId);
     this._emitter.stopGame(roomId);

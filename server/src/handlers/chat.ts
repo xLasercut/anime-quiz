@@ -1,6 +1,6 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { GameChatText } from '../shared/models/game';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { GameChatText } from 'anime-quiz-shared-resources/src/models/game';
 
 class ChatHandler extends ServerHandler {
   protected _events = {

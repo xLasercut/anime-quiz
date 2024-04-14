@@ -1,12 +1,12 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { ClientDataType, SongIdType } from '../shared/models/types';
-import { ClientData } from '../shared/models/client';
-import { SongId } from '../shared/models/song';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TClientData, TSongId } from 'anime-quiz-shared-resources/src/models/types';
+import { ClientData } from 'anime-quiz-shared-resources/src/models/client';
+import { SongId } from 'anime-quiz-shared-resources/src/models/song';
 
 class UserHandler extends ServerHandler {
   protected _events = {
-    [SOCKET_EVENTS.UPDATE_USER_SETTINGS]: (_clientData: ClientDataType) => {
+    [SOCKET_EVENTS.UPDATE_USER_SETTINGS]: (_clientData: TClientData) => {
       this._logger.info('updating user settings', {
         clientData: this._socket.data.clientData,
         request: _clientData
@@ -18,7 +18,7 @@ class UserHandler extends ServerHandler {
       this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
       this._emitter.systemNotification({ color: 'success', message: 'Updated user settings' }, this._socket.id);
     },
-    [SOCKET_EVENTS.ADD_USER_SONGS]: (_songs: SongIdType[], callback: Function) => {
+    [SOCKET_EVENTS.ADD_USER_SONGS]: (_songs: TSongId[], callback: Function) => {
       this._logger.info('add user songs', {
         clientData: this._socket.data.clientData,
         request: _songs
@@ -32,7 +32,7 @@ class UserHandler extends ServerHandler {
       this._emitter.systemNotification({ color: 'success', message: 'Added songs' }, this._socket.id);
       callback(true);
     },
-    [SOCKET_EVENTS.REMOVE_USER_SONGS]: (_songs: SongIdType[], callback: Function) => {
+    [SOCKET_EVENTS.REMOVE_USER_SONGS]: (_songs: TSongId[], callback: Function) => {
       this._logger.info('remove user songs', {
         clientData: this._socket.data.clientData,
         request: _songs

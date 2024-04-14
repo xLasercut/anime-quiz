@@ -46,11 +46,11 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { UserType } from '@/assets/shared/models/types';
+import { TUser } from 'anime-quiz-shared-resources/src/models/types';
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import UserEditTableFilters from '@/components/user-edit/UserEditTableFilters.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
@@ -60,7 +60,7 @@ import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 const headers = [
   { title: 'Discord ID', key: 'discordId', sortable: false },
   { title: 'User ID', key: 'userId', sortable: false },
@@ -76,7 +76,7 @@ const filters = ref({
 });
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.USER_EDIT_TABLE_ITEMS_PER_PAGE);
 
-const filteredUserList = computed((): UserType[] => {
+const filteredUserList = computed((): TUser[] => {
   return dataStore.userList.filter((user) => {
     return (
       user.discordId.includes(filters.value.discordId) &&
@@ -86,13 +86,13 @@ const filteredUserList = computed((): UserType[] => {
   });
 });
 
-function editUser(user: UserType) {
+function editUser(user: TUser) {
   adminStore.updateUserInEdit(user);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
   openDialog(DIALOG_ROUTES.USER_EDIT, 'Edit User');
 }
 
-function deleteUser(user: UserType) {
+function deleteUser(user: TUser) {
   adminStore.updateUserInEdit(user);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
   openDialog(DIALOG_ROUTES.USER_EDIT, 'Delete User');

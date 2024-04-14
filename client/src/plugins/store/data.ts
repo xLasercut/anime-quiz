@@ -1,28 +1,28 @@
 import { defineStore } from 'pinia';
 import {
-  AnimeNameType,
-  AnimeType,
-  BotMessageType,
-  EmojiType,
-  SongIdType,
-  SongStatsRecordsType,
-  SongTitleType,
-  SongType,
-  UserType
-} from '@/assets/shared/models/types';
+  TAnimeName,
+  TAnime,
+  TBotMessage,
+  TEmoji,
+  TSongId,
+  TSongStatsRecords,
+  TSongTitle,
+  TSong,
+  TUser
+} from 'anime-quiz-shared-resources/src/models/types';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { AnimeString } from '@/assets/types';
+import { TAnimeString } from '@/assets/types';
 
 interface State {
-  songList: SongType[];
-  animeList: AnimeType[];
-  songTitles: SongTitleType[];
-  animeNames: AnimeNameType[];
-  userSongList: SongIdType[];
-  userList: UserType[];
-  emojiList: EmojiType[];
-  botMessageList: BotMessageType[];
-  songStatsRecords: SongStatsRecordsType;
+  songList: TSong[];
+  animeList: TAnime[];
+  songTitles: TSongTitle[];
+  animeNames: TAnimeName[];
+  userSongList: TSongId[];
+  userList: TUser[];
+  emojiList: TEmoji[];
+  botMessageList: TBotMessage[];
+  songStatsRecords: TSongStatsRecords;
   dataVersion: string;
 }
 
@@ -42,7 +42,7 @@ const useDataStore = defineStore('data', {
     };
   },
   actions: {
-    updateSongList(songList: SongType[]) {
+    updateSongList(songList: TSong[]) {
       this.songList = songList.sort((a, b) => {
         const animeA = a.animeName[0];
         const animeB = b.animeName[0];
@@ -56,22 +56,22 @@ const useDataStore = defineStore('data', {
         return -1;
       });
     },
-    updateAnimeList(animeList: AnimeType[]) {
+    updateAnimeList(animeList: TAnime[]) {
       this.animeList = animeList;
     },
-    updateSongTitles(songTitles: SongTitleType[]) {
+    updateSongTitles(songTitles: TSongTitle[]) {
       this.songTitles = songTitles.sort();
     },
-    updateAnimeNames(animeNames: AnimeNameType[]) {
+    updateAnimeNames(animeNames: TAnimeName[]) {
       this.animeNames = animeNames.sort();
     },
-    updateUserSongList(userSongList: SongIdType[]) {
+    updateUserSongList(userSongList: TSongId[]) {
       this.userSongList = userSongList;
     },
-    updateUserList(userList: UserType[]) {
+    updateUserList(userList: TUser[]) {
       this.userList = userList;
     },
-    updateEmojiList(emojiList: EmojiType[]) {
+    updateEmojiList(emojiList: TEmoji[]) {
       this.emojiList = emojiList.sort((a, b) => {
         if (a.command === b.command) {
           return 0;
@@ -82,7 +82,7 @@ const useDataStore = defineStore('data', {
         return -1;
       });
     },
-    updateBotMessageList(botMessageList: BotMessageType[]) {
+    updateBotMessageList(botMessageList: TBotMessage[]) {
       this.botMessageList = botMessageList.sort((a, b) => {
         if (a.displayName === b.displayName) {
           return 0;
@@ -93,7 +93,7 @@ const useDataStore = defineStore('data', {
         return -1;
       });
     },
-    updateSongStatsRecords(songStatsRecords: SongStatsRecordsType) {
+    updateSongStatsRecords(songStatsRecords: TSongStatsRecords) {
       this.songStatsRecords = songStatsRecords;
     },
     updateDataVersion(dataVersion: string) {
@@ -101,7 +101,7 @@ const useDataStore = defineStore('data', {
     }
   },
   getters: {
-    animeStringList(): AnimeString[] {
+    animeStringList(): TAnimeString[] {
       return this.animeList.map((anime) => {
         return {
           animeId: anime.animeId,

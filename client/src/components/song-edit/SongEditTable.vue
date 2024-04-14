@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { SongType } from '@/assets/shared/models/types';
+import { TSong } from 'anime-quiz-shared-resources/src/models/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
@@ -72,14 +72,14 @@ import { isMatchFilter } from '@/assets/game-helpers';
 import TableAction from '@/components/common/tables/TableAction.vue';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 const headers = [
   { title: 'Anime', key: 'animeName', sortable: false },
   { title: 'Title', key: 'songTitle', sortable: false },
@@ -97,19 +97,19 @@ const filters = ref({
 });
 const expanded = ref([]);
 
-function editSong(song: SongType) {
+function editSong(song: TSong) {
   adminStore.updateSongInEdit(song);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
   openDialog(DIALOG_ROUTES.SONG_EDIT, 'Edit Song');
 }
 
-function deleteSong(song: SongType) {
+function deleteSong(song: TSong) {
   adminStore.updateSongInEdit(song);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
   openDialog(DIALOG_ROUTES.SONG_EDIT, 'Delete Song');
 }
 
-const filteredSongList = computed((): SongType[] => {
+const filteredSongList = computed((): TSong[] => {
   return dataStore.songList.filter((song) => {
     return (
       isMatchFilter(filters.value.anime, song.animeName.join(',')) &&

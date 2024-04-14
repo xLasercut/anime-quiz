@@ -1,8 +1,8 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
-import { ServerConfig } from '../interfaces';
-import { AnimeIdType, AnimeNameType, AnimeType } from '../shared/models/types';
+import { TServerConfig } from '../interfaces';
+import { TAnimeId, TAnimeName, TAnime } from 'anime-quiz-shared-resources/src/models/types';
 import { DbAnime, DbAnimeName } from '../models/anime';
-import { Anime } from '../shared/models/anime';
+import { Anime } from 'anime-quiz-shared-resources/src/models/anime';
 import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
@@ -52,14 +52,14 @@ const RAW_STATEMENTS = {
   `
 };
 
-class AnimeDb extends ServerDb<AnimeType> {
+class AnimeDb extends ServerDb<TAnime> {
   protected _db: SqliteDb;
   protected _songDb: SongDb;
   protected _factory: StatementFactory;
-  protected _animeList: AnimeType[] = [];
-  protected _animeNames: AnimeNameType[] = [];
+  protected _animeList: TAnime[] = [];
+  protected _animeNames: TAnimeName[] = [];
 
-  constructor(config: ServerConfig, logger: Logger, songDb: SongDb, state: DatabaseDataState) {
+  constructor(config: TServerConfig, logger: Logger, songDb: SongDb, state: DatabaseDataState) {
     super(config, logger, state);
     this._songDb = songDb;
     this._db = mainDbConnection(null, config);
@@ -67,15 +67,15 @@ class AnimeDb extends ServerDb<AnimeType> {
     this.reloadCache();
   }
 
-  public get animeList(): AnimeType[] {
+  public get animeList(): TAnime[] {
     return this._animeList;
   }
 
-  public get animeNames(): AnimeNameType[] {
+  public get animeNames(): TAnimeName[] {
     return this._animeNames;
   }
 
-  public newRecord(record: AnimeType) {
+  public newRecord(record: TAnime) {
     const statement = this._factory.getStatement(STATEMENTS.INSERT_ANIME);
     const insertMany = this._db.transaction(() => {
       for (const animeName of record.animeName) {
@@ -86,7 +86,7 @@ class AnimeDb extends ServerDb<AnimeType> {
     this.reloadCache();
   }
 
-  public editRecord(record: AnimeType) {
+  public editRecord(record: TAnime) {
     const statement = this._factory.getStatement(STATEMENTS.DELETE_ANIME);
     statement.run(record);
     this.newRecord(record);
@@ -94,7 +94,7 @@ class AnimeDb extends ServerDb<AnimeType> {
     this._songDb.reloadCache();
   }
 
-  public deleteRecord(record: AnimeType) {
+  public deleteRecord(record: TAnime) {
     const deleteAnimeStatement = this._factory.getStatement(STATEMENTS.DELETE_ANIME);
     deleteAnimeStatement.run(record);
     const deleteSongAnimeStatement = this._factory.getStatement(STATEMENTS.DELETE_SONG_ANIME_BY_ANIME_ID);
@@ -103,7 +103,7 @@ class AnimeDb extends ServerDb<AnimeType> {
     this._songDb.reloadCache();
   }
 
-  public validateRecordNotExists(record: AnimeType) {
+  public validateRecordNotExists(record: TAnime) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ANIME_BY_ID);
     const response = statement.get(record);
     if (response) {
@@ -111,7 +111,7 @@ class AnimeDb extends ServerDb<AnimeType> {
     }
   }
 
-  public validateRecordExists(record: AnimeType) {
+  public validateRecordExists(record: TAnime) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ANIME_BY_ID);
     const response = statement.get(record);
     if (!response) {
@@ -119,7 +119,7 @@ class AnimeDb extends ServerDb<AnimeType> {
     }
   }
 
-  public validateAnimesExists(animeIds: AnimeIdType[]) {
+  public validateAnimesExists(animeIds: TAnimeId[]) {
     const statement = this._db.prepare(`
       SELECT DISTINCT
         anime_id
@@ -132,13 +132,13 @@ class AnimeDb extends ServerDb<AnimeType> {
     }
   }
 
-  protected _getAnimeList(): AnimeType[] {
+  protected _getAnimeList(): TAnime[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_ANIME_GROUP_BY_ID);
     const response = statement.all();
     return response
       .map((item) => DbAnime.parse(item))
       .map((dbAnime) => {
-        const anime: AnimeType = {
+        const anime: TAnime = {
           animeId: dbAnime.anime_id,
           animeName: dbAnime.anime_name
         };
@@ -146,11 +146,11 @@ class AnimeDb extends ServerDb<AnimeType> {
       });
   }
 
-  protected _getAnimeNames(): AnimeNameType[] {
+  protected _getAnimeNames(): TAnimeName[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_ANIME_NAME);
     const response = statement.all();
-    const existingAnimeNames: Set<AnimeNameType> = new Set();
-    const animeNames: AnimeNameType[] = [];
+    const existingAnimeNames: Set<TAnimeName> = new Set();
+    const animeNames: TAnimeName[] = [];
     for (const item of response) {
       const parsedName = DbAnimeName.parse(item).anime_name;
       if (existingAnimeNames.has(parsedName.toLowerCase())) {

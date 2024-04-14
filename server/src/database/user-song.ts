@@ -1,10 +1,10 @@
 import { DatabaseDataState, ServerDb, userDbConnection } from './common';
-import { DbUserSongType } from '../models/types';
-import { ServerConfig } from '../interfaces';
+import { TDbUserSong } from '../models/types';
+import { TServerConfig } from '../interfaces';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
-import { SongIdType, UserIdType } from '../shared/models/types';
+import { TSongId, TUserId } from 'anime-quiz-shared-resources/src/models/types';
 import { DbUserSongList } from '../models/user';
 import { Logger } from 'winston';
 
@@ -40,17 +40,17 @@ const RAW_STATEMENTS = {
   `
 };
 
-class UserSongDb extends ServerDb<DbUserSongType> {
+class UserSongDb extends ServerDb<TDbUserSong> {
   protected _db: SqliteDb;
   protected _factory: StatementFactory;
 
-  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+  constructor(config: TServerConfig, logger: Logger, state: DatabaseDataState) {
     super(config, logger, state);
     this._db = userDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
   }
 
-  public newRecord(record: DbUserSongType) {
+  public newRecord(record: TDbUserSong) {
     const statement = this._factory.getStatement(STATEMENTS.INSERT_USER_SONGS);
     const insertMany = this._db.transaction(() => {
       for (const songId of record.song_id) {
@@ -60,9 +60,9 @@ class UserSongDb extends ServerDb<DbUserSongType> {
     insertMany();
   }
 
-  public editRecord(record: DbUserSongType) {}
+  public editRecord(record: TDbUserSong) {}
 
-  public deleteRecord(record: DbUserSongType) {
+  public deleteRecord(record: TDbUserSong) {
     const statement = this._factory.getStatement(STATEMENTS.DELETE_USER_SONGS_BY_USER_ID_AND_SONG_ID);
     const deleteMany = this._db.transaction(() => {
       for (const songId of record.song_id) {
@@ -72,13 +72,13 @@ class UserSongDb extends ServerDb<DbUserSongType> {
     deleteMany();
   }
 
-  public validateRecordExists(record: DbUserSongType) {
+  public validateRecordExists(record: TDbUserSong) {
     if (record.song_id.length > 50) {
       throw new DataQualityError('Cannot remove more than 50 songs at a time');
     }
   }
 
-  public validateRecordNotExists(record: DbUserSongType) {
+  public validateRecordNotExists(record: TDbUserSong) {
     if (record.song_id.length > 50) {
       throw new DataQualityError('Cannot add more than 50 songs at a time');
     }
@@ -97,7 +97,7 @@ class UserSongDb extends ServerDb<DbUserSongType> {
     }
   }
 
-  public getUserSongList(userId: UserIdType): SongIdType[] {
+  public getUserSongList(userId: TUserId): TSongId[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_SONGS_BY_USER_ID);
     const response = statement.get(userId);
     this._logger.debug('fetched user song list', {

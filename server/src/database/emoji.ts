@@ -1,8 +1,8 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
-import { ServerConfig } from '../interfaces';
-import { EmojiType } from '../shared/models/types';
+import { TServerConfig } from '../interfaces';
+import { TEmoji } from 'anime-quiz-shared-resources/src/models/types';
 import { DbEmoji } from '../models/emoji';
-import { Emoji } from '../shared/models/emoji';
+import { Emoji } from 'anime-quiz-shared-resources/src/models/emoji';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
@@ -62,35 +62,35 @@ const RAW_STATEMENTS = {
   `
 };
 
-class EmojiDb extends ServerDb<EmojiType> {
+class EmojiDb extends ServerDb<TEmoji> {
   protected _db: SqliteDb;
   protected _factory: StatementFactory;
-  protected _emojiList: EmojiType[] = [];
+  protected _emojiList: TEmoji[] = [];
 
-  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+  constructor(config: TServerConfig, logger: Logger, state: DatabaseDataState) {
     super(config, logger, state);
     this._db = mainDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
     this.reloadCache();
   }
 
-  public get emojiList(): EmojiType[] {
+  public get emojiList(): TEmoji[] {
     return this._emojiList;
   }
 
-  public newRecord(record: EmojiType) {
+  public newRecord(record: TEmoji) {
     const statement = this._factory.getStatement(STATEMENTS.INSERT_EMOJI);
     statement.run(record);
     this.reloadCache();
   }
 
-  public editRecord(record: EmojiType) {
+  public editRecord(record: TEmoji) {
     const statement = this._factory.getStatement(STATEMENTS.EDIT_EMOJI);
     statement.run(record);
     this.reloadCache();
   }
 
-  public deleteRecord(record: EmojiType) {
+  public deleteRecord(record: TEmoji) {
     const statement = this._factory.getStatement(STATEMENTS.DELETE_EMOJI);
     statement.run(record);
     this.reloadCache();
@@ -107,7 +107,7 @@ class EmojiDb extends ServerDb<EmojiType> {
     this._state.updateState();
   }
 
-  public validateRecordExists(record: EmojiType) {
+  public validateRecordExists(record: TEmoji) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_ID);
     const response = statement.get(record);
     if (!response) {
@@ -115,7 +115,7 @@ class EmojiDb extends ServerDb<EmojiType> {
     }
   }
 
-  public validateRecordNotExists(record: EmojiType) {
+  public validateRecordNotExists(record: TEmoji) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_ID_OR_COMMAND);
     const response = statement.get(record);
     if (response) {
@@ -123,7 +123,7 @@ class EmojiDb extends ServerDb<EmojiType> {
     }
   }
 
-  public validateCommandNotExists(record: EmojiType) {
+  public validateCommandNotExists(record: TEmoji) {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_EMOJI_BY_COMMAND);
     const response = statement.get(record);
     if (response) {
@@ -131,13 +131,13 @@ class EmojiDb extends ServerDb<EmojiType> {
     }
   }
 
-  protected _getEmojiList(): EmojiType[] {
+  protected _getEmojiList(): TEmoji[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_EMOJI);
     const response = statement.all();
     return response
       .map((item) => DbEmoji.parse(item))
       .map((dbEmoji) => {
-        const emoji: EmojiType = {
+        const emoji: TEmoji = {
           emojiId: dbEmoji.emoji_id,
           command: dbEmoji.command,
           src: dbEmoji.src,

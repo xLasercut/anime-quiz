@@ -1,7 +1,7 @@
 import { Logger } from 'winston';
-import { AvatarType, DisplayNameType, GameChatType, UserIdType } from '../shared/models/types';
+import { TAvatar, TDisplayName, TGameChat, TUserId } from 'anime-quiz-shared-resources/src/models/types';
 import { Socket } from '../types';
-import { AVATARS } from '../shared/avatars';
+import { AVATARS } from 'anime-quiz-shared-resources/src/avatars';
 import { BotMessageDb } from '../database/bot-message';
 
 const SANITIZE_MAP: Record<string, string> = {
@@ -22,7 +22,7 @@ class GameChatSerialiser {
     this._botMessageDb = botMessageDb;
   }
 
-  public generateBotMsg(msg: string): GameChatType | undefined {
+  public generateBotMsg(msg: string): TGameChat | undefined {
     if (!msg.startsWith('/')) {
       return undefined;
     }
@@ -42,7 +42,7 @@ class GameChatSerialiser {
     );
   }
 
-  public generateUserMsg(socket: Socket, msg: string): GameChatType {
+  public generateUserMsg(socket: Socket, msg: string): TGameChat {
     return this._generateChatMsg(
       socket.data.clientData.displayName,
       socket.data.clientData.admin,
@@ -52,17 +52,11 @@ class GameChatSerialiser {
     );
   }
 
-  public generateSystemMsg(msg: string): GameChatType {
+  public generateSystemMsg(msg: string): TGameChat {
     return this._generateChatMsg('Eva Unit-01', false, AVATARS.EVA_UNIT_1, 'user-00000000-0000-0000-0000-000000000000', msg);
   }
 
-  protected _generateChatMsg(
-    displayName: DisplayNameType,
-    admin: boolean,
-    avatar: AvatarType,
-    userId: UserIdType,
-    msg: string
-  ): GameChatType {
+  protected _generateChatMsg(displayName: TDisplayName, admin: boolean, avatar: TAvatar, userId: TUserId, msg: string): TGameChat {
     return {
       displayName: displayName,
       admin: admin,

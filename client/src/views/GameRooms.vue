@@ -22,9 +22,9 @@
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
-import { GameRoomIdType } from '@/assets/shared/models/types';
-import { GameRoomId } from '@/assets/shared/models/game';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TGameRoomId } from 'anime-quiz-shared-resources/src/models/types';
+import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 import { useGameStore } from '@/plugins/store/game';
@@ -32,9 +32,9 @@ import { useGameStore } from '@/plugins/store/game';
 const clientStore = useClientStore();
 const gameStore = useGameStore();
 
-const roomList = ref<GameRoomIdType[]>([]);
+const roomList = ref<TGameRoomId[]>([]);
 
-socket.on(SOCKET_EVENTS.UPDATE_ROOM_LIST, (_roomList: GameRoomIdType[]) => {
+socket.on(SOCKET_EVENTS.UPDATE_ROOM_LIST, (_roomList: TGameRoomId[]) => {
   roomList.value = _roomList.map((item) => GameRoomId.parse(item));
 });
 
@@ -48,7 +48,7 @@ onUnmounted(() => {
   socket.off(SOCKET_EVENTS.UPDATE_ROOM_LIST);
 });
 
-function joinRoom(roomId: GameRoomIdType) {
+function joinRoom(roomId: TGameRoomId) {
   socket.emit(SOCKET_EVENTS.JOIN_GAME_ROOM, roomId, (success: boolean) => {
     if (success) {
       clientStore.changeView(ROUTES.MAIN_GAME);

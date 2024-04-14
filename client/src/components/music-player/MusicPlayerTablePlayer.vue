@@ -38,14 +38,14 @@
 <script setup lang="ts">
 import { PropType, ref, watch } from 'vue';
 import { useClientStore } from '@/plugins/store/client';
-import { SongType } from '@/assets/shared/models/types';
+import { TSong } from 'anime-quiz-shared-resources/src/models/types';
 import MusicPlayerTablePlayerControls from '@/components/music-player/MusicPlayerTablePlayerControls.vue';
 import { MediaDurationChangeEvent, MediaTimeUpdateEvent } from 'vidstack';
 
 const props = defineProps({
   song: {
     required: true,
-    type: Object as PropType<SongType>
+    type: Object as PropType<TSong>
   },
   shuffle: {
     required: true,

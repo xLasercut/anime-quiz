@@ -1,11 +1,11 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { UserType } from '../shared/models/types';
-import { User } from '../shared/models/user';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TUser } from 'anime-quiz-shared-resources/src/models/types';
+import { User } from 'anime-quiz-shared-resources/src/models/user';
 
 class AdminUserHandler extends ServerHandler {
   protected _events = {
-    [SOCKET_EVENTS.ADMIN_NEW_USER]: (_user: UserType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_NEW_USER]: (_user: TUser, callback: Function) => {
       this._logger.info('admin add user', {
         clientData: this._socket.data.clientData,
         request: _user
@@ -24,7 +24,7 @@ class AdminUserHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_DELETE_USER]: (_user: UserType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_DELETE_USER]: (_user: TUser, callback: Function) => {
       this._logger.info('admin delete user', {
         clientData: this._socket.data.clientData,
         request: _user
@@ -43,7 +43,7 @@ class AdminUserHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_EDIT_USER]: (_user: UserType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_EDIT_USER]: (_user: TUser, callback: Function) => {
       this._logger.info('admin edit user', {
         clientData: this._socket.data.clientData,
         request: _user

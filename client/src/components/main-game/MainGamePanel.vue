@@ -14,16 +14,16 @@ import { useClientStore } from '@/plugins/store/client';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { useGameStore } from '@/plugins/store/game';
 import PanelVolumeSlider from '@/components/common/panel/PanelVolumeSlider.vue';
 import PanelAudioOnlyToggle from '@/components/common/panel/PanelAudioOnlyToggle.vue';
 
 const clientStore = useClientStore();
 const gameStore = useGameStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 
 function openSettings() {
   socket.emit(SOCKET_EVENTS.GET_GAME_ROOM_SETTINGS);

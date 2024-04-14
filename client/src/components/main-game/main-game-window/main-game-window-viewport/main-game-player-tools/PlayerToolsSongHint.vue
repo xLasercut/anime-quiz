@@ -13,9 +13,9 @@ import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { onUnmounted, ref } from 'vue';
 import { useGameStore } from '@/plugins/store/game';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
-import { GamePlayerLifeLineTypeType } from '@/assets/shared/models/types';
-import { GamePlayerLifeLineType } from '@/assets/shared/models/game';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TGamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/types';
+import { GamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/game';
 
 const gameStore = useGameStore();
 const disabled = ref(true);
@@ -29,7 +29,7 @@ socket.on(SOCKET_EVENTS.START_GAME, () => {
   usedHint.value = false;
 });
 
-socket.on(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, (_lifeLineType: GamePlayerLifeLineTypeType) => {
+socket.on(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, (_lifeLineType: TGamePlayerLifeLineType) => {
   const lifeLineType = GamePlayerLifeLineType.parse(_lifeLineType);
   if (lifeLineType === 'SONG_HINT') {
     usedHint.value = true;

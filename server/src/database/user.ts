@@ -1,10 +1,10 @@
 import { DatabaseDataState, ServerDb, userDbConnection } from './common';
-import { ServerConfig } from '../interfaces';
+import { TServerConfig } from '../interfaces';
 import { DbUser } from '../models/user';
-import { DbUserType } from '../models/types';
+import { TDbUser } from '../models/types';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
-import { ClientDataType, DiscordIdType, UserIdType, UserType } from '../shared/models/types';
-import { User } from '../shared/models/user';
+import { TClientData, TDiscordId, TUserId, TUser } from 'anime-quiz-shared-resources/src/models/types';
+import { User } from 'anime-quiz-shared-resources/src/models/user';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { Logger } from 'winston';
@@ -69,25 +69,25 @@ const RAW_STATEMENTS = {
   `
 };
 
-class UserDb extends ServerDb<UserType> {
+class UserDb extends ServerDb<TUser> {
   protected _db: SqliteDb;
   protected _factory: StatementFactory;
-  protected _allowedUsers: DiscordIdType[] = [];
+  protected _allowedUsers: TDiscordId[] = [];
 
-  constructor(config: ServerConfig, logger: Logger, state: DatabaseDataState) {
+  constructor(config: TServerConfig, logger: Logger, state: DatabaseDataState) {
     super(config, logger, state);
     this._db = userDbConnection(null, config);
     this._factory = new StatementFactory(this._db, RAW_STATEMENTS);
     this.reloadCache();
   }
 
-  public getUserList(): UserType[] {
+  public getUserList(): TUser[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_USER);
     const response = statement.all();
     this._logger.debug('fetched user list', { response: response });
     const dbUserList = response.map((item) => DbUser.parse(item));
-    return dbUserList.map((dbUser): UserType => {
-      const user: UserType = {
+    return dbUserList.map((dbUser): TUser => {
+      const user: TUser = {
         discordId: dbUser.discord_id,
         userId: dbUser.user_id,
         admin: dbUser.admin,
@@ -98,25 +98,25 @@ class UserDb extends ServerDb<UserType> {
     });
   }
 
-  public getUserInfo(discordId: DiscordIdType): DbUserType {
+  public getUserInfo(discordId: TDiscordId): TDbUser {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_BY_DISCORD_ID);
     const response = statement.get(discordId);
     this._logger.debug('fetched user info', { response: response, discordId: discordId });
     return DbUser.parse(response);
   }
 
-  public updateUserSettings(clientData: ClientDataType, userId: UserIdType): void {
+  public updateUserSettings(clientData: TClientData, userId: TUserId): void {
     const statement = this._factory.getStatement(STATEMENTS.EDIT_USER_SETTINGS);
     statement.run(userId, clientData);
   }
 
-  public validateAllowedUser(discordId: DiscordIdType): void {
+  public validateAllowedUser(discordId: TDiscordId): void {
     if (!this._allowedUsers.includes(discordId)) {
       throw new UnauthorizedError();
     }
   }
 
-  public validateRecordNotExists(user: UserType): void {
+  public validateRecordNotExists(user: TUser): void {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_BY_ANY_IDS);
     const response = statement.get(user);
     if (response) {
@@ -124,7 +124,7 @@ class UserDb extends ServerDb<UserType> {
     }
   }
 
-  public validateRecordExists(record: UserType): void {
+  public validateRecordExists(record: TUser): void {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_USER_BY_ANY_IDS);
     const response = statement.get(record);
     if (!response) {
@@ -132,13 +132,13 @@ class UserDb extends ServerDb<UserType> {
     }
   }
 
-  public newRecord(record: UserType) {
+  public newRecord(record: TUser) {
     const statement = this._factory.getStatement(STATEMENTS.INSERT_USER);
     statement.run(record.admin ? 1 : 0, record);
     this.reloadCache();
   }
 
-  public deleteRecord(record: UserType) {
+  public deleteRecord(record: TUser) {
     const deleteUserStatement = this._factory.getStatement(STATEMENTS.DELETE_USER);
     deleteUserStatement.run(record);
     const deleteUserSongStatement = this._factory.getStatement(STATEMENTS.DELETE_USER_SONGS_BY_USER_ID);
@@ -146,13 +146,13 @@ class UserDb extends ServerDb<UserType> {
     this.reloadCache();
   }
 
-  public editRecord(record: UserType) {
+  public editRecord(record: TUser) {
     const statement = this._factory.getStatement(STATEMENTS.EDIT_USER);
     statement.run(record.admin ? 1 : 0, record);
     this.reloadCache();
   }
 
-  protected _getAllowedUsers(): DiscordIdType[] {
+  protected _getAllowedUsers(): TDiscordId[] {
     const statement = this._factory.getStatement(STATEMENTS.SELECT_ALL_USER);
     const response = statement.all();
     return response.map((item: any) => DbUser.parse(item).discord_id);

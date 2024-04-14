@@ -25,20 +25,20 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { useClientStore } from '@/plugins/store/client';
 import { ROUTES } from '@/assets/routing/routes';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { CLIENT_VERSION, LOCAL_STORAGE_CONSTANTS, ROOT_URL_PATH } from '@/assets/constants';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { SendNotification } from '@/assets/types';
+import { TSendNotification } from '@/assets/types';
 import { getAuthorizeUrl } from '@/assets/authorization';
-import { ClientLoginAuthType } from '@/assets/shared/models/types';
+import { TClientLoginAuth } from 'anime-quiz-shared-resources/src/models/types';
 import { useDataStore } from '@/plugins/store/data';
 
 const clientStore = useClientStore();
 const dataStore = useDataStore();
-const sendNotification = inject(CLIENT_EVENTS.SYSTEM_NOTIFICATION) as SendNotification;
+const sendNotification = inject(CLIENT_EVENTS.SYSTEM_NOTIFICATION) as TSendNotification;
 const disabled = ref(false);
 
 function login() {
@@ -63,7 +63,7 @@ function authorizeUser() {
 
   if (code && returnedState === localStorage[LOCAL_STORAGE_CONSTANTS.OAUTH_STATE]) {
     disabled.value = true;
-    const clientLoginAuth: ClientLoginAuthType = {
+    const clientLoginAuth: TClientLoginAuth = {
       code: code,
       dataVersion: dataStore.dataVersion,
       clientVersion: CLIENT_VERSION

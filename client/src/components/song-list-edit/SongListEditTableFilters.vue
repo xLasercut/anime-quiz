@@ -32,7 +32,7 @@ import { debounce } from '@/assets/game-helpers';
 import TableFilterTextField from '@/components/common/tables/TableFilterTextField.vue';
 import TableFilterCombobox from '@/components/common/tables/TableFilterCombobox.vue';
 import TableFilterSelect from '@/components/common/tables/TableFilterSelect.vue';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { PropType } from 'vue';
 
 defineProps({

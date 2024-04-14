@@ -38,15 +38,15 @@
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import { useGameStore } from '@/plugins/store/game';
 import { ref } from 'vue';
-import { GamePlayerType } from '@/assets/shared/models/types';
+import { TGamePlayer } from 'anime-quiz-shared-resources/src/models/types';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 
 const gameStore = useGameStore();
 const playerToKick = ref('');
 const avatarSize = ref('50');
 
-function playerText(player: GamePlayerType): string {
+function playerText(player: TGamePlayer): string {
   return `${player.displayName} - ${player.socketId}`;
 }
 

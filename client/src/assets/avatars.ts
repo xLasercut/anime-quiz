@@ -1,4 +1,4 @@
-import { AVATARS } from '@/assets/shared/avatars';
+import { AVATARS } from 'anime-quiz-shared-resources/src/avatars';
 
 const AVATAR_MAP = {
   [AVATARS.ZERO_TWO]: 'https://i.imgur.com/qQ0Fkkx.png',

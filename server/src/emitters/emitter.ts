@@ -1,15 +1,15 @@
 import { Server } from '../app/server';
 import {
-  ClientDataType,
-  GameChatType,
-  GameGuessType,
-  GamePlayerLifeLineTypeType,
-  GameRoomSettingsType,
-  SystemNotificationType,
-  UserIdType
-} from '../shared/models/types';
-import { SOCKET_EVENTS } from '../shared/events';
-import { EmitterDependencies } from '../interfaces';
+  TClientData,
+  TGameChat,
+  TGameGuess,
+  TGamePlayerLifeLineType,
+  TGameRoomSettings,
+  TSystemNotification,
+  TUserId
+} from 'anime-quiz-shared-resources/src/models/types';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TEmitterDependencies } from '../interfaces';
 import { UserDb } from '../database/user';
 import { SongDb } from '../database/song';
 import { EmojiDb } from '../database/emoji';
@@ -34,7 +34,7 @@ class Emitter {
   protected _chatSerialiser: GameChatSerialiser;
   protected _dbDataState: DatabaseDataState;
 
-  constructor(io: Server, dependencies: EmitterDependencies) {
+  constructor(io: Server, dependencies: TEmitterDependencies) {
     this._io = io;
     this._userDb = dependencies.userDb;
     this._songDb = dependencies.songDb;
@@ -48,7 +48,7 @@ class Emitter {
     this._dbDataState = dependencies.dbDataState;
   }
 
-  public gameShowLifeLine(lifeLineType: GamePlayerLifeLineTypeType, sid: string) {
+  public gameShowLifeLine(lifeLineType: TGamePlayerLifeLineType, sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.GAME_SHOW_LIFE_LINE, lifeLineType);
   }
 
@@ -80,7 +80,7 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_GAME_STATE, this._gameRooms.getRoom(sid).state.dict);
   }
 
-  public updateGameChat(gameChat: GameChatType, sid?: string) {
+  public updateGameChat(gameChat: TGameChat, sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_GAME_CHAT, gameChat);
   }
 
@@ -88,11 +88,11 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_ROOM_LIST, this._gameRooms.getRoomList());
   }
 
-  public systemNotification(notification: SystemNotificationType, sid?: string) {
+  public systemNotification(notification: TSystemNotification, sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.SYSTEM_NOTIFICATION, notification);
   }
 
-  public updateStoreClientData(clientData: ClientDataType, sid: string) {
+  public updateStoreClientData(clientData: TClientData, sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_CLIENT_DATA, clientData);
   }
 
@@ -112,7 +112,7 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_ANIME_LIST, this._animeDb.animeList);
   }
 
-  public updateStoreUserSongList(userId: UserIdType, sid: string) {
+  public updateStoreUserSongList(userId: TUserId, sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_USER_SONG_LIST, this._userSongDb.getUserSongList(userId));
   }
 
@@ -136,7 +136,7 @@ class Emitter {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_DATA_VERSION, this._dbDataState.dataVersion);
   }
 
-  public updateGameRoomSettings(settings: GameRoomSettingsType, sid?: string) {
+  public updateGameRoomSettings(settings: TGameRoomSettings, sid?: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_CLIENT_GAME_ROOM_SETTINGS, settings);
   }
 
@@ -144,7 +144,7 @@ class Emitter {
     this._client(roomId).emit(SOCKET_EVENTS.UPDATE_STORE_PLAYER_LIST, this._gameRooms.getPlayerList(roomId));
   }
 
-  public updateStoreGameGuess(guess: GameGuessType, sid: string) {
+  public updateStoreGameGuess(guess: TGameGuess, sid: string) {
     this._client(sid).emit(SOCKET_EVENTS.UPDATE_STORE_GAME_GUESS, guess);
   }
 

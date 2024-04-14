@@ -15,16 +15,14 @@ WORKDIR ${WRK_DIR}
 
 RUN npm install -g pnpm
 
-COPY package.json ${WRK_DIR}/package.json
-COPY pnpm-lock.yaml ${WRK_DIR}/pnpm-lock.yaml
+COPY ./shared-resources ${WRK_DIR}/shared-resources/
+COPY ./server ${WRK_DIR}/server/
+COPY ./tsconfig.json ${WRK_DIR}/tsconfig.json
+COPY ./package.json ${WRK_DIR}/package.json
+COPY ./pnpm-lock.yaml ${WRK_DIR}/pnpm-lock.yaml
+COPY ./pnpm-workspace.yaml ${WRK_DIR}/pnpm-workspace.yaml
 
 RUN pnpm install
-
-COPY src/. ${WRK_DIR}/src/
-COPY tsconfig.json ${WRK_DIR}/tsconfig.json
-RUN pnpm build
-
-COPY data/. ${WRK_DIR}/data/
 
 EXPOSE 3000
 

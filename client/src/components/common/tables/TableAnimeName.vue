@@ -17,11 +17,11 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { CombinedSongStatsType, SongType } from '@/assets/shared/models/types';
+import { TCombinedSongStats, TSong } from 'anime-quiz-shared-resources/src/models/types';
 
 defineProps({
   song: {
-    type: Object as PropType<SongType | CombinedSongStatsType>,
+    type: Object as PropType<TSong | TCombinedSongStats>,
     required: true
   }
 });

@@ -36,7 +36,7 @@ import CustomCombobox from '@/components/common/inputs/CustomCombobox.vue';
 import { onUnmounted, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
 import { useGameStore } from '@/plugins/store/game';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 
 const dataStore = useDataStore();

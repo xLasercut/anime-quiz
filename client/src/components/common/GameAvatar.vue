@@ -5,11 +5,11 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
 import { AVATAR_MAP } from '@/assets/avatars';
-import { AvatarType } from '@/assets/shared/models/types';
+import { TAvatar } from 'anime-quiz-shared-resources/src/models/types';
 
 const props = defineProps({
   avatar: {
-    type: String as PropType<AvatarType>,
+    type: String as PropType<TAvatar>,
     required: true
   },
   border: {

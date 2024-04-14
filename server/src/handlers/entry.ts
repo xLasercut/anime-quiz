@@ -1,9 +1,9 @@
 import { ServerHandler } from './common';
 import { Socket } from '../types';
-import { SOCKET_EVENTS } from '../shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { UserHandler } from './user';
 import { DataHandler } from './data';
-import { HandlerDependencies } from '../interfaces';
+import { THandlerDependencies } from '../interfaces';
 import { AdminUserHandler } from './admin-user';
 import { UnauthorizedError } from '../app/exceptions';
 import { AdminAnimeHandler } from './admin-anime';
@@ -11,8 +11,8 @@ import { AdminSongHandler } from './admin-song';
 import { AdminEmojiHandler } from './admin-emoji';
 import { GameRoomsHandler } from './game-rooms';
 import { ChatHandler } from './chat';
-import { ClientLoginAuthType } from '../shared/models/types';
-import { ClientLoginAuth } from '../shared/models/client';
+import { TClientLoginAuth } from 'anime-quiz-shared-resources/src/models/types';
+import { ClientLoginAuth } from 'anime-quiz-shared-resources/src/models/client';
 import { GameHandler } from './game';
 import { AdminGameHandler } from './admin-game';
 import { AdminGeneralHandler } from './admin-general';
@@ -23,7 +23,7 @@ class EntryPointHandler extends ServerHandler {
   protected _handlers: ServerHandler[];
   protected _adminHandlers: ServerHandler[];
   protected _events = {
-    [SOCKET_EVENTS.AUTHORIZE_USER]: async (_clientLoginAuth: ClientLoginAuthType, callback: Function) => {
+    [SOCKET_EVENTS.AUTHORIZE_USER]: async (_clientLoginAuth: TClientLoginAuth, callback: Function) => {
       this._logger.info('authenticating client', {
         id: this._socket.id,
         clientLoginAuth: _clientLoginAuth
@@ -44,7 +44,7 @@ class EntryPointHandler extends ServerHandler {
     }
   };
 
-  constructor(socket: Socket, errHandler: Function, dependencies: HandlerDependencies) {
+  constructor(socket: Socket, errHandler: Function, dependencies: THandlerDependencies) {
     super(socket, errHandler, dependencies);
     this._handlers = [
       new UserHandler(socket, errHandler, dependencies),
@@ -101,7 +101,7 @@ class EntryPointHandler extends ServerHandler {
     }
   }
 
-  protected _validateClientVersion(clientLoginAuth: ClientLoginAuthType) {
+  protected _validateClientVersion(clientLoginAuth: TClientLoginAuth) {
     if (this._config.serverVersion !== clientLoginAuth.clientVersion) {
       throw new UnauthorizedError('Client version out of date');
     }

@@ -1,23 +1,23 @@
 import { GameListGenerator } from './common';
-import { GameRoomSettingsType, SongType, UserIdType } from '../../shared/models/types';
-import { HandlerDependencies } from '../../interfaces';
+import { TGameRoomSettings, TSong, TUserId } from 'anime-quiz-shared-resources/src/models/types';
+import { THandlerDependencies } from '../../interfaces';
 
 class BalancedPlusGameListGenerator extends GameListGenerator {
   protected _songsPerUser: number;
   protected _normalSongCount: number;
 
-  constructor(dependencies: HandlerDependencies, settings: GameRoomSettingsType, players: UserIdType[]) {
+  constructor(dependencies: THandlerDependencies, settings: TGameRoomSettings, players: TUserId[]) {
     super(dependencies, settings, players);
     this._normalSongCount = Math.floor(this._songCount / 2);
     this._songsPerUser = Math.floor(this._normalSongCount / this._players.length);
   }
 
-  protected _generateList(): SongType[] {
-    return this._shuffleArray<SongType>(this._generateNormalList().concat(this._generateBalancedList()));
+  protected _generateList(): TSong[] {
+    return this._shuffleArray<TSong>(this._generateNormalList().concat(this._generateBalancedList()));
   }
 
-  protected _generateNormalList(): SongType[] {
-    const songList: SongType[] = [];
+  protected _generateNormalList(): TSong[] {
+    const songList: TSong[] = [];
     for (const song of this._getSongsByUserIds(this._players)) {
       if (!this._isDupeAnime(song) && !this._isDupeSong(song)) {
         songList.push(song);
@@ -31,8 +31,8 @@ class BalancedPlusGameListGenerator extends GameListGenerator {
     return songList;
   }
 
-  protected _generateBalancedList(): SongType[] {
-    const songList: SongType[] = [];
+  protected _generateBalancedList(): TSong[] {
+    const songList: TSong[] = [];
     for (const userId of this._players) {
       let songCount = 0;
       for (const song of this._getSongsByUserId(userId)) {

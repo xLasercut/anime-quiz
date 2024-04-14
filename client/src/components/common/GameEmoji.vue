@@ -5,12 +5,12 @@
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue';
-import { EmojiType } from '@/assets/shared/models/types';
+import { TEmoji } from 'anime-quiz-shared-resources/src/models/types';
 
 const props = defineProps({
   emoji: {
     required: true,
-    type: Object as PropType<EmojiType>
+    type: Object as PropType<TEmoji>
   },
   size: {
     type: String,

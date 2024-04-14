@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { getLocalStorageNumber } from '@/assets/game-helpers';
-import { ClientDataType } from '@/assets/shared/models/types';
+import { TClientData } from 'anime-quiz-shared-resources/src/models/types';
 import { ClientDialogRoute, ClientRoute } from '@/assets/routing/types';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 
@@ -9,7 +9,7 @@ interface State {
   view: ClientRoute;
   dialogView: ClientDialogRoute;
   volume: number;
-  clientData: ClientDataType;
+  clientData: TClientData;
   audioOnly: boolean;
 }
 
@@ -33,7 +33,7 @@ const useClientStore = defineStore('client', {
     };
   },
   actions: {
-    updateClientData(clientData: ClientDataType) {
+    updateClientData(clientData: TClientData) {
       this.clientData = clientData;
     },
     changeView(view: ClientRoute) {

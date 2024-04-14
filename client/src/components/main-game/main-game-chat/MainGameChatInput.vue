@@ -40,9 +40,9 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { EmojiCommandType, EmojiType } from '@/assets/shared/models/types';
+import { TEmojiCommand, TEmoji } from 'anime-quiz-shared-resources/src/models/types';
 import GameEmoji from '@/components/common/GameEmoji.vue';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 
 const EMOJI_CHAT_FORMAT = new RegExp('(:)(?:[^:]+)$', 'ig');
@@ -50,7 +50,7 @@ const dataStore = useDataStore();
 
 const message = ref('');
 const showEmojiSelect = ref(false);
-const emojiChoices = ref<EmojiType[]>(dataStore.emojiList);
+const emojiChoices = ref<TEmoji[]>(dataStore.emojiList);
 const emojiChoicesOldLength = ref(0);
 
 watch(
@@ -68,7 +68,7 @@ watch(
     }
 
     const command = match[0];
-    emojiChoices.value = dataStore.emojiList.filter((emoji: EmojiType) => {
+    emojiChoices.value = dataStore.emojiList.filter((emoji: TEmoji) => {
       return `:${emoji.command.toLowerCase()}:`.includes(command.toLowerCase());
     });
     const currentLength = emojiChoices.value.length;
@@ -89,7 +89,7 @@ watch(
   }
 );
 
-function addEmoji(command: EmojiCommandType) {
+function addEmoji(command: TEmojiCommand) {
   message.value = message.value.replace(EMOJI_CHAT_FORMAT, `:${command}:`);
   emojiChoicesOldLength.value = 0;
   showEmojiSelect.value = false;

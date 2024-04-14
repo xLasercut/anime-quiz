@@ -10,20 +10,20 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { NotificationColorType } from '@/assets/shared/models/types';
-import { RegisterSendNotification } from '@/assets/types';
+import { TNotificationColor } from 'anime-quiz-shared-resources/src/models/types';
+import { TRegisterSendNotification } from '@/assets/types';
 
 const message = ref('');
 const show = ref(false);
-const color = ref<NotificationColorType>('error');
+const color = ref<TNotificationColor>('error');
 
-function _showNotification(_color: NotificationColorType, _message: string): void {
+function _showNotification(_color: TNotificationColor, _message: string): void {
   color.value = _color;
   message.value = _message;
   show.value = true;
 }
 
-function sendNotification(color: NotificationColorType, message: string): void {
+function sendNotification(color: TNotificationColor, message: string): void {
   if (show.value) {
     show.value = false;
     setTimeout((): void => {
@@ -34,6 +34,6 @@ function sendNotification(color: NotificationColorType, message: string): void {
   }
 }
 
-const registerSendNotification = inject(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION) as RegisterSendNotification;
+const registerSendNotification = inject(CLIENT_EVENTS.REGISTER_SEND_NOTIFICATION) as TRegisterSendNotification;
 registerSendNotification(sendNotification);
 </script>

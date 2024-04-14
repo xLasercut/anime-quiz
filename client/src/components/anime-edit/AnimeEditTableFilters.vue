@@ -14,14 +14,14 @@
 import { PropType } from 'vue';
 import TableFilterTextField from '@/components/common/tables/TableFilterTextField.vue';
 import TableFilterCombobox from '@/components/common/tables/TableFilterCombobox.vue';
-import { AnimeIdType } from '@/assets/shared/models/types';
+import { TAnimeId } from 'anime-quiz-shared-resources/src/models/types';
 import { debounce } from '@/assets/game-helpers';
 import { useDataStore } from '@/plugins/store/data';
 
 defineProps({
   animeId: {
     required: true,
-    type: String as PropType<AnimeIdType>
+    type: String as PropType<TAnimeId>
   },
   animeName: {
     required: true,

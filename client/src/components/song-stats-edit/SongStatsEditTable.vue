@@ -47,12 +47,12 @@ import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import { computed, inject, ref } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
-import { CombinedSongStatsType } from '@/assets/shared/models/types';
+import { TCombinedSongStats } from 'anime-quiz-shared-resources/src/models/types';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
-import { SONG_TYPES } from '@/assets/shared/song-types';
+import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import TableAction from '@/components/common/tables/TableAction.vue';
@@ -61,7 +61,7 @@ import { usePagination } from '@/assets/pagination-helpers';
 const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.SONG_STATS_EDIT_TABLE_ITEMS_PER_PAGE);
 const filters = ref({
@@ -104,7 +104,7 @@ const filteredSongList = computed(() => {
   return songList;
 });
 
-function editSongStats(song: CombinedSongStatsType) {
+function editSongStats(song: TCombinedSongStats) {
   adminStore.updateSongStatsInEdit({
     songId: song.songId,
     playCount: song.playCount
@@ -113,7 +113,7 @@ function editSongStats(song: CombinedSongStatsType) {
   openDialog(DIALOG_ROUTES.SONG_STATS_EDIT, 'Edit Song Stats');
 }
 
-function deleteSongStats(song: CombinedSongStatsType) {
+function deleteSongStats(song: TCombinedSongStats) {
   adminStore.updateSongStatsInEdit({
     songId: song.songId,
     playCount: song.playCount

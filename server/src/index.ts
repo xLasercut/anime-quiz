@@ -1,12 +1,12 @@
 import { createServer } from 'http';
 import { Oidc } from './app/oidc';
 import { SERVER_CONFIG } from './app/config';
-import { EmitterDependencies, HandlerDependencies } from './interfaces';
+import { TEmitterDependencies, THandlerDependencies } from './interfaces';
 import { Server } from './app/server';
 import { UserDb } from './database/user';
 import { Socket } from './types';
 import { SocketData } from './app/socket-data';
-import { SOCKET_EVENTS } from './shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { Emitter } from './emitters/emitter';
 import { newIoErrorHandler, newSocketErrorHandler } from './app/exceptions';
 import { SongDb } from './database/song';
@@ -17,8 +17,8 @@ import { EmojiDb } from './database/emoji';
 import { UserSongDb } from './database/user-song';
 import { GameRooms } from './game-state/room';
 import { LOG_FORMAT, LOG_TRANSPORTS } from './app/logger';
-import { GameRoomId } from './shared/models/game';
-import { GameRoomIdType } from './shared/models/types';
+import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
+import { TGameRoomId } from 'anime-quiz-shared-resources/src/models/types';
 import { GameChatSerialiser } from './game-state/chat';
 import { DatabaseDataState } from './database/common';
 import { BotMessageDb } from './database/bot-message';
@@ -49,7 +49,7 @@ const botMessageDb = new BotMessageDb(SERVER_CONFIG, logger, dbDataState);
 const songStatsDb = new SongStatsDb(SERVER_CONFIG, logger, dbDataState);
 const gameRooms = new GameRooms(io, logger);
 const chatSerialiser = new GameChatSerialiser(logger, botMessageDb);
-const emitterDependencies: EmitterDependencies = {
+const emitterDependencies: TEmitterDependencies = {
   userDb: userDb,
   animeDb: animeDb,
   songDb: songDb,
@@ -62,7 +62,7 @@ const emitterDependencies: EmitterDependencies = {
   dbDataState: dbDataState
 };
 const emitter = new Emitter(io, emitterDependencies);
-const handlerDependencies: HandlerDependencies = {
+const handlerDependencies: THandlerDependencies = {
   logger: logger,
   config: SERVER_CONFIG,
   dbDataState: dbDataState,
@@ -160,7 +160,7 @@ httpServer.listen(SERVER_CONFIG.serverPort, () => {
   logger.info('server started', { port: SERVER_CONFIG.serverPort, corsConfig: SERVER_CONFIG.corsConfig });
 });
 
-function parseGameRoomId(roomId: string): false | GameRoomIdType {
+function parseGameRoomId(roomId: string): false | TGameRoomId {
   try {
     return GameRoomId.parse(roomId);
   } catch {

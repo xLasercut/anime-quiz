@@ -1,11 +1,11 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { BotMessageType } from '../shared/models/types';
-import { BotMessage } from '../shared/models/bot-message';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TBotMessage } from 'anime-quiz-shared-resources/src/models/types';
+import { BotMessage } from 'anime-quiz-shared-resources/src/models/bot-message';
 
 class AdminBotMessageHandler extends ServerHandler {
   protected _events = {
-    [SOCKET_EVENTS.ADMIN_NEW_BOT_MESSAGE]: (_botMessage: BotMessageType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_NEW_BOT_MESSAGE]: (_botMessage: TBotMessage, callback: Function) => {
       this._logger.info('admin add bot message', {
         clientData: this._socket.data.clientData,
         request: _botMessage
@@ -24,7 +24,7 @@ class AdminBotMessageHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_EDIT_BOT_MESSAGE]: (_botMessage: BotMessageType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_EDIT_BOT_MESSAGE]: (_botMessage: TBotMessage, callback: Function) => {
       this._logger.info('admin edit bot message', {
         clientData: this._socket.data.clientData,
         request: _botMessage
@@ -44,7 +44,7 @@ class AdminBotMessageHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_DELETE_BOT_MESSAGE]: (_botMessage: BotMessageType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_DELETE_BOT_MESSAGE]: (_botMessage: TBotMessage, callback: Function) => {
       this._logger.info('admin delete bot message', {
         clientData: this._socket.data.clientData,
         request: _botMessage

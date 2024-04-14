@@ -23,11 +23,11 @@ import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 
 const theme = useTheme();
 const clientStore = useClientStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 
 function panelComponent() {
   return PANEL_MAPPING[clientStore.view] || DefaultPanel;

@@ -1,0 +1,20 @@
+name: "Create client env file"
+description: "Create client .env file"
+inputs:
+  client_id:
+    description: "Discord client id"
+    required: true
+  redirect_url:
+    description: "Webapp redirect url"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Create .env file
+      run: |
+        touch client/.env
+        echo VITE_DISCORD_CLIENT_ID=${{ inputs.client_id }} >> client/.env
+        echo VITE_REDIRECT_URL=${{ inputs.redirect_url }} >> client/.env
+        export VITE_CLIENT_VERSION=$(git rev-parse --short "$GITHUB_SHA")
+        echo VITE_CLIENT_VERSION=${{ env.VITE_CLIENT_VERSION }} >> client/.env
+      shell: bash

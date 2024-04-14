@@ -21,14 +21,11 @@ jobs:
         uses: ./.github/actions/runner-setup/
 
       - name: Install dependencies
-        run: make install
+        run: pnpm install
 
       - name: Create cache - ${{ env.CACHE_NAME }}
         uses: ./.github/actions/caching/
         with:
-          path: |
-            server/node_modules
-            client/node_modules
           name: ${{ env.CACHE_NAME }}
 
   build-client:
@@ -46,20 +43,16 @@ jobs:
       - name: Download cache - ${{ env.CACHE_NAME }}
         uses: ./.github/actions/caching/
         with:
-          path: |
-            server/node_modules
-            client/node_modules
           name: ${{ env.CACHE_NAME }}
 
+      - name: Set client env file
+        uses: ./.github/actions/create-client-env-file
+        with:
+          client_id: ${{ secrets.VITE_DISCORD_CLIENT_ID }}
+          redirect_url: ${{ secrets.VITE_REDIRECT_URL }}
+
       - name: Build client
-        run: |
-          cd client
-          touch .env
-          echo VITE_DISCORD_CLIENT_ID=${{ secrets.VITE_DISCORD_CLIENT_ID }} >> .env
-          echo VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} >> .env
-          export VITE_CLIENT_VERSION=${{ github.ref_name }}
-          echo VITE_CLIENT_VERSION=${{ env.VITE_CLIENT_VERSION }} >> .env
-          make build
+        run: pnpm build
 
       - name: Publish client
         uses: JamesIves/github-pages-deploy-action@v4
@@ -88,7 +81,7 @@ jobs:
       - name: Build and push server
         uses: docker/build-push-action@v5
         with:
-          context: server
+          context: .
           push: true
           platforms: linux/amd64,linux/arm64
           tags: lasercut/anime-quiz:latest,lasercut/anime-quiz:${{ github.ref_name }}

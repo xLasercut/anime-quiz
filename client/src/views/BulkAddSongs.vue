@@ -48,14 +48,14 @@ import { computed, inject, ref } from 'vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import axios from 'axios';
-import { AnimeThemesResponseAnimeThemeType, AnimeThemesResponseVideoType, SongIdType, SongType } from '@/assets/shared/models/types';
-import { SendNotification } from '@/assets/types';
+import { TAnimeThemesResponseAnimeTheme, TAnimeThemesResponseVideo, TSongId, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { TSendNotification } from '@/assets/types';
 import BulkAddSongSongInfo from '@/components/bulk-add-songs/BulkAddSongSongInfo.vue';
 import { canParseValue, generateId } from '@/assets/game-helpers';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { AnimeThemesResponse, AnimeThemesResponseString } from '@/assets/shared/models/anime-themes';
+import { AnimeThemesResponse, AnimeThemesResponseString } from 'anime-quiz-shared-resources/src/models/anime-themes';
 
 interface SongSrc {
   video: string;
@@ -64,7 +64,7 @@ interface SongSrc {
 
 const anime = ref([]);
 const animeSlug = ref('');
-const songs = ref<SongType[]>([]);
+const songs = ref<TSong[]>([]);
 const loadSongsValid = ref(false);
 const addSongsValid = ref(false);
 const disabled = ref(false);
@@ -74,7 +74,7 @@ const animeSlugRules = [
   (v: string): boolean | string => canParseValue(v, AnimeThemesResponseString) || 'Invalid Anime Slug'
 ];
 
-const sendNotification = inject(CLIENT_EVENTS.SYSTEM_NOTIFICATION) as SendNotification;
+const sendNotification = inject(CLIENT_EVENTS.SYSTEM_NOTIFICATION) as TSendNotification;
 
 async function loadSongs() {
   if (!loadSongsValid.value) {
@@ -114,7 +114,7 @@ async function loadSongs() {
   }
 }
 
-function getArtist(animeTheme: AnimeThemesResponseAnimeThemeType): string {
+function getArtist(animeTheme: TAnimeThemesResponseAnimeTheme): string {
   if (animeTheme.song.artists.length <= 0) {
     return '';
   }
@@ -126,8 +126,8 @@ function getArtist(animeTheme: AnimeThemesResponseAnimeThemeType): string {
     .join(' & ');
 }
 
-function getSongSrc(animeTheme: AnimeThemesResponseAnimeThemeType): SongSrc {
-  let videos: AnimeThemesResponseVideoType[] = [];
+function getSongSrc(animeTheme: TAnimeThemesResponseAnimeTheme): SongSrc {
+  let videos: TAnimeThemesResponseVideo[] = [];
 
   for (const entry of animeTheme.animethemeentries) {
     videos = videos.concat(entry.videos);
@@ -178,7 +178,7 @@ async function addSongs() {
   }
 }
 
-async function sendAddSongRequest(song: SongType): Promise<void> {
+async function sendAddSongRequest(song: TSong): Promise<void> {
   return new Promise((resolve, reject) => {
     socket.emit(SOCKET_EVENTS.ADMIN_NEW_SONG, song, (success: boolean) => {
       if (success) {
@@ -190,7 +190,7 @@ async function sendAddSongRequest(song: SongType): Promise<void> {
   });
 }
 
-function removeSong(songId: SongIdType) {
+function removeSong(songId: TSongId) {
   const songIds = songs.value.map((song) => song.songId);
   const indexToRemove = songIds.indexOf(songId);
   songs.value.splice(indexToRemove, 1);

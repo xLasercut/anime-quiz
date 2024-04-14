@@ -1,12 +1,12 @@
 import * as path from 'path';
-import { ServerConfig } from '../interfaces';
+import { TServerConfig } from '../interfaces';
 
 const ROOT_DIR = path.join(__dirname, '..', '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
 const PRIMARY_DATA_DIR = path.join(DATA_DIR, 'primary');
 const SECONDARY_DATA_DIR = path.join(DATA_DIR, 'secondary');
 
-const SERVER_CONFIG: ServerConfig = {
+const SERVER_CONFIG: TServerConfig = {
   rootDir: ROOT_DIR,
   logDir: path.join(ROOT_DIR, 'log'),
   dataDir: DATA_DIR,

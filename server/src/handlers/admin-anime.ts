@@ -1,11 +1,11 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from '../shared/events';
-import { AnimeType } from '../shared/models/types';
-import { Anime } from '../shared/models/anime';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { TAnime } from 'anime-quiz-shared-resources/src/models/types';
+import { Anime } from 'anime-quiz-shared-resources/src/models/anime';
 
 class AdminAnimeHandler extends ServerHandler {
   protected _events = {
-    [SOCKET_EVENTS.ADMIN_NEW_ANIME]: (_anime: AnimeType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_NEW_ANIME]: (_anime: TAnime, callback: Function) => {
       this._logger.info('admin add anime', {
         clientData: this._socket.data.clientData,
         request: _anime
@@ -25,7 +25,7 @@ class AdminAnimeHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_EDIT_ANIME]: (_anime: AnimeType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_EDIT_ANIME]: (_anime: TAnime, callback: Function) => {
       this._logger.info('admin edit anime', {
         clientData: this._socket.data.clientData,
         request: _anime
@@ -47,7 +47,7 @@ class AdminAnimeHandler extends ServerHandler {
       );
       callback(true);
     },
-    [SOCKET_EVENTS.ADMIN_DELETE_ANIME]: (_anime: AnimeType, callback: Function) => {
+    [SOCKET_EVENTS.ADMIN_DELETE_ANIME]: (_anime: TAnime, callback: Function) => {
       this._logger.info('admin delete anime', {
         clientData: this._socket.data.clientData,
         request: _anime

@@ -1,32 +1,32 @@
 import {
-  ClientDataType,
-  GameGuessType,
-  GamePlayerLifeLineTypeType,
-  GamePlayerType,
-  GameRoomIdType,
-  GameScoreType,
-  NotificationColorType,
-  SongIdType
-} from '../shared/models/types';
-import { DbUserSongType, DbUserType } from '../models/types';
-import { ClientData } from '../shared/models/client';
+  TClientData,
+  TGameGuess,
+  TGamePlayerLifeLineType,
+  TGamePlayer,
+  TGameRoomId,
+  TGameScore,
+  TNotificationColor,
+  TSongId
+} from 'anime-quiz-shared-resources/src/models/types';
+import { TDbUserSong, TDbUser } from '../models/types';
+import { ClientData } from 'anime-quiz-shared-resources/src/models/client';
 import { Socket } from '../types';
-import { GameRoomId } from '../shared/models/game';
+import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
 import { UnauthorizedError } from './exceptions';
 import { Logger } from 'winston';
 
 class SocketData {
-  protected _clientData: ClientDataType;
+  protected _clientData: TClientData;
   protected _logger: Logger;
   protected _socket: Socket;
   public clientAuthTimer?: NodeJS.Timeout;
-  protected _gameGuess: GameGuessType;
-  protected _score: GameScoreType;
+  protected _gameGuess: TGameGuess;
+  protected _score: TGameScore;
   protected _songLoaded: boolean;
   protected _pendingScore: number;
-  protected _scoreColor: NotificationColorType;
+  protected _scoreColor: TNotificationColor;
   protected _skipSong: boolean;
-  protected _lifeLine: Record<GamePlayerLifeLineTypeType, boolean>;
+  protected _lifeLine: Record<TGamePlayerLifeLineType, boolean>;
 
   constructor(socket: Socket, logger: Logger) {
     this._logger = logger;
@@ -56,7 +56,7 @@ class SocketData {
     };
   }
 
-  public useLifeLine(lifeLineType: GamePlayerLifeLineTypeType): boolean {
+  public useLifeLine(lifeLineType: TGamePlayerLifeLineType): boolean {
     if (this._lifeLine[lifeLineType]) {
       this._lifeLine[lifeLineType] = false;
       return true;
@@ -72,11 +72,11 @@ class SocketData {
     this._skipSong = skipSong;
   }
 
-  public get clientData(): ClientDataType {
+  public get clientData(): TClientData {
     return this._clientData;
   }
 
-  public get playerData(): GamePlayerType {
+  public get playerData(): TGamePlayer {
     return {
       ...this._clientData,
       guess: this._gameGuess,
@@ -94,7 +94,7 @@ class SocketData {
     this._songLoaded = songLoaded;
   }
 
-  public set gameGuess(gameGuess: GameGuessType) {
+  public set gameGuess(gameGuess: TGameGuess) {
     this._gameGuess = gameGuess;
   }
 
@@ -102,7 +102,7 @@ class SocketData {
     this._pendingScore = pendingScore;
   }
 
-  public get currentGameRoom(): GameRoomIdType {
+  public get currentGameRoom(): TGameRoomId {
     const allRooms = Array.from(this._socket.rooms);
     const gameRooms = allRooms.filter((roomId: string) => {
       try {
@@ -130,12 +130,12 @@ class SocketData {
     };
   }
 
-  public updateUserSettings(clientData: ClientDataType): void {
+  public updateUserSettings(clientData: TClientData): void {
     this._clientData.avatar = clientData.avatar;
     this._clientData.displayName = clientData.displayName;
   }
 
-  public initClientData(dbUser: DbUserType): void {
+  public initClientData(dbUser: TDbUser): void {
     this._clientData = ClientData.parse({
       userId: dbUser.user_id,
       displayName: dbUser.display_name,
@@ -148,7 +148,7 @@ class SocketData {
     });
   }
 
-  public generateDbUserSongs(songIds: SongIdType[]): DbUserSongType {
+  public generateDbUserSongs(songIds: TSongId[]): TDbUserSong {
     return {
       user_id: this._clientData.userId,
       song_id: songIds
@@ -175,7 +175,7 @@ class SocketData {
     this._skipSong = false;
   }
 
-  protected _getScoreColor(): NotificationColorType {
+  protected _getScoreColor(): TNotificationColor {
     if (this._pendingScore >= 2) {
       return 'success';
     }

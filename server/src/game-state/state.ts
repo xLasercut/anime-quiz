@@ -1,11 +1,10 @@
-import { GameGuessType, GameRoomIdType, GameRoomStateType, SongType } from '../shared/models/types';
+import { TGameGuess, TGameRoomId, TGameRoomState, TSong } from 'anime-quiz-shared-resources/src/models/types';
 import { Server } from '../app/server';
-import { clearInterval, clearTimeout } from 'node:timers';
 import { Socket } from '../types';
 import { SongListEmptyError } from '../app/exceptions';
 
 class GameState {
-  protected _currentSong: SongType = {
+  protected _currentSong: TSong = {
     songId: '',
     src: '',
     type: 'OP',
@@ -17,20 +16,20 @@ class GameState {
   };
   protected _currentSongCount: number = 0;
   protected _maxSongCount: number = 0;
-  protected _gameSongList: SongType[] = [];
+  protected _gameSongList: TSong[] = [];
   protected _playing: boolean = false;
   protected _timeout?: NodeJS.Timeout;
   protected _timer?: NodeJS.Timeout;
   protected _io: Server;
-  protected _roomId: GameRoomIdType;
-  protected _songOverride?: SongType;
+  protected _roomId: TGameRoomId;
+  protected _songOverride?: TSong;
 
-  constructor(io: Server, roomId: GameRoomIdType) {
+  constructor(io: Server, roomId: TGameRoomId) {
     this._io = io;
     this._roomId = roomId;
   }
 
-  public get dict(): GameRoomStateType {
+  public get dict(): TGameRoomState {
     return {
       currentSong: this._currentSong,
       currentSongCount: this._currentSongCount + 1,
@@ -39,7 +38,7 @@ class GameState {
     };
   }
 
-  public newGame(songList: SongType[]) {
+  public newGame(songList: TSong[]) {
     if (songList.length <= 0) {
       throw new SongListEmptyError();
     }
@@ -68,7 +67,7 @@ class GameState {
     this._currentSong = this._getCurrentSong();
   }
 
-  public calculateScore(gameGuess: GameGuessType): number {
+  public calculateScore(gameGuess: TGameGuess): number {
     let score = 0;
     if (gameGuess.title && gameGuess.title.toLowerCase() === this._currentSong.songTitle.toLowerCase()) {
       score += 1;
@@ -144,7 +143,7 @@ class GameState {
     return true;
   }
 
-  protected _getCurrentSong(): SongType {
+  protected _getCurrentSong(): TSong {
     if (this._songOverride) {
       return this._songOverride;
     }
@@ -185,7 +184,7 @@ class GameState {
     }
   }
 
-  public set songOverride(song: SongType | undefined) {
+  public set songOverride(song: TSong | undefined) {
     this._songOverride = song;
   }
 }

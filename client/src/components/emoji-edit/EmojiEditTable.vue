@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { EmojiType } from '@/assets/shared/models/types';
+import { TEmoji } from 'anime-quiz-shared-resources/src/models/types';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import GameEmoji from '@/components/common/GameEmoji.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
@@ -50,13 +50,13 @@ import EmojiEditTableFilters from '@/components/emoji-edit/EmojiEditTableFilters
 import TableAction from '@/components/common/tables/TableAction.vue';
 import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
-import { OpenDialog } from '@/assets/types';
+import { TOpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { usePagination } from '@/assets/pagination-helpers';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
-const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as OpenDialog;
+const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
 const headers = [
   { title: 'Emoji ID', key: 'emojiId', sortable: false },
   { title: 'Command', key: 'command', sortable: false },
@@ -71,19 +71,19 @@ const filters = ref({
   type: ['img', 'dec']
 });
 
-function editEmoji(emoji: EmojiType) {
+function editEmoji(emoji: TEmoji) {
   adminStore.updateEmojiInEdit(emoji);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.EDIT);
   openDialog(DIALOG_ROUTES.EMOJI_EDIT, 'Edit Emoji');
 }
 
-function deleteEmoji(emoji: EmojiType) {
+function deleteEmoji(emoji: TEmoji) {
   adminStore.updateEmojiInEdit(emoji);
   adminStore.updateEditMode(DATABASE_EDIT_MODE.DELETE);
   openDialog(DIALOG_ROUTES.EMOJI_EDIT, 'Delete Emoji');
 }
 
-const filteredEmojiList = computed((): EmojiType[] => {
+const filteredEmojiList = computed((): TEmoji[] => {
   return dataStore.emojiList.filter((emoji) => {
     return (
       emoji.emojiId.includes(filters.value.emojiId) &&

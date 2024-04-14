@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { LocalStorageConstant } from '@/assets/types';
+import { TLocalStorageConstant } from '@/assets/types';
 
 const props = defineProps({
   currentPage: {
@@ -43,7 +43,7 @@ const props = defineProps({
   },
   localStorageKey: {
     required: true,
-    type: String as PropType<LocalStorageConstant>
+    type: String as PropType<TLocalStorageConstant>
   }
 });
 

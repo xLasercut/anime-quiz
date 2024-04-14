@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import BotMessageEditTable from '@/components/bot-message-edit/BotMessageEditTable.vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from '@/assets/shared/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 
 socket.emit(SOCKET_EVENTS.UPDATE_STORE_BOT_MESSAGE_LIST);
 </script>

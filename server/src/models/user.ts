@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { Avatar, DiscordId, DisplayName, UserId } from '../shared/models/user';
+import { Avatar, DiscordId, DisplayName, UserId } from 'anime-quiz-shared-resources/src/models/user';
 import { isValidJson } from './common';
-import { SongId } from '../shared/models/song';
+import { SongId } from 'anime-quiz-shared-resources/src/models/song';
 
 const DbUserAdmin = z.number().transform((arg) => {
   return arg === 1;
