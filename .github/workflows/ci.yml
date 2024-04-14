@@ -23,11 +23,6 @@ jobs:
       - name: Create cache - ${{ env.CACHE_NAME }}
         uses: ./.github/actions/caching/
         with:
-          path: |
-            server/node_modules
-            client/node_modules
-            shared-resources/node_modules
-            node_modules
           name: ${{ env.CACHE_NAME }}
 
   check-formatting:
@@ -45,11 +40,6 @@ jobs:
       - name: Download cache - ${{ env.CACHE_NAME }}
         uses: ./.github/actions/caching/
         with:
-          path: |
-            server/node_modules
-            client/node_modules
-            shared-resources/node_modules
-            node_modules
           name: ${{ env.CACHE_NAME }}
 
       - name: Check formatting
@@ -70,11 +60,6 @@ jobs:
       - name: Download cache - ${{ env.CACHE_NAME }}
         uses: ./.github/actions/caching/
         with:
-          path: |
-            server/node_modules
-            client/node_modules
-            shared-resources/node_modules
-            node_modules
           name: ${{ env.CACHE_NAME }}
 
       - name: Set client env file

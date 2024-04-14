@@ -4,14 +4,15 @@ inputs:
   name:
     description: "Name of cache. Will be prefixed with GITHUB_SHA_SHORT"
     required: true
-  path:
-    description: "Path of files to cache"
-    required: true
 runs:
   using: "composite"
   steps:
     - name: Create cache
       uses: actions/cache@v4
       with:
-        path: ${{ inputs.path }}
+        path: |
+          server/node_modules
+          client/node_modules
+          shared-resources/node_modules
+          node_modules
         key: "${{ env.GITHUB_SHA_SHORT }}-${{ inputs.name }}"
