@@ -62,14 +62,14 @@ jobs:
         with:
           name: ${{ env.CACHE_NAME }}
 
-      - name: Set client env file
-        uses: ./.github/actions/create-client-env-file
-        with:
-          client_id: ${{ secrets.VITE_DISCORD_CLIENT_ID }}
-          redirect_url: ${{ secrets.VITE_REDIRECT_URL }}
-
       - name: Test build typescript
-        run: pnpm build
+        run: |
+          touch client/.env
+          echo VITE_DISCORD_CLIENT_ID=${{ secrets.VITE_DISCORD_CLIENT_ID }} >> client/.env
+          echo VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} >> client/.env
+          export VITE_CLIENT_VERSION=$(git rev-parse --short "$GITHUB_SHA")
+          echo VITE_CLIENT_VERSION=${{ env.VITE_CLIENT_VERSION }} >> client/.env
+          pnpm build
 
   test-build-server-docker:
     name: Test build server docker
