@@ -1,4 +1,4 @@
-FROM node:20-bookworm
+FROM node:21-bookworm
 
 LABEL maintainer="xLasercut"
 
