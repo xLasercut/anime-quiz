@@ -1,25 +1,28 @@
 import { Socket } from 'socket.io-client';
 import { useDataStore } from '@/plugins/store/data';
 import { pinia } from '@/plugins/store';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import {
-  TAnimeName,
+  Anime,
+  AnimeName,
+  BotMessage,
+  Emoji,
+  SOCKET_EVENTS,
+  Song,
+  SongId,
+  SongStatsRecords,
+  SongTitle,
   TAnime,
+  TAnimeName,
   TBotMessage,
   TEmoji,
+  TSong,
   TSongId,
   TSongStatsRecords,
   TSongTitle,
-  TSong,
-  TUser
-} from 'anime-quiz-shared-resources/src/models/types';
-import { Song, SongId, SongTitle } from 'anime-quiz-shared-resources/src/models/song';
-import { Anime, AnimeName } from 'anime-quiz-shared-resources/src/models/anime';
-import { User } from 'anime-quiz-shared-resources/src/models/user';
-import { Emoji } from 'anime-quiz-shared-resources/src/models/emoji';
+  TUser,
+  User
+} from 'anime-quiz-shared-resources';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { BotMessage } from 'anime-quiz-shared-resources/src/models/bot-message';
-import { SongStatsRecords } from 'anime-quiz-shared-resources/src/models/song-stats';
 
 const dataStore = useDataStore(pinia);
 

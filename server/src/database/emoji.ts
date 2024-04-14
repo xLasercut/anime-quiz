@@ -1,8 +1,7 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
 import { TServerConfig } from '../interfaces';
-import { TEmoji } from 'anime-quiz-shared-resources/src/models/types';
+import { Emoji, TEmoji } from 'anime-quiz-shared-resources';
 import { DbEmoji } from '../models/emoji';
-import { Emoji } from 'anime-quiz-shared-resources/src/models/emoji';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';

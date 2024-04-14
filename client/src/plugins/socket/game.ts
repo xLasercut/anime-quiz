@@ -1,9 +1,7 @@
 import { Socket } from 'socket.io-client';
 import { pinia } from '@/plugins/store';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TGameGuess, TGamePlayer, TGameRoomState } from 'anime-quiz-shared-resources/src/models/types';
+import { GameGuess, GamePlayer, GameRoomState, SOCKET_EVENTS, TGameGuess, TGamePlayer, TGameRoomState } from 'anime-quiz-shared-resources';
 import { useGameStore } from '@/plugins/store/game';
-import { GameGuess, GamePlayer, GameRoomState } from 'anime-quiz-shared-resources/src/models/game';
 import { useClientStore } from '@/plugins/store/client';
 
 const gameStore = useGameStore(pinia);

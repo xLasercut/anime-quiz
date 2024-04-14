@@ -20,10 +20,8 @@ import MainAnswerAnswerDisplay from '@/components/main-game/main-game-window/mai
 import { onUnmounted, ref } from 'vue';
 import MainAnswerQuestionDisplay from '@/components/main-game/main-game-window/main-game-window-answer-display/MainAnswerQuestionDisplay.vue';
 import { useGameStore } from '@/plugins/store/game';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { GamePlayerLifeLineType, SOCKET_EVENTS, TGamePlayerLifeLineType } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
-import { TGamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/types';
-import { GamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/game';
 import MainAnswerHintDisplay from '@/components/main-game/main-game-window/main-game-window-answer-display/MainAnswerHintDisplay.vue';
 
 const gameStore = useGameStore();

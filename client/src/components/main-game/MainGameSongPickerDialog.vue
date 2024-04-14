@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { SOCKET_EVENTS, SONG_TYPES, TSong } from 'anime-quiz-shared-resources';
 import { isMatchFilter } from '@/assets/game-helpers';
 import { useDataStore } from '@/plugins/store/data';
 import { computed, ref } from 'vue';
@@ -54,9 +54,7 @@ import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import TableActionBtn from '@/components/common/buttons/TableActionBtn.vue';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { usePagination } from '@/assets/pagination-helpers';
 
 const emit = defineEmits(['dialog:close']);

@@ -1,6 +1,5 @@
-import { Admin, Avatar, DiscordId, DisplayName, UserId } from 'anime-quiz-shared-resources/src/models/user';
+import { Admin, Avatar, DiscordId, DisplayName, SongId, SongSrc, SongTitle, SongType, UserId } from 'anime-quiz-shared-resources';
 import { canParseValue } from '@/assets/game-helpers';
-import { SongId, SongSrc, SongTitle, SongType } from 'anime-quiz-shared-resources/src/models/song';
 
 function isValidDiscordId(v: string): boolean {
   return canParseValue(v, DiscordId);

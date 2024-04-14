@@ -26,10 +26,9 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { TAnimeId } from 'anime-quiz-shared-resources/src/models/types';
+import { AnimeId, TAnimeId } from 'anime-quiz-shared-resources';
 import { canParseValue, isMatchFilter } from '@/assets/game-helpers';
 import { z } from 'zod';
-import { AnimeId } from 'anime-quiz-shared-resources/src/models/anime';
 import { useDataStore } from '@/plugins/store/data';
 
 defineProps({

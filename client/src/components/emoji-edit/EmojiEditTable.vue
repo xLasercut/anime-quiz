@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { TEmoji } from 'anime-quiz-shared-resources/src/models/types';
+import { TEmoji } from 'anime-quiz-shared-resources';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import GameEmoji from '@/components/common/GameEmoji.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';

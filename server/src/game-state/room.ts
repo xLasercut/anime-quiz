@@ -1,6 +1,5 @@
 import { Server } from '../app/server';
-import { TGamePlayer, TGameRoomId } from 'anime-quiz-shared-resources/src/models/types';
-import { GameRoomId } from 'anime-quiz-shared-resources/src/models/game';
+import { GameRoomId, TGamePlayer, TGameRoomId } from 'anime-quiz-shared-resources';
 import { ZodError } from 'zod';
 import { TGameRoom } from './interfaces';
 import { Logger } from 'winston';

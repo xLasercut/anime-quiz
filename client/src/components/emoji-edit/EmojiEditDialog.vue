@@ -45,10 +45,10 @@ import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import GameEmoji from '@/components/common/GameEmoji.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
 import { canParseValue } from '@/assets/game-helpers';
-import { EmojiCommand, EmojiId, EmojiSrc, EmojiType } from 'anime-quiz-shared-resources/src/models/emoji';
+import { EmojiCommand, EmojiId, EmojiSrc, EmojiType } from 'anime-quiz-shared-resources';
 
 const adminStore = useAdminStore();
 const valid = ref(false);

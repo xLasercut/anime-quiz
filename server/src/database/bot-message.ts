@@ -1,11 +1,10 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
-import { TBotMessage, TMessageCommand } from 'anime-quiz-shared-resources/src/models/types';
+import { BotMessage, TBotMessage, TMessageCommand } from 'anime-quiz-shared-resources';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { TServerConfig } from '../interfaces';
 import { Logger } from 'winston';
 import { StatementFactory } from './statement';
 import { DbBotMessage } from '../models/bot-message';
-import { BotMessage } from 'anime-quiz-shared-resources/src/models/bot-message';
 import { DataQualityError } from '../app/exceptions';
 
 const STATEMENTS = {

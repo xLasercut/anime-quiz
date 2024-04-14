@@ -13,10 +13,8 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue';
 import { useGameStore } from '@/plugins/store/game';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { GamePlayerLifeLineType, SOCKET_EVENTS, TGamePlayerLifeLineType } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
-import { TGamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/types';
-import { GamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/game';
 import { getGameNameHint } from '@/assets/game-helpers';
 
 const gameStore = useGameStore();

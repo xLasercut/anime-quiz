@@ -50,14 +50,12 @@ import { ref } from 'vue';
 import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { useAdminStore } from '@/plugins/store/admin';
 import { canParseValue } from '@/assets/game-helpers';
-import { MessageCommand, MessageId } from 'anime-quiz-shared-resources/src/models/bot-message';
+import { GameChatText, MessageCommand, MessageId, SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { AVATAR_RULES, DISPLAY_NAME_RULES, USER_ID_RULES } from '@/assets/form-rules';
 import UserSettingsAvatarSelect from '@/components/common/dialogs/DialogAvatarSelect.vue';
 import DialogTextarea from '@/components/common/dialogs/DialogTextarea.vue';
-import { GameChatText } from 'anime-quiz-shared-resources/src/models/game';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
 
 const adminStore = useAdminStore();

@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue';
-import { TGameChat } from 'anime-quiz-shared-resources/src/models/types';
+import { TGameChat } from 'anime-quiz-shared-resources';
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import { useDataStore } from '@/plugins/store/data';
 

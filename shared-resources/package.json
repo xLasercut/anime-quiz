@@ -1,7 +1,7 @@
 {
   "name": "anime-quiz-shared-resources",
   "description": "Rewrite and successor of [Anime Music Quiz](https://github.com/xLasercut/anime-music-quiz)",
-  "private": true,
+  "main": "src/index.ts",
   "scripts": {
     "build": "rm -rf ./dist && tsc -b",
     "format": "prettier 'src/**/*.ts' --write",

@@ -11,7 +11,7 @@ import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TOpenDialog } from '@/assets/types';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { inject } from 'vue';
 
 const clientStore = useClientStore();

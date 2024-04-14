@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { TBotMessage } from 'anime-quiz-shared-resources/src/models/types';
+import { TBotMessage } from 'anime-quiz-shared-resources';
 import { useDataStore } from '@/plugins/store/data';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { computed, inject, ref } from 'vue';

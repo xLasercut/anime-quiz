@@ -13,9 +13,7 @@ import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { onUnmounted, ref } from 'vue';
 import { useGameStore } from '@/plugins/store/game';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TGamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/types';
-import { GamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/game';
+import { GamePlayerLifeLineType, SOCKET_EVENTS, TGamePlayerLifeLineType } from 'anime-quiz-shared-resources';
 
 const gameStore = useGameStore();
 const disabled = ref(true);

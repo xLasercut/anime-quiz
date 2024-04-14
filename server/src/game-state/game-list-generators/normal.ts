@@ -1,5 +1,5 @@
 import { GameListGenerator } from './common';
-import { TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { TSong } from 'anime-quiz-shared-resources';
 
 class NormalGameListGenerator extends GameListGenerator {
   protected _generateList(): TSong[] {

@@ -1,8 +1,5 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { TSocketId, TSong } from 'anime-quiz-shared-resources/src/models/types';
-import { Song } from 'anime-quiz-shared-resources/src/models/song';
-import { SocketId } from 'anime-quiz-shared-resources/src/models/client';
+import { SOCKET_EVENTS, SocketId, Song, TSocketId, TSong } from 'anime-quiz-shared-resources';
 
 class AdminGameHandler extends ServerHandler {
   protected _events = {

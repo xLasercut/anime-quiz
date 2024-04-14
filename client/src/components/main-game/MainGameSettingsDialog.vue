@@ -51,28 +51,28 @@
 </template>
 
 <script setup lang="ts">
-import { TGameRoomSettings } from 'anime-quiz-shared-resources/src/models/types';
-import { onUnmounted, ref } from 'vue';
-import { GAME_MODES } from 'anime-quiz-shared-resources/src/game-modes';
-import DialogForm from '@/components/common/dialogs/DialogForm.vue';
-import DialogSlider from '@/components/common/dialogs/DialogSlider.vue';
-import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
-import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import {
+  GAME_MODES,
   GameRoomSettings,
   GameRoomSettingsGameMode,
   GameRoomSettingsGuessTime,
   GameRoomSettingsLoadTime,
   GameRoomSettingSongCount,
-  GameRoomSettingsSongType
-} from 'anime-quiz-shared-resources/src/models/game';
+  GameRoomSettingsSongType,
+  SOCKET_EVENTS,
+  SONG_TYPES,
+  TGameRoomSettings
+} from 'anime-quiz-shared-resources';
+import { onUnmounted, ref } from 'vue';
+import DialogForm from '@/components/common/dialogs/DialogForm.vue';
+import DialogSlider from '@/components/common/dialogs/DialogSlider.vue';
+import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
+import { socket } from '@/plugins/socket';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { canParseValue } from '@/assets/game-helpers';
 import { z } from 'zod';
 import { useClientStore } from '@/plugins/store/client';
 import { useGameStore } from '@/plugins/store/game';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import DialogToggle from '@/components/common/dialogs/DialogToggle.vue';
 
 const clientStore = useClientStore();

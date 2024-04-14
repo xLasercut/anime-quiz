@@ -18,14 +18,7 @@
     </template>
 
     <template #item.src="{ item }">
-      <v-row :dense="true">
-        <v-col cols="auto">
-          <a :href="item.src" target="_blank">Video</a>
-        </v-col>
-        <v-col cols="auto">
-          <a :href="item.audioSrc" target="_blank" v-if="item.audioSrc">Audio</a>
-        </v-col>
-      </v-row>
+      <table-src :song="item"></table-src>
     </template>
 
     <template #item.action="{ item }">
@@ -63,7 +56,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { SONG_TYPES, TSong } from 'anime-quiz-shared-resources';
 import { CLIENT_CONSTANTS, DATABASE_EDIT_MODE, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
@@ -74,8 +67,8 @@ import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { useAdminStore } from '@/plugins/store/admin';
 import { TOpenDialog } from '@/assets/types';
 import { CLIENT_EVENTS } from '@/assets/events';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { usePagination } from '@/assets/pagination-helpers';
+import TableSrc from '@/components/common/tables/TableSrc.vue';
 
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
@@ -85,7 +78,7 @@ const headers = [
   { title: 'Title', key: 'songTitle', sortable: false },
   { title: 'Artist', key: 'artist', sortable: false },
   { title: 'Type', key: 'type', sortable: false },
-  { title: 'Source', key: 'src', sortable: false },
+  { title: 'Source', key: 'src', sortable: false, width: CLIENT_CONSTANTS.TABLE_ACTION_WIDTH },
   { title: 'Action', key: 'action', sortable: false, width: CLIENT_CONSTANTS.TABLE_ACTION_WIDTH }
 ];
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.SONG_EDIT_TABLE_ITEMS_PER_PAGE);

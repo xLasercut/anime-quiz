@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 
 function lockDatabase() {
   socket.emit(SOCKET_EVENTS.ADMIN_LOCK_DATABASE);

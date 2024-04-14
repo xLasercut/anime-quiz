@@ -19,11 +19,10 @@ import NavBar from '@/components/app/NavBar.vue';
 import SystemNotification from '@/components/app/SystemNotification.vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
-import { TNotificationColor, TSystemNotification } from 'anime-quiz-shared-resources/src/models/types';
+import { SOCKET_EVENTS, TNotificationColor, TSystemNotification } from 'anime-quiz-shared-resources';
 import { TOpenDialog, TSendNotification } from '@/assets/types';
 import GlobalDialog from '@/components/app/GlobalDialog.vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { ClientDialogRoute } from '@/assets/routing/types';
 
 const clientStore = useClientStore();

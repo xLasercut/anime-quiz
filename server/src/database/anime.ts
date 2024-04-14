@@ -1,8 +1,7 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
 import { TServerConfig } from '../interfaces';
-import { TAnimeId, TAnimeName, TAnime } from 'anime-quiz-shared-resources/src/models/types';
+import { Anime, TAnime, TAnimeId, TAnimeName } from 'anime-quiz-shared-resources';
 import { DbAnime, DbAnimeName } from '../models/anime';
-import { Anime } from 'anime-quiz-shared-resources/src/models/anime';
 import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';

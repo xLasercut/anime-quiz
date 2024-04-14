@@ -1,13 +1,13 @@
 import {
+  GAME_MODES,
+  SONG_TYPES,
+  TGameRoomSettings,
   TGameRoomSettingsGameMode,
   TGameRoomSettingsGuessTime,
   TGameRoomSettingsLoadTime,
   TGameRoomSettingSongCount,
-  TGameRoomSettings,
   TSongType
-} from 'anime-quiz-shared-resources/src/models/types';
-import { GAME_MODES } from 'anime-quiz-shared-resources/src/game-modes';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
+} from 'anime-quiz-shared-resources';
 
 class GameSettings {
   protected _songCount: TGameRoomSettingSongCount = 20;

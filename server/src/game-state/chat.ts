@@ -1,7 +1,6 @@
 import { Logger } from 'winston';
-import { TAvatar, TDisplayName, TGameChat, TUserId } from 'anime-quiz-shared-resources/src/models/types';
+import { AVATARS, TAvatar, TDisplayName, TGameChat, TUserId } from 'anime-quiz-shared-resources';
 import { Socket } from '../types';
-import { AVATARS } from 'anime-quiz-shared-resources/src/avatars';
 import { BotMessageDb } from '../database/bot-message';
 
 const SANITIZE_MAP: Record<string, string> = {

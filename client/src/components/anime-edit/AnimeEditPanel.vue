@@ -14,7 +14,7 @@ import { useAdminStore } from '@/plugins/store/admin';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import { useDataStore } from '@/plugins/store/data';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { inject } from 'vue';
 
 const clientStore = useClientStore();

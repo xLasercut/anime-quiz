@@ -54,9 +54,8 @@ import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogMultiAnimeAutocomplete from '@/components/common/dialogs/DialogMultiAnimeAutocomplete.vue';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS, SONG_TYPES } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { SONG_ID_RULES, SONG_SRC_RULES, SONG_TITLE_RULES, SONG_TYPE_RULES } from '@/assets/form-rules';
 
 const adminStore = useAdminStore();

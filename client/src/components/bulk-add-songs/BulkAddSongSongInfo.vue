@@ -64,9 +64,8 @@ import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { SONG_ID_RULES, SONG_SRC_RULES, SONG_TITLE_RULES, SONG_TYPE_RULES } from '@/assets/form-rules';
 import DialogSelect from '@/components/common/dialogs/DialogSelect.vue';
 import DialogMultiAnimeAutocomplete from '@/components/common/dialogs/DialogMultiAnimeAutocomplete.vue';
-import { TAnimeId, TSongId, TSongTitle, TSongType } from 'anime-quiz-shared-resources/src/models/types';
+import { SONG_TYPES, TAnimeId, TSongId, TSongTitle, TSongType } from 'anime-quiz-shared-resources';
 import { computed, PropType } from 'vue';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { generateId } from '@/assets/game-helpers';
 import { useDataStore } from '@/plugins/store/data';
 

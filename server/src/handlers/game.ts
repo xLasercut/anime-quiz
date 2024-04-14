@@ -1,10 +1,10 @@
 import { ServerHandler } from './common';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { GameListGeneratorFactory } from '../game-state/game-list-generator';
 import { Socket } from '../types';
 import { THandlerDependencies } from '../interfaces';
-import { TGameGuess, TGamePlayerLifeLineType, TGameRoomId, TGameRoomSettings } from 'anime-quiz-shared-resources/src/models/types';
-import { GameGuess, GamePlayerLifeLineType } from 'anime-quiz-shared-resources/src/models/game';
+import { TGameGuess, TGamePlayerLifeLineType, TGameRoomId, TGameRoomSettings } from 'anime-quiz-shared-resources';
+import { GameGuess, GamePlayerLifeLineType } from 'anime-quiz-shared-resources';
 
 class GameHandler extends ServerHandler {
   protected _generatorFactory: GameListGeneratorFactory;

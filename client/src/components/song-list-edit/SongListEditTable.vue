@@ -31,14 +31,7 @@
     </template>
 
     <template #item.src="{ item }">
-      <v-row :dense="true">
-        <v-col cols="auto">
-          <a :href="item.src" target="_blank">Video</a>
-        </v-col>
-        <v-col cols="auto">
-          <a :href="item.audioSrc" target="_blank" v-if="item.audioSrc">Audio</a>
-        </v-col>
-      </v-row>
+      <table-src :song="item"></table-src>
     </template>
 
     <template #top>
@@ -71,17 +64,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { TSongId, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { SOCKET_EVENTS, SONG_TYPES, TSong, TSongId } from 'anime-quiz-shared-resources';
 import TableAnimeName from '@/components/common/tables/TableAnimeName.vue';
 import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, SONG_LIST_EDIT_MODE } from '@/assets/constants';
 import TablePagination from '@/components/common/tables/TablePagination.vue';
 import SongListEditTableFilters from '@/components/song-list-edit/SongListEditTableFilters.vue';
 import { isMatchFilter } from '@/assets/game-helpers';
 import SongListEditTableActions from '@/components/song-list-edit/SongListEditTableActions.vue';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 import { socket } from '@/plugins/socket';
-import { SONG_TYPES } from 'anime-quiz-shared-resources/src/song-types';
 import { usePagination } from '@/assets/pagination-helpers';
+import TableSrc from '@/components/common/tables/TableSrc.vue';
 
 const dataStore = useDataStore();
 const headers = [
@@ -89,7 +81,7 @@ const headers = [
   { title: 'Title', key: 'songTitle', sortable: false },
   { title: 'Artist', key: 'artist', sortable: false },
   { title: 'Type', key: 'type', sortable: false },
-  { title: 'Source', key: 'src', sortable: false }
+  { title: 'Source', key: 'src', sortable: false, width: CLIENT_CONSTANTS.TABLE_ACTION_WIDTH }
 ];
 
 const { currentPage, itemsPerPage } = usePagination(LOCAL_STORAGE_CONSTANTS.SONG_LIST_EDIT_TABLE_ITEMS_PER_PAGE);

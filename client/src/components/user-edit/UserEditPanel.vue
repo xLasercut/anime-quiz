@@ -9,7 +9,7 @@ import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import { useClientStore } from '@/plugins/store/client';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { useDataStore } from '@/plugins/store/data';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TOpenDialog } from '@/assets/types';

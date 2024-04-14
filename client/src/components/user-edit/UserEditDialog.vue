@@ -46,8 +46,7 @@ import { useAdminStore } from '@/plugins/store/admin';
 import { ADMIN_RULES, AVATAR_RULES, DISCORD_ID_RULES, DISPLAY_NAME_RULES, USER_ID_RULES } from '@/assets/form-rules';
 import DialogActions from '@/components/common/dialogs/DialogActions.vue';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
-import { User } from 'anime-quiz-shared-resources/src/models/user';
+import { SOCKET_EVENTS, User } from 'anime-quiz-shared-resources';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
 import DialogToggle from '@/components/common/dialogs/DialogToggle.vue';
 

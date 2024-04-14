@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue';
-import { TEmoji } from 'anime-quiz-shared-resources/src/models/types';
+import { TEmoji } from 'anime-quiz-shared-resources';
 
 const props = defineProps({
   emoji: {

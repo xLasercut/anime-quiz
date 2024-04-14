@@ -3,12 +3,12 @@ import {
   TAnimeId,
   TCombinedSongStats,
   TGameRoomSettings,
+  TSong,
   TSongId,
   TSongStatsPlayCount,
-  TSong,
   TSongType,
   TUserId
-} from 'anime-quiz-shared-resources/src/models/types';
+} from 'anime-quiz-shared-resources';
 import { SongDb } from '../../database/song';
 import { THandlerDependencies } from '../../interfaces';
 import { SongStatsDb } from '../../database/song-stats';

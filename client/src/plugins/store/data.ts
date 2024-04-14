@@ -1,15 +1,5 @@
 import { defineStore } from 'pinia';
-import {
-  TAnimeName,
-  TAnime,
-  TBotMessage,
-  TEmoji,
-  TSongId,
-  TSongStatsRecords,
-  TSongTitle,
-  TSong,
-  TUser
-} from 'anime-quiz-shared-resources/src/models/types';
+import { TAnime, TAnimeName, TBotMessage, TEmoji, TSong, TSongId, TSongStatsRecords, TSongTitle, TUser } from 'anime-quiz-shared-resources';
 import { LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
 import { TAnimeString } from '@/assets/types';
 

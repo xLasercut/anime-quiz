@@ -1,5 +1,5 @@
 import { DatabaseDataState, gameDbConnection, mainDbConnection, ServerDb } from './common';
-import { TSongStatsRecords, TSongStats, TSong } from 'anime-quiz-shared-resources/src/models/types';
+import { TSong, TSongStats, TSongStatsRecords } from 'anime-quiz-shared-resources';
 import { TServerConfig } from '../interfaces';
 import { Logger } from 'winston';
 import { Database as SqliteDb } from 'better-sqlite3';

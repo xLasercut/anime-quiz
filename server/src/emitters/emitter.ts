@@ -1,5 +1,6 @@
 import { Server } from '../app/server';
 import {
+  SOCKET_EVENTS,
   TClientData,
   TGameChat,
   TGameGuess,
@@ -7,8 +8,7 @@ import {
   TGameRoomSettings,
   TSystemNotification,
   TUserId
-} from 'anime-quiz-shared-resources/src/models/types';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
+} from 'anime-quiz-shared-resources';
 import { TEmitterDependencies } from '../interfaces';
 import { UserDb } from '../database/user';
 import { SongDb } from '../database/song';

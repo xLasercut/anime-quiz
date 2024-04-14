@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { useDataStore } from '@/plugins/store/data';
-import { TUser } from 'anime-quiz-shared-resources/src/models/types';
+import { TUser } from 'anime-quiz-shared-resources';
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import UserEditTableFilters from '@/components/user-edit/UserEditTableFilters.vue';
 import TablePagination from '@/components/common/tables/TablePagination.vue';

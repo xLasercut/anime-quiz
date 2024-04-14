@@ -38,9 +38,8 @@
 import GameAvatar from '@/components/common/GameAvatar.vue';
 import { useGameStore } from '@/plugins/store/game';
 import { ref } from 'vue';
-import { TGamePlayer } from 'anime-quiz-shared-resources/src/models/types';
+import { SOCKET_EVENTS, TGamePlayer } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources/src/events';
 
 const gameStore = useGameStore();
 const playerToKick = ref('');
