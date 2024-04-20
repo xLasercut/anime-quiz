@@ -2,11 +2,12 @@
   <v-combobox
     :model-value="modelValue"
     @update:model-value="$emit('update:modelValue', $event || '')"
-    :eager="true"
     :no-filter="true"
     :items="itemsList"
     :search="search"
     @update:search="updateSearch($event)"
+    :hide-no-data="true"
+    :hide-selected="true"
   ></v-combobox>
 </template>
 
