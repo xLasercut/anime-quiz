@@ -11,15 +11,15 @@
   "author": "xLasercut",
   "license": "MIT",
   "dependencies": {
-    "typescript": "^5.4.4",
-    "zod": "^3.22.4",
     "axios": "^1.6.8",
-    "uuid": "^9.0.1"
+    "typescript": "^5.4.5",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.5"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
-    "@types/node": "^20.12.5",
-    "@types/uuid": "^9.0.8"
+    "@types/node": "^20.12.7",
+    "@types/uuid": "^9.0.8",
+    "prettier": "^3.2.5"
   },
   "bugs": {
     "url": "https://github.com/xLasercut/anime-quiz/issues"

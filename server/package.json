@@ -13,11 +13,11 @@
   "author": "xLasercut",
   "license": "MIT",
   "dependencies": {
-    "better-sqlite3": "^9.4.5",
+    "anime-quiz-shared-resources": "workspace:*",
+    "better-sqlite3": "^9.5.0",
     "socket.io": "^4.7.5",
     "winston": "^3.13.0",
-    "winston-daily-rotate-file": "^4.7.1",
-    "anime-quiz-shared-resources": "workspace:*"
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.9",
