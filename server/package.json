@@ -17,7 +17,7 @@
     "better-sqlite3": "^9.5.0",
     "socket.io": "^4.7.5",
     "winston": "^3.13.0",
-    "winston-daily-rotate-file": "^4.7.1"
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.9",
