@@ -26,6 +26,7 @@ dist-ssr
 
 # server logs
 */log/
+server/config/*
 server/data-backup/
 
 anime-quiz-user.db

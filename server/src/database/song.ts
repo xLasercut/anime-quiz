@@ -1,12 +1,11 @@
 import { DatabaseDataState, mainDbConnection, ServerDb, userDbConnection } from './common';
-import { TServerConfig } from '../interfaces';
 
 import { DbSong, DbSongTitle } from '../models/song';
 import { Song, TSong, TSongId, TSongTitle } from 'anime-quiz-shared-resources';
 import { DataQualityError } from '../app/exceptions';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
-import { TDbSong } from '../models/types';
+import { TDbSong, TServerConfig } from '../models/types';
 import { Logger } from 'winston';
 
 const STATEMENTS = {

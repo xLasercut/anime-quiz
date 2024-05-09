@@ -1,5 +1,4 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
-import { TServerConfig } from '../interfaces';
 import { Anime, TAnime, TAnimeId, TAnimeName } from 'anime-quiz-shared-resources';
 import { DbAnime, DbAnimeName } from '../models/anime';
 import { DataQualityError } from '../app/exceptions';
@@ -7,6 +6,7 @@ import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { SongDb } from './song';
 import { Logger } from 'winston';
+import { TServerConfig } from '../models/types';
 
 const STATEMENTS = {
   INSERT_ANIME: 'INSERT_ANIME',
