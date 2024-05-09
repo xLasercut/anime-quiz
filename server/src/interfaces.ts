@@ -13,6 +13,7 @@ import { DatabaseDataState } from './database/common';
 import { BotMessageDb } from './database/bot-message';
 import { SongStatsDb } from './database/song-stats';
 import { Logger } from 'winston';
+import { TServerConfig } from './models/types';
 
 interface TEmitterDependencies {
   userDb: UserDb;
@@ -46,24 +47,4 @@ interface THandlerDependencies {
   chatSerialiser: GameChatSerialiser;
 }
 
-interface TServerConfig {
-  rootDir: string;
-  logDir: string;
-  dataDir: string;
-  primaryDataDir: string;
-  secondaryDataDir: string;
-  mainDbPath: string;
-  serverPort: string;
-  corsConfig: string;
-  clientAuthDelay: number;
-  userDbPath: string;
-  gameDbPath: string;
-  redirectUrl: string;
-  discordClientId: string;
-  discordClientSecret: string;
-  logLevel: string;
-  discordUserOverride: string;
-  serverVersion: string;
-}
-
-export type { THandlerDependencies, TServerConfig, TEmitterDependencies };
+export type { THandlerDependencies, TEmitterDependencies };

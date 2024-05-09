@@ -1,4 +1,4 @@
-import { THandlerDependencies, TServerConfig } from '../interfaces';
+import { THandlerDependencies } from '../interfaces';
 import { UserDb } from '../database/user';
 import { Socket, SocketEvent } from '../types';
 import { Emitter } from '../emitters/emitter';
@@ -17,6 +17,7 @@ import { DatabaseDataState } from '../database/common';
 import { BotMessageDb } from '../database/bot-message';
 import { GameChatSerialiser } from '../game-state/chat';
 import { SongStatsDb } from '../database/song-stats';
+import { TServerConfig } from '../models/types';
 
 abstract class ServerHandler {
   protected _logger: Logger;

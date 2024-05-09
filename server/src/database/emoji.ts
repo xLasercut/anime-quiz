@@ -1,11 +1,11 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
-import { TServerConfig } from '../interfaces';
 import { Emoji, TEmoji } from 'anime-quiz-shared-resources';
 import { DbEmoji } from '../models/emoji';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
 import { Logger } from 'winston';
+import { TServerConfig } from '../models/types';
 
 const STATEMENTS = {
   SELECT_ALL_EMOJI: 'SELECT_ALL_EMOJI',

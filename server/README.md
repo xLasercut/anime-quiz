@@ -17,13 +17,16 @@ pnpm bootstrap
 ```
 
 ### Setting up server config
-create a file called `config.env`
+create a file in config folder called `config.json`
 
 input server settings
-```dotenv
-DISCORD_CLIENT_ID=<discord_oauth_client_id>
-DISCORD_CLIENT_SECRET=<discord_oauth_client_secret>
-REDIRECT_URL=[defaults to http://localhost:8080/anime-quiz/]
+```json
+{
+  "discordClientId": "<discord_oauth_client_id>",
+  "discordClientSecret": "<discord_oauth_client_secret>",
+  "logLevel": "debug",
+  "redirectUrl": "<defaults to http://localhost:8080>"
+}
 ```
 
 ## Running locally

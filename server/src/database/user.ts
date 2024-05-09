@@ -1,7 +1,6 @@
 import { DatabaseDataState, ServerDb, userDbConnection } from './common';
-import { TServerConfig } from '../interfaces';
 import { DbUser } from '../models/user';
-import { TDbUser } from '../models/types';
+import { TDbUser, TServerConfig } from '../models/types';
 import { DataQualityError, UnauthorizedError } from '../app/exceptions';
 import { TClientData, TDiscordId, TUser, TUserId, User } from 'anime-quiz-shared-resources';
 import { Database as SqliteDb } from 'better-sqlite3';

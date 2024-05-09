@@ -1,11 +1,11 @@
 import { DatabaseDataState, mainDbConnection, ServerDb } from './common';
 import { BotMessage, TBotMessage, TMessageCommand } from 'anime-quiz-shared-resources';
 import { Database as SqliteDb } from 'better-sqlite3';
-import { TServerConfig } from '../interfaces';
 import { Logger } from 'winston';
 import { StatementFactory } from './statement';
 import { DbBotMessage } from '../models/bot-message';
 import { DataQualityError } from '../app/exceptions';
+import { TServerConfig } from '../models/types';
 
 const STATEMENTS = {
   SELECT_ALL_BOT_MESSAGE: 'SELECT_ALL_BOT_MESSAGE',

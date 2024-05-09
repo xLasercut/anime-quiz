@@ -1,10 +1,9 @@
 import { DatabaseDataState, gameDbConnection, mainDbConnection, ServerDb } from './common';
 import { TSong, TSongStats, TSongStatsRecords } from 'anime-quiz-shared-resources';
-import { TServerConfig } from '../interfaces';
 import { Logger } from 'winston';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
-import { TDbSongStats } from '../models/types';
+import { TDbSongStats, TServerConfig } from '../models/types';
 import { DbSongStats } from '../models/song-stats';
 import { DataQualityError } from '../app/exceptions';
 

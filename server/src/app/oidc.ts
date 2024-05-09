@@ -1,6 +1,6 @@
-import { TServerConfig } from '../interfaces';
 import axios from 'axios';
 import { Logger } from 'winston';
+import { TServerConfig } from '../models/types';
 
 interface DiscordTokenApiResponse {
   token_type: string;

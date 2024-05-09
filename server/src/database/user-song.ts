@@ -1,6 +1,5 @@
 import { DatabaseDataState, ServerDb, userDbConnection } from './common';
-import { TDbUserSong } from '../models/types';
-import { TServerConfig } from '../interfaces';
+import { TDbUserSong, TServerConfig } from '../models/types';
 import { Database as SqliteDb } from 'better-sqlite3';
 import { StatementFactory } from './statement';
 import { DataQualityError } from '../app/exceptions';
