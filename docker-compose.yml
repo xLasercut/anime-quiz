@@ -9,8 +9,7 @@ services:
       - ./server/data/primary:/home/aq_server/server/data/primary
       - ./server/data/secondary:/home/aq_server/server/data/secondary
       - ./server/log/:/home/aq_server/server/log
-    env_file:
-      - server/config.env
+      - ./server/config/:/home/aq_server/server/config
     ports:
       - "3000:3000"
     logging:
