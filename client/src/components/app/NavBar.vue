@@ -18,7 +18,7 @@ import { PANEL_MAPPING } from '@/assets/routing/mapping';
 import { useClientStore } from '@/plugins/store/client';
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import DefaultPanel from '@/components/app/DefaultPanel.vue';
-import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, ROOT_URL_PATH } from '@/assets/constants';
 import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
 import { inject } from 'vue';
@@ -40,6 +40,7 @@ function changeTheme(): void {
 
 function logout(): void {
   socket.disconnect();
+  window.location.href = ROOT_URL_PATH;
 }
 
 function showLogout(): boolean {

@@ -7,7 +7,7 @@
     :search="search"
     @update:search="updateSearch($event)"
     :hide-no-data="true"
-    :hide-selected="true"
+    :hide-selected="false"
   ></v-combobox>
 </template>
 
