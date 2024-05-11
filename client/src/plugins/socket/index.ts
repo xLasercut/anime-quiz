@@ -12,8 +12,10 @@ startClientStoreListeners(socket);
 startDataStoreListeners(socket);
 startGameStoreListeners(socket);
 
-socket.on(SOCKET_EVENTS.DISCONNECT, () => {
-  window.location.href = ROOT_URL_PATH;
+socket.on(SOCKET_EVENTS.DISCONNECT, (reason) => {
+  if (reason === 'io server disconnect') {
+    window.location.href = ROOT_URL_PATH;
+  }
 });
 
 export { socket };
