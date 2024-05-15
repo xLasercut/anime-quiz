@@ -6,7 +6,7 @@
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <component :is="panelComponent()"></component>
+      <router-view :name="ROUTER_VIEWS.NAV_BAR"></router-view>
       <nav-btn icon="mdi-logout" color="error" @click="logout()" v-if="showLogout()"> Logout</nav-btn>
     </v-toolbar-items>
   </v-toolbar>
@@ -14,24 +14,22 @@
 
 <script setup lang="ts">
 import { useTheme } from 'vuetify';
-import { PANEL_MAPPING } from '@/assets/routing/mapping';
 import { useClientStore } from '@/plugins/store/client';
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
-import DefaultPanel from '@/components/app/DefaultPanel.vue';
-import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS, ROOT_URL_PATH } from '@/assets/constants';
-import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
+import { CLIENT_CONSTANTS, LOCAL_STORAGE_CONSTANTS } from '@/assets/constants';
+import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TOpenDialog } from '@/assets/types';
+import { ROUTER_VIEWS, ROUTES } from '@/plugins/router/constants';
+import { useRoute, useRouter } from 'vue-router';
 
 const theme = useTheme();
 const clientStore = useClientStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
-
-function panelComponent() {
-  return PANEL_MAPPING[clientStore.view] || DefaultPanel;
-}
+const route = useRoute();
+const router = useRouter();
 
 function changeTheme(): void {
   theme.global.name.value = theme.global.name.value === 'dark' ? 'light' : 'dark';
@@ -40,11 +38,11 @@ function changeTheme(): void {
 
 function logout(): void {
   socket.disconnect();
-  window.location.href = ROOT_URL_PATH;
+  router.push({ path: ROUTES.LOGIN, replace: true });
 }
 
 function showLogout(): boolean {
-  return clientStore.view !== ROUTES.LOGIN;
+  return route.path !== ROUTES.LOGIN;
 }
 
 function openAdminDialog() {

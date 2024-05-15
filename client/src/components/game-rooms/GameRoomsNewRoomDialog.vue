@@ -12,18 +12,16 @@ import DialogTextField from '@/components/common/dialogs/DialogTextField.vue';
 import { ref } from 'vue';
 import { canParseValue, generateId } from '@/assets/game-helpers';
 import { GameRoomId } from 'anime-quiz-shared-resources';
-import { socket } from '@/plugins/socket';
-import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
-import { useClientStore } from '@/plugins/store/client';
-import { ROUTES } from '@/assets/routing/routes';
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/plugins/router/constants';
 
 const emit = defineEmits(['dialog:close']);
 
-const clientStore = useClientStore();
 const disabled = ref(false);
 const valid = ref(false);
 const roomIdPrefix = generateId('amq');
 const roomName = ref('');
+const router = useRouter();
 
 function roomId(roomName: string): string {
   return `${roomIdPrefix}|${roomName}`;
@@ -36,14 +34,8 @@ const roomNameRules = [
 
 function submitChange() {
   if (valid.value) {
-    disabled.value = true;
-    socket.emit(SOCKET_EVENTS.NEW_GAME_ROOM, roomId(roomName.value), (success: boolean) => {
-      disabled.value = false;
-      if (success) {
-        emit('dialog:close');
-        clientStore.changeView(ROUTES.MAIN_GAME);
-      }
-    });
+    emit('dialog:close');
+    router.push(ROUTES.MAIN_GAME(roomId(roomName.value)));
   }
 }
 </script>

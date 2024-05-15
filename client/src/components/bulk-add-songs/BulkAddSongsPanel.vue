@@ -4,12 +4,12 @@
 
 <script setup lang="ts">
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
-import { ROUTES } from '@/assets/routing/routes';
-import { useClientStore } from '@/plugins/store/client';
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/plugins/router/constants';
 
-const clientStore = useClientStore();
+const router = useRouter();
 
 function back() {
-  clientStore.changeView(ROUTES.LOBBY);
+  router.push(ROUTES.LOBBY);
 }
 </script>

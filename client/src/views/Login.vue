@@ -26,19 +26,20 @@
 import { inject, onMounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS, TClientLoginAuth } from 'anime-quiz-shared-resources';
-import { useClientStore } from '@/plugins/store/client';
-import { ROUTES } from '@/assets/routing/routes';
 import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { CLIENT_VERSION, LOCAL_STORAGE_CONSTANTS, ROOT_URL_PATH } from '@/assets/constants';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TSendNotification } from '@/assets/types';
 import { getAuthorizeUrl } from '@/assets/authorization';
 import { useDataStore } from '@/plugins/store/data';
+import { useRouter } from 'vue-router';
+import { useClientStore } from '@/plugins/store/client';
 
-const clientStore = useClientStore();
 const dataStore = useDataStore();
+const clientStore = useClientStore();
 const sendNotification = inject(CLIENT_EVENTS.SYSTEM_NOTIFICATION) as TSendNotification;
 const disabled = ref(false);
+const router = useRouter();
 
 function login() {
   if (!localStorage[LOCAL_STORAGE_CONSTANTS.GAME_SERVER]) {
@@ -53,6 +54,12 @@ function authorizeUser() {
   const parseSearchParams = new URLSearchParams(window.location.search);
   const returnedState = parseSearchParams.get('state');
   const code = parseSearchParams.get('code');
+
+  if (!code) {
+    clientStore.$reset();
+    dataStore.$reset();
+    socket.disconnect();
+  }
 
   if (code && returnedState !== localStorage[LOCAL_STORAGE_CONSTANTS.OAUTH_STATE]) {
     console.error('State mismatch');
@@ -71,9 +78,10 @@ function authorizeUser() {
     socket.emit(SOCKET_EVENTS.AUTHORIZE_USER, clientLoginAuth, (auth: boolean) => {
       disabled.value = false;
       if (auth) {
-        clientStore.changeView(ROUTES.LOBBY);
+        router.push('/lobby');
       } else {
         socket.disconnect();
+        router.push('/login');
       }
     });
   }

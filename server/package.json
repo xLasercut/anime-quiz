@@ -14,13 +14,13 @@
   "license": "MIT",
   "dependencies": {
     "anime-quiz-shared-resources": "workspace:*",
-    "better-sqlite3": "^9.5.0",
+    "better-sqlite3": "^9.6.0",
     "socket.io": "^4.7.5",
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.9",
+    "@types/better-sqlite3": "^7.6.10",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2"
   },

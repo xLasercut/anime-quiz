@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
 import { useClientStore } from '@/plugins/store/client';
-import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
+import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TOpenDialog } from '@/assets/types';
@@ -20,10 +20,13 @@ import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { useGameStore } from '@/plugins/store/game';
 import PanelVolumeSlider from '@/components/common/panel/PanelVolumeSlider.vue';
 import PanelAudioOnlyToggle from '@/components/common/panel/PanelAudioOnlyToggle.vue';
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/plugins/router/constants';
 
 const clientStore = useClientStore();
 const gameStore = useGameStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
+const router = useRouter();
 
 function openSettings() {
   socket.emit(SOCKET_EVENTS.GET_GAME_ROOM_SETTINGS);
@@ -35,7 +38,7 @@ function openSongPicker() {
 }
 
 function back() {
-  clientStore.changeView(ROUTES.GAME_ROOMS);
+  router.push(ROUTES.GAME_ROOMS);
 }
 
 function startGame() {

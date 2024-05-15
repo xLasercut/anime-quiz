@@ -13,27 +13,21 @@ class GameRoomsHandler extends ServerHandler {
     [SOCKET_EVENTS.GET_ROOM_LIST]: () => {
       this._emitter.updateRoomList(this._socket.id);
     },
-    [SOCKET_EVENTS.NEW_GAME_ROOM]: (_roomId: TGameRoomId, callback: Function) => {
-      this._logger.info('new game room request', {
-        clientData: this._socket.data.clientData,
-        request: _roomId
-      });
-      const roomId = GameRoomId.parse(_roomId);
-      this._gameRooms.validateRoomNotExists(roomId);
-      this._socket.data.setHost(true);
-      this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
-      this._socket.join(roomId);
-      callback(true);
-    },
     [SOCKET_EVENTS.JOIN_GAME_ROOM]: (_roomId: TGameRoomId, callback: Function) => {
       this._logger.info('join game room request', {
         clientData: this._socket.data.clientData,
         request: _roomId
       });
       const roomId = GameRoomId.parse(_roomId);
-      this._gameRooms.validateRoomExists(roomId);
-      this._socket.join(roomId);
-      callback(true);
+      if (this._gameRooms.roomExists(roomId)) {
+        this._socket.join(roomId);
+        callback(true);
+      } else {
+        this._socket.data.setHost(true);
+        this._emitter.updateStoreClientData(this._socket.data.clientData, this._socket.id);
+        this._socket.join(roomId);
+        callback(true);
+      }
     },
     [SOCKET_EVENTS.GET_GAME_ROOM_SETTINGS]: () => {
       this._logger.info('getting room settings', {
