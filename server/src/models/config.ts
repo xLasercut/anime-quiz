@@ -19,7 +19,7 @@ const ServerConfig = z.object({
   serverPort: OptionalString('3000'),
   corsConfig: OptionalString('*'),
   clientAuthDelay: OptionalNumber(2000),
-  redirectUrl: OptionalString('http://localhost:8080'),
+  redirectUrl: OptionalString('http://localhost:8080/login'),
   discordClientId: MandatoryString,
   discordClientSecret: MandatoryString,
   logLevel: OptionalString('debug'),

@@ -3,7 +3,7 @@
     <nav-bar></nav-bar>
     <v-container :fluid="true" :style="mainContainerStyles()">
       <v-main>
-        <component :is="viewComponent()"></component>
+        <router-view></router-view>
       </v-main>
     </v-container>
     <system-notification></system-notification>
@@ -13,8 +13,6 @@
 
 <script setup lang="ts">
 import { onMounted, provide } from 'vue';
-import { VIEW_MAPPING } from '@/assets/routing/mapping';
-import { useClientStore } from '@/plugins/store/client';
 import NavBar from '@/components/app/NavBar.vue';
 import SystemNotification from '@/components/app/SystemNotification.vue';
 import { CLIENT_EVENTS } from '@/assets/events';
@@ -24,8 +22,6 @@ import { TOpenDialog, TSendNotification } from '@/assets/types';
 import GlobalDialog from '@/components/app/GlobalDialog.vue';
 import { socket } from '@/plugins/socket';
 import { ClientDialogRoute } from '@/assets/routing/types';
-
-const clientStore = useClientStore();
 
 let sendNotification: TSendNotification;
 let openDialog: TOpenDialog;
@@ -42,10 +38,6 @@ provide(CLIENT_EVENTS.OPEN_DIALOG, (route: ClientDialogRoute, label: string): vo
 provide(CLIENT_EVENTS.SYSTEM_NOTIFICATION, (color: TNotificationColor, message: string): void => {
   sendNotification(color, message);
 });
-
-function viewComponent() {
-  return VIEW_MAPPING[clientStore.view];
-}
 
 function mainContainerStyles() {
   return {

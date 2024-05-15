@@ -15,15 +15,16 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import LobbyMenuCard from '@/components/lobby/LobbyMenuCard.vue';
-import { ROUTES } from '@/assets/routing/routes';
+import { ROUTES } from '@/plugins/router/constants';
 import { useClientStore } from '@/plugins/store/client';
 import { useAdminStore } from '@/plugins/store/admin';
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
-import { ClientRoute } from '@/assets/routing/types';
+import { useRouter } from 'vue-router';
 
 const clientStore = useClientStore();
 const adminStore = useAdminStore();
+const router = useRouter();
 
 const cards = ref([
   {
@@ -116,8 +117,8 @@ const cards = ref([
   }
 ]);
 
-function changeView(route: ClientRoute) {
-  clientStore.changeView(route);
+function changeView(route: string) {
+  router.push(route);
 }
 
 function filteredCards() {

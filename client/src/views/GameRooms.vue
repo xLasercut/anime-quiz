@@ -23,12 +23,12 @@ import IconBtn from '@/components/common/buttons/IconBtn.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/plugins/socket';
 import { GameRoomId, SOCKET_EVENTS, TGameRoomId } from 'anime-quiz-shared-resources';
-import { useClientStore } from '@/plugins/store/client';
-import { ROUTES } from '@/assets/routing/routes';
 import { useGameStore } from '@/plugins/store/game';
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/plugins/router/constants';
 
-const clientStore = useClientStore();
 const gameStore = useGameStore();
+const router = useRouter();
 
 const roomList = ref<TGameRoomId[]>([]);
 
@@ -37,7 +37,6 @@ socket.on(SOCKET_EVENTS.UPDATE_ROOM_LIST, (_roomList: TGameRoomId[]) => {
 });
 
 onMounted(() => {
-  socket.emit(SOCKET_EVENTS.LEAVE_ALL_ROOMS);
   socket.emit(SOCKET_EVENTS.GET_ROOM_LIST);
   gameStore.$reset();
 });
@@ -47,10 +46,6 @@ onUnmounted(() => {
 });
 
 function joinRoom(roomId: TGameRoomId) {
-  socket.emit(SOCKET_EVENTS.JOIN_GAME_ROOM, roomId, (success: boolean) => {
-    if (success) {
-      clientStore.changeView(ROUTES.MAIN_GAME);
-    }
-  });
+  router.push(ROUTES.MAIN_GAME(roomId));
 }
 </script>

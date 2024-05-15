@@ -52,6 +52,7 @@ jobs:
           echo VITE_REDIRECT_URL=${{ secrets.VITE_REDIRECT_URL }} >> client/.env
           echo VITE_CLIENT_VERSION=${{ github.ref_name }} >> client/.env
           pnpm build
+          cp client/dist/index.html client/dist/404.html
 
       - name: Publish client
         uses: JamesIves/github-pages-deploy-action@v4

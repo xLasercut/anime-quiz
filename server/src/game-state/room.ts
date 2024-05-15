@@ -41,16 +41,8 @@ class GameRooms {
     return roomList;
   }
 
-  public validateRoomNotExists(roomId: TGameRoomId) {
-    if (roomId in this._rooms) {
-      throw new DataQualityError('Room already exists');
-    }
-  }
-
-  public validateRoomExists(roomId: TGameRoomId) {
-    if (!(roomId in this._rooms)) {
-      throw new DataQualityError('Room does not exists');
-    }
+  public roomExists(roomId: TGameRoomId): boolean {
+    return roomId in this._rooms;
   }
 
   public getPlayerList(roomId: TGameRoomId): TGamePlayer[] {

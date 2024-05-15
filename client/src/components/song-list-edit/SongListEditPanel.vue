@@ -5,17 +5,18 @@
 
 <script setup lang="ts">
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
-import { useClientStore } from '@/plugins/store/client';
-import { ROUTES } from '@/assets/routing/routes';
+
 import { socket } from '@/plugins/socket';
 import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { useDataStore } from '@/plugins/store/data';
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/plugins/router/constants';
 
-const clientStore = useClientStore();
 const dataStore = useDataStore();
+const router = useRouter();
 
 function back() {
-  clientStore.changeView(ROUTES.LOBBY);
+  router.push(ROUTES.LOBBY);
 }
 
 function reload() {

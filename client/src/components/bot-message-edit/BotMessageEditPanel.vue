@@ -6,21 +6,22 @@
 
 <script setup lang="ts">
 import NavBtn from '@/components/common/buttons/NavBtn.vue';
-import { useClientStore } from '@/plugins/store/client';
 import { useDataStore } from '@/plugins/store/data';
 import { useAdminStore } from '@/plugins/store/admin';
 import { inject } from 'vue';
 import { CLIENT_EVENTS } from '@/assets/events';
 import { TOpenDialog } from '@/assets/types';
-import { DIALOG_ROUTES, ROUTES } from '@/assets/routing/routes';
+import { DIALOG_ROUTES } from '@/assets/routing/routes';
 import { socket } from '@/plugins/socket';
 import { AVATARS, SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { DATABASE_EDIT_MODE } from '@/assets/constants';
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/plugins/router/constants';
 
-const clientStore = useClientStore();
 const dataStore = useDataStore();
 const adminStore = useAdminStore();
 const openDialog = inject(CLIENT_EVENTS.OPEN_DIALOG) as TOpenDialog;
+const router = useRouter();
 
 function reload() {
   dataStore.updateBotMessageList([]);
@@ -28,7 +29,7 @@ function reload() {
 }
 
 function back() {
-  clientStore.changeView(ROUTES.LOBBY);
+  router.push(ROUTES.LOBBY);
 }
 
 function newMessage() {
