@@ -1,1 +1,0 @@
-import{d as o,c as a,w as s,x as i,i as c,D as r,e as _,l as p,q as l}from"./index-BT2ZsoMq.js";const g=o({__name:"LoginPanel",setup(m){const t=c(l.OPEN_DIALOG);function n(){t(r.LOGIN_SETTINGS,"Settings")}return(f,e)=>(_(),a(i,{icon:"mdi-cog",color:"primary",onClick:e[0]||(e[0]=S=>n())},{default:s(()=>[p("Settings")]),_:1}))}});export{g as default};
