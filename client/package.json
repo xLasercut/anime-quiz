@@ -20,7 +20,7 @@
     "vidstack": "^1.11.18",
     "vue": "^3.4.23",
     "vue-router": "^4.3.2",
-    "vuetify": "^3.5.9",
+    "vuetify": "^3.6.8",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
