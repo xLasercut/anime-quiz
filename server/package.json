@@ -7,7 +7,7 @@
     "build": "rm -rf ./dist && tsc -b",
     "bootstrap": "ts-node tools/bootstrap.ts",
     "format": "prettier 'src/**/*.ts' --write",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node --transpile-only src/index.ts",
     "format:check": "prettier 'src/**/*.ts' --check"
   },
   "author": "xLasercut",
