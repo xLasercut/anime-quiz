@@ -1,0 +1,1 @@
+import{d as n,c as s,w as o,x as r,b as c,E as i,e as u,l}from"./index-8OO56EcO.js";const d=n({__name:"UserSettingsPanel",setup(p){const t=c();function a(){t.push(i.LOBBY)}return(_,e)=>(u(),s(r,{icon:"mdi-backspace-reverse-outline",color:"warning",onClick:e[0]||(e[0]=f=>a())},{default:o(()=>[l("Back")]),_:1}))}});export{d as default};
