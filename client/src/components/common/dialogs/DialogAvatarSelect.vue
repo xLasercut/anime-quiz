@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-select variant="outlined" label="Avatar" v-bind="$attrs" :items="avatars" density="compact">
         <template #item="{ item, props }">
-          <v-list-item @click="props.onClick">
+          <v-list-item v-bind="props">
             <template #prepend>
               <game-avatar :size="avatarSize" :avatar="item.raw"></game-avatar>
             </template>
