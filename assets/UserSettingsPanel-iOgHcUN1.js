@@ -1,0 +1,1 @@
+import{d as s,b as o,c as a,w as r,x as c,E as i,f as u,n as p}from"./index-CfBULS3w.js";const d=s({__name:"UserSettingsPanel",setup(f){const t=o();function n(){t.push(i.LOBBY)}return(l,e)=>(u(),a(c,{icon:"mdi-backspace-reverse-outline",color:"warning",onClick:e[0]||(e[0]=m=>n())},{default:r(()=>e[1]||(e[1]=[p("Back")])),_:1}))}});export{d as default};
