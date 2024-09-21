@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "anime-quiz-shared-resources": "workspace:*",
-    "better-sqlite3": "^9.6.0",
+    "better-sqlite3": "^11.3.0",
     "socket.io": "^4.8.0",
     "winston": "^3.14.2",
     "winston-daily-rotate-file": "^4.7.1"
