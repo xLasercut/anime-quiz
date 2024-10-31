@@ -1,0 +1,1 @@
+import{d as t,b as s,c as a,w as r,x as c,E as u,f as i,n as l}from"./index-DnoG31dZ.js";const m=t({__name:"BulkAddSongsPanel",setup(p){const n=s();function o(){n.push(u.LOBBY)}return(d,e)=>(i(),a(c,{icon:"mdi-backspace-reverse-outline",color:"warning",onClick:e[0]||(e[0]=f=>o())},{default:r(()=>e[1]||(e[1]=[l("Back")])),_:1}))}});export{m as default};

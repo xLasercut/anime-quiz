@@ -1,1 +1,0 @@
-import{d as o,i as s,c as a,w as i,x as r,C as _,D as c,f as p,n as f}from"./index-CfBULS3w.js";const g=o({__name:"LoginPanel",setup(l){const t=s(_.OPEN_DIALOG);function e(){t(c.LOGIN_SETTINGS,"Settings")}return(m,n)=>(p(),a(r,{icon:"mdi-cog",color:"primary",onClick:n[0]||(n[0]=S=>e())},{default:i(()=>n[1]||(n[1]=[f("Settings")])),_:1}))}});export{g as default};
