@@ -9,7 +9,7 @@
           :currentTime="currentTime"
           @pause="playing = false"
           @play="playing = true"
-          :volume="clientStore.volume / 100"
+          :volume="volume / 100"
           @ended="playbackEnded = true"
           @source-change="playbackEnded = false"
           @time-update="updateCurrentTime($event)"
@@ -62,6 +62,14 @@ const currentTime = ref(0);
 const duration = ref(-1);
 const playing = ref(false);
 const playbackEnded = ref(false);
+const volume = ref(clientStore.volume);
+
+watch(
+  () => clientStore.volume,
+  (value) => {
+    volume.value = value;
+  }
+);
 
 watch(
   () => playbackEnded.value,
@@ -89,6 +97,7 @@ function updateDuration(event: MediaDurationChangeEvent) {
 
 function play() {
   if (props.song.songId) {
+    player.value.volume = clientStore.volume / 100;
     player.value.play();
   } else {
     emit('set-initial-song');

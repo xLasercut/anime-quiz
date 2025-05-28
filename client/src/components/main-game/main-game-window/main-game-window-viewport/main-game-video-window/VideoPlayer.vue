@@ -4,7 +4,7 @@
     :muted="muted"
     :src="gameStore.currentSong.currentSongSrc"
     :currentTime="currentTime"
-    :volume="clientStore.volume / 100"
+    :volume="volume / 100"
     @time-update="updateCurrentTime($event)"
     @duration-change="updateDuration($event)"
     @can-play="playbackReady = true"
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/plugins/store/game';
-import { nextTick, onUnmounted, ref } from 'vue';
+import { nextTick, onUnmounted, ref, watch } from 'vue';
 import { SOCKET_EVENTS } from 'anime-quiz-shared-resources';
 import { socket } from '@/plugins/socket';
 import { useClientStore } from '@/plugins/store/client';
@@ -28,6 +28,14 @@ let timer: NodeJS.Timeout;
 
 const gameStore = useGameStore();
 const clientStore = useClientStore();
+const volume = ref(clientStore.volume);
+
+watch(
+  () => clientStore.volume,
+  (value) => {
+    volume.value = value;
+  }
+);
 
 const emit = defineEmits(['update:loading-color']);
 
@@ -138,6 +146,7 @@ socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, async () => {
   console.log('starting countdown');
   muted.value = false;
   notPauseAfterSeek.value = true;
+  player.value.volume = clientStore.volume / 100;
   player.value.play();
 });
 

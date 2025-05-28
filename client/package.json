@@ -14,22 +14,22 @@
     "@mdi/font": "7.4.47",
     "anime-quiz-shared-resources": "workspace:*",
     "install": "^0.13.0",
-    "pinia": "^2.2.2",
+    "pinia": "^2.3.1",
     "roboto-fontface": "^0.10.0",
-    "socket.io-client": "^4.8.0",
-    "vidstack": "^1.12.11",
-    "vue": "^3.5.7",
-    "vue-router": "^4.4.5",
-    "vuetify": "^3.7.2",
+    "socket.io-client": "^4.8.1",
+    "vidstack": "^1.12.13",
+    "vue": "^3.5.15",
+    "vue-router": "^4.5.1",
+    "vuetify": "^3.8.7",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@babel/types": "^7.25.6",
+    "@babel/types": "^7.27.3",
     "@types/webfontloader": "^1.6.38",
-    "@vitejs/plugin-vue": "^5.1.4",
-    "vite": "^5.4.7",
-    "vite-plugin-vuetify": "^2.0.4",
-    "vue-tsc": "^2.1.6"
+    "@vitejs/plugin-vue": "^5.2.4",
+    "vite": "^5.4.19",
+    "vite-plugin-vuetify": "^2.1.1",
+    "vue-tsc": "^2.2.10"
   },
   "bugs": {
     "url": "https://github.com/xLasercut/anime-quiz/issues"
