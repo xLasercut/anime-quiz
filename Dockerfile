@@ -1,4 +1,4 @@
-FROM node:20-bookworm
+FROM node:22-bookworm
 
 LABEL maintainer="xLasercut"
 
@@ -24,7 +24,7 @@ COPY ./pnpm-workspace.yaml ${WRK_DIR}/pnpm-workspace.yaml
 
 RUN pnpm install
 
-RUN cd ${WRK_DIR}/server/node_modules/better-sqlite3/ && pnpm run build-release
+#RUN cd ${WRK_DIR}/server/node_modules/better-sqlite3/ && pnpm run build-release
 
 EXPOSE 3000
 

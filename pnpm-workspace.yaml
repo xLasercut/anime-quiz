@@ -2,3 +2,5 @@ packages:
   - client
   - server
   - shared-resources
+onlyBuiltDependencies:
+  - better-sqlite3
