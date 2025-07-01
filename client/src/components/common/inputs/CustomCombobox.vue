@@ -2,20 +2,18 @@
   <v-combobox
     :model-value="modelValue"
     @update:model-value="$emit('update:modelValue', $event || '')"
-    :no-filter="true"
-    :items="itemsList"
-    :search="search"
-    @update:search="updateSearch($event)"
+    :items="items"
     :hide-no-data="true"
     :hide-selected="false"
+    :custom-filter="customFilter"
   ></v-combobox>
 </template>
 
 <script setup lang="ts">
-import { debounce, isMatchFilter } from '@/assets/game-helpers';
-import { computed, PropType, ref } from 'vue';
+import { isMatchFilter } from '@/assets/game-helpers';
+import { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   modelValue: {
     required: true,
     type: String
@@ -33,19 +31,7 @@ const props = defineProps({
 });
 defineEmits(['update:modelValue']);
 
-const search = ref('');
-
-const updateSearch = debounce((val: string) => {
-  search.value = val || '';
-}, props.debounceTime);
-
-const itemsList = computed((): string[] => {
-  if (!search.value) {
-    return [];
-  }
-
-  return props.items.filter((item) => {
-    return isMatchFilter(search.value, item);
-  });
-});
+function customFilter(value: string, query: string) {
+  return isMatchFilter(query, value);
+}
 </script>
