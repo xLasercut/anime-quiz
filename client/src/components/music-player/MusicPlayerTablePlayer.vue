@@ -4,7 +4,7 @@
       <div class="music-player-container">
         <media-player
           ref="player"
-          autoplay
+          :autoplay="false"
           :src="mediaSrc()"
           :currentTime="currentTime"
           @pause="playing = false"
@@ -15,6 +15,7 @@
           @time-update="updateCurrentTime($event)"
           @duration-change="updateDuration($event)"
           load="eager"
+          @can-play="playMusic"
         >
           <media-provider></media-provider>
         </media-player>
@@ -79,6 +80,13 @@ watch(
     }
   }
 );
+
+async function playMusic() {
+  player.value.play();
+  setTimeout(() => {
+    player.value.volume = clientStore.volume / 100;
+  }, 0);
+}
 
 function mediaSrc(): string {
   if (clientStore.audioOnly && props.song.audioSrc) {
