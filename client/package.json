@@ -17,7 +17,7 @@
     "pinia": "^2.3.1",
     "roboto-fontface": "^0.10.0",
     "socket.io-client": "^4.8.1",
-    "vidstack": "^1.12.13",
+    "vidstack": "1.11.30",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
     "vuetify": "^3.8.11",
