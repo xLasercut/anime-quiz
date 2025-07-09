@@ -8,14 +8,15 @@
           :src="mediaSrc()"
           :currentTime="currentTime"
           @pause="playing = false"
+          :volume="volume / 10000"
           @play="playing = true"
-          :volume="volume / 100"
           @ended="playbackEnded = true"
           @source-change="playbackEnded = false"
           @time-update="updateCurrentTime($event)"
           @duration-change="updateDuration($event)"
           load="eager"
           @can-play="playMusic"
+          :muted="muted"
         >
           <media-provider></media-provider>
         </media-player>
@@ -64,6 +65,7 @@ const duration = ref(-1);
 const playing = ref(false);
 const playbackEnded = ref(false);
 const volume = ref(clientStore.volume);
+const muted = ref(false);
 
 watch(
   () => clientStore.volume,
@@ -83,8 +85,11 @@ watch(
 
 async function playMusic() {
   player.value.play();
+  // TODO: vidstack bug, need to set to mute then quickly change volume, waiting for fix in package
   setTimeout(() => {
-    player.value.volume = clientStore.volume / 100;
+    muted.value = true;
+    volume.value = clientStore.volume;
+    muted.value = false;
   }, 0);
 }
 
@@ -105,7 +110,6 @@ function updateDuration(event: MediaDurationChangeEvent) {
 
 function play() {
   if (props.song.songId) {
-    player.value.volume = clientStore.volume / 100;
     player.value.play();
   } else {
     emit('set-initial-song');

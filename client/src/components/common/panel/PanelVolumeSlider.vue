@@ -1,8 +1,8 @@
 <template>
   <div class="volume-slider-container">
     <v-slider
-      :min="0"
-      :max="100"
+      :min="1"
+      :max="10000"
       :step="1"
       :hide-details="true"
       prepend-icon="mdi-volume-medium"

@@ -4,7 +4,7 @@
     :muted="muted"
     :src="gameStore.currentSong.currentSongSrc"
     :currentTime="currentTime"
-    :volume="volume / 100"
+    :volume="volume / 10000"
     @time-update="updateCurrentTime($event)"
     @duration-change="updateDuration($event)"
     @can-play="playbackReady = true"
@@ -144,10 +144,15 @@ socket.on(SOCKET_EVENTS.GAME_START_LOAD, async (_startPosition: number, _guessTi
 
 socket.on(SOCKET_EVENTS.GAME_START_COUNTDOWN, async () => {
   console.log('starting countdown');
-  muted.value = false;
   notPauseAfterSeek.value = true;
-  player.value.volume = clientStore.volume / 100;
+  muted.value = false;
   player.value.play();
+  // TODO: vidstack bug, need to set to mute then quickly change volume, waiting for fix in package
+  setTimeout(() => {
+    muted.value = true;
+    volume.value = clientStore.volume;
+    muted.value = false;
+  }, 0);
 });
 
 socket.on(SOCKET_EVENTS.GAME_SHOW_GUESS, () => {

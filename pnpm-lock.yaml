@@ -52,8 +52,8 @@ importers:
         specifier: ^4.8.1
         version: 4.8.1
       vidstack:
-        specifier: ^1.12.13
-        version: 1.12.13
+        specifier: 1.11.30
+        version: 1.11.30
       vue:
         specifier: ^3.5.17
         version: 3.5.17(typescript@5.8.3)
@@ -1136,8 +1136,8 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  vidstack@1.12.13:
-    resolution: {integrity: sha512-vuNeyRmWoH/7EoFVDYjp9nkgcqtCMmal518LDeb78dYKgWb+p6+vtY0AzDhrkBv5q1UiCn+xwmjMmwvSlPLuhQ==}
+  vidstack@1.11.30:
+    resolution: {integrity: sha512-RbHh204Y+fta7CeoQ4TblbFO6P2zcwhYF4O52jDTHcr9R/CazB3Bzyxltz+UWVMmrkmDIJ0Hd4IJywkn7p/ivA==}
     engines: {node: '>=18'}
 
   vite-plugin-vuetify@2.1.1:
@@ -2255,7 +2255,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vidstack@1.12.13:
+  vidstack@1.11.30:
     dependencies:
       '@floating-ui/dom': 1.7.2
       lit-html: 2.8.0
