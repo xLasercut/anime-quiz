@@ -4,3 +4,4 @@ packages:
   - shared-resources
 onlyBuiltDependencies:
   - better-sqlite3
+  - esbuild
