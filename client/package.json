@@ -14,7 +14,7 @@
     "@mdi/font": "7.4.47",
     "anime-quiz-shared-resources": "workspace:*",
     "install": "^0.13.0",
-    "pinia": "^2.3.1",
+    "pinia": "^3.0.3",
     "roboto-fontface": "^0.10.0",
     "socket.io-client": "^4.8.1",
     "vidstack": "1.11.30",
