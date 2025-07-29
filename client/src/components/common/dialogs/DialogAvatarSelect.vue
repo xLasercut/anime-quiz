@@ -7,7 +7,6 @@
             <template #prepend>
               <game-avatar :size="avatarSize" :avatar="item.raw"></game-avatar>
             </template>
-            <v-list-item-title v-text="item.raw"></v-list-item-title>
           </v-list-item>
         </template>
 
