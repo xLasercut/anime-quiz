@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { AVATAR_IMG_BASE_URL, AVATAR_MAP } from '@/assets/avatars';
+import { AVATAR_MAP } from '@/assets/avatars';
 import { TAvatar } from 'anime-quiz-shared-resources';
 
 const props = defineProps({
@@ -21,7 +21,7 @@ const props = defineProps({
 });
 
 function getAvatarUrl(): string {
-  return AVATAR_MAP[props.avatar] || `${AVATAR_IMG_BASE_URL}/dead-link.jpg`;
+  return AVATAR_MAP[props.avatar] || `https://cdn.imgchest.com/files/8d0ef62a4df9.jpg`;
 }
 
 function avatarStyle() {
