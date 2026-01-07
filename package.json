@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^20.19.27",
     "@types/uuid": "^9.0.8",
+    "@types/ws": "^8.18.1",
     "prettier": "^3.7.4"
   },
   "bugs": {
