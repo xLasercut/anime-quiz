@@ -52,8 +52,8 @@ importers:
         specifier: ^4.8.1
         version: 4.8.1
       vidstack:
-        specifier: 1.11.30
-        version: 1.11.30
+        specifier: 1.12.13
+        version: 1.12.13
       vue:
         specifier: ^3.5.17
         version: 3.5.18(typescript@5.8.3)
@@ -302,11 +302,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@floating-ui/core@1.7.2':
-    resolution: {integrity: sha512-wNB5ooIKHQc+Kui96jE/n69rHFWAVoxn5CAzL1Xdd8FG03cgY3MLO+GF9U3W737fYDSgPWA6MReKhBQBop6Pcw==}
+  '@floating-ui/core@1.7.3':
+    resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
 
-  '@floating-ui/dom@1.7.2':
-    resolution: {integrity: sha512-7cfaOQuCS27HD7DX+6ib2OrnW+b4ZBwDNnCcT0uTyidcmyWb03FnQqJybDBoCnpdxwBSfA94UAYlRCt7mV+TbA==}
+  '@floating-ui/dom@1.7.3':
+    resolution: {integrity: sha512-uZA413QEpNuhtb3/iIKoYMSK07keHPYeXF02Zhd6e213j+d1NamLix/mCLxBUDW/Gx52sPH2m+chlUsyaBs/Ag==}
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
@@ -1209,8 +1209,8 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  vidstack@1.11.30:
-    resolution: {integrity: sha512-RbHh204Y+fta7CeoQ4TblbFO6P2zcwhYF4O52jDTHcr9R/CazB3Bzyxltz+UWVMmrkmDIJ0Hd4IJywkn7p/ivA==}
+  vidstack@1.12.13:
+    resolution: {integrity: sha512-vuNeyRmWoH/7EoFVDYjp9nkgcqtCMmal518LDeb78dYKgWb+p6+vtY0AzDhrkBv5q1UiCn+xwmjMmwvSlPLuhQ==}
     engines: {node: '>=18'}
 
   vite-plugin-vuetify@2.1.2:
@@ -1450,13 +1450,13 @@ snapshots:
   '@esbuild/win32-x64@0.25.6':
     optional: true
 
-  '@floating-ui/core@1.7.2':
+  '@floating-ui/core@1.7.3':
     dependencies:
       '@floating-ui/utils': 0.2.10
 
-  '@floating-ui/dom@1.7.2':
+  '@floating-ui/dom@1.7.3':
     dependencies:
-      '@floating-ui/core': 1.7.2
+      '@floating-ui/core': 1.7.3
       '@floating-ui/utils': 0.2.10
 
   '@floating-ui/utils@0.2.10': {}
@@ -2383,9 +2383,9 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vidstack@1.11.30:
+  vidstack@1.12.13:
     dependencies:
-      '@floating-ui/dom': 1.7.2
+      '@floating-ui/dom': 1.7.3
       lit-html: 2.8.0
       media-captions: 1.0.4
       unplugin: 1.16.1
