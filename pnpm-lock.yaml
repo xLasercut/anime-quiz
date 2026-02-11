@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       axios:
-        specifier: ^1.13.2
-        version: 1.13.2
+        specifier: ^1.13.5
+        version: 1.13.5
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -115,7 +115,7 @@ importers:
         version: 3.1.11
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@25.0.3)(typescript@5.9.3)
+        version: 10.9.2(@types/node@20.19.33)(typescript@5.9.3)
 
   shared-resources: {}
 
@@ -485,6 +485,9 @@ packages:
   '@types/node@20.19.27':
     resolution: {integrity: sha512-N2clP5pJhB2YnZJ3PIHFk5RkygRX5WO/5f0WC08tp0wd+sv0rsJk3MqWn3CbNmT2J505a5336jaQj4ph1AdMug==}
 
+  '@types/node@20.19.33':
+    resolution: {integrity: sha512-Rs1bVAIdBs5gbTIKza/tgpMuG1k3U/UMJLWecIMxNdJFDMzcM5LOiLVRYh3PilWEYDIeUDv7bpiHPLPsbydGcw==}
+
   '@types/node@25.0.3':
     resolution: {integrity: sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==}
 
@@ -598,8 +601,8 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  axios@1.13.2:
-    resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
+  axios@1.13.5:
+    resolution: {integrity: sha512-cz4ur7Vb0xS4/KUN0tPWe44eqxrIu31me+fbang3ijiNscE129POzipJJA6zniq2C/Z6sJCjMimjS8Lc/GAs8Q==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1577,6 +1580,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/node@20.19.33':
+    dependencies:
+      undici-types: 6.21.0
+
   '@types/node@25.0.3':
     dependencies:
       undici-types: 7.16.0
@@ -1725,7 +1732,7 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.13.2:
+  axios@1.13.5:
     dependencies:
       follow-redirects: 1.15.11
       form-data: 4.0.5
@@ -2334,14 +2341,14 @@ snapshots:
 
   triple-beam@1.4.1: {}
 
-  ts-node@10.9.2(@types/node@25.0.3)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@20.19.33)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 25.0.3
+      '@types/node': 20.19.33
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
