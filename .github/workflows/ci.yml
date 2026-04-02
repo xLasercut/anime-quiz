@@ -51,7 +51,7 @@ jobs:
         uses: ./.github/actions/runner-setup/
 
       - name: Test build server
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: false
