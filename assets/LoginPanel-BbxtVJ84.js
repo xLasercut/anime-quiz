@@ -1,0 +1,1 @@
+import{d as o,c as s,w as a,x as i,D as r,n as _,b as c,k as p,q as l}from"./index-Cr7UKAgU.js";const g=o({__name:"LoginPanel",setup(m){const t=_(l.OPEN_DIALOG);function e(){t(r.LOGIN_SETTINGS,"Settings")}return(f,n)=>(c(),s(i,{icon:"mdi-cog",color:"primary",onClick:n[0]||(n[0]=S=>e())},{default:a(()=>[...n[1]||(n[1]=[p("Settings",-1)])]),_:1}))}});export{g as default};
